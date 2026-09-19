@@ -48,9 +48,10 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `doc/verification-2026-09-19.md` | the measurements the decoding rests on |
 
 Correcting the table means re-running `tools/transcribe.py` against a newer
-revision of the manual. Nothing is generated into `src/`, and the TSVs should
-not be edited by hand — that would make the next revision impossible to apply
-cleanly.
+revision of the manual, which goes in `manual/`, ignored by git because the
+document is the manufacturer's. Nothing is generated into `src/`, and the TSVs
+should not be edited by hand — that would make the next revision impossible to
+apply cleanly.
 
 ## Three things that bite
 

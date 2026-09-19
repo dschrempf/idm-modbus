@@ -2,3 +2,5 @@ dist-newstyle/
 .direnv/
 *.hi
 *.o
+# the manufacturer's documents, copied in to re-run tools/transcribe.py
+manual/

@@ -1,27 +1,27 @@
 address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
-1000	FLOAT	RO	volatile	Außentemperatur (B3					°C	present
+1000	FLOAT	RO	volatile	Außentemperatur (B32)					°C	present
 1002	FLOAT	RO	volatile	Gemittelte Außentemperatur					°C	present
 1004	UCHAR	RO	volatile	Interne Meldung						present
 1005	UCHAR	RW	eeprom	Betriebsart System	SYSMODE	0	5	1		present
 1006	UCHAR	RO	volatile	Smart Grid Status		0	4			present
-1008	FLOAT	RO	volatile	Wärmespeichertemperatur (B3					°C	present
-1010	FLOAT	RO	volatile	Kältespeichertemperatur (B4					°C	present
-1012	FLOAT	RO	volatile	Trinkwassererwärmertemp. unten (B4					°C	present
-1014	FLOAT	RO	volatile	Trinkwassererwärmertemp. oben (B4					°C	present
-1030	FLOAT	RO	volatile	Warmwasserzapftemperatur (B4					°C	present
+1008	FLOAT	RO	volatile	Wärmespeichertemperatur (B38)					°C	present
+1010	FLOAT	RO	volatile	Kältespeichertemperatur (B40)					°C	present
+1012	FLOAT	RO	volatile	Trinkwassererwärmertemp. unten (B41)					°C	present
+1014	FLOAT	RO	volatile	Trinkwassererwärmertemp. oben (B48)					°C	present
+1030	FLOAT	RO	volatile	Warmwasserzapftemperatur (B42)					°C	present
 1032	UCHAR	RW	eeprom	Warmwasser-Solltemperatur	FW030	35	95	46	°C	present
 1033	UCHAR	RW	eeprom	Warmwasserladung Einschalttemperatur	FW027	30	50	46	°C	present
 1034	UCHAR	RW	eeprom	Warmwasserladung Ausschalttemperatur	FW028	46	53	50	°C	present
 1048	FLOAT	RO	volatile	Aktueller Strompreis						present
-1050	FLOAT	RO	volatile	Wärmepumpen Vorlauftemperatur (B3					°C	present
-1052	FLOAT	RO	volatile	Wärmepumpen Rücklauftemperatur (B3					°C	present
-1054	FLOAT	RO	volatile	HGL Vorlauftemperatur (B3					°C	present
-1056	FLOAT	RO	volatile	Wärmequelleneintrittstemperatur (B4					°C	present
-1058	FLOAT	RO	volatile	Wärmequellenaustrittstemperatur (B3					°C	present
-1060	FLOAT	RO	volatile	Luftansaugtemperatur (B3					°C	present
-1062	FLOAT	RO	volatile	Luftwärmetauschertemperatur (B7					°C	present
-1064	FLOAT	RO	volatile	Luftansaugtemperatur 2 (B4					°C	present
-1066	FLOAT	RO	volatile	Ladefühler (B4					°C	present
+1050	FLOAT	RO	volatile	Wärmepumpen Vorlauftemperatur (B33)					°C	present
+1052	FLOAT	RO	volatile	Wärmepumpen Rücklauftemperatur (B34)					°C	present
+1054	FLOAT	RO	volatile	HGL Vorlauftemperatur (B35)					°C	present
+1056	FLOAT	RO	volatile	Wärmequelleneintrittstemperatur (B43)					°C	present
+1058	FLOAT	RO	volatile	Wärmequellenaustrittstemperatur (B36)					°C	present
+1060	FLOAT	RO	volatile	Luftansaugtemperatur (B37)					°C	present
+1062	FLOAT	RO	volatile	Luftwärmetauschertemperatur (B72)					°C	present
+1064	FLOAT	RO	volatile	Luftansaugtemperatur 2 (B46)					°C	present
+1066	FLOAT	RO	volatile	Ladefühler (B45)					°C	present
 1090	UCHAR	RO	volatile	Betriebsart Wärmepumpe		0	8			present
 1091	UCHAR	RO	volatile	Heizanforderung		0	1			present
 1092	UCHAR	RO	volatile	Kühlanforderung		0	1			present
@@ -32,20 +32,20 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 1101	UCHAR	RO	volatile	Status Verdichter 2		0	1			present
 1102	UCHAR	RO	volatile	Status Verdichter 3		0	1			present
 1103	UCHAR	RO	volatile	Status Verdichter 4		0	1			present
-1104	WORD	RO	volatile	Status Ladepumpe (M7		-1	100		%	present
-1105	WORD	RO	volatile	Status Sole/Zwischenkreispumpe (M1		-1	100		%	present
-1106	WORD	RO	volatile	Status Wärmequellen/Grundwasserpumpe		-1	100		%	present
-1108	WORD	RO	volatile	Status ISC Kältespeicherpumpe (M8		-1	100		%	present
-1109	WORD	RO	volatile	Status ISC Rückkühlpumpe (M1		-1	100		%	present
-1110	WORD	RO	volatile	Umschaltventil Heizkreis Heizen/Kühlen		0	1			present
-1111	WORD	RO	volatile	Umschaltventil Speicher Heizen/Kühlen		0	1			present
-1112	WORD	RO	volatile	Umschaltventil Heizen/Warmwasser (M6		0	1			present
-1113	WORD	RO	volatile	Umschaltventil Wärmequelle Heizen/Kühlen		0	1			present
-1114	WORD	RO	volatile	Umschaltventil Solar Heizen/Warmwasser		0	1			present
-1115	WORD	RO	volatile	Umschaltventil Solar Speicher/Wärmequelle		0	1			present
-1116	WORD	RO	volatile	Umschaltventil ISC Wärmequelle /Kältespei-		0	1			present
-1117	WORD	RO	volatile	Umschaltventil ISC Speicher / Bypass (M9		0	1			present
-1118	WORD	RO	volatile	Zirkulationspumpe (M6		0	1			present
+1104	WORD	RO	volatile	Status Ladepumpe (M73)		-1	100		%	present
+1105	WORD	RO	volatile	Status Sole/Zwischenkreispumpe (M16)		-1	100		%	present
+1106	WORD	RO	volatile	Status Wärmequellen/Grundwasserpumpe (M15)		-1	100		%	present
+1108	WORD	RO	volatile	Status ISC Kältespeicherpumpe (M84)		-1	100		%	present
+1109	WORD	RO	volatile	Status ISC Rückkühlpumpe (M17)		-1	100		%	present
+1110	WORD	RO	volatile	Umschaltventil Heizkreis Heizen/Kühlen (M61)		0	1			present
+1111	WORD	RO	volatile	Umschaltventil Speicher Heizen/Kühlen (M62)		0	1			present
+1112	WORD	RO	volatile	Umschaltventil Heizen/Warmwasser (M63)		0	1			present
+1113	WORD	RO	volatile	Umschaltventil Wärmequelle Heizen/Kühlen (M74)		0	1			present
+1114	WORD	RO	volatile	Umschaltventil Solar Heizen/Warmwasser (M78)		0	1			present
+1115	WORD	RO	volatile	Umschaltventil Solar Speicher/Wärmequelle (M79)		0	1			present
+1116	WORD	RO	volatile	Umschaltventil ISC Wärmequelle /Kältespeicher (M89)		0	1			present
+1117	WORD	RO	volatile	Umschaltventil ISC Speicher / Bypass (M99)		0	1			present
+1118	WORD	RO	volatile	Zirkulationspumpe (M64)		0	1			present
 1120	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 1	BV002	-90	40		°C	present
 1121	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 2	BV003	-90	40		°C	present
 1122	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 1	BV102	-90	40		°C	present
@@ -59,36 +59,36 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 1152	UCHAR	RO	volatile	Kaskade / Laufende Stufen Warmwasser		0	20			present
 1200	FLOAT	RO	volatile	Kaskade / Angeforderte Heiztemperatur					°C	present
 1202	FLOAT	RO	volatile	Kaskade / Angeforderte Kühltemperatur					°C	present
-1204	FLOAT	RO	volatile	Kaskade / Angeforderte Warmwasser-					°C	present
-1206	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur					°C	present
-1208	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur					°C	present
-1210	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur					°C	present
-1220	UCHAR	RW	volatile	Kaskade / Minimale Leistung Heizen	0				%	present
-1221	UCHAR	RW	volatile	Kaskade / Maximale Leistung Heizen	0				%	present
-1222	UCHAR	RW	volatile	Kaskade / Minimale Leistung Kühlen	0				%	present
-1223	UCHAR	RW	volatile	Kaskade / Maximale Leistung Kühlen	0				%	present
-1224	UCHAR	RW	volatile	Kaskade / Minimale Leistung Warmwasser	0				%	present
-1225	UCHAR	RW	volatile	Kaskade / Maximale Leistung Warmwasser	0				%	present
-1226	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Parallel	-90				°C	present
-1227	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Alternativ	-90				°C	present
-1228	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Parallel	-90				°C	present
-1229	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Alternativ	-90				°C	present
-1230	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmwasser	-90				°C	present
-1231	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmwasser	-90				°C	present
-1350	FLOAT	RO	volatile	Heizkreis A Vorlauftemperatur (B5					°C	present
-1352	FLOAT	RO	volatile	Heizkreis B Vorlauftemperatur (B5					°C	present
-1354	FLOAT	RO	volatile	Heizkreis C Vorlauftemperatur (B5					°C	present
-1356	FLOAT	RO	volatile	Heizkreis D Vorlauftemperatur (B5					°C	present
-1358	FLOAT	RO	volatile	Heizkreis E Vorlauftemperatur (B5					°C	present
-1360	FLOAT	RO	volatile	Heizkreis F Vorlauftemperatur (B5					°C	present
-1362	FLOAT	RO	volatile	Heizkreis G Vorlauftemperatur (B5					°C	present
-1364	FLOAT	RO	volatile	Heizkreis A Raumtemperatur (B6					°C	present
-1366	FLOAT	RO	volatile	Heizkreis B Raumtemperatur (B6					°C	present
-1368	FLOAT	RO	volatile	Heizkreis C Raumtemperatur (B6					°C	present
-1370	FLOAT	RO	volatile	Heizkreis D Raumtemperatur (B6					°C	present
-1372	FLOAT	RO	volatile	Heizkreis E Raumtemperatur (B6					°C	present
-1374	FLOAT	RO	volatile	Heizkreis F Raumtemperatur (B6					°C	present
-1376	FLOAT	RO	volatile	Heizkreis G Raumtemperatur (B6					°C	present
+1204	FLOAT	RO	volatile	Kaskade / Angeforderte Warmwassertemperatur					°C	present
+1206	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Heizen					°C	present
+1208	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Kühlen					°C	present
+1210	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Warmwasser					°C	present
+1220	UCHAR	RW	volatile	Kaskade / Minimale Leistung Heizen	SYSCAMLHM	0	100		%	present
+1221	UCHAR	RW	volatile	Kaskade / Maximale Leistung Heizen	SYSCAMLH	0	100		%	present
+1222	UCHAR	RW	volatile	Kaskade / Minimale Leistung Kühlen	SYSCAMLCM	0	100		%	present
+1223	UCHAR	RW	volatile	Kaskade / Maximale Leistung Kühlen	SYSCAMLC	0	100		%	present
+1224	UCHAR	RW	volatile	Kaskade / Minimale Leistung Warmwasser	SYSCAMLPM	0	100		%	present
+1225	UCHAR	RW	volatile	Kaskade / Maximale Leistung Warmwasser	SYSCAMLP	0	100		%	present
+1226	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Parallel	SYSCAPVTHP	-90	40		°C	present
+1227	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Alternativ	SYSCAPVTHA	-90	40		°C	present
+1228	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Parallel	SYSCAPVTCP	-90	40		°C	present
+1229	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Alternativ	SYSCAPVTCA	-90	40		°C	present
+1230	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmwasser	SYSCAPVTPP	-90	40		°C	present
+1231	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmwasser	SYSCAPVTPA	-90	40		°C	present
+1350	FLOAT	RO	volatile	Heizkreis A Vorlauftemperatur (B51)					°C	present
+1352	FLOAT	RO	volatile	Heizkreis B Vorlauftemperatur (B52)					°C	present
+1354	FLOAT	RO	volatile	Heizkreis C Vorlauftemperatur (B53)					°C	present
+1356	FLOAT	RO	volatile	Heizkreis D Vorlauftemperatur (B54)					°C	present
+1358	FLOAT	RO	volatile	Heizkreis E Vorlauftemperatur (B55)					°C	present
+1360	FLOAT	RO	volatile	Heizkreis F Vorlauftemperatur (B56)					°C	present
+1362	FLOAT	RO	volatile	Heizkreis G Vorlauftemperatur (B57)					°C	present
+1364	FLOAT	RO	volatile	Heizkreis A Raumtemperatur (B61)					°C	present
+1366	FLOAT	RO	volatile	Heizkreis B Raumtemperatur (B62)					°C	present
+1368	FLOAT	RO	volatile	Heizkreis C Raumtemperatur (B63)					°C	present
+1370	FLOAT	RO	volatile	Heizkreis D Raumtemperatur (B64)					°C	present
+1372	FLOAT	RO	volatile	Heizkreis E Raumtemperatur (B65)					°C	present
+1374	FLOAT	RO	volatile	Heizkreis F Raumtemperatur (B66)					°C	present
+1376	FLOAT	RO	volatile	Heizkreis G Raumtemperatur (B67)					°C	present
 1378	FLOAT	RO	volatile	Heizkreis A Sollvorlauftemperatur					°C	present
 1380	FLOAT	RO	volatile	Heizkreis B Sollvorlauftemperatur					°C	present
 1382	FLOAT	RO	volatile	Heizkreis C Sollvorlauftemperatur					°C	present
@@ -96,7 +96,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 1386	FLOAT	RO	volatile	Heizkreis E Sollvorlauftemperatur					°C	present
 1388	FLOAT	RO	volatile	Heizkreis F Sollvorlauftemperatur					°C	present
 1390	FLOAT	RO	volatile	Heizkreis G Sollvorlauftemperatur					°C	present
-1392	FLOAT	RO	volatile	Feuchtesensor (B3		0	100		%rF	present
+1392	FLOAT	RO	volatile	Feuchtesensor (B31)		0	100		%rF	present
 1393	UCHAR	RW	eeprom	Betriebsart Heizkreis A	HKA01	0	5	1		present
 1394	UCHAR	RW	eeprom	Betriebsart Heizkreis B	HKB01	0	5	1		present
 1395	UCHAR	RW	eeprom	Betriebsart Heizkreis C	HKC01	0	5	1		present
@@ -198,29 +198,29 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 1711	BOOL	RW	volatile	Anforderung Kühlen		0	1	0		present
 1712	BOOL	RW	volatile	Anforderung Warmwasserladung		0	1	0		present
 1713	BOOL	RW	volatile	Ext. Ansteuerung „Einmalige WW-Ladung“		0	1	0		present
-1714	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe						present
-1715	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe						present
-1716	FLOAT	W	volatile	GLT Wärmespeichertemperatur	-1					present
-1718	FLOAT	W	volatile	GLT Kältespeichertemperatur	-1					present
+1714	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW/SWM/SW Twin) und Sole-/Zwischenkreispumpe M16 (bei SW/SWM/SW Twin/SW Max)						present
+1715	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW Max)						present
+1716	FLOAT	W	volatile	GLT Wärmespeichertemperatur				-1	°C	present
+1718	FLOAT	W	volatile	GLT Kältespeichertemperatur				-1	°C	present
 1720	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. unten				-1	°C	present
 1722	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. oben				-1	°C	present
-1748	FLOAT	RO	volatile	Wärmemenge Heizen	kWh					present
-1750	FLOAT	RO	volatile	Wärmemenge Gesamt	kWh					present
-1752	FLOAT	RO	volatile	Wärmemenge Kühlen	kWh					present
-1754	FLOAT	RO	volatile	Wärmemenge Warmwasser	kWh					present
-1756	FLOAT	RO	volatile	Wärmemenge Abtauung	2)					present
-1758	FLOAT	RO	volatile	Wärmemenge Passive Kühlung	3)					present
-1760	FLOAT	RO	volatile	Wärmemenge Solar	4)					present
-1762	FLOAT	RO	volatile	Wärmemenge Elektroheizeinsatz	2)					present
-1790	FLOAT	RO	volatile	Momentanleistung	5)					present
+1748	FLOAT	RO	volatile	Wärmemenge Heizen					kWh	present
+1750	FLOAT	RO	volatile	Wärmemenge Gesamt					kWh	present
+1752	FLOAT	RO	volatile	Wärmemenge Kühlen					kWh	present
+1754	FLOAT	RO	volatile	Wärmemenge Warmwasser					kWh	present
+1756	FLOAT	RO	volatile	Wärmemenge Abtauung					kWh	present
+1758	FLOAT	RO	volatile	Wärmemenge Passive Kühlung					kWh	present
+1760	FLOAT	RO	volatile	Wärmemenge Solar					kWh	present
+1762	FLOAT	RO	volatile	Wärmemenge Elektroheizeinsatz					kWh	present
+1790	FLOAT	RO	volatile	Momentanleistung					kW	present
 1792	FLOAT	RO	volatile	Momentanleistung Solar					kW	present
-1850	FLOAT	RO	volatile	Solar Kollektortemperatur (B7					°C	present
-1852	FLOAT	RO	volatile	Solar Kollektorrücklauftemperatur (B7					°C	present
-1854	FLOAT	RO	volatile	Solar Ladetemperatur (B7					°C	present
+1850	FLOAT	RO	volatile	Solar Kollektortemperatur (B73)					°C	present
+1852	FLOAT	RO	volatile	Solar Kollektorrücklauftemperatur (B75)					°C	present
+1854	FLOAT	RO	volatile	Solar Ladetemperatur (B74)					°C	present
 1856	UCHAR	RW	eeprom	Betriebsart Solar	SC002	0	4	0		present
-1857	FLOAT	RO	volatile	Solar WQ-Referenztemp./Pooltemp. (B7					°C	present
-1870	FLOAT	RO	volatile	ISC Ladetemperatur Kühlen (B4					°C	present
-1872	FLOAT	RO	volatile	ISC Rückkühltemperatur (B4					°C	present
+1857	FLOAT	RO	volatile	Solar WQ-Referenztemp./Pooltemp. (B76)					°C	present
+1870	FLOAT	RO	volatile	ISC Ladetemperatur Kühlen (B44)					°C	present
+1872	FLOAT	RO	volatile	ISC Rückkühltemperatur (B49)					°C	present
 1874	UCHAR	RO	volatile	ISC Modus		0	8			present
 1999	UCHAR	W	volatile	Störmeldungen quittieren						absent
 2000	UCHAR	RO	volatile	Zonenmodul 1 Modus Heizen/Kühlen A14		0	1			absent
@@ -249,7 +249,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2053	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 8					°C	absent
 2056	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 8		0	4			absent
 2057	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 8		0	1			absent
-2064	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 9 (A		0	1			absent
+2064	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 9 (A9)		0	1			absent
 2065	UCHAR	RO	volatile	Zonenmodul 2 Modus Heizen/Kühlen A14		0	1			absent
 2066	UCHAR	RO	volatile	Zonenmodul 2 Entfeuchtungsausgang A12		0	1	0		absent
 2069	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 1					°C	absent
@@ -276,7 +276,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2118	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 8					°C	absent
 2121	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 8		0	4			absent
 2122	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 8		0	1			absent
-2129	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 9 (A		0	1			absent
+2129	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 9 (A9)		0	1			absent
 2130	UCHAR	RO	volatile	Zonenmodul 3 Modus Heizen/Kühlen A14		0	1			absent
 2131	UCHAR	RO	volatile	Zonenmodul 3 Entfeuchtungsausgang A12		0	1	0		absent
 2134	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 1					°C	absent
@@ -303,7 +303,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2183	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 8					°C	absent
 2186	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 8		0	4			absent
 2187	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 8		0	1			absent
-2194	UCHAR	RO	volatile	Zonenmodul 3 Status Raum 9 (A		0	1			absent
+2194	UCHAR	RO	volatile	Zonenmodul 3 Status Raum 9 (A9)		0	1			absent
 2195	UCHAR	RO	volatile	Zonenmodul 4 Modus Heizen/Kühlen A14		0	1			absent
 2196	UCHAR	RO	volatile	Zonenmodul 4 Entfeuchtungsausgang A12		0	1	0		absent
 2199	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 1					°C	absent
@@ -330,7 +330,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2248	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 8					°C	absent
 2251	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 8		0	4			absent
 2252	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 8		0	1			absent
-2259	UCHAR	RO	volatile	Zonenmodul 4 Status Raum 9 (A		0	1			absent
+2259	UCHAR	RO	volatile	Zonenmodul 4 Status Raum 9 (A9)		0	1			absent
 2260	UCHAR	RO	volatile	Zonenmodul 5 Modus Heizen/Kühlen A14		0	1			absent
 2261	UCHAR	RO	volatile	Zonenmodul 5 Entfeuchtungsausgang A12		0	1	0		absent
 2264	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 1					°C	absent
@@ -357,7 +357,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2313	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 8					°C	absent
 2316	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 8		0	4			absent
 2317	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 8		0	1			absent
-2324	UCHAR	RO	volatile	Zonenmodul 5 Status Raum 9 (A		0	1			absent
+2324	UCHAR	RO	volatile	Zonenmodul 5 Status Raum 9 (A9)		0	1			absent
 2325	UCHAR	RO	volatile	Zonenmodul 6 Modus Heizen/Kühlen A14		0	1			absent
 2326	UCHAR	RO	volatile	Zonenmodul 6 Entfeuchtungsausgang A12		0	1	0		absent
 2329	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 1					°C	absent
@@ -384,7 +384,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2378	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 8					°C	absent
 2381	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 8		0	4			absent
 2382	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 8		0	1			absent
-2389	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 9 (A		0	1			absent
+2389	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 9 (A9)		0	1			absent
 2390	UCHAR	RO	volatile	Zonenmodul 7 Modus Heizen/Kühlen A14		0	1			absent
 2391	UCHAR	RO	volatile	Zonenmodul 7 Entfeuchtungsausgang A12		0	1	0		absent
 2394	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 1					°C	absent
@@ -411,7 +411,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2443	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 8					°C	absent
 2446	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 8		0	4			absent
 2447	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 8		0	1			absent
-2454	UCHAR	RO	volatile	Zonenmodul 7 Status Raum 9 (A		0	1			absent
+2454	UCHAR	RO	volatile	Zonenmodul 7 Status Raum 9 (A9)		0	1			absent
 2455	UCHAR	RO	volatile	Zonenmodul 8 Modus Heizen/Kühlen A14		0	1			absent
 2456	UCHAR	RO	volatile	Zonenmodul 8 Entfeuchtungsausgang A12		0	1	0		absent
 2459	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 1					°C	absent
@@ -438,7 +438,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2508	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 8					°C	absent
 2511	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 8		0	4			absent
 2512	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 8		0	1			absent
-2519	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 9 (A		0	1			absent
+2519	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 9 (A9)		0	1			absent
 2520	UCHAR	RO	volatile	Zonenmodul 9 Modus Heizen/Kühlen A14		0	1			absent
 2521	UCHAR	RO	volatile	Zonenmodul 9 Entfeuchtungsausgang A12		0	1	0		absent
 2524	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 1					°C	absent
@@ -465,7 +465,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2573	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 8					°C	absent
 2576	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 8		0	4			absent
 2577	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 8		0	1			absent
-2584	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 9 (A		0	1			absent
+2584	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 9 (A9)		0	1			absent
 2585	UCHAR	RO	volatile	Zonenmodul 10 Modus Heizen/Kühlen A14		0	1			absent
 2586	UCHAR	RO	volatile	Zonenmodul 10 Entfeuchtungsausgang A12		0	1	0		absent
 2589	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 1					°C	absent
@@ -492,7 +492,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 2638	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 8					°C	absent
 2641	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 8		0	4			absent
 2642	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 8		0	1			absent
-2649	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 9 (A		0	1			absent
+2649	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 9 (A9)		0	1			absent
 4122	FLOAT	RO	volatile	Aktuelle Leistungsaufnahme Wärmepumpe					kW	present
 4126	FLOAT	RO	volatile	thermische Leistung (Durchflusssensor)				0	kW	present
 4128	FLOAT	RO	volatile	Wärmemenge gesamt				0	kWh	present

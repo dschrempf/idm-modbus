@@ -34,6 +34,9 @@ checks =
     ( "every register has a name",
       all (not . T.null . registerName) Table.navigator20
     ),
+    ( "a name carries its sensor designator whole",
+      all (balanced . registerName) Table.navigator20
+    ),
     ( "a documented range is well ordered",
       all wellOrdered Table.navigator20
     ),
@@ -85,6 +88,12 @@ decodeAt a bs = case decodeRaw a bs of
 approximately :: Maybe Double -> Double -> Bool
 approximately (Just x) y = abs (x - y) < 0.01
 approximately Nothing _ = False
+
+-- | The parameter list prints a footnote marker exactly like the tail of a
+-- sensor designator, so a transcription that confuses the two leaves
+-- @Außentemperatur (B32)@ as @Außentemperatur (B3@.
+balanced :: T.Text -> Bool
+balanced t = T.count (T.pack "(") t == T.count (T.pack ")") t
 
 wellOrdered :: Register -> Bool
 wellOrdered r = case registerRange r of
