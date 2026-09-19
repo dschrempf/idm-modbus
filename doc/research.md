@@ -199,6 +199,13 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
   implicit, and likewise for zone modules. The transcription in `data/` records
   only what is literally printed; extending an encoding across a family is a
   judgement call and has not been made yet.
+- **The unit of address 74.** Both manuals print `[kW]`, and that is what
+  `data/` records. The evcc discussions describe writing watts. The Smartfox
+  setup asks for the pump's rated power in watts too, but that is a field in
+  the energy manager, not the register. The capture cannot decide it: 74, 78
+  and 4122 all read exactly 0.0 on this machine, which has no PV system. It
+  matters only once writing exists, and it should be settled by writing a known
+  value and reading the controller's own display back, not by argument.
 - **`UCHAR` value 254.** Addresses 1714 and 1715 return 254, where every other
   unfitted `UCHAR` returns 255. Whether 254 is a second sentinel or a real
   value is not known; the library currently treats both as absence.
