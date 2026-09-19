@@ -1,0 +1,56 @@
+address	code	label
+1005	0	Standby
+1005	1	Automatik
+1005	2	Abwesend
+1005	4	Nur Warmwasser
+1005	5	Nur Heizung/Kühlung
+1006	0	EVU-Sperre u. kein günstiger Strom
+1006	1	EVU-Bezug u. kein günstiger Strom
+1006	2	Kein EVU-Bezug u. günstiger Strom
+1006	4	EVU-Sperre u. günstiger Strom
+1090	0	Aus
+1090	1	Heizbetrieb
+1090	2	Kühlbetrieb
+1090	4	Warmwasser
+1090	8	Abtauung
+1098	0	gesperrt
+1098	1	nicht gesperrt
+1099	0	Keine Störung
+1099	1	Störung
+1100	0	Aus
+1100	1	Ein
+1124	0	Aus
+1124	1	Bivalenz 1 aktiv
+1124	2	Bivalenz 2 aktiv
+1124	3	Bivalenz 1+2 aktiv
+1393	0	Aus
+1393	1	Zeitprogramm
+1393	2	Normal
+1393	3	Eco
+1393	4	Manuell Heizen
+1393	5	Manuell Kühlen
+1498	0	Aus
+1498	1	Heizen
+1498	2	Kühlen
+1712	0	Aus
+1712	1	Ein
+1856	0	Automatik
+1856	1	Warmwasser
+1856	2	Heizung
+1856	3	Warmwasser + Heizung
+1856	4	Wärmequelle / Pool
+1874	0	Keine Abwärme
+1874	1	Heizung
+1874	4	Warmwasser
+1874	8	Wärmequelle
+2000	0	Kühlen
+2000	1	Heizen
+2001	0	Aus
+2001	1	Ein
+2007	0	Aus
+2007	1	Automatik
+2007	2	Eco
+2007	3	Normal
+2007	4	Komfort
+2008	0	Aus
+2008	1	Ein
