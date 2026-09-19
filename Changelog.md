@@ -12,6 +12,17 @@
 - `idm-dump`, which reads every register and prints it.
 - The research behind all of this, in `doc/`.
 
+### Changed
+
+- `data/navigator-2.0-scan-2026-09-19.json` holds what the machine said and
+  nothing else: address, status, the exception code behind a refusal, the
+  bytes, and the number those bytes spell. It used to repeat the parameter
+  list's own columns, transcribed a second time and wrong in 19 of them — the
+  same defects as the table, plus a few of its own. `idm-dump --json` writes
+  the format, so the capture is reproducible; `IDM.Navigator.Register.asWritten`
+  reads bytes without applying the conventions the manual leaves out, which is
+  what a capture must record if it is to be the evidence for them.
+
 ### Fixed
 
 - `tools/transcribe.py` read the parameter list by the order of its cells,

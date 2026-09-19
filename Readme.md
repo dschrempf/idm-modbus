@@ -26,7 +26,10 @@ implemented.
 `idm-dump` reads every register that a reference machine answered for and
 prints address, access right, EEPROM marking, value, unit and name. With
 `--all` it sweeps the entire parameter list instead, which is how you find out
-what your own machine has fitted.
+what your own machine has fitted. With `--json` it sweeps every address,
+write-only ones included, and writes the capture format of
+`data/navigator-2.0-scan-*.json`: address, status, exception code, bytes, and
+the number those bytes spell, uninterpreted.
 
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The
@@ -38,7 +41,7 @@ service code is the day and month of the current date. Port 502, unit id 1.
 |---|---|
 | `data/navigator-2.0-registers.tsv` | the parameter list, transcribed; the single source of truth |
 | `data/navigator-2.0-enums.tsv` | enumerated values, as literally printed in the manual |
-| `data/navigator-2.0-scan-*.json` | what a real machine answered, unedited |
+| `data/navigator-2.0-scan-*.json` | what a real machine answered, and nothing the list already says |
 | `tools/transcribe.py` | rebuilds both TSVs from the manual's extracted text |
 | `src/IDM/Modbus/TCP.hs` | framing |
 | `src/IDM/Navigator/Register.hs` | what a register is, and how to decode one |

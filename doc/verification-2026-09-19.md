@@ -3,7 +3,13 @@
 2026-09-19. Every one of the 497 addresses in document 812170 revision 10 was
 read once, sequentially, over one connection, with 150 ms between requests.
 Read access only; nothing was written. The raw result is
-`data/navigator-2.0-scan-2026-09-19.json`.
+`data/navigator-2.0-scan-2026-09-19.json`, which `idm-dump --json` writes.
+
+That file records what the machine said and nothing the parameter list already
+says: the address, whether it answered, the Modbus exception behind a refusal,
+the bytes, and the number those bytes spell. The number is uninterpreted — a
+`WORD` bivalence point appears there as 65516, not as -20 degrees — because a
+capture that already applied a convention could not be the evidence for it.
 
 ## The machine
 

@@ -17,6 +17,7 @@ module IDM.Modbus.TCP
     Address (..),
     Quantity (..),
     ExceptionCode (..),
+    exceptionByte,
     Failure (..),
     readRegisters,
   )
@@ -75,6 +76,15 @@ exceptionCode 2 = IllegalDataAddress
 exceptionCode 3 = IllegalDataValue
 exceptionCode 4 = ServerDeviceFailure
 exceptionCode n = OtherException n
+
+-- | The inverse. The manual and the community name these codes by number, so a
+-- record of what a machine answered gives the number.
+exceptionByte :: ExceptionCode -> Word8
+exceptionByte IllegalFunction = 1
+exceptionByte IllegalDataAddress = 2
+exceptionByte IllegalDataValue = 3
+exceptionByte ServerDeviceFailure = 4
+exceptionByte (OtherException n) = n
 
 -- | Why a read did not produce registers. 'DeviceException' is the ordinary
 -- case on a Navigator: an address belonging to hardware that is not fitted

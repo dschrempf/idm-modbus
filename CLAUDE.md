@@ -29,8 +29,11 @@ The register table is data, not code, and it flows one way:
 
 `tools/transcribe.py` is the only thing that may write the TSVs — editing them
 by hand makes the next revision of the manual impossible to apply cleanly. It
-also folds in `data/navigator-2.0-scan-*.json`, an unedited capture of what one
-machine answered, to fill the `observed` column. A defect in a register name,
+also folds in `data/navigator-2.0-scan-*.json`, a capture of what one machine
+answered, to fill the `observed` column. The capture holds no transcribed data
+of its own — `idm-dump --json` writes it, and it records only address, status,
+exception code, raw bytes and the uninterpreted number, so a correction to the
+table cannot leave it saying something else. A defect in a register name,
 unit or range is therefore a defect in the transcription script, not in the
 Haskell parser.
 

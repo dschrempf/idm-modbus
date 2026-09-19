@@ -22,6 +22,7 @@ module IDM.Navigator.Register
     Reading (..),
     reading,
     Value (..),
+    asWritten,
     decode,
   )
 where
@@ -29,7 +30,7 @@ where
 import Data.Bits (shiftL, (.|.))
 import qualified Data.ByteString as B
 import Data.Text (Text)
-import Data.Word (Word16)
+import Data.Word (Word16, Word32)
 import GHC.Float (castWord32ToFloat)
 import IDM.Modbus.TCP (Address, Quantity (..))
 
@@ -156,45 +157,62 @@ data Value
   | Flag Bool
   deriving (Show, Eq)
 
--- | Interpret the bytes of a read according to the register's datatype.
+-- | The number the machine sent, as the datatype alone describes it.
 --
 -- Two things about the wire format are easy to get wrong and are handled here.
 -- A 32-bit float arrives low word first, against the usual Modbus habit. And a
 -- @UCHAR@ occupies a whole register of which only the low byte is meaningful.
-decode :: Register -> B.ByteString -> Maybe (Reading Value)
-decode reg bytes = case registerDatatype reg of
+--
+-- None of the conventions the manual leaves out are applied: a sentinel is
+-- still a -1 here, and a temperature-carrying @WORD@ is still unsigned. This
+-- is what a capture records, so that the evidence for a convention does not
+-- rest on the convention.
+asWritten :: Register -> B.ByteString -> Maybe Value
+asWritten reg bytes = case registerDatatype reg of
   Float32 -> withWords 2 $ \ws -> case ws of
-    [lo, hi] ->
-      let v = realToFrac (castWord32ToFloat ((fromIntegral hi `shiftL` 16) .|. fromIntegral lo))
-       in sentinel (v == -1) (Real v)
+    [lo, hi] -> Just (Real (realToFrac (castWord32ToFloat (wide lo hi))))
     _ -> Nothing
   DWord -> withWords 2 $ \ws -> case ws of
-    [lo, hi] ->
-      let v = (fromIntegral hi `shiftL` 16) .|. fromIntegral lo :: Int
-       in sentinel (v == 0xFFFFFFFF) (Count v)
+    [lo, hi] -> Just (Count (fromIntegral (wide lo hi)))
     _ -> Nothing
   UChar -> withWords 1 $ \ws -> case ws of
-    [w] ->
-      let v = fromIntegral w `mod` 256 :: Int
-       in sentinel (v >= 254) (Count v)
-    _ -> Nothing
-  Boolean -> withWords 1 $ \ws -> case ws of
-    [w] -> sentinel (w >= 254) (Flag (w /= 0))
+    [w] -> Just (Count (fromIntegral w `mod` 256))
     _ -> Nothing
   Word -> withWords 1 $ \ws -> case ws of
-    [w] -> sentinel (w == 0xFFFF) (Count (signedIfTemperature w))
+    [w] -> Just (Count (fromIntegral w))
+    _ -> Nothing
+  Boolean -> withWords 1 $ \ws -> case ws of
+    [w] -> Just (Count (fromIntegral w))
     _ -> Nothing
   where
-    sentinel isSentinel v = Just (if isSentinel then NotFitted else Measured v)
+    wide lo hi = (fromIntegral hi `shiftL` 16) .|. fromIntegral lo :: Word32
     withWords n k
       | B.length bytes == 2 * n = k (toWords bytes)
       | otherwise = Nothing
+
+-- | Read the bytes of a read the way the Navigator means them.
+decode :: Register -> B.ByteString -> Maybe (Reading Value)
+decode reg bytes = navigator reg <$> asWritten reg bytes
+
+-- | The conventions the parameter list does not state: the sentinel an
+-- unfitted sensor answers with, the sign of a temperature-carrying @WORD@, and
+-- the 0 or 1 of a @BOOL@.
+navigator :: Register -> Value -> Reading Value
+navigator reg v = case (registerDatatype reg, v) of
+  (Float32, Real x) -> sentinel (x == -1) v
+  (DWord, Count n) -> sentinel (n == 0xFFFFFFFF) v
+  (UChar, Count n) -> sentinel (n >= 254) v
+  (Boolean, Count n) -> sentinel (n >= 254) (Flag (n /= 0))
+  (Word, Count n) -> sentinel (n == 0xFFFF) (Count (signedIfTemperature n))
+  -- 'asWritten' pairs each datatype with one constructor; nothing else arises
+  _ -> Measured v
+  where
+    sentinel isSentinel w = if isSentinel then NotFitted else Measured w
     -- A @WORD@ carrying a temperature is two's complement: the bivalence
     -- points read 65531 and 65516 for the documented -5 and -20 degrees.
-    signedIfTemperature w
-      | registerUnit reg == Just DegreeCelsius && w > 0x7FFF =
-          fromIntegral w - 65536
-      | otherwise = fromIntegral w
+    signedIfTemperature n
+      | registerUnit reg == Just DegreeCelsius && n > 0x7FFF = n - 65536
+      | otherwise = n
 
 toWords :: B.ByteString -> [Word16]
 toWords bs

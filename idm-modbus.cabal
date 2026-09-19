@@ -18,9 +18,9 @@ license-file:       License.txt
 build-type:         Simple
 extra-doc-files:
   Changelog.md
-  Readme.md
   doc/research.md
   doc/verification-2026-09-19.md
+  Readme.md
 
 extra-source-files:
   data/navigator-2.0-enums.tsv
@@ -67,6 +67,7 @@ executable idm-dump
   hs-source-dirs: app
   build-depends:
     , base        >=4.7 && <5
+    , bytestring
     , idm-modbus
     , text
 

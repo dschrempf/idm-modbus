@@ -58,6 +58,10 @@ checks =
       -- 65531 is the documented -5 degree bivalence point
       decodeRaw 1120 (B.pack [0xff, 0xfb]) == Just (Measured (Count (-5)))
     ),
+    ( "a capture records the number, not the reading",
+      asWritten (register 1120) (B.pack [0xff, 0xfb]) == Just (Count 65531)
+        && asWritten (register 1000) (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just (Real (-1))
+    ),
     ( "an all-ones word is absence, not minus one",
       decodeRaw 1104 (B.pack [0xff, 0xff]) == Just NotFitted
     ),
