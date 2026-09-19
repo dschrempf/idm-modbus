@@ -48,14 +48,50 @@ Two facts from it that every integration needs and that are easy to miss:
   EEPROM, which the manual rates at 300000 write cycles. An automation that
   adjusts a starred setpoint once a minute destroys it in about seven months.
 
-Supporting document 812184, "myiDM+energy – Navigator 2.0", covers the
-photovoltaic side and is published openly by iDM. It describes addresses 74
-(current PV surplus) and 4122 (current power draw) at greater length, but both
-are in 812170 too: 74 to 86 as the block a home energy manager writes, marked
-`RW/RO`, and 4122 to 4128 as ordinary read-only registers.
+## The supporting document
 
-A copy of both PDFs is filed with the house documents rather than in this
-repository; they are the manufacturer's, not ours to redistribute.
+**iDM document 812184, revision 13, "myiDM+energy – Navigator 2.0", 52 pages,
+dated 27 November 2024.** This one iDM publishes, and unlike 812170 it is easy
+to find. It covers the photovoltaic and the Smart Grid side:
+
+    https://www.idm-energie.at/wp-content/uploads/2021/04/tu_de_812184_myiDMenergy_PV_Variable-Stromtarife_Navigator-2.0-2.pdf
+
+It adds no address. Its block — 74, 76, 78, 82, 84, 86 and 4122 — is the one
+812170 prints, with the same datatypes and the same defaults, and in revision
+13 it is a screenshot rather than text, so `pdftotext` drops it without saying
+so. Five things in it are not in 812170:
+
+- **A second switch gates the PV path.** 812170 asks only that "Modbus TCP" be
+  "Ein" under "Gebäudeleittechnik". 812184 adds that the parameter PV008
+  (`SYSPVSIGNAL`) must read "Gebäudeleittechnik/Smartfox", and that the
+  controller needs a static address. `SYSPVSIGNAL` appears nowhere in the
+  parameter list, so the switch cannot be thrown over Modbus. This is half an
+  answer to the `RW/RO` question below: for this block a menu parameter does
+  gate the feature, and neither document says what a write to 74 does while it
+  is unset.
+- **4122 is a model output, not a meter.** While the machine runs, it is
+  computed from the compressor characteristic, the evaporation and condensation
+  temperature, the speed and the fan power; at standstill it is a forecast from
+  the outside temperature, the storage or return temperature, the minimum speed
+  and the "TWW-Erwärmer-Maximaltemperatur". A series logged from it is not
+  measured electrical power.
+- **The PV menu is not on Modbus.** 812184 documents the settings PV001 to
+  PV016, PV025, PVPRIO and PV-ROOMS; not one of those identifiers appears in
+  the parameter column of 812170. Only the live values are addressable.
+- **The same two values sit on two other buses**, as BACnet objects 74 (Analog
+  Value) and 4122 (Analog Input) on UDP port 47808, and as EIB/KNX datapoints
+  995 and 997. The Analog Value / Analog Input split mirrors the
+  holding/input register split that turns out to be immaterial on the wire.
+- **In a cascade, 74 is a surplus signal only.** Every PV signal but the
+  digital input is available there, and of the regulation modes only the
+  surplus one stays active.
+
+Nothing on the Smart Grid side is addressable at all: tariff signals arrive on
+two digital inputs (terminals 112/113 and 118/119) and hourly tariffs over
+myiDM.
+
+The PDFs live in `manual/`, which git ignores; they are the manufacturer's, not
+ours to redistribute.
 
 ## Community work
 
@@ -142,11 +178,22 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
   management system may supply this, and may read it back", which is what the
   worked examples in chapter 4.3 do with them. Whether writing takes effect
   without the matching menu parameter set to "Ja" is untested; writing is not
-  implemented.
+  implemented. For the PV block there is at least a named gate — PV008, see
+  above — and it is not itself addressable.
 - **Revision drift.** Revision 10 documents software 20.21-101; this machine
   runs 20.24. No address in the manual is missing from the machine, so nothing
   was removed, but the manual cannot say what was *added*. Worth asking iDM
-  support whether a later revision exists.
+  support whether a later revision exists — revision numbers run per document,
+  so 812184 reaching revision 13 says nothing about 812170, and the Loxone
+  mirror still serves revision 10 byte for byte
+  (md5 `5cff6722aee3655431b2d4166a6b3d5a`).
+
+  Two later reprints constrain the drift for one block. 812184 rev. 13
+  (November 2024) and the Navigator 10 excerpt (January 2026) both print
+  addresses 74 to 86 and 4122 with unchanged datatypes and defaults — across
+  two years and a controller generation. The same two revisions show that
+  printed enumerations *do* drift: PV013 went from "Ja/Nein" to
+  "Nein/Automatik/Immer", and PV008 gained four inverter manufacturers.
 - **Enumerations are printed once per family.** The manual gives the operating
   mode codes beside heating circuit A (address 1393) and leaves B to G
   implicit, and likewise for zone modules. The transcription in `data/` records
@@ -159,9 +206,42 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
 ## Sources
 
 - [812170 rev. 10, Modbus TCP Navigatorregelung 2.0](https://api.library.loxone.com/downloader/file/647/Modbus%20TCP_Navigator%202.0_DE.pdf)
-- [812184, myiDM+energy Navigator 2.0](https://www.idm-energie.at/wp-content/uploads/2023/10/tu_de_812184_myiDMenergy-Navigator-2.0.pdf)
+- [812184 rev. 13, myiDM+energy Navigator 2.0](https://www.idm-energie.at/wp-content/uploads/2021/04/tu_de_812184_myiDMenergy_PV_Variable-Stromtarife_Navigator-2.0-2.pdf)
+  — the 26-page file under `uploads/2023/10/` is an excerpt of an earlier
+  revision, printed pages 11 to 36
+- [The same chapter for the Navigator 10, January 2026](https://www.idm-energie.at/wp-content/uploads/2026/01/Gebaeudeleittechnik-Smartfox.pdf)
+  — three pages, filed under a name that hides what it is
 - [kodebach/hacs-idm-heatpump](https://github.com/kodebach/hacs-idm-heatpump)
 - [Xerolux/idm-heatpump-api](https://github.com/Xerolux/idm-heatpump-api)
 - [chincherpa/idm_control](https://github.com/chincherpa/idm_control/blob/master/modbus_tcp_navigator.md)
 - [evcc discussion 11905](https://github.com/evcc-io/evcc/discussions/11905)
 - [Home Assistant community: IDM heatpump integration via modbus](https://community.home-assistant.io/t/idm-heatpump-integration-via-modbus-pure-ha/701473)
+
+## Finding documents on the iDM site
+
+idm-energie.at runs WordPress with the REST API open, so the document list can
+be read out rather than guessed at. Filenames are not a reliable guide — the
+Navigator 10 chapter above is called `Gebaeudeleittechnik-Smartfox.pdf` and
+carries no document number, while the number-bearing files sit under an upload
+folder (`2021/04/`) that has nothing to do with their date.
+
+Every published PDF, newest first — 1364 of them at the time of writing:
+
+    for p in $(seq 1 14); do
+      curl -s "https://www.idm-energie.at/wp-json/wp/v2/media?mime_type=application/pdf&per_page=100&page=$p&_fields=date,source_url" \
+        | jq -r '.[]|[.date[0:10],.source_url]|@tsv'
+    done
+
+`&search=<term>` narrows it; the search runs over title and slug, so `812`
+finds the numbered technical documents, `schnittstelle` the per-manufacturer
+interface sheets, and `gebaeudeleittechnik` the Navigator 10 one. The `date`
+field is the upload date, which is how a newer revision is spotted: several
+revisions of one document sit side by side, distinguished only by a `-1`, `-2`
+suffix.
+
+Two things this does not reach. The Download Monitor endpoint
+(`/wp-json/download-monitor/v1/downloads`) answers 403, so anything gated
+behind the partner portal stays invisible. And 812170 is not in the library at
+all: a search for `812` returns fifteen files, none of them it, and the obvious
+guesses (`Modbus-TCP.pdf`, `tu_de_812170_*.pdf`, tried across several upload
+folders) all 404. For that document the Loxone mirror remains the only source.
