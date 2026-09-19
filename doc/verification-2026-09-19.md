@@ -1,6 +1,6 @@
 # Verifying the parameter list against a running machine
 
-2026-09-19. Every one of the 497 addresses in document 812170 revision 10 was
+2026-09-19. Every one of the 663 addresses in document 812170 revision 10 was
 read once, sequentially, over one connection, with 150 ms between requests.
 Read access only; nothing was written. The raw result is
 `data/navigator-2.0-scan-2026-09-19.json`, which `idm-dump --json` writes.
@@ -28,8 +28,8 @@ capture that already applied a convention could not be the evidence for it.
 
 | | |
 |---|---|
-| Answered | 226 |
-| Refused with `IllegalDataAddress` | 271 |
+| Answered | 232 |
+| Refused with `IllegalDataAddress` | 431 |
 | Any other failure | 0 |
 
 **Every refusal is explained by the machine's configuration.** The refused set
@@ -40,8 +40,9 @@ not describe.
 
 Addresses answered in these blocks:
 
-    1000-1066  1090-1124  1147-1152  1200-1231  1350-1511
-    1650-1662  1690-1722  1748-1762  1790-1792  1850-1874  4122-4128
+    74-86      1000-1014  1030-1034  1048-1066  1090-1124  1147-1152
+    1200-1210  1220-1231  1350-1511  1650-1662  1690-1698  1710-1722
+    1748-1762  1790-1792  1850-1857  1870-1874  4122-4128
 
 ## Readings that confirm the decoding
 
@@ -50,16 +51,32 @@ afternoon, compressor off.
 
 | Address | Reading | Why it confirms something |
 |---|---|---|
-| 1000 | 21.59 °C | outdoor temperature; float, low word first |
-| 1002 | 17.16 °C | averaged outdoor temperature |
+| 1000 | 22.97 °C | outdoor temperature; float, low word first |
+| 1002 | 18.52 °C | averaged outdoor temperature |
 | 1008 | 21.25 °C | buffer |
-| 1012 / 1014 | 41.00 / 53.20 °C | hot water bottom and top, a plausible stratification |
+| 1012 / 1014 | 39.90 / 52.31 °C | hot water bottom and top, a plausible stratification |
 | 1032 | 46 °C | hot water setpoint, exactly the documented default |
 | 1005 | 4 | system mode, resolves to "Nur Warmwasser" via the enumeration |
-| 1350 / 1354 / 1356 | 22.63 / 21.71 / 22.14 °C | flow temperature of circuits A, C, D |
+| 1350 / 1354 / 1356 | 22.56 / 21.63 / 22.14 °C | flow temperature of circuits A, C, D |
 | 1352, 1358-1362 | -1.0 | circuits B, E, F, G: not fitted |
 | 1750 | 257.982 | total heat, and 1.080 + 256.902 + 0.0 for heating, hot water and defrost sums to it exactly |
 | 4128 | 257.982 kWh | the same quantity under a second address |
+
+## The energy management block
+
+Addresses 74 to 86 are the block an inverter or a home energy manager writes:
+PV surplus, heating element power, PV production, house consumption, battery
+discharge, battery charge level. The parameter list marks them `RW/RO`, a
+right chapter 4.1 does not define and this transcription reads as 'Supplied'.
+
+All six answer. The five floats read `0.0` — nothing is feeding them here —
+and 86 reads `65535`, the `WORD` sentinel, so the battery charge level is
+absent rather than zero. **That settles address 86**, which the Home Assistant
+thread lists as unresolved: it is `Batteriefüllstand`, documented in revision
+10 all along.
+
+The 160 zone module room temperature and humidity registers carry the same
+marking and all refuse, consistent with the rest of the zone module block.
 
 ## The three findings
 

@@ -49,8 +49,10 @@ Two facts from it that every integration needs and that are easy to miss:
   adjusts a starred setpoint once a minute destroys it in about seven months.
 
 Supporting document 812184, "myiDM+energy – Navigator 2.0", covers the
-photovoltaic side and is published openly by iDM. It is where addresses 74
-(current PV surplus) and 4122 (current power draw) are described.
+photovoltaic side and is published openly by iDM. It describes addresses 74
+(current PV surplus) and 4122 (current power draw) at greater length, but both
+are in 812170 too: 74 to 86 as the block a home energy manager writes, marked
+`RW/RO`, and 4122 to 4128 as ordinary read-only registers.
 
 A copy of both PDFs is filed with the house documents rather than in this
 repository; they are the manufacturer's, not ours to redistribute.
@@ -90,7 +92,11 @@ The **Home Assistant community thread** "IDM heatpump integration via modbus
 (pure HA)" documents the plain-YAML approach with the stock `modbus:`
 integration. It confirms the word order problem (`swap: word`), recommends
 scan intervals of 5 seconds for power and 30 for temperatures, and leaves the
-encoding of address 86 unresolved.
+encoding of address 86 unresolved. It is `Batteriefüllstand`, a `WORD` in
+percent, and it is in the parameter list of revision 10 — under the access
+right `RW/RO`, which chapter 4.1 does not define. A machine without a battery
+answers the `WORD` sentinel rather than 0; see
+[verification-2026-09-19.md](verification-2026-09-19.md).
 
 A recurring warning across loxforum and iobroker: querying too many parameters
 at once makes the Navigator stall. One user staggers intervals at 55, 56 and
@@ -99,7 +105,7 @@ default rather than treating that as tuning.
 
 ## What the manual does not say, and this project establishes
 
-Reading all 497 documented addresses off a machine whose configuration is known
+Reading all 663 documented addresses off a machine whose configuration is known
 answered three questions the documentation leaves open. The measurements are in
 [verification-2026-09-19.md](verification-2026-09-19.md); the conclusions:
 
@@ -130,6 +136,13 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
 
 ## Open questions
 
+- **The `RW/RO` access right.** 166 of the 663 registers carry it — the
+  energy management block at 74 to 86 and every zone module room value — and
+  chapter 4.1 defines only `RO`, `RW` and `W`. Read as "the building
+  management system may supply this, and may read it back", which is what the
+  worked examples in chapter 4.3 do with them. Whether writing takes effect
+  without the matching menu parameter set to "Ja" is untested; writing is not
+  implemented.
 - **Revision drift.** Revision 10 documents software 20.21-101; this machine
   runs 20.24. No address in the manual is missing from the machine, so nothing
   was removed, but the manual cannot say what was *added*. Worth asking iDM
@@ -139,8 +152,6 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
   implicit, and likewise for zone modules. The transcription in `data/` records
   only what is literally printed; extending an encoding across a family is a
   judgement call and has not been made yet.
-- **Address 86.** Unresolved in the Home Assistant thread, and not in the
-  parameter list of revision 10 either.
 - **`UCHAR` value 254.** Addresses 1714 and 1715 return 254, where every other
   unfitted `UCHAR` returns 255. Whether 254 is a second sentinel or a real
   value is not known; the library currently treats both as absence.

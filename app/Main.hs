@@ -81,7 +81,7 @@ render s =
   intercalate
     "  "
     [ printf "%5d" addr,
-      printf "%-2s" (accessText (registerAccess reg)),
+      printf "%-5s" (accessText (registerAccess reg)),
       printf "%-8s" (persistenceText (registerPersistence reg)),
       printf "%18s" value,
       printf "%-4s" (maybe "" unitText (registerUnit reg)),
@@ -162,6 +162,7 @@ accessText a = case a of
   ReadOnly -> "ro"
   ReadWrite -> "rw"
   WriteOnly -> "w"
+  Supplied -> "rw/ro"
 
 persistenceText :: Persistence -> String
 persistenceText p = case p of

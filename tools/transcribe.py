@@ -25,12 +25,12 @@ from pathlib import Path
 ROW = re.compile(
     r"^\s*(?P<eeprom>\*?)(?P<addr>\d{1,4})\s+"
     r"(?P<dtype>FLOAT|UCHAR|WORD|CHAR|BOOL|INT|DWORD)\s+"
-    r"(?P<access>RO|RW|W)\s+"
+    r"(?P<access>RW/RO|RO|RW|W)\s+"
     r"(?P<tail>\S.*?)\s*$"
 )
 # the access right alone, for lines that continue a row
 ROW_HEAD = re.compile(
-    r"^\s*\*?\d{1,4}\s+(FLOAT|UCHAR|WORD|CHAR|BOOL|INT|DWORD)\s+(RO|RW|W)\s"
+    r"^\s*\*?\d{1,4}\s+(FLOAT|UCHAR|WORD|CHAR|BOOL|INT|DWORD)\s+(RW/RO|RO|RW|W)\s"
 )
 # every page of the parameter list repeats the column headings
 PAGE_HEAD = re.compile(r"Adresse.*Bezeichnung")

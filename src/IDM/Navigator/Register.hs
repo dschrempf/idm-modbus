@@ -65,6 +65,10 @@ data Access
   = ReadOnly
   | ReadWrite
   | WriteOnly
+  | -- | a value the building management system may supply to the heat pump,
+    -- and may read back. Printed @RW\/RO@, which chapter 4.1 does not define;
+    -- whether the pump uses what is written depends on a menu setting.
+    Supplied
   deriving (Show, Eq, Ord)
 
 isReadable :: Access -> Bool

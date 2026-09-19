@@ -117,6 +117,7 @@ parseAccess t = case t of
   "RO" -> Just ReadOnly
   "RW" -> Just ReadWrite
   "W" -> Just WriteOnly
+  "RW/RO" -> Just Supplied
   _ -> Nothing
 
 parsePersistence :: Text -> Maybe Persistence

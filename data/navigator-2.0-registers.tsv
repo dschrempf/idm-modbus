@@ -1,4 +1,10 @@
 address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
+74	FLOAT	RW/RO	volatile	Aktueller PV-Überschuss					kW	present
+76	FLOAT	RW/RO	volatile	Leistung E-Heizstab					kW	present
+78	FLOAT	RW/RO	volatile	Aktuelle PV Produktion					kW	present
+82	FLOAT	RW/RO	volatile	Hausverbrauch				0	kW	present
+84	FLOAT	RW/RO	volatile	Batterieentladung				0	kW	present
+86	WORD	RW/RO	volatile	Batteriefüllstand				-1	%	present
 1000	FLOAT	RO	volatile	Außentemperatur (B32)					°C	present
 1002	FLOAT	RO	volatile	Gemittelte Außentemperatur					°C	present
 1004	UCHAR	RO	volatile	Interne Meldung						present
@@ -225,271 +231,431 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	observed
 1999	UCHAR	W	volatile	Störmeldungen quittieren						absent
 2000	UCHAR	RO	volatile	Zonenmodul 1 Modus Heizen/Kühlen A14		0	1			absent
 2001	UCHAR	RO	volatile	Zonenmodul 1 Entfeuchtungsausgang A12		0	1	0		absent
+2002	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 1		15	30		°C	absent
 2004	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 1					°C	absent
+2006	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 1		0	100		%rF	absent
 2007	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 1		0	4			absent
 2008	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 1		0	1			absent
+2009	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 2		15	30		°C	absent
 2011	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 2					°C	absent
+2013	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 2		0	100		%rF	absent
 2014	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 2		0	4			absent
 2015	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 2		0	1			absent
+2016	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 3		15	30		°C	absent
 2018	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 3					°C	absent
+2020	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 3		0	100		%rF	absent
 2021	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 3		0	4			absent
 2022	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 3		0	1			absent
+2023	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 4		15	30		°C	absent
 2025	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 4					°C	absent
+2027	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 4		0	100		%rF	absent
 2028	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 4		0	4			absent
 2029	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 4		0	1			absent
+2030	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 5		15	30		°C	absent
 2032	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 5					°C	absent
+2034	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 5		0	100		%rF	absent
 2035	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 5		0	4			absent
 2036	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 5		0	1			absent
+2037	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 6		15	30		°C	absent
 2039	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 6					°C	absent
+2041	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 6		0	100		%rF	absent
 2042	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 6		0	4			absent
 2043	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 6		0	1			absent
+2044	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 7		15	30		°C	absent
 2046	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 7					°C	absent
+2048	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 7		0	100		%rF	absent
 2049	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 7		0	4			absent
 2050	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 7		0	1			absent
+2051	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 8		15	30		°C	absent
 2053	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 8					°C	absent
+2055	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 8		0	100		%rF	absent
 2056	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 8		0	4			absent
 2057	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 8		0	1			absent
 2064	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 9 (A9)		0	1			absent
 2065	UCHAR	RO	volatile	Zonenmodul 2 Modus Heizen/Kühlen A14		0	1			absent
 2066	UCHAR	RO	volatile	Zonenmodul 2 Entfeuchtungsausgang A12		0	1	0		absent
+2067	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 1		15	30		°C	absent
 2069	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 1					°C	absent
+2071	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 1		0	100		%rF	absent
 2072	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 1		0	4			absent
 2073	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 1		0	1			absent
+2074	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 2		15	30		°C	absent
 2076	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 2					°C	absent
+2078	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 2		0	100		%rF	absent
 2079	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 2		0	4			absent
 2080	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 2		0	1			absent
+2081	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 3		15	30		°C	absent
 2083	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 3					°C	absent
+2085	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 3		0	100		%rF	absent
 2086	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 3		0	4			absent
 2087	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 3		0	1			absent
+2088	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 4		15	30		°C	absent
 2090	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 4					°C	absent
+2092	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 4		0	100		%rF	absent
 2093	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 4		0	4			absent
 2094	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 4		0	1			absent
+2095	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 5		15	30		°C	absent
 2097	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 5					°C	absent
+2099	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 5		0	100		%rF	absent
 2100	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 5		0	4			absent
 2101	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 5		0	1			absent
+2102	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 6		15	30		°C	absent
 2104	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 6					°C	absent
+2106	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 6		0	100		%rF	absent
 2107	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 6		0	4			absent
 2108	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 6		0	1			absent
+2109	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 7		15	30		°C	absent
 2111	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 7					°C	absent
+2113	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 7		0	100		%rF	absent
 2114	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 7		0	4			absent
 2115	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 7		0	1			absent
+2116	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 8		15	30		°C	absent
 2118	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 8					°C	absent
+2120	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 8		0	100		%rF	absent
 2121	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 8		0	4			absent
 2122	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 8		0	1			absent
 2129	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 9 (A9)		0	1			absent
 2130	UCHAR	RO	volatile	Zonenmodul 3 Modus Heizen/Kühlen A14		0	1			absent
 2131	UCHAR	RO	volatile	Zonenmodul 3 Entfeuchtungsausgang A12		0	1	0		absent
+2132	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 1		15	30		°C	absent
 2134	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 1					°C	absent
+2136	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 1		0	100		%rF	absent
 2137	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 1		0	4			absent
 2138	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 1		0	1			absent
+2139	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 2		15	30		°C	absent
 2141	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 2					°C	absent
+2143	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 2		0	100		%rF	absent
 2144	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 2		0	4			absent
 2145	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 2		0	1			absent
+2146	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 3		15	30		°C	absent
 2148	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 3					°C	absent
+2150	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 3		0	100		%rF	absent
 2151	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 3		0	4			absent
 2152	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 3		0	1			absent
+2153	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 4		15	30		°C	absent
 2155	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 4					°C	absent
+2157	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 4		0	100		%rF	absent
 2158	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 4		0	4			absent
 2159	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 4		0	1			absent
+2160	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 5		15	30		°C	absent
 2162	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 5					°C	absent
+2164	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 5		0	100		%rF	absent
 2165	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 5		0	4			absent
 2166	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 5		0	1			absent
+2167	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 6		15	30		°C	absent
 2169	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 6					°C	absent
+2171	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 6		0	100		%rF	absent
 2172	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 6		0	4			absent
 2173	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 6		0	1			absent
+2174	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 7		15	30		°C	absent
 2176	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 7					°C	absent
+2178	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 7		0	100		%rF	absent
 2179	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 7		0	4			absent
 2180	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 7		0	1			absent
+2181	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 8		15	30		°C	absent
 2183	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 8					°C	absent
+2185	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 8		0	100		%rF	absent
 2186	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 8		0	4			absent
 2187	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 8		0	1			absent
 2194	UCHAR	RO	volatile	Zonenmodul 3 Status Raum 9 (A9)		0	1			absent
 2195	UCHAR	RO	volatile	Zonenmodul 4 Modus Heizen/Kühlen A14		0	1			absent
 2196	UCHAR	RO	volatile	Zonenmodul 4 Entfeuchtungsausgang A12		0	1	0		absent
+2197	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 1		15	30		°C	absent
 2199	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 1					°C	absent
+2201	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 1		0	100		%rF	absent
 2202	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 1		0	4			absent
 2203	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 1		0	1			absent
+2204	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 2		15	30		°C	absent
 2206	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 2					°C	absent
+2208	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 2		0	100		%rF	absent
 2209	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 2		0	4			absent
 2210	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 2		0	1			absent
+2211	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 3		15	30		°C	absent
 2213	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 3					°C	absent
+2215	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 3		0	100		%rF	absent
 2216	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 3		0	4			absent
 2217	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 3		0	1			absent
+2218	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 4		15	30		°C	absent
 2220	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 4					°C	absent
+2222	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 4		0	100		%rF	absent
 2223	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 4		0	4			absent
 2224	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 4		0	1			absent
+2225	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 5		15	30		°C	absent
 2227	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 5					°C	absent
+2229	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 5		0	100		%rF	absent
 2230	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 5		0	4			absent
 2231	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 5		0	1			absent
+2232	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 6		15	30		°C	absent
 2234	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 6					°C	absent
+2236	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 6		0	100		%rF	absent
 2237	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 6		0	4			absent
 2238	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 6		0	1			absent
+2239	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 7		15	30		°C	absent
 2241	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 7					°C	absent
+2243	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 7		0	100		%rF	absent
 2244	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 7		0	4			absent
 2245	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 7		0	1			absent
+2246	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 8		15	30		°C	absent
 2248	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 8					°C	absent
+2250	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 8		0	100		%rF	absent
 2251	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 8		0	4			absent
 2252	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 8		0	1			absent
 2259	UCHAR	RO	volatile	Zonenmodul 4 Status Raum 9 (A9)		0	1			absent
 2260	UCHAR	RO	volatile	Zonenmodul 5 Modus Heizen/Kühlen A14		0	1			absent
 2261	UCHAR	RO	volatile	Zonenmodul 5 Entfeuchtungsausgang A12		0	1	0		absent
+2262	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 1		15	30		°C	absent
 2264	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 1					°C	absent
+2266	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 1		0	100		%rF	absent
 2267	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 1		0	4			absent
 2268	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 1		0	1			absent
+2269	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 2		15	30		°C	absent
 2271	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 2					°C	absent
+2273	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 2		0	100		%rF	absent
 2274	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 2		0	4			absent
 2275	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 2		0	1			absent
+2276	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 3		15	30		°C	absent
 2278	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 3					°C	absent
+2280	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 3		0	100		%rF	absent
 2281	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 3		0	4			absent
 2282	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 3		0	1			absent
+2283	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 4		15	30		°C	absent
 2285	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 4					°C	absent
+2287	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 4		0	100		%rF	absent
 2288	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 4		0	4			absent
 2289	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 4		0	1			absent
+2290	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 5		15	30		°C	absent
 2292	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 5					°C	absent
+2294	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 5		0	100		%rF	absent
 2295	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 5		0	4			absent
 2296	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 5		0	1			absent
+2297	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 6		15	30		°C	absent
 2299	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 6					°C	absent
+2301	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 6		0	100		%rF	absent
 2302	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 6		0	4			absent
 2303	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 6		0	1			absent
+2304	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 7		15	30		°C	absent
 2306	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 7					°C	absent
+2308	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 7		0	100		%rF	absent
 2309	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 7		0	4			absent
 2310	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 7		0	1			absent
+2311	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 8		15	30		°C	absent
 2313	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 8					°C	absent
+2315	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 8		0	100		%rF	absent
 2316	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 8		0	4			absent
 2317	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 8		0	1			absent
 2324	UCHAR	RO	volatile	Zonenmodul 5 Status Raum 9 (A9)		0	1			absent
 2325	UCHAR	RO	volatile	Zonenmodul 6 Modus Heizen/Kühlen A14		0	1			absent
 2326	UCHAR	RO	volatile	Zonenmodul 6 Entfeuchtungsausgang A12		0	1	0		absent
+2327	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 1		15	30		°C	absent
 2329	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 1					°C	absent
+2331	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 1		0	100		%rF	absent
 2332	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 1		0	4			absent
 2333	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 1		0	1			absent
+2334	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 2		15	30		°C	absent
 2336	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 2					°C	absent
+2338	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 2		0	100		%rF	absent
 2339	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 2		0	4			absent
 2340	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 2		0	1			absent
+2341	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 3		15	30		°C	absent
 2343	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 3					°C	absent
+2345	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 3		0	100		%rF	absent
 2346	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 3		0	4			absent
 2347	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 3		0	1			absent
+2348	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 4		15	30		°C	absent
 2350	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 4					°C	absent
+2352	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 4		0	100		%rF	absent
 2353	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 4		0	4			absent
 2354	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 4		0	1			absent
+2355	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 5		15	30		°C	absent
 2357	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 5					°C	absent
+2359	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 5		0	100		%rF	absent
 2360	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 5		0	4			absent
 2361	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 5		0	1			absent
+2362	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 6		15	30		°C	absent
 2364	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 6					°C	absent
+2366	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 6		0	100		%rF	absent
 2367	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 6		0	4			absent
 2368	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 6		0	1			absent
+2369	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 7		15	30		°C	absent
 2371	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 7					°C	absent
+2373	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 7		0	100		%rF	absent
 2374	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 7		0	4			absent
 2375	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 7		0	1			absent
+2376	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 8		15	30		°C	absent
 2378	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 8					°C	absent
+2380	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 8		0	100		%rF	absent
 2381	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 8		0	4			absent
 2382	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 8		0	1			absent
 2389	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 9 (A9)		0	1			absent
 2390	UCHAR	RO	volatile	Zonenmodul 7 Modus Heizen/Kühlen A14		0	1			absent
 2391	UCHAR	RO	volatile	Zonenmodul 7 Entfeuchtungsausgang A12		0	1	0		absent
+2392	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 1		15	30		°C	absent
 2394	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 1					°C	absent
+2396	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 1		0	100		%rF	absent
 2397	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 1		0	4			absent
 2398	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 1		0	1			absent
+2399	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 2		15	30		°C	absent
 2401	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 2					°C	absent
+2403	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 2		0	100		%rF	absent
 2404	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 2		0	4			absent
 2405	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 2		0	1			absent
+2406	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 3		15	30		°C	absent
 2408	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 3					°C	absent
+2410	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 3		0	100		%rF	absent
 2411	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 3		0	4			absent
 2412	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 3		0	1			absent
+2413	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 4		15	30		°C	absent
 2415	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 4					°C	absent
+2417	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 4		0	100		%rF	absent
 2418	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 4		0	4			absent
 2419	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 4		0	1			absent
+2420	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 5		15	30		°C	absent
 2422	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 5					°C	absent
+2424	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 5		0	100		%rF	absent
 2425	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 5		0	4			absent
 2426	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 5		0	1			absent
+2427	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 6		15	30		°C	absent
 2429	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 6					°C	absent
+2431	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 6		0	100		%rF	absent
 2432	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 6		0	4			absent
 2433	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 6		0	1			absent
+2434	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 7		15	30		°C	absent
 2436	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 7					°C	absent
+2438	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 7		0	100		%rF	absent
 2439	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 7		0	4			absent
 2440	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 7		0	1			absent
+2441	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 8		15	30		°C	absent
 2443	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 8					°C	absent
+2445	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 8		0	100		%rF	absent
 2446	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 8		0	4			absent
 2447	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 8		0	1			absent
 2454	UCHAR	RO	volatile	Zonenmodul 7 Status Raum 9 (A9)		0	1			absent
 2455	UCHAR	RO	volatile	Zonenmodul 8 Modus Heizen/Kühlen A14		0	1			absent
 2456	UCHAR	RO	volatile	Zonenmodul 8 Entfeuchtungsausgang A12		0	1	0		absent
+2457	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 1		15	30		°C	absent
 2459	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 1					°C	absent
+2461	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 1		0	100		%rF	absent
 2462	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 1		0	4			absent
 2463	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 1		0	1			absent
+2464	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 2		15	30		°C	absent
 2466	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 2					°C	absent
+2468	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 2		0	100		%rF	absent
 2469	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 2		0	4			absent
 2470	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 2		0	1			absent
+2471	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 3		15	30		°C	absent
 2473	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 3					°C	absent
+2475	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 3		0	100		%rF	absent
 2476	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 3		0	4			absent
 2477	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 3		0	1			absent
+2478	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 4		15	30		°C	absent
 2480	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 4					°C	absent
+2482	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 4		0	100		%rF	absent
 2483	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 4		0	4			absent
 2484	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 4		0	1			absent
+2485	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 5		15	30		°C	absent
 2487	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 5					°C	absent
+2489	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 5		0	100		%rF	absent
 2490	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 5		0	4			absent
 2491	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 5		0	1			absent
+2492	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 6		15	30		°C	absent
 2494	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 6					°C	absent
+2496	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 6		0	100		%rF	absent
 2497	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 6		0	4			absent
 2498	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 6		0	1			absent
+2499	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 7		15	30		°C	absent
 2501	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 7					°C	absent
+2503	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 7		0	100		%rF	absent
 2504	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 7		0	4			absent
 2505	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 7		0	1			absent
+2506	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 8		15	30		°C	absent
 2508	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 8					°C	absent
+2510	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 8		0	100		%rF	absent
 2511	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 8		0	4			absent
 2512	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 8		0	1			absent
 2519	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 9 (A9)		0	1			absent
 2520	UCHAR	RO	volatile	Zonenmodul 9 Modus Heizen/Kühlen A14		0	1			absent
 2521	UCHAR	RO	volatile	Zonenmodul 9 Entfeuchtungsausgang A12		0	1	0		absent
+2522	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 1		15	30		°C	absent
 2524	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 1					°C	absent
+2526	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 1		0	100		%rF	absent
 2527	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 1		0	4			absent
 2528	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 1		0	1			absent
+2529	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 2		15	30		°C	absent
 2531	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 2					°C	absent
+2533	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 2		0	100		%rF	absent
 2534	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 2		0	4			absent
 2535	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 2		0	1			absent
+2536	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 3		15	30		°C	absent
 2538	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 3					°C	absent
+2540	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 3		0	100		%rF	absent
 2541	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 3		0	4			absent
 2542	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 3		0	1			absent
+2543	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 4		15	30		°C	absent
 2545	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 4					°C	absent
+2547	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 4		0	100		%rF	absent
 2548	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 4		0	4			absent
 2549	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 4		0	1			absent
+2550	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 5		15	30		°C	absent
 2552	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 5					°C	absent
+2554	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 5		0	100		%rF	absent
 2555	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 5		0	4			absent
 2556	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 5		0	1			absent
+2557	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 6		15	30		°C	absent
 2559	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 6					°C	absent
+2561	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 6		0	100		%rF	absent
 2562	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 6		0	4			absent
 2563	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 6		0	1			absent
+2564	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 7		15	30		°C	absent
 2566	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 7					°C	absent
+2568	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 7		0	100		%rF	absent
 2569	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 7		0	4			absent
 2570	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 7		0	1			absent
+2571	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 8		15	30		°C	absent
 2573	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 8					°C	absent
+2575	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 8		0	100		%rF	absent
 2576	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 8		0	4			absent
 2577	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 8		0	1			absent
 2584	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 9 (A9)		0	1			absent
 2585	UCHAR	RO	volatile	Zonenmodul 10 Modus Heizen/Kühlen A14		0	1			absent
 2586	UCHAR	RO	volatile	Zonenmodul 10 Entfeuchtungsausgang A12		0	1	0		absent
+2587	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 1		15	30		°C	absent
 2589	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 1					°C	absent
+2591	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 1		0	100		%rF	absent
 2592	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 1		0	4			absent
 2593	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 1		0	1			absent
+2594	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 2		15	30		°C	absent
 2596	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 2					°C	absent
+2598	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 2		0	100		%rF	absent
 2599	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 2		0	4			absent
 2600	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 2		0	1			absent
+2601	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 3		15	30		°C	absent
 2603	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 3					°C	absent
+2605	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 3		0	100		%rF	absent
 2606	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 3		0	4			absent
 2607	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 3		0	1			absent
+2608	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 4		15	30		°C	absent
 2610	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 4					°C	absent
+2612	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 4		0	100		%rF	absent
 2613	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 4		0	4			absent
 2614	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 4		0	1			absent
+2615	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 5		15	30		°C	absent
 2617	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 5					°C	absent
+2619	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 5		0	100		%rF	absent
 2620	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 5		0	4			absent
 2621	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 5		0	1			absent
+2622	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 6		15	30		°C	absent
 2624	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 6					°C	absent
+2626	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 6		0	100		%rF	absent
 2627	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 6		0	4			absent
 2628	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 6		0	1			absent
+2629	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 7		15	30		°C	absent
 2631	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 7					°C	absent
+2633	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 7		0	100		%rF	absent
 2634	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 7		0	4			absent
 2635	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 7		0	1			absent
+2636	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 8		15	30		°C	absent
 2638	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 8					°C	absent
+2640	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 8		0	100		%rF	absent
 2641	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 8		0	4			absent
 2642	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 8		0	1			absent
 2649	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 9 (A9)		0	1			absent

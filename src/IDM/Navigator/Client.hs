@@ -4,9 +4,9 @@
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 --
--- Read support only. Writing is a separate problem: a third of the writable
--- registers wear out an EEPROM, and that deserves its own interface rather than
--- an extra argument here. See the changelog.
+-- Read support only. Writing is a separate problem: eighty-eight registers
+-- wear out an EEPROM, and that deserves its own interface rather than an extra
+-- argument here. See the changelog.
 module IDM.Navigator.Client
   ( Poll (..),
     defaultPoll,

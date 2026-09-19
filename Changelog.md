@@ -11,14 +11,26 @@
   sensor returns, and that reads a temperature-carrying `WORD` as signed.
 - `idm-dump`, which reads every register and prints it.
 - The research behind all of this, in `doc/`.
+- The 166 registers the parameter list marks `RW/RO`, an access right chapter
+  4.1 never defines and the transcription used to skip: the energy management
+  block at 74 to 86 — PV surplus, house consumption, battery charge level —
+  and every zone module room temperature and humidity. The table now has 663
+  registers rather than 497. `Access` gained `Supplied` for the marking, read
+  as "the building management system may supply this value, and may read it
+  back". This settles address 86, which `doc/research.md` had listed as
+  documented nowhere: it is `Batteriefüllstand`.
 
 ### Changed
 
-- `data/navigator-2.0-scan-2026-09-19.json` holds what the machine said and
-  nothing else: address, status, the exception code behind a refusal, the
-  bytes, and the number those bytes spell. It used to repeat the parameter
-  list's own columns, transcribed a second time and wrong in 19 of them — the
-  same defects as the table, plus a few of its own. `idm-dump --json` writes
+- `data/navigator-2.0-scan-2026-09-19.json` is a fresh sweep of all 663
+  addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress` and
+  every one of them in the zone module block or write-only. It reproduces the
+  earlier sweep of the 497 addresses then known, sentinel for sentinel.
+- The same file holds what the machine said and nothing else: address, status,
+  the exception code behind a refusal, the bytes, and the number those bytes
+  spell. It used to repeat the parameter list's own columns, transcribed a
+  second time and wrong in 19 of them — the same defects as the table, plus a
+  few of its own. `idm-dump --json` writes
   the format, so the capture is reproducible; `IDM.Navigator.Register.asWritten`
   reads bytes without applying the conventions the manual leaves out, which is
   what a capture must record if it is to be the evidence for them.
@@ -37,8 +49,8 @@
 
 ### Not yet
 
-- Writing. A third of the writable registers are stored in an EEPROM rated for
-  300000 cycles, so writes need an interface that makes the cost visible rather
-  than an extra argument on a read function.
+- Writing. Eighty-eight registers are stored in an EEPROM rated for 300000
+  cycles, so writes need an interface that makes the cost visible rather than
+  an extra argument on a read function.
 - Enumerations for every member of a register family. The manual prints the
   encoding once, for heating circuit A, and leaves B to G implicit.

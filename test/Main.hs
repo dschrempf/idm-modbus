@@ -26,7 +26,7 @@ check (name, ok) = do
 checks :: [(String, Bool)]
 checks =
   [ ( "the table parses to the number of rows in the file",
-      length Table.navigator20 == 497
+      length Table.navigator20 == 663
     ),
     ( "addresses are unique",
       all ((== 1) . length) (group (sort (map registerAddress Table.navigator20)))
