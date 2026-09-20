@@ -19,6 +19,12 @@ address	code	label
 1099	1	Störung
 1100	0	Aus
 1100	1	Ein
+1101	0	Aus
+1101	1	Ein
+1102	0	Aus
+1102	1	Ein
+1103	0	Aus
+1103	1	Ein
 1124	0	Aus
 1124	1	Bivalenz 1 aktiv
 1124	2	Bivalenz 2 aktiv
@@ -29,9 +35,63 @@ address	code	label
 1393	3	Eco
 1393	4	Manuell Heizen
 1393	5	Manuell Kühlen
+1394	0	Aus
+1394	1	Zeitprogramm
+1394	2	Normal
+1394	3	Eco
+1394	4	Manuell Heizen
+1394	5	Manuell Kühlen
+1395	0	Aus
+1395	1	Zeitprogramm
+1395	2	Normal
+1395	3	Eco
+1395	4	Manuell Heizen
+1395	5	Manuell Kühlen
+1396	0	Aus
+1396	1	Zeitprogramm
+1396	2	Normal
+1396	3	Eco
+1396	4	Manuell Heizen
+1396	5	Manuell Kühlen
+1397	0	Aus
+1397	1	Zeitprogramm
+1397	2	Normal
+1397	3	Eco
+1397	4	Manuell Heizen
+1397	5	Manuell Kühlen
+1398	0	Aus
+1398	1	Zeitprogramm
+1398	2	Normal
+1398	3	Eco
+1398	4	Manuell Heizen
+1398	5	Manuell Kühlen
+1399	0	Aus
+1399	1	Zeitprogramm
+1399	2	Normal
+1399	3	Eco
+1399	4	Manuell Heizen
+1399	5	Manuell Kühlen
 1498	0	Aus
 1498	1	Heizen
 1498	2	Kühlen
+1499	0	Aus
+1499	1	Heizen
+1499	2	Kühlen
+1500	0	Aus
+1500	1	Heizen
+1500	2	Kühlen
+1501	0	Aus
+1501	1	Heizen
+1501	2	Kühlen
+1502	0	Aus
+1502	1	Heizen
+1502	2	Kühlen
+1503	0	Aus
+1503	1	Heizen
+1503	2	Kühlen
+1504	0	Aus
+1504	1	Heizen
+1504	2	Kühlen
 1712	0	Aus
 1712	1	Ein
 1856	0	Automatik
@@ -54,3 +114,52 @@ address	code	label
 2007	4	Komfort
 2008	0	Aus
 2008	1	Ein
+2014	0	Aus
+2014	1	Automatik
+2014	2	Eco
+2014	3	Normal
+2014	4	Komfort
+2015	0	Aus
+2015	1	Ein
+2021	0	Aus
+2021	1	Automatik
+2021	2	Eco
+2021	3	Normal
+2021	4	Komfort
+2022	0	Aus
+2022	1	Ein
+2028	0	Aus
+2028	1	Automatik
+2028	2	Eco
+2028	3	Normal
+2028	4	Komfort
+2029	0	Aus
+2029	1	Ein
+2035	0	Aus
+2035	1	Automatik
+2035	2	Eco
+2035	3	Normal
+2035	4	Komfort
+2036	0	Aus
+2036	1	Ein
+2042	0	Aus
+2042	1	Automatik
+2042	2	Eco
+2042	3	Normal
+2042	4	Komfort
+2043	0	Aus
+2043	1	Ein
+2049	0	Aus
+2049	1	Automatik
+2049	2	Eco
+2049	3	Normal
+2049	4	Komfort
+2050	0	Aus
+2050	1	Ein
+2056	0	Aus
+2056	1	Automatik
+2056	2	Eco
+2056	3	Normal
+2056	4	Komfort
+2057	0	Aus
+2057	1	Ein

@@ -174,6 +174,48 @@ def one(found):
     return found[0] if found else ""
 
 
+# the letter or number that tells one member of a family from the next
+FAMILY_TAIL = re.compile(r" (?:[A-G]|[1-9])$")
+
+
+def family(r):
+    """What a register shares with the others the manual lists it beside.
+
+    Heating circuits A to G, and compressors 1 to 4, get an address each, but
+    the enumeration of their values is printed once, beside the first of them.
+    Members are alike in everything but the letter or number ending the name.
+    """
+    stem = FAMILY_TAIL.sub("", r["name"])
+    if stem == r["name"]:
+        return None
+    return (stem, r["datatype"], r["access"], r["min"], r["max"], r["unit"])
+
+
+def share_within_families(enums, registers):
+    """Give every member of a family the enumeration printed beside one of them.
+
+    Sharing is refused where more than one member carries a printed
+    enumeration: they are then not saying the same thing, and which one holds
+    is a question for the manual rather than for this script.
+    """
+    families = {}
+    for a, r in registers.items():
+        f = family(r)
+        if f:
+            families.setdefault(f, []).append(a)
+    out = dict(enums)
+    for group in families.values():
+        printed = sorted({a for a, _ in enums if a in group})
+        if len(printed) != 1:
+            continue
+        source = printed[0]
+        for a in group:
+            for (b, c), label in enums.items():
+                if b == source:
+                    out.setdefault((a, c), label)
+    return out
+
+
 def parse_enums(text, known):
     """Enumerated values, attached to the most recent register."""
     out, current = {}, None
@@ -200,7 +242,7 @@ def main():
         scan = {r["address"]: r for r in json.loads(Path(sys.argv[2]).read_text())}
 
     registers = parse_rows(text)
-    enums = parse_enums(text, registers)
+    enums = share_within_families(parse_enums(text, registers), registers)
 
     data = HERE / "data"
     with (data / "navigator-2.0-registers.tsv").open("w", newline="") as fh:
