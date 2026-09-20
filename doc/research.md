@@ -209,6 +209,18 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
 - **`UCHAR` value 254.** Addresses 1714 and 1715 return 254, where every other
   unfitted `UCHAR` returns 255. Whether 254 is a second sentinel or a real
   value is not known; the library currently treats both as absence.
+- **What the Wärmemenge registers accumulate.** 1748, 1750 and 1754 add up
+  among themselves and disagree with the totals the controller's own statistics
+  print, by a factor near 1.19 which grows with use rather than the fixed
+  offset a counter reset would leave, and no register in the sweep carries the
+  printed number. The manual names them "Wärmemenge Heizen", "Gesamt" and
+  "Warmwasser" and says no more. See `doc/verification-2026-09-20-webapi.md`;
+  812184 is worth reading on this.
+- **Operating mode 3.** The parameter list gives 1005 the codes 0, 1, 2, 4 and
+  5, within a documented range of 0 to 5, and prints no 3. The controller's own
+  web interface offers 3 as a choice, and −1 besides. The transcription is
+  faithful to the manual; the gap is the manual's, and what the two codes mean
+  is unknown.
 
 ## Sources
 
