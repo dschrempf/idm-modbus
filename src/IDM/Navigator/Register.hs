@@ -21,6 +21,7 @@ module IDM.Navigator.Register
     Register (..),
     Reading (..),
     reading,
+    Drive (..),
     Value (..),
     asWritten,
     decode,
@@ -44,7 +45,7 @@ data Datatype
     Float32
   | -- | one register, only the low byte carries the value
     UChar
-  | -- | one register; signed where the unit is a temperature
+  | -- | one register; signed where the documented minimum is negative
     Word
   | -- | one register, 0 or 1
     Boolean
@@ -144,6 +145,11 @@ data Register = Register
 -- The sentinels are not documented. They were determined by reading every
 -- address of a machine whose configuration is known; see
 -- @doc\/verification-2026-09-19.md@.
+--
+-- 'NotFitted' is claimed only where the sentinel lies outside the documented
+-- range, so that it cannot be a value the register may hold. Where it lies
+-- inside, absence is indistinguishable from a reading and none is claimed;
+-- 'Drive' is the case that arises in practice.
 data Reading a
   = NotFitted
   | Measured a
@@ -155,10 +161,25 @@ reading nothing just r = case r of
   NotFitted -> nothing
   Measured a -> just a
 
+-- | How hard a pump is being driven.
+--
+-- The controller's scale, printed on its own service page: @-1@ the pump is
+-- not being driven, @0@ it runs at its minimum speed, @100@ at its maximum.
+-- 'NotDriven' and @'Driven' 0@ are therefore different states, and neither is
+-- the absence of a pump: a fitted pump that nothing is calling for and a pump
+-- that was never installed both answer @-1@. See
+-- @doc\/verification-2026-09-20.md@.
+data Drive
+  = NotDriven
+  | -- | per cent of the pump's speed range
+    Driven Int
+  deriving (Show, Eq, Ord)
+
 data Value
   = Real Double
   | Count Int
   | Flag Bool
+  | DriveSignal Drive
   deriving (Show, Eq)
 
 -- | The number the machine sent, as the datatype alone describes it.
@@ -199,24 +220,33 @@ decode :: Register -> B.ByteString -> Maybe (Reading Value)
 decode reg bytes = navigator reg <$> asWritten reg bytes
 
 -- | The conventions the parameter list does not state: the sentinel an
--- unfitted sensor answers with, the sign of a temperature-carrying @WORD@, and
--- the 0 or 1 of a @BOOL@.
+-- unfitted sensor answers with, the sign of a @WORD@, and the 0 or 1 of a
+-- @BOOL@.
 navigator :: Register -> Value -> Reading Value
 navigator reg v = case (registerDatatype reg, v) of
   (Float32, Real x) -> sentinel (x == -1) v
   (DWord, Count n) -> sentinel (n == 0xFFFFFFFF) v
   (UChar, Count n) -> sentinel (n >= 254) v
   (Boolean, Count n) -> sentinel (n >= 254) (Flag (n /= 0))
-  (Word, Count n) -> sentinel (n == 0xFFFF) (Count (signedIfTemperature n))
+  (Word, Count n)
+    | signedWord -> Measured (meaning (n - if n > 0x7FFF then 65536 else 0))
+    | otherwise -> sentinel (n == 0xFFFF) v
   -- 'asWritten' pairs each datatype with one constructor; nothing else arises
   _ -> Measured v
   where
     sentinel isSentinel w = if isSentinel then NotFitted else Measured w
-    -- A @WORD@ carrying a temperature is two's complement: the bivalence
-    -- points read 65531 and 65516 for the documented -5 and -20 degrees.
-    signedIfTemperature n
-      | registerUnit reg == Just DegreeCelsius && n > 0x7FFF = n - 65536
-      | otherwise = n
+    -- The manual's own minimum decides the sign, and with it which words are
+    -- reachable. A bivalence point is documented down to -90 and a pump's
+    -- control signal down to -1, so both are two's complement and 65535 is a
+    -- value they may legitimately hold, not a sentinel. Every other @WORD@ is
+    -- documented from 0 up, leaving 65535 out of range and free to mean
+    -- absence.
+    signedWord = maybe False ((< 0) . rangeMinimum) (registerRange reg)
+    -- A signed percentage is a pump's control signal, and -1 is a state of it.
+    meaning n
+      | registerUnit reg == Just Percent =
+          DriveSignal (if n < 0 then NotDriven else Driven n)
+      | otherwise = Count n
 
 toWords :: B.ByteString -> [Word16]
 toWords bs

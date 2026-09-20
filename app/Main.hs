@@ -99,6 +99,8 @@ render s =
           (Count n, Nothing) -> show n
           (Real x, _) -> printf "%.2f" x
           (Flag b, _) -> if b then "on" else "off"
+          (DriveSignal NotDriven, _) -> "not driven"
+          (DriveSignal (Driven n), _) -> show n
 
 -- | The capture: what the machine answered and nothing else.
 --
@@ -139,11 +141,15 @@ refusal r = case r of
   Left (DeviceException e) -> Just (exceptionByte e)
   _ -> Nothing
 
+-- 'Flag' and 'DriveSignal' are what 'decode' makes of a word; 'asWritten'
+-- applies no convention, so the capture only ever sees the first two.
 number :: Value -> String
 number v = case v of
   Real x -> show x
   Count n -> show n
   Flag b -> if b then "true" else "false"
+  DriveSignal NotDriven -> "-1"
+  DriveSignal (Driven n) -> show n
 
 quote :: String -> String
 quote t = "\"" <> t <> "\""
