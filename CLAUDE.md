@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal test                         # prints one line per check
     cabal run idm-dump -- HOST         # read the registers a reference machine answered for
     cabal run idm-dump -- HOST --all   # sweep the whole parameter list
+    tools/webprobe.py HOST PIN         # read what the controller's own web pages show
     ormolu -i $(git ls-files '*.hs')   # formatting
     cabal-fmt -i idm-modbus.cabal
 
@@ -40,6 +41,19 @@ exception code, raw bytes and the uninterpreted number, so a correction to the
 table cannot leave it saying something else. A defect in a register name,
 unit or range is therefore a defect in the transcription script, not in the
 Haskell parser.
+
+`data/navigator-2.0-webapi-*.json` is the third kind: what the controller's web
+interface answered, captured rather than transcribed. `tools/webprobe.py`
+writes it over the websocket the web interface itself uses, sending only
+`overview` and `detail` — the protocol's `save` and `execute` must stay out of
+that script. It is the stronger witness of the two web sources, because the
+settings it walks name their value with the manufacturer's own parameter
+identifier, the `FW030` and `BV002` of the parameter list, so the join to the
+register table is on the identifier the table already carries. The capture is
+verbatim but for the code that opens the controller and the strings that name
+the machine, which are replaced by a visible marker. What the capture contains
+depends on the user level the controller is left at; the script never raises
+it.
 
 `manual/` holds the manufacturer's PDFs and is ignored by git; copy them in
 from the house documents to re-run the transcription. The list is printed
@@ -74,9 +88,11 @@ that makes the cost visible rather than an extra argument.
 
 `doc/research.md` records the sources and the open questions;
 `doc/verification-2026-09-19.md` records the measurements the decoding rests
-on, and `doc/verification-2026-09-20.md` what the controller's own display
-says about the same registers. Claims about the machine belong there, with the
-measurement that supports them.
+on, `doc/verification-2026-09-20.md` what the controller's own display says
+about the same registers, and `doc/verification-2026-09-20-webapi.md` what its
+web backend says about the settings, joined on the manufacturer's parameter
+identifier. Claims about the machine belong there, with the measurement that
+supports them.
 
 ## Conventions
 
