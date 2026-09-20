@@ -7,14 +7,15 @@ the URL:
 
     tools/webprobe.py 192.168.0.200 PIN > data/navigator-2.0-webapi-2026-09-20-2138.json
 
-Every request this sends is a read: `overview` or `detail`. The protocol also
-has `save` and `execute`; this script must never learn to send them. Nothing it
-writes is interpreted either -- the response goes into the capture verbatim,
-under the request that provoked it -- so a correction to the register table
-cannot leave a capture asserting something else. The PIN stays out of the
-capture.
+Every request this sends is a read: `overview`, `detail` or `traverse`, which is
+the whole read side of the protocol -- the controller's own JavaScript names
+these three and nothing else. It also has `save` and `execute`; this script must
+never learn to send them. Nothing it writes is interpreted either -- the
+response goes into the capture verbatim, under the request that provoked it --
+so a correction to the register table cannot leave a capture asserting something
+else. The PIN stays out of the capture.
 
-Two kinds of request. The pages of the web interface answer with whatever they
+Three kinds of request. The pages of the web interface answer with whatever they
 display, keyed by their own names. The settings tree answers with the
 manufacturer's parameter identifier -- `param`, the manual's `FW030`, `BV002`
 -- next to the live value, which is the one place the web interface and the
@@ -22,6 +23,18 @@ register table speak the same vocabulary. The tree is walked: `overview` on a
 `sub` yields its children, `detail` on anything else yields the value. What the
 tree shows depends on the user level of the controller; this reads whatever the
 level it is left at exposes, and never raises it.
+
+The third is the graph, and it is the only source here that carries time: the
+controller keeps a sampled history of the sensors it plots, and of whether it
+was heating, making hot water or defrosting. A register says what is true now
+and a page says what has accumulated; the graph is what says when the machine
+ran, which is what a rise in a counter has to be attributed to. It reaches back
+about a week. `traverse` lists every channel that could be plotted, which is
+more than any graph holds -- but reading a channel no graph holds would mean
+creating one, and that is a `save`.
+
+Two of the controller's reads are deliberately not sent. `relaytest`/`overview`
+opens the relay test, and `authentication`/`overview` asks with `userlevel` 4.
 
 One thing is not verbatim: the settings tree hands out the code that opens the
 controller, and the pages name the machine. Those are redacted, in the open.
@@ -82,6 +95,16 @@ REQUESTS = [
 ]
 
 READ_COMMANDS = ("overview", "detail", "traverse")
+# reads all the same, and none of this script's business
+FORBIDDEN_CONTROLLERS = ("relaytest", "authentication")
+
+# The spans of the graph, as the web interface's own tabs ask for them:
+# `fromSecs` reaches back from now, `stepSecs` 0 lets the controller choose the
+# resolution. Eight days is the furthest the interface looks.
+GRAPH_SPANS = (
+    {"fromSecs": 60 * 60 * 30, "stepSecs": 0},
+    {"fromSecs": 60 * 60 * 24 * 8, "stepSecs": 15},
+)
 
 REDACTED = "<redacted>"
 # The capture is otherwise verbatim. These carry the code that opens the
@@ -233,6 +256,8 @@ class Session:
     def ask(self, request):
         if request["command"] not in READ_COMMANDS:
             raise SystemExit(f"refusing to send a non-read command: {request}")
+        if request["controller"] in FORBIDDEN_CONTROLLERS:
+            raise SystemExit(f"refusing to send: {request}")
         self.ws.send_text(json.dumps(request))
         sent = now()
         responses = self.drain(REQUEST_INTERVAL_SECONDS)
@@ -249,6 +274,39 @@ class Session:
             message.pop("remoteSessionId", None)
             messages.append(redact(message))
         return messages
+
+
+def find_all(node, key):
+    """Every value stored under `key`, however deep."""
+    if isinstance(node, dict):
+        if key in node:
+            yield node[key]
+        for value in node.values():
+            yield from find_all(value, key)
+    elif isinstance(node, list):
+        for item in node:
+            yield from find_all(item, key)
+
+
+def walk_graphs(session):
+    """Every graph the controller offers, over every span the interface plots."""
+    session.ask({"controller": "graph", "command": "overview"})
+    # the channels that could be plotted, whether or not a graph uses them
+    session.ask({"controller": "graph", "command": "traverse"})
+    ids = {
+        graph["id"]
+        for graphs in find_all(session.capture, "graphs")
+        for graph in graphs
+    }
+    for graph_id in sorted(ids):
+        for span in GRAPH_SPANS:
+            session.ask(
+                {
+                    "controller": "graph",
+                    "command": "detail",
+                    "data": {"id": graph_id, **span},
+                }
+            )
 
 
 def walk_settings(session, node_id):
@@ -284,6 +342,7 @@ def main(host, pin):
             raise SystemExit(f"the controller did not authorize us: {hello}")
         for request in REQUESTS:
             session.ask(request)
+        walk_graphs(session)
         walk_settings(session, SETTINGS_ROOT)
         for message in session.drain(DRAIN_SECONDS):
             session.capture.append(
