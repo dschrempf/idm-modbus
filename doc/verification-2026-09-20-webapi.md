@@ -30,6 +30,13 @@ yields its children, `detail` on a leaf yields the value, its unit, its limits
 and its `param`. What the tree contains is therefore what the controller was
 willing to show, which matters below.
 
+The controller's own JavaScript names the whole protocol, which is how the
+above is known rather than guessed: every read is `overview`, `detail` or
+`traverse`, and every write is `save` or `execute`, so the script's whitelist
+covers the write side exactly. Two reads are refused as well —
+`relaytest`/`overview`, which opens the relay test, and
+`authentication`/`overview`, which asks with `userlevel` 4.
+
 The capture is verbatim except for the code that opens the controller and the
 strings that name the machine, which are replaced by `<redacted>` so a reader
 can tell a removal from an absence. The settings tree hands out the local code
@@ -44,6 +51,10 @@ is evidence for anything here.
 | Web backend | `data/navigator-2.0-webapi-2026-09-20-2138.json`, 21:38–21:41 |
 | Registers | `data/navigator-2.0-scan-2026-09-20-2141.json`, 21:41–21:43 |
 | Offset | under 5 minutes |
+| Graph | `data/navigator-2.0-webapi-2026-09-20-2218.json`, 22:18–22:21 |
+
+The graph capture has no sweep beside it and needs none: it is history rather
+than live values, and the counters had not moved since 19:54.
 
 The sweep partitions the 663 addresses into the same 232 that answer and 431
 that refuse as the four sweeps before it did, address for address. Nothing
@@ -147,14 +158,10 @@ series, 110.94 + 76.98 + 128.90 = 316.82. Each side adds up; they are adding up
 different things.
 
 **It is not a counter that was reset.** A reset would leave a fixed offset, and
-the gap grows with use. Between the sweep of 2026-09-19 and the 19:54 sweep of
-2026-09-20, 1754 rose by 8.494 kWh, from 256.902 to 265.396. The controller's
-figure for 2026-09-20 is 10.25 kWh, and all of it falls inside that window:
-1754 then held at 265.396 through the 20:07, 20:37 and 21:41 sweeps, so no hot
-water was made after 19:54 for the page to be counting and the register not.
-The window reaches back into 2026-09-19 as well, which can only add to the
-register's rise, never to the page's 10.25. The ratio, 1.21, is the ratio
-between the totals, 1.19, and between the two heating figures, 1.19.
+what is there is a ratio: 1.19 between the lifetime totals, 1.19 between the two
+heating figures, and 1.21 across the single charge the graph isolates below.
+1754 held at 265.396 through the 20:07, 20:37 and 21:41 sweeps, so no hot water
+was made after 19:54 for the page to be counting and the register not.
 
 **No register carries the controller's number.** Searching all 663 addresses
 for 316.81, 1.28, and for the runtimes and electrical energies the same pages
@@ -163,9 +170,118 @@ finds nothing within 0.4 percent of any of them. The Wärmemenge page and the
 Wärmemenge registers are two separate accountings, and the register table's
 names for 1748–1762 should not be read as naming what that page prints.
 
-Settling it needs two sweeps spanning a single charge, compared against the
-controller's figure for the same charge: if the ratio holds at 1.19 the
-registers are a scaled quantity, and it is worth asking which.
+## The graph, and what it settles
+
+The same capture answers this, in a part of it nobody had read. Beside the
+statistics the backend serves a **graph**: a sampled history of the sensors the
+web interface plots, and of whether the machine was heating, making hot water
+or defrosting. It is the only source here that carries time. A register says
+what is true now and a statistic says what has accumulated; the graph is what
+says *when the machine ran*, which is what a rise in a counter has to be
+attributed to.
+
+Its timestamps are seconds since 2000-01-01, and they are local time: read as
+if they were UTC they give the wall clock. The `timestamp` the status page
+carries is the same trick in milliseconds since 1970, and it agrees with the
+minute the capture was taken. The window that arrives unasked is 2026-09-19
+15:39 to 2026-09-20 21:39, the 30 hours the interface's own second tab asks
+for.
+
+A second capture, `data/navigator-2.0-webapi-2026-09-20-2218.json` at
+22:18–22:21, asks for the graph on purpose: `graph`/`overview`, then
+`graph`/`traverse`, then `graph`/`detail` for each graph the controller offers
+over each span the interface plots. `fromSecs` reaches back from now rather than
+naming a date, and eight days is the furthest the interface looks; the
+controller answered that request from 09-13 22:43 onwards, so seven days is what
+it had. Two graphs exist, `System` with the four sensors and the four state
+channels, and `WW` with the two hot water sensors.
+
+In the 30 hours of the first capture the machine ran **exactly once**:
+
+| Time | What the graph says |
+|---|---|
+| 09-19 15:39 – 09-20 09:05 | TW-Erwärmer decays 39.6 → 34.0 °C, no stage, no hot water |
+| 09-20 09:05 – 10:32 | one stage running, `N2_HOTWATER` set |
+| 09-20 10:32 – 21:39 | 57.9 °C decaying to 42.9, no stage |
+
+87 minutes of it, against the 1.48 h — 89 minutes — the controller booked as
+runtime for that day, so those two of its accountings agree. The lower sensor
+stood at 34.0 °C when it started, below the 36 °C of `FW027`.
+
+**The stamps on the state channels run an hour early.** `FW025` opens the hot
+water window at 10:00 and the machine charges there, but the stage and
+`N2_HOTWATER` channels put the run at 09:05. The tank's own sensors, in the same
+response, have it warming until 11:40, which is where the program puts it, and
+the live tail of both agrees with the wall clock to the minute. So the offset is
+in the stored history rather than in the epoch, and summer time is the obvious
+suspect. It is worth knowing before anyone dates something by this graph, and
+nothing below rests on it: the duration of a run, the number of runs and the days
+they fall on are the same either way.
+
+**So the factor survives a single charge.** The sweep of 09-19 was taken at
+15:05, half an hour before the graph begins, and the graph's first samples show
+a tank already cooling, so nothing ran in the gap either.
+
+| | |
+|---|---|
+| 1754 at 09-19 15:05 | 256.902 kWh |
+| 1754 at 09-20 19:54 | 265.396 kWh |
+| Rise, over one charge | **8.494 kWh** |
+| The controller's figure for that day | **10.25 kWh** |
+| Ratio | **1.207** |
+
+That rules out the cheapest explanation: the registers are not lagging behind an
+unobserved window. Two accountings of one 87-minute charge differ by a fifth.
+
+**The controller books a day the machine did not run.** On 2026-09-19 it credits
+10.25 kWh of hot water heat against 0 runtime and 0 electrical energy, and it is
+the only such day in the 31 the daily series holds — every other day's
+zero-or-nonzero pattern matches across all three series. The seven-day graph
+says the same thing from the sensors instead of from the statistics: one stage
+ran on 09-15, 09-17, 09-18 and 09-20, each time in the morning window for about
+90 minutes with `N2_HOTWATER` set, and on 09-19 the TW-Erwärmer falls from 50.0 °C to
+34.9 °C without a single rise. Nothing heated that water, and 10.25 kWh is
+booked against it.
+
+It is not confined to the daily list. September's daily figures sum to 128.89
+against a printed monthly 128.90, and the three monthly figures sum to the
+316.81 kWh total, so the phantom day is inside the number the page prints. That
+is why the lifetime ratio is the weaker of the two: the total on the web side
+contains at least one day that never happened, and the per-charge comparison
+above does not.
+
+**What the tank holds points the same way.** The charge took the lower sensor
+from 34.0 to 57.9 °C and the upper from 47.1 to 59.3 °C, so a 300 L tank took
+up between 6.3 kWh — if the mean before the charge was the average of the two
+sensors — and 8.4 kWh, if the bulk of it stood at the lower sensor's 34 °C.
+Hot water drawn during the 87 minutes adds to what was delivered and is not
+measured here, so this is a floor and not a figure. The registers' 8.494 kWh
+sits at the top of that band; the page's 10.25 kWh sits above it. Suggestive,
+resting on a nominal volume rather than a measured one, and worth stating
+because it is the only check here that does not come from the controller.
+
+None of this says what 1748–1754 accumulate. It says the disagreement is real,
+that it is per charge and not per lifetime, and that the page is the side with a
+known defect. A caller who wants the heat the tank received has no better source
+than the registers; a caller who wants the number the controller prints cannot
+have it from Modbus at all.
+
+**The channel that would name it exists and cannot be read.**
+`graph`/`traverse` lists every channel the controller could plot, whether or not
+a graph uses it, and among the groups — the site sensors, the heat pump states,
+heating circuits A, C and D, the compressor, the circulation pump, the bivalent
+stage — stands `N2_HEATQUANTITIES`, holding two channels named `T20x_QACT` with
+the unit `N2_KW`. That is an instantaneous heat output in kW, which is what
+registers 1790 and 1792 are called. Plotting it would require a graph that
+contains it, and creating one is `graph`/`save`: a write, and out of this
+script's reach. Modbus has the same quantity live, which is the way to take it.
+
+So what would name the quantity: sampling 1754 and 1790 through a charge, and
+integrating the second against the rise in the first. If they agree, the
+registers are a closed accounting of a measured power and the page is computing
+something else; if 1790 integrates to the page's figure instead, the counters
+are the odd ones. That needs a run during a charge window, which `FW025` opens
+at 10:00 on this machine, and has not been done.
 
 ## Reproducing
 
@@ -174,5 +290,9 @@ registers are a scaled quantity, and it is worth asking which.
 
 Run them in that order and within a few minutes of each other. The script needs
 nothing but a Python interpreter, holds its own websocket client, and takes
-about three minutes: it paces itself at one request every two seconds, where
+three or four minutes: it paces itself at one request every two seconds, where
 the manufacturer's own client polls a settings page twice a second.
+
+The graph is worth capturing on its own whenever a counter is in question,
+because it is the only thing that says what the machine was doing while the
+counter moved, and it reaches back about a week — after that the answer is gone.

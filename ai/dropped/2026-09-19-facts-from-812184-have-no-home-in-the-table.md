@@ -36,3 +36,20 @@ no longer the single source of the table.
 Nothing today. It becomes urgent if the library ever grows a "log this series"
 convenience, because that is the moment a prediction gets filed as a
 measurement.
+
+## Dropped 2026-09-20: the first option, prose
+
+Dominik's decision: the facts stay in `doc/research.md`, the table and the
+types do not learn them. No second file to keep true, no near-empty
+constructor. The cost is accepted — a caller who does not read the documents is
+not warned that 4122 is a forecast.
+
+The websocket cannot help here, which is what closes it rather than defers it.
+The backend settles what the machine is doing, never how a number came about;
+only 812184 draws that distinction, so no capture will ever make the fact
+derivable and the generated table can never carry it.
+
+The reopening condition stands: a convenience that logs a series. A second
+inhabitant would also change the arithmetic — the Wärmemenge counters and the
+page disagree per charge, and "computed" against "measured" is one of the
+shapes that disagreement could have.
