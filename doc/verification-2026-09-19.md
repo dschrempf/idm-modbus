@@ -17,7 +17,7 @@ capture that already applied a convention could not be the evidence for it.
 |---|---|
 | Model | iDM AERO ALM 2-8 |
 | Controller | Navigator 2.0, firmware `T_NAV10_20.24-1574-g183d9b17a` |
-| Heating circuits | A, C, D (D without a room unit) |
+| Heating circuits | A, C, D (D without a room unit), and B, the machine's own internal circuit |
 | Buffer | 300 l |
 | Domestic hot water | 300 l |
 | Zone modules | none |
@@ -133,7 +133,7 @@ Both return identical data for every address tried, including 4122, which
 ## And one trap
 
 Settings do not reveal whether a heating circuit exists. Circuits B and E to G
-are not installed, yet:
+carry no house heating, yet:
 
 | Address | Circuit | Value |
 |---|---|---|
@@ -143,6 +143,13 @@ are not installed, yet:
 
 Only read-only sensors (`-1.0`) and the active operating mode registers 1498 to
 1504 (`255`) report absence. Any auto-detection must use those.
+
+**Corrected on 2026-09-20.** The last sentence does not hold, and "not
+installed" was wrong about B. Circuit B is the machine's internal heating
+circuit: it exists, and it reads `-1.0` and `255` in exactly the places this
+section proposes using. Over Modbus it is identical to E, F and G in every
+register. Auto-detection can find the circuits that have sensors on them; it
+cannot find the circuits. See `doc/verification-2026-09-20.md`.
 
 ## Reproducing
 

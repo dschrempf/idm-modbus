@@ -184,13 +184,37 @@ Vorlauftemperatur Heizen` has no address anywhere in the list — a conclusion
 that searched the whole answering set rather than the registers whose names
 suggested themselves.
 
-1450, the same setting for the circuit B this house does not have, reads 60
-rather than 45. That is the trap the previous verification records: a circuit
-that is not installed still carries factory values, and not even the same ones
-as its neighbors.
-
 This rests on the change having reached the controller; it was made from the
-display and not read back there.
+display and not read back there. The three circuits were set back to 45
+afterwards.
+
+### An existing circuit that reads exactly like a missing one
+
+1450 stood out in that comparison: 60 where A, C and D read 45. It is heating
+circuit B, which is not a house circuit at all but the machine's own internal
+one. Looking at all seven circuits together:
+
+| Circuit | Betriebsart | Active mode | Heizkurve | Konstant | Vorlauftemperatur | Sollvorlauftemperatur |
+|---|---|---|---|---|---|---|
+| A | 1 | 0 | 0.4 | 45 | 22.74 | 0.0 |
+| C | 1 | 0 | 0.4 | 45 | 21.80 | 0.0 |
+| D | 0 | 0 | 0.4 | 45 | 22.39 | 0.0 |
+| **B** | **1** | **255** | **1.2** | **60** | **-1.0** | **-1.0** |
+| E, F, G | 1 | 255 | 1.2 | 60 | -1.0 | -1.0 |
+
+**B is real and reads identically to the three circuits that do not exist.**
+Not one register separates them.
+
+This retires the advice the previous verification gave. It proposed detecting
+which circuits exist from the read-only sensors at `-1.0` and the active
+operating mode at `255`, those being the only registers that report absence.
+They report B absent, and B is there. What those registers actually find is the
+circuits carrying a flow sensor and a room unit, which is a different question
+and the useful one for a temperature series — but it must not be called
+detecting the circuits.
+
+The practical rule: over Modbus, an installation's heating circuits cannot be
+enumerated. The configuration has to come from somewhere else.
 
 ### A documented minimum the machine does not respect
 

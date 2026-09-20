@@ -20,6 +20,7 @@ The daily Wärmemenge chart cannot check 1754: its window starts after the
 machine did.
 
 Settled on 2026-09-20: 1449 is not the maximum flow temperature. Moving that
-setting to 42, 43 and 44 on circuits A, C and D changed no register at all.
-Worth confirming on the display next session that the change did take, since
-the conclusion rests on it. The circuits can then go back to 45.
+setting to 42, 43 and 44 on circuits A, C and D changed no register at all. The
+circuits are back at 45. Worth confirming on the display next session that the
+change did take while it was made, since the conclusion rests on it — if the
+display never showed 42, the experiment proves nothing and has to be redone.
