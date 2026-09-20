@@ -94,6 +94,11 @@ Because no documented maximum comes near, the sentinel cannot be mistaken for a
 measurement. The library encodes this as `Reading a = NotFitted | Measured a`,
 so a caller cannot average a -1 into a temperature series by accident.
 
+**Corrected on 2026-09-20.** Looking only at the maximum was the mistake. Where
+a `WORD` is documented from a negative minimum, 65535 is inside its range and
+is a value the register may hold; the table's `min` column, not its `max`, is
+what says whether a sentinel is available at all.
+
 Addresses 1714 and 1715, "Externe Anforderung Grundwasserpumpe", return `254`
 rather than `255`. There is no groundwater pump here, so this is most likely a
 second sentinel, but it could be a real value. Treated as absence for now.
@@ -111,6 +116,14 @@ So the same raw 16-bit pattern means "minus one degree" in one register and
 as two's complement when the unit is degrees Celsius, and treats `65535` as
 absence first. A bivalence point genuinely set to -1 °C would therefore be
 misread; the protocol gives no way to avoid that.
+
+**Corrected on 2026-09-20.** The reading of 1104 above is wrong and so is the
+rule drawn from it. The controller's own display shows the charge pump fitted
+and running while 1104 reads 65535, which is -1 on the documented scale and
+means the pump is not being driven. The parameter list documents 1104 to 1109
+from a minimum of -1, and it is that minimum, not the unit, that says a `WORD`
+is signed — which also spares the bivalence point this section gave up on. See
+`doc/verification-2026-09-20.md`.
 
 ### Function codes 3 and 4 are interchangeable
 

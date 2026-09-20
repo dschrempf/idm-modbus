@@ -1,0 +1,191 @@
+page	tag	label	value	unit	captured
+Fühlereingänge	B32	Außentemperatur	21.1	°C	2026-09-20T19:47
+Fühlereingänge	B38	Wärmespeichertemperatur	21.2	°C	2026-09-20T19:47
+Fühlereingänge	B48	TW-Erw. Temp. oben	57.5	°C	2026-09-20T19:47
+Fühlereingänge	B41	TW-Erw. Temp.	45.0	°C	2026-09-20T19:47
+Fühlereingänge	B71	Heißgastemperatur 1	41.3	°C	2026-09-20T19:47
+Fühlereingänge	B37	Ansauglufttemperatur	21.8	°C	2026-09-20T19:47
+Fühlereingänge	B79	Verdampferaustritt 1	41.4	°C	2026-09-20T19:47
+Fühlereingänge	B78	Verdampfungsdruck 1	8.2	bar	2026-09-20T19:47
+Fühlereingänge	B78v	Verdampfungstemp. 1	23.5	°C	2026-09-20T19:47
+Fühlereingänge	B86	Kondensationsdruck 1	8.0	bar	2026-09-20T19:47
+Fühlereingänge	B86v	Kondensationstemp. 1	22.9	°C	2026-09-20T19:47
+Fühlereingänge	B87	Flüssigkeitsleit. Temp.	39.8	°C	2026-09-20T19:47
+Fühlereingänge	B45	Ladefühler	24.0	°C	2026-09-20T19:47
+Fühlereingänge	B51	Vorlauftemperatur HK A	22.7	°C	2026-09-20T19:47
+Fühlereingänge	B53	Vorlauftemperatur HK C	21.8	°C	2026-09-20T19:47
+Fühlereingänge	B54	Vorlauftemperatur HK D	22.4	°C	2026-09-20T19:47
+Fühlereingänge	B61	Raumtemperatur HK A	23.2	°C	2026-09-20T19:47
+Fühlereingänge	B63	Raumtemperatur HK C	23.1	°C	2026-09-20T19:47
+Fühlereingänge		Platinentemperatur	28.4	°C	2026-09-20T19:47
+Fühlereingänge	B124	Rücklauftemperatur Wärmesenke	27.8	°C	2026-09-20T19:47
+Fühlereingänge	B125	Vorlauftemperatur Wärmesenke	27.5	°C	2026-09-20T19:47
+Fühlereingänge	B2	Durchfluss Wärmesenke	0.0	l/min	2026-09-20T19:47
+Fühlereingänge	B33/B113	Vorlauftemperatur 1 Zwischenkreis	44.4	°C	2026-09-20T19:47
+Fühlereingänge	B34/B114	Rücklauftemperatur 1 Zwischenkreis	37.0	°C	2026-09-20T19:47
+Fühlereingänge		Batteriespannung Zentraleinheit	3.00	V	2026-09-20T19:47
+Analogausgänge	M13	Ventilatordrehzahl 1	0.0	V	2026-09-20T19:48
+Analogausgänge	M73	Ladepumpe Wärmesenke Steuersignal	-1.0	%	2026-09-20T19:48
+Analogausgänge	M125	Ladepumpe 1 Zwischenkreis Steuersignal	-1.0	%	2026-09-20T19:48
+Analogausgänge		AInOut 80-81	0.00	%	2026-09-20T19:48
+Analogausgänge		AInOut 82-83	101.41	%	2026-09-20T19:48
+Analogausgänge		AInOut 84-85	102.92	%	2026-09-20T19:48
+Analogausgänge		AInOut 86-87	0.00	%	2026-09-20T19:48
+Analogausgänge		AInOut 88-89	0.00	%	2026-09-20T19:48
+Analogausgänge		AInOut 180-181	40.32	%	2026-09-20T19:48
+Digitaleingänge		Externe Anforderung	0		2026-09-20T19:48
+Digitaleingänge		Ext. Umschaltung H/K	0		2026-09-20T19:48
+Digitaleingänge		EW/EVU Sperrkontakt	1		2026-09-20T19:48
+Digitaleingänge		ext. Vorrangladung	0		2026-09-20T19:48
+Digitaleingänge		internal use	1		2026-09-20T19:48
+Digitaleingänge	B15	Störung E-Heizstab	1		2026-09-20T19:48
+Digitaleingänge	B5	Taupunktwächter Heizkreis A	1		2026-09-20T19:48
+Digitaleingänge	M73	Störung Ladepumpe Wärmesenke	1		2026-09-20T19:48
+Digitalausgänge	M1	Verdichter 1	0		2026-09-20T19:49
+Digitalausgänge	M51	4-Wegeventil Kreis 1	0		2026-09-20T19:49
+Digitalausgänge	E32.1	Siphonheizung 1	0		2026-09-20T19:49
+Digitalausgänge	M13	Drehrichtung Ventilator 1	0		2026-09-20T19:49
+Digitalausgänge	E1	Verdichterheizung	0		2026-09-20T19:49
+Digitalausgänge	M64	Zirkulationspumpe	0		2026-09-20T19:49
+Digitalausgänge	M31	Pumpe Heizkreis A	0		2026-09-20T19:49
+Digitalausgänge	M41	Mischer Heizkreis A	Aus		2026-09-20T19:49
+Digitalausgänge	M33	Pumpe Heizkreis C	0		2026-09-20T19:49
+Digitalausgänge	M43	Mischer Heizkreis C	Aus		2026-09-20T19:49
+Digitalausgänge	M34	Pumpe Heizkreis D	0		2026-09-20T19:49
+Digitalausgänge	M44	Mischer Heizkreis D	Aus		2026-09-20T19:49
+Digitalausgänge		2./3. Wärmeerzeuger	0		2026-09-20T19:49
+Digitalausgänge		2. Wärmeerzeuger	0		2026-09-20T19:49
+Digitalausgänge	M63	Ventil Heizen/Vorrang	Heizen		2026-09-20T19:49
+Digitalausgänge	M73	Ladepumpe Wärmesenke EIN/AUS	100		2026-09-20T19:49
+Expansionsventil		Überhitzung 1	17.4	K	2026-09-20T20:01
+Expansionsventil		Unterkühlung	-16.6	K	2026-09-20T20:01
+Expansionsventil	B79	Verdampferaustritt 1	40.9	°C	2026-09-20T20:01
+Expansionsventil	B78	Verdampfungsdruck 1	8.2	bar	2026-09-20T20:01
+Expansionsventil	B78v	Verdampfungstemp. 1	23.5	°C	2026-09-20T20:01
+Expansionsventil	B71	Heißgastemperatur 1	40.8	°C	2026-09-20T20:01
+Expansionsventil	B86	Kondensationsdruck 1	8.0	bar	2026-09-20T20:01
+Expansionsventil	B86v	Kondensationstemp. 1	22.8	°C	2026-09-20T20:01
+Expansionsventil	B87	Flüssigkeitsleit. Temp.	39.5	°C	2026-09-20T20:01
+Expansionsventil		Ventilposition	2.0	%	2026-09-20T20:01
+Expansionsventil		Ventilpos. Unterk.	100.0	%	2026-09-20T20:01
+Modulation		Invertertype	Bluesight		2026-09-20T20:02
+Modulation		inverter model	unknown		2026-09-20T20:02
+Modulation		drive config	unknown		2026-09-20T20:02
+Modulation		drive status	stop		2026-09-20T20:02
+Modulation		actual error code	0.0		2026-09-20T20:02
+Modulation		status register	0.0		2026-09-20T20:02
+Modulation		motor speed	0.0	rps	2026-09-20T20:02
+Modulation		motor current	0.0	Arms	2026-09-20T20:02
+Modulation		motor voltage	0.0	Vrms	2026-09-20T20:02
+Modulation		motor power	0.0	kW	2026-09-20T20:02
+Modulation		dc bus voltage	566.6	V	2026-09-20T20:02
+Modulation		drive temperature	37	°C	2026-09-20T20:02
+Warmwasser		Warmwasserladung Ausschalttemperatur	44	°C	2026-09-20T20:03
+Warmwasser		Warmwasserladung Einschalttemperatur	36	°C	2026-09-20T20:03
+Warmwasser		Warmwasser-Komfort	Nein		2026-09-20T20:03
+Warmwasser		Ladepumpe P	1.0		2026-09-20T20:03
+Warmwasser		Ladepumpe I	25.0		2026-09-20T20:03
+Warmwasser		Ladepumpe D	18.0		2026-09-20T20:03
+Warmwasser		Minimale Ladepumpendrehzahl	25	%	2026-09-20T20:03
+Warmwasser		Maximale Ladepumpendrehzahl	100	%	2026-09-20T20:03
+Warmwasser		Minimaldrehzahl Ladepumpe Wärmesenke	13	%	2026-09-20T20:03
+Warmwasser		Maximaldrehzahl Ladepumpe Wärmesenke	100	%	2026-09-20T20:03
+Warmwasser		Bivalente Warmwassernachladung	Zweiter Wärmeerzeuger		2026-09-20T20:03
+Warmwasser		Legionellenfunktion	Wärmepumpe		2026-09-20T20:03
+Warmwasser		Legionellenfunktion - Temperatur	60	°C	2026-09-20T20:03
+Warmwasser		Legionellenfunktion - Zeitintervall	7	Tag(e)	2026-09-20T20:03
+Heizkreis A		Heizsystem	Geregelt		2026-09-20T20:04
+Heizkreis A		Raumtemperaturerfassung	Ja		2026-09-20T20:04
+Heizkreis A		Heizkreis mit iDM Einzelraumregelung	Aus		2026-09-20T20:04
+Heizkreis A		Betriebsart Heizkreis A	Zeitprogramm		2026-09-20T20:04
+Heizkreis A		Raumtemperatur Heizen Normal	22.0	°C	2026-09-20T20:04
+Heizkreis A		Raumtemperatur Heizen Eco	18.0	°C	2026-09-20T20:04
+Heizkreis A		Heizgrenze	15	°C	2026-09-20T20:04
+Heizkreis A		Raumeinflussfaktor	1.0		2026-09-20T20:04
+Heizkreis A		Heizkurve	0.4		2026-09-20T20:04
+Heizkreis A		Zuschaltzeit Heizen	15	Min	2026-09-20T20:04
+Heizkreis A		Parallelverschiebung	0	°C	2026-09-20T20:04
+Heizkreis A		Maximale Vorlauftemperatur Heizen	45	°C	2026-09-20T20:04
+Heizkreis A		Minimale Vorlauftemperatur Heizen	22	°C	2026-09-20T20:04
+Heizkreis A		Estrich Heizen	Nein		2026-09-20T20:04
+Heizkreis A		Heizkreis mit Anforderung	Ja		2026-09-20T20:04
+Heizkreis A		Heizkreis Frostschutz	Ja		2026-09-20T20:04
+Heizkreis A		Heizkreis Schnellabsenkung	Ja		2026-09-20T20:04
+Heizkreis A		Mischerlaufzeit	150	Sek	2026-09-20T20:04
+Heizkreis A		Mischer Nachstellzeit	60	Sek	2026-09-20T20:04
+Heizkreis A		Mischer Proportionalanteil	100		2026-09-20T20:04
+Heizkreis A		Mischer Intervall	10	Sek	2026-09-20T20:04
+Heizkreis C		Heizsystem	Geregelt		2026-09-20T20:04
+Heizkreis C		Raumtemperaturerfassung	Ja		2026-09-20T20:04
+Heizkreis C		Heizkreis mit iDM Einzelraumregelung	Aus		2026-09-20T20:04
+Heizkreis C		Betriebsart Heizkreis C	Zeitprogramm		2026-09-20T20:04
+Heizkreis C		Raumtemperatur Heizen Normal	22.0	°C	2026-09-20T20:04
+Heizkreis C		Raumtemperatur Heizen Eco	18.0	°C	2026-09-20T20:04
+Heizkreis C		Heizgrenze	15	°C	2026-09-20T20:04
+Heizkreis C		Raumeinflussfaktor	1.0		2026-09-20T20:04
+Heizkreis C		Heizkurve	0.4		2026-09-20T20:04
+Heizkreis C		Zuschaltzeit Heizen	15	Min	2026-09-20T20:04
+Heizkreis C		Parallelverschiebung	0	°C	2026-09-20T20:04
+Heizkreis C		Maximale Vorlauftemperatur Heizen	45	°C	2026-09-20T20:04
+Heizkreis C		Minimale Vorlauftemperatur Heizen	22	°C	2026-09-20T20:04
+Heizkreis C		Estrich Heizen	Nein		2026-09-20T20:04
+Heizkreis C		Heizkreis mit Anforderung	Ja		2026-09-20T20:04
+Heizkreis C		Heizkreis Frostschutz	Ja		2026-09-20T20:04
+Heizkreis C		Heizkreis Schnellabsenkung	Ja		2026-09-20T20:04
+Heizkreis C		Mischerlaufzeit	150	Sek	2026-09-20T20:04
+Heizkreis C		Mischer Nachstellzeit	60	Sek	2026-09-20T20:04
+Heizkreis C		Mischer Proportionalanteil	100		2026-09-20T20:04
+Heizkreis C		Mischer Intervall	10	Sek	2026-09-20T20:04
+Heizkreis D		Heizsystem	Geregelt		2026-09-20T20:04
+Heizkreis D		Raumtemperaturerfassung	Nein		2026-09-20T20:04
+Heizkreis D		Heizkreis mit iDM Einzelraumregelung	Aus		2026-09-20T20:04
+Heizkreis D		Betriebsart Heizkreis D	Aus		2026-09-20T20:04
+Heizkreis D		Raumtemperatur Heizen Normal	22.0	°C	2026-09-20T20:04
+Heizkreis D		Raumtemperatur Heizen Eco	18.0	°C	2026-09-20T20:04
+Heizkreis D		Heizgrenze	15	°C	2026-09-20T20:04
+Heizkreis D		Heizkurve	0.4		2026-09-20T20:04
+Heizkreis D		Zuschaltzeit Heizen	15	Min	2026-09-20T20:04
+Heizkreis D		Parallelverschiebung	0	°C	2026-09-20T20:04
+Heizkreis D		Maximale Vorlauftemperatur Heizen	45	°C	2026-09-20T20:04
+Heizkreis D		Minimale Vorlauftemperatur Heizen	25	°C	2026-09-20T20:04
+Heizkreis D		Estrich Heizen	Nein		2026-09-20T20:04
+Heizkreis D		Heizkreis mit Anforderung	Ja		2026-09-20T20:04
+Heizkreis D		Heizkreis Frostschutz	Ja		2026-09-20T20:04
+Heizkreis D		Mischerlaufzeit	150	Sek	2026-09-20T20:04
+Heizkreis D		Mischer Nachstellzeit	60	Sek	2026-09-20T20:04
+Heizkreis D		Mischer Proportionalanteil	100		2026-09-20T20:04
+Heizkreis D		Mischer Intervall	10	Sek	2026-09-20T20:04
+Fühlereingänge	B32	Außentemperatur	21.0	°C	2026-09-20T20:06
+Fühlereingänge	B38	Wärmespeichertemperatur	21.2	°C	2026-09-20T20:06
+Fühlereingänge	B48	TW-Erw. Temp. oben	57.4	°C	2026-09-20T20:06
+Fühlereingänge	B41	TW-Erw. Temp.	43.9	°C	2026-09-20T20:06
+Fühlereingänge	B71	Heißgastemperatur 1	40.7	°C	2026-09-20T20:06
+Fühlereingänge	B37	Ansauglufttemperatur	22.1	°C	2026-09-20T20:06
+Fühlereingänge	B79	Verdampferaustritt 1	40.8	°C	2026-09-20T20:06
+Fühlereingänge	B78	Verdampfungsdruck 1	8.2	bar	2026-09-20T20:06
+Fühlereingänge	B78v	Verdampfungstemp. 1	23.5	°C	2026-09-20T20:06
+Fühlereingänge	B86	Kondensationsdruck 1	8.0	bar	2026-09-20T20:06
+Fühlereingänge	B86v	Kondensationstemp. 1	22.9	°C	2026-09-20T20:06
+Fühlereingänge	B87	Flüssigkeitsleit. Temp.	39.4	°C	2026-09-20T20:06
+Fühlereingänge	B45	Ladefühler	23.8	°C	2026-09-20T20:06
+Fühlereingänge	B51	Vorlauftemperatur HK A	22.8	°C	2026-09-20T20:06
+Fühlereingänge	B53	Vorlauftemperatur HK C	21.8	°C	2026-09-20T20:06
+Fühlereingänge	B54	Vorlauftemperatur HK D	22.4	°C	2026-09-20T20:06
+Fühlereingänge	B61	Raumtemperatur HK A	23.2	°C	2026-09-20T20:06
+Fühlereingänge	B63	Raumtemperatur HK C	22.9	°C	2026-09-20T20:06
+Fühlereingänge		Platinentemperatur	28.3	°C	2026-09-20T20:06
+Fühlereingänge	B124	Rücklauftemperatur Wärmesenke	27.5	°C	2026-09-20T20:06
+Fühlereingänge	B125	Vorlauftemperatur Wärmesenke	27.3	°C	2026-09-20T20:06
+Fühlereingänge	B2	Durchfluss Wärmesenke	0.0	l/min	2026-09-20T20:06
+Fühlereingänge	B33/B113	Vorlauftemperatur 1 Zwischenkreis	43.8	°C	2026-09-20T20:06
+Fühlereingänge	B34/B114	Rücklauftemperatur 1 Zwischenkreis	36.5	°C	2026-09-20T20:06
+Fühlereingänge		Batteriespannung Zentraleinheit	3.00	V	2026-09-20T20:06
+System Informationen		Software Version	T_NAV10_20.24-1574-g183d9b17a		2026-09-20T20:06
+System Informationen		Regler Online	1947.0	h	2026-09-20T20:06
+System Informationen		Laufzeit Stufe 1	39.9	h	2026-09-20T20:06
+System Informationen		Schaltzyklen Stufe 1	39.0		2026-09-20T20:06
+System Informationen		Laufzeit 2.Wärmeerzeuger	0.0	h	2026-09-20T20:06
+System Informationen		Schaltzyklen 2.Wärmeerzeuger	0.0		2026-09-20T20:06
+System Informationen		Laufzeit Heizen	0.2	h	2026-09-20T20:06
+System Informationen		Laufzeit Warmwasser	39.7	h	2026-09-20T20:06
+System Informationen		Laufzeit Abtauen	0.0	h	2026-09-20T20:06

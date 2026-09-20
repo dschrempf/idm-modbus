@@ -27,8 +27,12 @@ The register table is data, not code, and it flows one way:
     manual/812170.pdf → pdftotext -layout → tools/transcribe.py
       → data/navigator-2.0-{registers,enums}.tsv → embedFile → IDM.Navigator.Table
 
-`tools/transcribe.py` is the only thing that may write the TSVs — editing them
-by hand makes the next revision of the manual impossible to apply cleanly. It
+`tools/transcribe.py` is the only thing that may write those two TSVs — editing
+them by hand makes the next revision of the manual impossible to apply cleanly.
+`data/navigator-2.0-web-*.tsv` is a different kind of file and is written by
+hand: what the controller's own web pages showed, at the minute they were read.
+It carries no addresses, so the mapping it tests is stated only in the register
+table; the join is on the sensor designator a register name already holds. It
 also folds in `data/navigator-2.0-scan-*.json`, a capture of what one machine
 answered, to fill the `observed` column. The capture holds no transcribed data
 of its own — `idm-dump --json` writes it, and it records only address, status,
@@ -63,13 +67,16 @@ that makes the cost visible rather than an extra argument.
 - A 32-bit float arrives **low word first**, against the usual Modbus habit.
 - An unfitted sensor answers with a sentinel (`-1.0`, `255`, `65535`), not an
   exception; `decode` returns `NotFitted` so a -1 never enters a temperature
-  series. A `WORD` carrying a temperature is two's complement.
+  series. A `WORD` is two's complement where the parameter list documents a
+  negative minimum for it, and there 65535 is a value rather than a sentinel:
+  the pump control signals at 1104 to 1109 read it as "not being driven".
 - The Navigator stalls when polled hard, hence `pollIntervalMicroseconds`.
 
 `doc/research.md` records the sources and the open questions;
 `doc/verification-2026-09-19.md` records the measurements the decoding rests
-on. Claims about the machine belong there, with the measurement that supports
-them.
+on, and `doc/verification-2026-09-20.md` what the controller's own display
+says about the same registers. Claims about the machine belong there, with the
+measurement that supports them.
 
 ## Conventions
 

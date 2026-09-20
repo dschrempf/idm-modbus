@@ -19,8 +19,22 @@
   as "the building management system may supply this value, and may read it
   back". This settles address 86, which `doc/research.md` had listed as
   documented nowhere: it is `Batteriefüllstand`.
+- `Drive`, what a pump's control signal says: `NotDriven`, or `Driven` so many
+  per cent. The controller's scale runs from -1, and `Driven 0` — a pump at its
+  minimum speed — is not a pump at rest.
+- A second verification, `doc/verification-2026-09-20.md`, checking the table
+  against the controller's own display rather than against the machine alone,
+  with the readings in `data/navigator-2.0-web-2026-09-20.tsv` and the two
+  captures taken beside them.
 
 ### Changed
+
+- The sign of a `WORD` follows the minimum the parameter list documents for it,
+  not its unit. Registers documented from a negative minimum — the bivalence
+  points from -90, the pump control signals from -1 — are two's complement, and
+  65535 is a value they may hold rather than a sentinel. This replaces the
+  special case for degrees Celsius instead of adding a second one, and a
+  bivalence point set to -1 °C is no longer swallowed.
 
 - `data/navigator-2.0-scan-2026-09-19.json` is a fresh sweep of all 663
   addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress` and
@@ -37,6 +51,17 @@
 
 ### Fixed
 
+- Addresses 1104 to 1109 reported a fitted pump as absent. They are pump
+  control signals documented from -1, so their 65535 means "not being driven",
+  which the controller's display confirms for the charge pump M73 while showing
+  it running. A pump nothing calls for and a pump never installed answer alike,
+  and the library no longer pretends to tell them apart.
+- `enumLabel` reached only the register the manual prints an enumeration
+  beside, so the operating mode of heating circuits B to G, their active mode,
+  and compressors 2 to 4 had no labels. `tools/transcribe.py` now shares an
+  enumeration across the registers that differ only in the letter or digit
+  ending their name and agree in everything else, and refuses to share where
+  two of them carry enumerations of their own. Sixteen addresses became 45.
 - `tools/transcribe.py` read the parameter list by the order of its cells,
   which the list does not keep. It now reads each cell by the column it is
   printed in. Sixty-six names were wrong — 59 cut short of their sensor
@@ -52,5 +77,3 @@
 - Writing. Eighty-eight registers are stored in an EEPROM rated for 300000
   cycles, so writes need an interface that makes the cost visible rather than
   an extra argument on a read function.
-- Enumerations for every member of a register family. The manual prints the
-  encoding once, for heating circuit A, and leaves B to G implicit.
