@@ -44,12 +44,16 @@ Haskell parser.
 
 `data/navigator-2.0-webapi-*.json` is the third kind: what the controller's web
 interface answered, captured rather than transcribed. `tools/webprobe.py`
-writes it over the websocket the web interface itself uses, sending only
-`overview` and `detail` — the protocol's `save` and `execute` must stay out of
-that script. It is the stronger witness of the two web sources, because the
+writes it over the websocket the web interface itself uses, sending only the
+three read commands the controller's own JavaScript names, `overview`, `detail`
+and `traverse` — the protocol's `save` and `execute` must stay out of that
+script, and so must the two reads that open the relay test and ask for user
+level 4. It is the stronger witness of the two web sources, because the
 settings it walks name their value with the manufacturer's own parameter
 identifier, the `FW030` and `BV002` of the parameter list, so the join to the
-register table is on the identifier the table already carries. The capture is
+register table is on the identifier the table already carries. It is also the
+only source that carries time: the graph it captures says when the machine ran,
+which is what a rise in a counter has to be attributed to. The capture is
 verbatim but for the code that opens the controller and the strings that name
 the machine, which are replaced by a visible marker. What the capture contains
 depends on the user level the controller is left at; the script never raises

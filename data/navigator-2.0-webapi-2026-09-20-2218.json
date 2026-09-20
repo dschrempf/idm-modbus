@@ -1,0 +1,8041 @@
+[
+ {
+  "request": {
+   "controller": "status",
+   "command": "overview"
+  },
+  "captured": "2026-09-20T22:18:07+02:00",
+  "responses": [
+   {
+    "status": {
+     "authenticationEnabled": true,
+     "demoModeActive": false,
+     "frostProtectionInfo": {
+      "active": false,
+      "display": false
+     },
+     "header": {},
+     "jsonVersion": 11,
+     "language": "de",
+     "myidmInfo": "<redacted>",
+     "network": true,
+     "notificationCount": 0,
+     "rules": {
+      "1": 2,
+      "2": 0,
+      "3": 2,
+      "4": 2,
+      "5": 2,
+      "6": 0,
+      "7": 2
+     },
+     "timestamp": 1789942765000,
+     "userlevel": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "home",
+   "command": "overview"
+  },
+  "captured": "2026-09-20T22:18:09+02:00",
+  "responses": [
+   {
+    "home": {
+     "10": {
+      "1x2": {
+       "operationMode": 0
+      },
+      "1x3": {
+       "operationMode": 0
+      }
+     },
+     "11": {
+      "1x1": {
+       "temperatures": {
+        "top": "56.8"
+       }
+      },
+      "1x2": {
+       "temperatures": {
+        "top": "56.8"
+       }
+      },
+      "1x3": {
+       "temperatures": {
+        "top": "56.8"
+       }
+      }
+     },
+     "12": {
+      "1x1": {
+       "temperatures": {
+        "heating": "21.2"
+       }
+      },
+      "1x2": {
+       "temperatures": {
+        "heating": "21.2"
+       }
+      },
+      "1x3": {
+       "temperatures": {
+        "heating": "21.2"
+       }
+      }
+     },
+     "14": {
+      "1x2": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.48
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 0.8300000000000001
+        }
+       },
+       "name": "N2_RUNTIMEHEATPUMP",
+       "type": 0
+      },
+      "1x3": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.48
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 0.8300000000000001
+        }
+       },
+       "name": "N2_RUNTIMEHEATPUMP",
+       "type": 0
+      },
+      "3x2": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.48
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 0.8300000000000001
+        }
+       },
+       "name": "N2_RUNTIMEHEATPUMP",
+       "type": 0
+      },
+      "3x4": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.48
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 0.8300000000000001
+        }
+       },
+       "name": "N2_RUNTIMEHEATPUMP",
+       "type": 0
+      }
+     },
+     "15": {
+      "1x2": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 2.98
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.6500000000000001
+        }
+       },
+       "name": "N2_EMHP",
+       "type": 3
+      },
+      "1x3": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 2.98
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.6500000000000001
+        }
+       },
+       "name": "N2_EMHP",
+       "type": 3
+      },
+      "3x2": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 2.98
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.6500000000000001
+        }
+       },
+       "name": "N2_EMHP",
+       "type": 3
+      },
+      "3x4": {
+       "data": {
+        "today": {
+         "defrost": 0,
+         "heating": 0,
+         "priority": 2.98
+        },
+        "typeDict": {
+         "defrost": "N2_DEFROST",
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "defrost": 0,
+         "heating": 0,
+         "priority": 1.6500000000000001
+        }
+       },
+       "name": "N2_EMHP",
+       "type": 3
+      }
+     },
+     "17": {
+      "1x1": {
+       "operationMode": 0
+      },
+      "1x2": {
+       "operationMode": 0
+      },
+      "1x3": {
+       "operationMode": 0
+      }
+     },
+     "18": {
+      "1x1": {
+       "activeMode": 0,
+       "displayName": "A Erdgeschoss",
+       "mode": {
+        "value": 1
+       },
+       "pumpActive": false,
+       "type": 2
+      },
+      "1x2": {
+       "activeMode": 0,
+       "displayName": "A Erdgeschoss",
+       "mode": {
+        "value": 1
+       },
+       "pumpActive": false,
+       "type": 2
+      },
+      "1x3": {
+       "activeMode": 0,
+       "displayName": "A Erdgeschoss",
+       "mode": {
+        "value": 1
+       },
+       "pumpActive": false,
+       "type": 2
+      }
+     },
+     "2": {
+      "1x2": {
+       "data": {
+        "today": {
+         "heating": 0,
+         "priority": 10.25
+        },
+        "typeDict": {
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "heating": 0,
+         "priority": 6.95
+        }
+       },
+       "name": "N2_HEATQUANTITIES",
+       "type": 6
+      },
+      "1x3": {
+       "data": {
+        "today": {
+         "heating": 0,
+         "priority": 10.25
+        },
+        "typeDict": {
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "heating": 0,
+         "priority": 6.95
+        }
+       },
+       "name": "N2_HEATQUANTITIES",
+       "type": 6
+      },
+      "3x2": {
+       "data": {
+        "today": {
+         "heating": 0,
+         "priority": 10.25
+        },
+        "typeDict": {
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "heating": 0,
+         "priority": 6.95
+        }
+       },
+       "name": "N2_HEATQUANTITIES",
+       "type": 6
+      },
+      "3x4": {
+       "data": {
+        "today": {
+         "heating": 0,
+         "priority": 10.25
+        },
+        "typeDict": {
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "heating": 0,
+         "priority": 6.95
+        }
+       },
+       "name": "N2_HEATQUANTITIES",
+       "type": 6
+      }
+     },
+     "20": {
+      "1x1": {
+       "activeMode": 0,
+       "displayName": "C Obergeschoss",
+       "mode": {
+        "value": 1
+       },
+       "pumpActive": false,
+       "type": 2
+      },
+      "1x2": {
+       "activeMode": 0,
+       "displayName": "C Obergeschoss",
+       "mode": {
+        "value": 1
+       },
+       "pumpActive": false,
+       "type": 2
+      },
+      "1x3": {
+       "activeMode": 0,
+       "displayName": "C Obergeschoss",
+       "mode": {
+        "value": 1
+       },
+       "pumpActive": false,
+       "type": 2
+      }
+     },
+     "21": {
+      "1x1": {
+       "activeMode": 0,
+       "displayName": "D Kellergeschoss",
+       "mode": {
+        "value": 0
+       },
+       "pumpActive": false,
+       "type": 2
+      },
+      "1x2": {
+       "activeMode": 0,
+       "displayName": "D Kellergeschoss",
+       "mode": {
+        "value": 0
+       },
+       "pumpActive": false,
+       "type": 2
+      },
+      "1x3": {
+       "activeMode": 0,
+       "displayName": "D Kellergeschoss",
+       "mode": {
+        "value": 0
+       },
+       "pumpActive": false,
+       "type": 2
+      }
+     },
+     "3": {
+      "1x2": {
+       "date": "20.09.2026",
+       "dayofweek": "N2_TODAY",
+       "sun": 13366,
+       "sym_w50": 4,
+       "temperature": {
+        "act": 20,
+        "avg": "20°C/16.0h",
+        "max": 26,
+        "min": 10
+       }
+      },
+      "1x3": {
+       "date": "20.09.2026",
+       "dayofweek": "N2_TODAY",
+       "sun": 13366,
+       "sym_w50": 4,
+       "temperature": {
+        "act": 20,
+        "avg": "20°C/16.0h",
+        "max": 26,
+        "min": 10
+       }
+      },
+      "3x2": {
+       "forecast1": {
+        "date": "21.09.2026",
+        "dayofweek": "N2_MO",
+        "sun": 28725,
+        "sym_w50": 3,
+        "temperature": {
+         "act": 15,
+         "max": 20,
+         "min": 13
+        }
+       },
+       "forecast2": {
+        "date": "22.09.2026",
+        "dayofweek": "N2_TU",
+        "sun": 26833,
+        "sym_w50": 3,
+        "temperature": {
+         "act": 13,
+         "max": 18,
+         "min": 10
+        }
+       },
+       "forecast3": {
+        "date": "23.09.2026",
+        "dayofweek": "N2_WE",
+        "sun": 17770,
+        "sym_w50": 4,
+        "temperature": {
+         "act": 13,
+         "max": 19,
+         "min": 9
+        }
+       },
+       "forecast4": {
+        "date": "24.09.2026",
+        "dayofweek": "N2_TH",
+        "sun": 28211,
+        "sym_w50": 3,
+        "temperature": {
+         "act": 14,
+         "max": 22,
+         "min": 7
+        }
+       },
+       "forecast5": {
+        "date": "25.09.2026",
+        "dayofweek": "N2_FR",
+        "sun": 16316,
+        "sym_w50": 4,
+        "temperature": {
+         "act": 14,
+         "max": 20,
+         "min": 10
+        }
+       },
+       "forecast6": {
+        "date": "26.09.2026",
+        "dayofweek": "N2_SA",
+        "sun": 41883,
+        "sym_w50": 1,
+        "temperature": {
+         "act": 16,
+         "max": 26,
+         "min": 10
+        }
+       },
+       "today": {
+        "date": "20.09.2026",
+        "dayofweek": "N2_TODAY",
+        "sun": 13366,
+        "sym_w50": 4,
+        "temperature": {
+         "act": 20,
+         "avg": "20°C/16.0h",
+         "max": 26,
+         "min": 10
+        }
+       }
+      },
+      "3x4": {
+       "forecast1": {
+        "date": "21.09.2026",
+        "dayofweek": "N2_MO",
+        "sun": 28725,
+        "sym_w50": 3,
+        "temperature": {
+         "act": 15,
+         "max": 20,
+         "min": 13
+        }
+       },
+       "forecast2": {
+        "date": "22.09.2026",
+        "dayofweek": "N2_TU",
+        "sun": 26833,
+        "sym_w50": 3,
+        "temperature": {
+         "act": 13,
+         "max": 18,
+         "min": 10
+        }
+       },
+       "forecast3": {
+        "date": "23.09.2026",
+        "dayofweek": "N2_WE",
+        "sun": 17770,
+        "sym_w50": 4,
+        "temperature": {
+         "act": 13,
+         "max": 19,
+         "min": 9
+        }
+       },
+       "forecast4": {
+        "date": "24.09.2026",
+        "dayofweek": "N2_TH",
+        "sun": 28211,
+        "sym_w50": 3,
+        "temperature": {
+         "act": 14,
+         "max": 22,
+         "min": 7
+        }
+       },
+       "forecast5": {
+        "date": "25.09.2026",
+        "dayofweek": "N2_FR",
+        "sun": 16316,
+        "sym_w50": 4,
+        "temperature": {
+         "act": 14,
+         "max": 20,
+         "min": 10
+        }
+       },
+       "forecast6": {
+        "date": "26.09.2026",
+        "dayofweek": "N2_SA",
+        "sun": 41883,
+        "sym_w50": 1,
+        "temperature": {
+         "act": 16,
+         "max": 26,
+         "min": 10
+        }
+       },
+       "today": {
+        "date": "20.09.2026",
+        "dayofweek": "N2_TODAY",
+        "sun": 13366,
+        "sym_w50": 4,
+        "temperature": {
+         "act": 20,
+         "avg": "20°C/16.0h",
+         "max": 26,
+         "min": 10
+        }
+       }
+      }
+     },
+     "32": {
+      "1x2": {
+       "temperatures": {
+        "bottom": "42.6"
+       }
+      },
+      "1x3": {
+       "temperatures": {
+        "bottom": "42.6"
+       }
+      }
+     },
+     "6": {
+      "1x2": {
+       "avgOutdoor": "20.3",
+       "avgOutdoorInterval": "16.0",
+       "outdoor": "20.4"
+      },
+      "1x3": {
+       "avgOutdoor": "20.3",
+       "avgOutdoorInterval": "16.0",
+       "outdoor": "20.4"
+      }
+     },
+     "7": {
+      "1x2": {
+       "systemMode": {
+        "coolingConfigured": false,
+        "options": [
+         {
+          "value": -1
+         },
+         {
+          "value": 0
+         },
+         {
+          "value": 1
+         },
+         {
+          "value": 2
+         },
+         {
+          "value": 3
+         },
+         {
+          "value": 5
+         },
+         {
+          "value": 4
+         }
+        ],
+        "value": 4
+       }
+      },
+      "1x3": {
+       "systemMode": {
+        "coolingConfigured": false,
+        "options": [
+         {
+          "value": -1
+         },
+         {
+          "value": 0
+         },
+         {
+          "value": 1
+         },
+         {
+          "value": 2
+         },
+         {
+          "value": 3
+         },
+         {
+          "value": 5
+         },
+         {
+          "value": 4
+         }
+        ],
+        "value": 4
+       }
+      }
+     },
+     "8": {
+      "1x2": {
+       "active": false,
+       "enabled": {
+        "id": "CE001",
+        "increment": "1",
+        "type": "chooselist",
+        "types": [
+         {
+          "0": "N2_NO"
+         },
+         {
+          "1": "N2_YES"
+         }
+        ],
+        "value": 0
+       },
+       "ionSubscriptionStatus": -1
+      },
+      "1x3": {
+       "active": false,
+       "enabled": {
+        "id": "CE001",
+        "increment": "1",
+        "type": "chooselist",
+        "types": [
+         {
+          "0": "N2_NO"
+         },
+         {
+          "1": "N2_YES"
+         }
+        ],
+        "value": 0
+       },
+       "ionSubscriptionStatus": -1
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "home",
+   "command": "detail"
+  },
+  "captured": "2026-09-20T22:18:11+02:00",
+  "responses": [
+   {
+    "homeDetail": {
+     "data": {
+      "10": {
+       "operationMode": 0
+      },
+      "17": {
+       "operationMode": 0
+      },
+      "2": {
+       "data": {
+        "today": {
+         "heating": 0,
+         "priority": 10.25
+        },
+        "typeDict": {
+         "heating": "N2_HEATING",
+         "priority": "N2_HOTWATER"
+        },
+        "weeklyAvg": {
+         "days": 7,
+         "heating": 0,
+         "priority": 6.95
+        }
+       },
+       "name": "N2_HEATQUANTITIES",
+       "type": 6
+      },
+      "6": {
+       "avgOutdoor": "20.3",
+       "avgOutdoorInterval": "16.0",
+       "outdoor": "20.4"
+      },
+      "7": {
+       "systemMode": {
+        "coolingConfigured": false,
+        "options": [
+         {
+          "value": -1
+         },
+         {
+          "value": 0
+         },
+         {
+          "value": 1
+         },
+         {
+          "value": 2
+         },
+         {
+          "value": 3
+         },
+         {
+          "value": 5
+         },
+         {
+          "value": 4
+         }
+        ],
+        "value": 4
+       }
+      },
+      "8": {
+       "active": false,
+       "enabled": {
+        "id": "CE001",
+        "increment": "1",
+        "type": "chooselist",
+        "types": [
+         {
+          "0": "N2_NO"
+         },
+         {
+          "1": "N2_YES"
+         }
+        ],
+        "value": 0
+       },
+       "ionSubscriptionStatus": -1
+      }
+     },
+     "widgetLayout": [
+      [
+       2,
+       2,
+       2,
+       2,
+       6,
+       6
+      ],
+      [
+       2,
+       2,
+       2,
+       2,
+       16,
+       16
+      ],
+      [
+       2,
+       2,
+       2,
+       2,
+       17,
+       17
+      ],
+      [
+       7,
+       7,
+       8,
+       8,
+       10,
+       10
+      ]
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "system",
+   "command": "overview"
+  },
+  "captured": "2026-09-20T22:18:13+02:00",
+  "responses": [
+   {
+    "system": {
+     "buffer": {
+      "systemMode": 4,
+      "temperatures": {
+       "heating": "21.2"
+      }
+     },
+     "freshwater": {
+      "circulation": {
+       "active": false
+      },
+      "statusInfo": {
+       "scheduledTime": "2026-09-21 10:00:00",
+       "status": 32
+      },
+      "systemMode": 4,
+      "temperatures": {
+       "bottom": "42.6",
+       "top": "56.8"
+      }
+     },
+     "heatingcircuit": [
+      {
+       "activeMode": 0,
+       "displayName": "A Erdgeschoss",
+       "id": "A",
+       "mode": 1,
+       "pumpActive": false,
+       "room": {
+        "temperatures": {
+         "actual": "23.0",
+         "set": "0.0"
+        }
+       },
+       "temperatures": {
+        "actual": "22.7",
+        "set": "0.0"
+       },
+       "type": 2
+      },
+      {
+       "activeMode": 0,
+       "displayName": "C Obergeschoss",
+       "id": "C",
+       "mode": 1,
+       "pumpActive": false,
+       "room": {
+        "temperatures": {
+         "actual": "22.5",
+         "set": "0.0"
+        }
+       },
+       "temperatures": {
+        "actual": "21.8",
+        "set": "0.0"
+       },
+       "type": 2
+      },
+      {
+       "activeMode": 0,
+       "displayName": "D Kellergeschoss",
+       "id": "D",
+       "mode": 0,
+       "pumpActive": false,
+       "temperatures": {
+        "actual": "22.4",
+        "set": "0.0"
+       },
+       "type": 2
+      }
+     ],
+     "heatpump": {
+      "active": false,
+      "ion": {
+       "active": false,
+       "enabled": {
+        "id": "CE001",
+        "increment": "1",
+        "type": "chooselist",
+        "types": [
+         {
+          "0": "N2_NO"
+         },
+         {
+          "1": "N2_YES"
+         }
+        ],
+        "value": 0
+       },
+       "ionSubscriptionStatus": -1
+      },
+      "operationMode": 0,
+      "source": {
+       "active": false,
+       "temperatures": {
+        "in": "21.2"
+       },
+       "type": 2
+      },
+      "systemMode": 4,
+      "temperatures": {
+       "flow": "25.9",
+       "return": "25.9"
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "system.freshwater",
+   "command": "detail"
+  },
+  "captured": "2026-09-20T22:18:15+02:00",
+  "responses": [
+   {
+    "freshwaterDetail": {
+     "circulation": {
+      "active": false,
+      "timeSettings": {
+       "idle": {
+        "id": "FW042",
+        "increment": "5",
+        "max": 240,
+        "min": 0,
+        "type": "int",
+        "value": 45
+       },
+       "run": {
+        "id": "FW041",
+        "increment": "1",
+        "max": 60,
+        "min": 1,
+        "type": "int",
+        "value": 4
+       }
+      },
+      "timetable": {
+       "discrete": true,
+       "id": "FW040",
+       "value": "000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000"
+      }
+     },
+     "oneTimeLoading": {
+      "id": "PROG0",
+      "oneTimeLoadingAllowed": true,
+      "oneTimeLoadingBoostAllowed": false,
+      "status": 0,
+      "types": [
+       {
+        "info": "52",
+        "value": 5
+       }
+      ]
+     },
+     "statusInfo": {
+      "scheduledTime": "2026-09-21 10:00:00",
+      "status": 32
+     },
+     "systemMode": 4,
+     "temperatures": {
+      "bottom": "42.6",
+      "off": {
+       "id": "FW028",
+       "increment": "1",
+       "max": 64,
+       "min": 48,
+       "type": "int",
+       "value": 52
+      },
+      "on": {
+       "id": "FW027",
+       "increment": "1",
+       "max": 52,
+       "min": 30,
+       "type": "int",
+       "value": 48
+      },
+      "top": "56.8"
+     },
+     "timetable": {
+      "discrete": false,
+      "id": "FW025",
+      "value": "000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000"
+     }
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "system.heatingcircuit",
+   "command": "detail",
+   "data": {
+    "hcId": "A"
+   }
+  },
+  "captured": "2026-09-20T22:18:17+02:00",
+  "responses": [
+   {
+    "heatingcircuitDetail": {
+     "activeMode": 0,
+     "availableHeatingCircuits": [
+      {
+       "displayName": "A Erdgeschoss",
+       "id": "A",
+       "mode": 1
+      },
+      {
+       "displayName": "C Obergeschoss",
+       "id": "C",
+       "mode": 1
+      },
+      {
+       "displayName": "D Kellergeschoss",
+       "id": "D",
+       "mode": 1
+      }
+     ],
+     "displayName": "A Erdgeschoss",
+     "function": 1,
+     "id": "A",
+     "info": {
+      "activeMode": 0,
+      "demand": 1,
+      "function": 1,
+      "heatLimit": 15,
+      "mixer": 0,
+      "mode": 1,
+      "outdoorTemp": {
+       "avgOutdoor": "20.3",
+       "avgOutdoorInterval": "16.0",
+       "outdoor": "20.4"
+      },
+      "pumpActive": false,
+      "roomEquipment": 1,
+      "type": 2
+     },
+     "limitsInfo": 2,
+     "mixer": 0,
+     "mode": {
+      "id": "HKA01",
+      "type": "chooselist",
+      "types": [
+       {
+        "key": 0,
+        "name": "N2_OFF"
+       },
+       {
+        "key": 1,
+        "name": "N2_TIMETABLE"
+       },
+       {
+        "key": 2,
+        "name": "N2_NORMAL"
+       },
+       {
+        "key": 3,
+        "name": "N2_ECO"
+       },
+       {
+        "key": 4,
+        "name": "N2_MANUALHEAT"
+       }
+      ],
+      "value": 1
+     },
+     "pumpActive": false,
+     "room": {
+      "temperatures": {
+       "actual": "23.0",
+       "set": "0.0"
+      }
+     },
+     "temperatures": {
+      "actual": "22.7",
+      "heating": {
+       "eco": {
+        "id": "HKA05",
+        "increment": "0.1",
+        "max": 25,
+        "min": 10,
+        "type": "float",
+        "value": 18
+       },
+       "normal": {
+        "id": "HKA04",
+        "increment": "0.1",
+        "max": 30,
+        "min": 15,
+        "type": "float",
+        "value": 22
+       }
+      },
+      "set": "0.0"
+     },
+     "timetable": {
+      "discrete": false,
+      "id": "HKA06",
+      "value": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111"
+     },
+     "type": 2
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "system.heatingcircuit",
+   "command": "detail",
+   "data": {
+    "hcId": "C"
+   }
+  },
+  "captured": "2026-09-20T22:18:19+02:00",
+  "responses": [
+   {
+    "heatingcircuitDetail": {
+     "activeMode": 0,
+     "availableHeatingCircuits": [
+      {
+       "displayName": "A Erdgeschoss",
+       "id": "A",
+       "mode": 1
+      },
+      {
+       "displayName": "C Obergeschoss",
+       "id": "C",
+       "mode": 1
+      },
+      {
+       "displayName": "D Kellergeschoss",
+       "id": "D",
+       "mode": 1
+      }
+     ],
+     "displayName": "C Obergeschoss",
+     "function": 1,
+     "id": "C",
+     "info": {
+      "activeMode": 0,
+      "demand": 1,
+      "function": 1,
+      "heatLimit": 15,
+      "mixer": 0,
+      "mode": 1,
+      "outdoorTemp": {
+       "avgOutdoor": "20.3",
+       "avgOutdoorInterval": "16.0",
+       "outdoor": "20.4"
+      },
+      "pumpActive": false,
+      "roomEquipment": 1,
+      "type": 2
+     },
+     "limitsInfo": 2,
+     "mixer": 0,
+     "mode": {
+      "id": "HKC01",
+      "type": "chooselist",
+      "types": [
+       {
+        "key": 0,
+        "name": "N2_OFF"
+       },
+       {
+        "key": 1,
+        "name": "N2_TIMETABLE"
+       },
+       {
+        "key": 2,
+        "name": "N2_NORMAL"
+       },
+       {
+        "key": 3,
+        "name": "N2_ECO"
+       },
+       {
+        "key": 4,
+        "name": "N2_MANUALHEAT"
+       }
+      ],
+      "value": 1
+     },
+     "pumpActive": false,
+     "room": {
+      "temperatures": {
+       "actual": "22.5",
+       "set": "0.0"
+      }
+     },
+     "temperatures": {
+      "actual": "21.8",
+      "heating": {
+       "eco": {
+        "id": "HKC05",
+        "increment": "0.1",
+        "max": 25,
+        "min": 10,
+        "type": "float",
+        "value": 18
+       },
+       "normal": {
+        "id": "HKC04",
+        "increment": "0.1",
+        "max": 30,
+        "min": 15,
+        "type": "float",
+        "value": 22
+       }
+      },
+      "set": "0.0"
+     },
+     "timetable": {
+      "discrete": false,
+      "id": "HKC06",
+      "value": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111"
+     },
+     "type": 2
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "system.heatingcircuit",
+   "command": "detail",
+   "data": {
+    "hcId": "D"
+   }
+  },
+  "captured": "2026-09-20T22:18:21+02:00",
+  "responses": [
+   {
+    "heatingcircuitDetail": {
+     "activeMode": 0,
+     "availableHeatingCircuits": [
+      {
+       "displayName": "A Erdgeschoss",
+       "id": "A",
+       "mode": 1
+      },
+      {
+       "displayName": "C Obergeschoss",
+       "id": "C",
+       "mode": 1
+      },
+      {
+       "displayName": "D Kellergeschoss",
+       "id": "D",
+       "mode": 1
+      }
+     ],
+     "displayName": "D Kellergeschoss",
+     "function": 1,
+     "id": "D",
+     "info": {
+      "activeMode": 0,
+      "demand": 1,
+      "function": 1,
+      "heatLimit": 15,
+      "mixer": 0,
+      "mode": 0,
+      "outdoorTemp": {
+       "avgOutdoor": "20.3",
+       "avgOutdoorInterval": "16.0",
+       "outdoor": "20.4"
+      },
+      "pumpActive": false,
+      "roomEquipment": 0,
+      "type": 2
+     },
+     "limitsInfo": 2,
+     "mixer": 0,
+     "mode": {
+      "id": "HKD01",
+      "type": "chooselist",
+      "types": [
+       {
+        "key": 0,
+        "name": "N2_OFF"
+       },
+       {
+        "key": 1,
+        "name": "N2_TIMETABLE"
+       },
+       {
+        "key": 2,
+        "name": "N2_NORMAL"
+       },
+       {
+        "key": 3,
+        "name": "N2_ECO"
+       },
+       {
+        "key": 4,
+        "name": "N2_MANUALHEAT"
+       }
+      ],
+      "value": 0
+     },
+     "pumpActive": false,
+     "temperatures": {
+      "actual": "22.4",
+      "heating": {
+       "eco": {
+        "id": "HKD05",
+        "increment": "0.1",
+        "max": 25,
+        "min": 10,
+        "type": "float",
+        "value": 18
+       },
+       "normal": {
+        "id": "HKD04",
+        "increment": "0.1",
+        "max": 30,
+        "min": 15,
+        "type": "float",
+        "value": 22
+       }
+      },
+      "set": "0.0"
+     },
+     "timetable": {
+      "discrete": false,
+      "id": "HKD06",
+      "value": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111"
+     },
+     "type": 2
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "system.heatpump.performance",
+   "command": "detail"
+  },
+  "captured": "2026-09-20T22:18:23+02:00",
+  "responses": [
+   {
+    "performanceDetail": {
+     "consumption": {
+      "battery": false,
+      "power": "0.0",
+      "source": 1
+     },
+     "environment": {
+      "power": "0.0",
+      "source": 2,
+      "temperatures": {
+       "in": "21.2"
+      }
+     },
+     "heatingRod": false,
+     "mode": 0,
+     "production": {
+      "temperatures": {
+       "flow": "25.9"
+      }
+     },
+     "systemMode": 4
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "energyflow",
+   "command": "overview"
+  },
+  "captured": "2026-09-20T22:18:25+02:00",
+  "responses": [
+   {
+    "energyflow": {}
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "statistic",
+   "command": "overview"
+  },
+  "captured": "2026-09-20T22:18:27+02:00",
+  "responses": [
+   {
+    "statistic": [
+     {
+      "categoryType": 0,
+      "idx": 0,
+      "name": "RD_HEAT_QUANTITIES",
+      "statistic": [
+       {
+        "data": {
+         "today": {
+          "heating": 0,
+          "priority": 10.25
+         },
+         "typeDict": {
+          "heating": "N2_HEATING",
+          "priority": "N2_HOTWATER"
+         },
+         "weeklyAvg": {
+          "days": 7,
+          "heating": 0,
+          "priority": 6.95
+         }
+        },
+        "idx": 0,
+        "name": "N2_HEATQUANTITIES",
+        "type": 6
+       }
+      ]
+     },
+     {
+      "categoryType": 1,
+      "idx": 1,
+      "name": "RD_RUNTIMES",
+      "statistic": [
+       {
+        "data": {
+         "today": {
+          "defrost": 0,
+          "heating": 0,
+          "priority": 1.48
+         },
+         "typeDict": {
+          "defrost": "N2_DEFROST",
+          "heating": "N2_HEATING",
+          "priority": "N2_HOTWATER"
+         },
+         "weeklyAvg": {
+          "days": 7,
+          "defrost": 0,
+          "heating": 0,
+          "priority": 0.8300000000000001
+         }
+        },
+        "idx": 0,
+        "name": "N2_RUNTIMEHEATPUMP",
+        "type": 0
+       }
+      ]
+     },
+     {
+      "categoryType": 3,
+      "idx": 2,
+      "name": "RD_ENERGY_MANAGEMENT",
+      "statistic": [
+       {
+        "data": {
+         "today": {
+          "defrost": 0,
+          "heating": 0,
+          "priority": 2.98
+         },
+         "typeDict": {
+          "defrost": "N2_DEFROST",
+          "heating": "N2_HEATING",
+          "priority": "N2_HOTWATER"
+         },
+         "weeklyAvg": {
+          "days": 7,
+          "defrost": 0,
+          "heating": 0,
+          "priority": 1.6500000000000001
+         }
+        },
+        "idx": 0,
+        "name": "N2_EMHP",
+        "type": 3
+       }
+      ]
+     },
+     {
+      "categoryType": 4,
+      "idx": 3,
+      "name": "N2_WEATHER",
+      "statistic": [
+       {
+        "forecast1": {
+         "date": "21.09.2026",
+         "dayofweek": "N2_MO",
+         "sun": 28725,
+         "sym_w50": 3,
+         "temperature": {
+          "act": 15,
+          "max": 20,
+          "min": 13
+         }
+        },
+        "forecast2": {
+         "date": "22.09.2026",
+         "dayofweek": "N2_TU",
+         "sun": 26833,
+         "sym_w50": 3,
+         "temperature": {
+          "act": 13,
+          "max": 18,
+          "min": 10
+         }
+        },
+        "forecast3": {
+         "date": "23.09.2026",
+         "dayofweek": "N2_WE",
+         "sun": 17770,
+         "sym_w50": 4,
+         "temperature": {
+          "act": 13,
+          "max": 19,
+          "min": 9
+         }
+        },
+        "forecast4": {
+         "date": "24.09.2026",
+         "dayofweek": "N2_TH",
+         "sun": 28211,
+         "sym_w50": 3,
+         "temperature": {
+          "act": 14,
+          "max": 22,
+          "min": 7
+         }
+        },
+        "forecast5": {
+         "date": "25.09.2026",
+         "dayofweek": "N2_FR",
+         "sun": 16316,
+         "sym_w50": 4,
+         "temperature": {
+          "act": 14,
+          "max": 20,
+          "min": 10
+         }
+        },
+        "forecast6": {
+         "date": "26.09.2026",
+         "dayofweek": "N2_SA",
+         "sun": 41883,
+         "sym_w50": 1,
+         "temperature": {
+          "act": 16,
+          "max": 26,
+          "min": 10
+         }
+        },
+        "today": {
+         "date": "20.09.2026",
+         "dayofweek": "N2_TODAY",
+         "sun": 13366,
+         "sym_w50": 4,
+         "temperature": {
+          "act": 20,
+          "avg": "20°C/16.0h",
+          "max": 26,
+          "min": 10
+         }
+        }
+       }
+      ]
+     },
+     {
+      "categoryType": 5,
+      "idx": 4,
+      "name": "N2_GRAPH",
+      "statistic": [
+       {
+        "channels": [
+         {
+          "data": {
+           "843148264": 22.6299991607666,
+           "843156641": 20.825788497924805,
+           "843162471": 17.707059860229492,
+           "843168382": 16.197500228881836,
+           "843175196": 15.1274995803833,
+           "843179930": 14.392857551574707,
+           "843183695": 13.595000267028809,
+           "843188309": 13.146666526794434,
+           "843193688": 12.836000442504883,
+           "843202370": 13.965998649597168,
+           "843205495": 18.553998947143555,
+           "843210400": 21.112499237060547,
+           "843213544": 21.71999740600586,
+           "843216719": 22.90888786315918,
+           "843220464": 23.773332595825195,
+           "843224954": 24.535001754760742,
+           "843229073": 24.996665954589844,
+           "843232450": 25.079999923706055,
+           "843235887": 24.40666389465332,
+           "843239283": 23.4022216796875,
+           "843242581": 22.29800033569336,
+           "843254080": 21.33121109008789,
+           "843256227": 20.74889373779297,
+           "843256533": 20.694169998168945,
+           "843256841": 20.635080337524414,
+           "843257149": 20.57229232788086,
+           "843257456": 20.497758865356445,
+           "843257765": 20.443904876708984,
+           "843257984": 20.435449600219727
+          },
+          "id": 1,
+          "info": {
+           "bm": "B32",
+           "defaultColor": "#000000",
+           "defaultWidth": 2,
+           "group": 1,
+           "id": 1,
+           "legend": true,
+           "name": "T25x_AIN_TAUS",
+           "type": "line",
+           "unit": "N2_GRAD"
+          },
+          "originalName": "Außentemperatur",
+          "settings": {
+           "color": "#7A838F",
+           "width": 1
+          }
+         },
+         {
+          "data": {
+           "843110554": 21.25,
+           "843174119": 21.19999885559082,
+           "843181269": 21.299999237060547,
+           "843181579": 21.3799991607666,
+           "843183742": 21.34000015258789,
+           "843193688": 21.28999900817871,
+           "843211304": 21.229999542236328,
+           "843254080": 21.215036392211914,
+           "843254385": 21.21627426147461,
+           "843254691": 21.215240478515625,
+           "843255000": 21.214935302734375,
+           "843255306": 21.213932037353516,
+           "843255612": 21.214448928833008,
+           "843255920": 21.21289825439453,
+           "843256227": 21.213144302368164,
+           "843256533": 21.213476181030273,
+           "843256841": 21.213443756103516,
+           "843257149": 21.21292495727539,
+           "843257456": 21.21390151977539,
+           "843257765": 21.21277618408203,
+           "843257984": 21.216276168823242
+          },
+          "id": 5,
+          "info": {
+           "bm": "B38",
+           "defaultColor": "#000000",
+           "defaultWidth": 2,
+           "group": 1,
+           "id": 5,
+           "legend": true,
+           "name": "T25x_AIN_TBUFFER_HEAT",
+           "type": "line",
+           "unit": "N2_GRAD"
+          },
+          "originalName": "Wärmespeichertemperatur",
+          "settings": {
+           "color": "#FFAB58",
+           "width": 1
+          }
+         },
+         {
+          "data": {
+           "843149907": 39.43000030517578,
+           "843157949": 39.02124786376953,
+           "843165493": 36.358177185058594,
+           "843173051": 34.87999725341797,
+           "843180630": 34.689998626708984,
+           "843187065": 34.483333587646484,
+           "843191938": 34.30999755859375,
+           "843196984": 34.18499755859375,
+           "843204852": 34.019996643066406,
+           "843211973": 38.46833419799805,
+           "843215079": 51.926002502441406,
+           "843219633": 57.91777801513672,
+           "843224254": 57.79199981689453,
+           "843228120": 57.35199737548828,
+           "843231344": 56.904998779296875,
+           "843234760": 55.14249801635742,
+           "843237943": 50.0260009765625,
+           "843241275": 49.11428451538086,
+           "843244500": 48.537498474121094,
+           "843247755": 44.650001525878906,
+           "843254080": 43.278106689453125,
+           "843256227": 42.83403015136719,
+           "843256533": 42.79621124267578,
+           "843256841": 42.75824737548828,
+           "843257149": 42.721900939941406,
+           "843257456": 42.685157775878906,
+           "843257765": 42.64893341064453,
+           "843257984": 42.60690689086914
+          },
+          "id": 7,
+          "info": {
+           "bm": "B41",
+           "defaultColor": "#000000",
+           "defaultWidth": 2,
+           "group": 1,
+           "id": 7,
+           "legend": true,
+           "name": "T25x_AIN_TBUFFER_FRWA",
+           "type": "line",
+           "unit": "N2_GRAD"
+          },
+          "originalName": "TW-Erw. Temp.",
+          "settings": {
+           "color": "#FF84B0",
+           "width": 1
+          }
+         },
+         {
+          "data": {
+           "843149829": 51.71999740600586,
+           "843157560": 51.394287109375,
+           "843164268": 50.60667037963867,
+           "843171835": 49.875999450683594,
+           "843177208": 49.50249481201172,
+           "843181377": 49.20750045776367,
+           "843184647": 48.943328857421875,
+           "843189309": 48.644996643066406,
+           "843193688": 48.352500915527344,
+           "843198422": 48.019996643066406,
+           "843202806": 47.68333435058594,
+           "843207071": 47.394996643066406,
+           "843211475": 47.14999771118164,
+           "843214585": 52.3129997253418,
+           "843221194": 58.88111114501953,
+           "843224844": 59.304996490478516,
+           "843229011": 58.970001220703125,
+           "843232574": 58.66499710083008,
+           "843237725": 58.27799606323242,
+           "843241882": 57.91749572753906,
+           "843245372": 57.59499740600586,
+           "843254080": 57.22191619873047,
+           "843256227": 56.921836853027344,
+           "843256533": 56.89522933959961,
+           "843256841": 56.8800163269043,
+           "843257149": 56.858638763427734,
+           "843257456": 56.83159255981445,
+           "843257765": 56.80889892578125,
+           "843257984": 56.78288650512695
+          },
+          "id": 363,
+          "info": {
+           "bm": "",
+           "defaultColor": "#000000",
+           "defaultWidth": 2,
+           "group": 1,
+           "id": 363,
+           "legend": true,
+           "name": "T25x_AIN_TBUFFER_FRWA_TOP",
+           "type": "line",
+           "unit": "N2_GRAD"
+          },
+          "originalName": "TW-Erw. Temp. oben",
+          "settings": {
+           "color": "#BA1651",
+           "width": 1
+          }
+         },
+         {
+          "data": {
+           "843210040": 0,
+           "843210353": 1,
+           "843215532": 0,
+           "843257984": 0
+          },
+          "id": 10000,
+          "info": {
+           "bm": "",
+           "defaultColor": "#000000",
+           "defaultWidth": 2,
+           "group": 2,
+           "id": 10000,
+           "legend": false,
+           "name": "N2_STAGES",
+           "type": "step",
+           "unit": ""
+          },
+          "originalName": "Stufen",
+          "settings": {
+           "color": "#969696",
+           "width": 1
+          }
+         },
+         {
+          "data": {
+           "843210040": 0,
+           "843210353": 0,
+           "843215532": 0,
+           "843257984": 0
+          },
+          "id": 10001,
+          "info": {
+           "bm": "",
+           "defaultColor": "#ff0000",
+           "defaultWidth": 2,
+           "group": 2,
+           "id": 10001,
+           "legend": false,
+           "name": "N2_HEATING",
+           "type": "binary",
+           "unit": ""
+          },
+          "originalName": "Heizen",
+          "settings": {
+           "color": "#FFAB58",
+           "width": 1
+          }
+         },
+         {
+          "data": {
+           "843210040": 1,
+           "843210353": 1,
+           "843215532": 0,
+           "843257984": 0
+          },
+          "id": 10003,
+          "info": {
+           "bm": "",
+           "defaultColor": "#00cc00",
+           "defaultWidth": 2,
+           "group": 2,
+           "id": 10003,
+           "legend": false,
+           "name": "N2_HOTWATER",
+           "type": "binary",
+           "unit": ""
+          },
+          "originalName": "Warmwasser",
+          "settings": {
+           "color": "#FF5B96",
+           "width": 1
+          }
+         },
+         {
+          "data": {
+           "843210040": 0,
+           "843210353": 0,
+           "843215532": 0,
+           "843257984": 0
+          },
+          "id": 10004,
+          "info": {
+           "bm": "",
+           "defaultColor": "#ffff00",
+           "defaultWidth": 2,
+           "group": 2,
+           "id": 10004,
+           "legend": false,
+           "name": "N2_DEFROSTING",
+           "type": "binary",
+           "unit": ""
+          },
+          "originalName": "Abtauung",
+          "settings": {
+           "color": "#50565E",
+           "width": 1
+          }
+         }
+        ],
+        "graphs": [
+         {
+          "id": 1,
+          "name": "System",
+          "userLevel": 0
+         },
+         {
+          "id": 100,
+          "name": "WW",
+          "userLevel": 0
+         }
+        ],
+        "name": "System",
+        "navigation": {
+         "from": 843149985,
+         "step": 0,
+         "to": 843257985
+        },
+        "userLevel": 0
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "statistic",
+   "command": "detail",
+   "data": {
+    "statisticType": 6,
+    "periodType": 0,
+    "statisticSubType": null
+   }
+  },
+  "captured": "2026-09-20T22:18:29+02:00",
+  "responses": [
+   {
+    "statisticDetail": {
+     "data": {
+      "daily": [
+       {
+        "date": "2026-09-20",
+        "heating": 0,
+        "idx": 1,
+        "priority": 10.25
+       },
+       {
+        "date": "2026-09-19",
+        "heating": 0,
+        "idx": 2,
+        "priority": 10.25
+       },
+       {
+        "date": "2026-09-18",
+        "heating": 0,
+        "idx": 3,
+        "priority": 9.68
+       },
+       {
+        "date": "2026-09-17",
+        "heating": 0,
+        "idx": 4,
+        "priority": 10.59
+       },
+       {
+        "date": "2026-09-16",
+        "heating": 0,
+        "idx": 5,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-15",
+        "heating": 0,
+        "idx": 6,
+        "priority": 10.17
+       },
+       {
+        "date": "2026-09-14",
+        "heating": 0,
+        "idx": 7,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-13",
+        "heating": 0,
+        "idx": 8,
+        "priority": 7.98
+       },
+       {
+        "date": "2026-09-12",
+        "heating": 0,
+        "idx": 9,
+        "priority": 8.81
+       },
+       {
+        "date": "2026-09-11",
+        "heating": 0,
+        "idx": 10,
+        "priority": 12.72
+       },
+       {
+        "date": "2026-09-10",
+        "heating": 0,
+        "idx": 11,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-09",
+        "heating": 0,
+        "idx": 12,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-08",
+        "heating": 0,
+        "idx": 13,
+        "priority": 11.51
+       },
+       {
+        "date": "2026-09-07",
+        "heating": 0,
+        "idx": 14,
+        "priority": 8.26
+       },
+       {
+        "date": "2026-09-06",
+        "heating": 0,
+        "idx": 15,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-05",
+        "heating": 0,
+        "idx": 16,
+        "priority": 8.75
+       },
+       {
+        "date": "2026-09-04",
+        "heating": 0,
+        "idx": 17,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-03",
+        "heating": 0,
+        "idx": 18,
+        "priority": 6.3500000000000005
+       },
+       {
+        "date": "2026-09-02",
+        "heating": 0,
+        "idx": 19,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-01",
+        "heating": 0,
+        "idx": 20,
+        "priority": 13.57
+       },
+       {
+        "date": "2026-08-31",
+        "heating": 0,
+        "idx": 21,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-30",
+        "heating": 0,
+        "idx": 22,
+        "priority": 7.47
+       },
+       {
+        "date": "2026-08-29",
+        "heating": 0,
+        "idx": 23,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-28",
+        "heating": 0,
+        "idx": 24,
+        "priority": 5.68
+       },
+       {
+        "date": "2026-08-27",
+        "heating": 0,
+        "idx": 25,
+        "priority": 3.93
+       },
+       {
+        "date": "2026-08-26",
+        "heating": 0,
+        "idx": 26,
+        "priority": 4.97
+       },
+       {
+        "date": "2026-08-25",
+        "heating": 0,
+        "idx": 27,
+        "priority": 5.16
+       },
+       {
+        "date": "2026-08-24",
+        "heating": 0,
+        "idx": 28,
+        "priority": 12.36
+       },
+       {
+        "date": "2026-08-23",
+        "heating": 0,
+        "idx": 29,
+        "priority": 5.93
+       },
+       {
+        "date": "2026-08-22",
+        "heating": 0,
+        "idx": 30,
+        "priority": 3.5500000000000003
+       },
+       {
+        "date": "2026-08-21",
+        "heating": 0,
+        "idx": 31,
+        "priority": 4.18
+       }
+      ],
+      "monthly": [
+       {
+        "date": "2026-09-20",
+        "heating": 0,
+        "idx": 1,
+        "priority": 128.9
+       },
+       {
+        "date": "2026-08-31",
+        "heating": 0,
+        "idx": 2,
+        "priority": 76.98
+       },
+       {
+        "date": "2026-07-31",
+        "heating": 1.28,
+        "idx": 3,
+        "priority": 110.94
+       }
+      ],
+      "today": {
+       "heating": 0,
+       "priority": 10.25
+      },
+      "total": {
+       "heating": 1.28,
+       "priority": 316.81
+      },
+      "typeDict": {
+       "heating": "N2_HEATING",
+       "priority": "N2_HOTWATER"
+      },
+      "weekly": [
+       {
+        "date": "2026-09-20",
+        "heating": 0,
+        "idx": 1,
+        "priority": 50.94
+       },
+       {
+        "date": "2026-09-13",
+        "heating": 0,
+        "idx": 2,
+        "priority": 49.29
+       },
+       {
+        "date": "2026-09-06",
+        "heating": 0,
+        "idx": 3,
+        "priority": 28.66
+       },
+       {
+        "date": "2026-08-30",
+        "heating": 0,
+        "idx": 4,
+        "priority": 39.56
+       },
+       {
+        "date": "2026-08-23",
+        "heating": 0,
+        "idx": 5,
+        "priority": 21.25
+       },
+       {
+        "date": "2026-08-16",
+        "heating": 0,
+        "idx": 6,
+        "priority": 16.16
+       },
+       {
+        "date": "2026-08-09",
+        "heating": 0,
+        "idx": 7,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-02",
+        "heating": 0,
+        "idx": 8,
+        "priority": 0
+       },
+       {
+        "date": "2026-07-26",
+        "heating": 0,
+        "idx": 9,
+        "priority": 0
+       },
+       {
+        "date": "2026-07-19",
+        "heating": 0,
+        "idx": 10,
+        "priority": 30.32
+       },
+       {
+        "date": "2026-07-12",
+        "heating": 0,
+        "idx": 11,
+        "priority": 27.76
+       },
+       {
+        "date": "2026-07-05",
+        "heating": 1.28,
+        "idx": 12,
+        "priority": 52.870000000000005
+       }
+      ],
+      "yearly": [
+       {
+        "date": "2026-09-20",
+        "heating": 1.28,
+        "idx": 1,
+        "priority": 316.81
+       }
+      ]
+     },
+     "name": "N2_HEATQUANTITIES",
+     "type": 6
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "statistic",
+   "command": "detail",
+   "data": {
+    "statisticType": 0,
+    "periodType": 0,
+    "statisticSubType": null
+   }
+  },
+  "captured": "2026-09-20T22:18:31+02:00",
+  "responses": [
+   {
+    "statisticDetail": {
+     "data": {
+      "daily": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 1,
+        "priority": 1.48
+       },
+       {
+        "date": "2026-09-19",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 2,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-18",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 3,
+        "priority": 1.48
+       },
+       {
+        "date": "2026-09-17",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 4,
+        "priority": 1.6
+       },
+       {
+        "date": "2026-09-16",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 5,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-15",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 6,
+        "priority": 1.52
+       },
+       {
+        "date": "2026-09-14",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 7,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-13",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 8,
+        "priority": 1.18
+       },
+       {
+        "date": "2026-09-12",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 9,
+        "priority": 1.33
+       },
+       {
+        "date": "2026-09-11",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 10,
+        "priority": 1.9000000000000001
+       },
+       {
+        "date": "2026-09-10",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 11,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-09",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 12,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-08",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 13,
+        "priority": 1.45
+       },
+       {
+        "date": "2026-09-07",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 14,
+        "priority": 0.9500000000000001
+       },
+       {
+        "date": "2026-09-06",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 15,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-05",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 16,
+        "priority": 1
+       },
+       {
+        "date": "2026-09-04",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 17,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-03",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 18,
+        "priority": 0.72
+       },
+       {
+        "date": "2026-09-02",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 19,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-01",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 20,
+        "priority": 1.75
+       },
+       {
+        "date": "2026-08-31",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 21,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-30",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 22,
+        "priority": 0.78
+       },
+       {
+        "date": "2026-08-29",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 23,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-28",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 24,
+        "priority": 0.62
+       },
+       {
+        "date": "2026-08-27",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 25,
+        "priority": 0.43
+       },
+       {
+        "date": "2026-08-26",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 26,
+        "priority": 0.52
+       },
+       {
+        "date": "2026-08-25",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 27,
+        "priority": 0.58
+       },
+       {
+        "date": "2026-08-24",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 28,
+        "priority": 1.67
+       },
+       {
+        "date": "2026-08-23",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 29,
+        "priority": 0.67
+       },
+       {
+        "date": "2026-08-22",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 30,
+        "priority": 0.38
+       },
+       {
+        "date": "2026-08-21",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 31,
+        "priority": 0.43
+       }
+      ],
+      "monthly": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 1,
+        "priority": 16.37
+       },
+       {
+        "date": "2026-08-31",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 2,
+        "priority": 9
+       },
+       {
+        "date": "2026-07-31",
+        "defrost": 0,
+        "heating": 0.17,
+        "idx": 3,
+        "priority": 14.280000000000001
+       }
+      ],
+      "today": {
+       "defrost": 0,
+       "heating": 0,
+       "priority": 1.48
+      },
+      "total": {
+       "defrost": 0,
+       "heating": 0.17,
+       "priority": 39.65
+      },
+      "typeDict": {
+       "defrost": "N2_DEFROST",
+       "heating": "N2_HEATING",
+       "priority": "N2_HOTWATER"
+      },
+      "weekly": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 1,
+        "priority": 6.08
+       },
+       {
+        "date": "2026-09-13",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 2,
+        "priority": 6.82
+       },
+       {
+        "date": "2026-09-06",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 3,
+        "priority": 3.47
+       },
+       {
+        "date": "2026-08-30",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 4,
+        "priority": 4.6000000000000005
+       },
+       {
+        "date": "2026-08-23",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 5,
+        "priority": 2.32
+       },
+       {
+        "date": "2026-08-16",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 6,
+        "priority": 2.08
+       },
+       {
+        "date": "2026-08-09",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 7,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-02",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 8,
+        "priority": 0
+       },
+       {
+        "date": "2026-07-26",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 9,
+        "priority": 0
+       },
+       {
+        "date": "2026-07-19",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 10,
+        "priority": 3.68
+       },
+       {
+        "date": "2026-07-12",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 11,
+        "priority": 3.4
+       },
+       {
+        "date": "2026-07-05",
+        "defrost": 0,
+        "heating": 0.17,
+        "idx": 12,
+        "priority": 7.2
+       }
+      ],
+      "yearly": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0.17,
+        "idx": 1,
+        "priority": 39.65
+       }
+      ]
+     },
+     "name": "N2_RUNTIMEHEATPUMP",
+     "type": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "statistic",
+   "command": "detail",
+   "data": {
+    "statisticType": 3,
+    "periodType": 0,
+    "statisticSubType": null
+   }
+  },
+  "captured": "2026-09-20T22:18:33+02:00",
+  "responses": [
+   {
+    "statisticDetail": {
+     "data": {
+      "daily": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 1,
+        "priority": 2.98
+       },
+       {
+        "date": "2026-09-19",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 2,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-18",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 3,
+        "priority": 2.99
+       },
+       {
+        "date": "2026-09-17",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 4,
+        "priority": 3.22
+       },
+       {
+        "date": "2026-09-16",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 5,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-15",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 6,
+        "priority": 3.02
+       },
+       {
+        "date": "2026-09-14",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 7,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-13",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 8,
+        "priority": 2.31
+       },
+       {
+        "date": "2026-09-12",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 9,
+        "priority": 2.63
+       },
+       {
+        "date": "2026-09-11",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 10,
+        "priority": 4.01
+       },
+       {
+        "date": "2026-09-10",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 11,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-09",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 12,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-08",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 13,
+        "priority": 2.99
+       },
+       {
+        "date": "2026-09-07",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 14,
+        "priority": 2.43
+       },
+       {
+        "date": "2026-09-06",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 15,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-05",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 16,
+        "priority": 2.39
+       },
+       {
+        "date": "2026-09-04",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 17,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-03",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 18,
+        "priority": 1.7
+       },
+       {
+        "date": "2026-09-02",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 19,
+        "priority": 0
+       },
+       {
+        "date": "2026-09-01",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 20,
+        "priority": 3.62
+       },
+       {
+        "date": "2026-08-31",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 21,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-30",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 22,
+        "priority": 1.78
+       },
+       {
+        "date": "2026-08-29",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 23,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-28",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 24,
+        "priority": 1.56
+       },
+       {
+        "date": "2026-08-27",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 25,
+        "priority": 1.05
+       },
+       {
+        "date": "2026-08-26",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 26,
+        "priority": 1.28
+       },
+       {
+        "date": "2026-08-25",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 27,
+        "priority": 1.46
+       },
+       {
+        "date": "2026-08-24",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 28,
+        "priority": 3.44
+       },
+       {
+        "date": "2026-08-23",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 29,
+        "priority": 1.52
+       },
+       {
+        "date": "2026-08-22",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 30,
+        "priority": 0.9
+       },
+       {
+        "date": "2026-08-21",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 31,
+        "priority": 0.96
+       }
+      ],
+      "monthly": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 1,
+        "priority": 34.29
+       },
+       {
+        "date": "2026-08-31",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 2,
+        "priority": 19.98
+       },
+       {
+        "date": "2026-07-31",
+        "defrost": 0,
+        "heating": 0.2,
+        "idx": 3,
+        "priority": 28.44
+       }
+      ],
+      "today": {
+       "defrost": 0,
+       "heating": 0,
+       "priority": 2.98
+      },
+      "total": {
+       "defrost": 0,
+       "heating": 0.2,
+       "priority": 82.71000000000001
+      },
+      "typeDict": {
+       "defrost": "N2_DEFROST",
+       "heating": "N2_HEATING",
+       "priority": "N2_HOTWATER"
+      },
+      "weekly": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 1,
+        "priority": 12.21
+       },
+       {
+        "date": "2026-09-13",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 2,
+        "priority": 14.370000000000001
+       },
+       {
+        "date": "2026-09-06",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 3,
+        "priority": 7.71
+       },
+       {
+        "date": "2026-08-30",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 4,
+        "priority": 10.57
+       },
+       {
+        "date": "2026-08-23",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 5,
+        "priority": 5.11
+       },
+       {
+        "date": "2026-08-16",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 6,
+        "priority": 4.3
+       },
+       {
+        "date": "2026-08-09",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 7,
+        "priority": 0
+       },
+       {
+        "date": "2026-08-02",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 8,
+        "priority": 0
+       },
+       {
+        "date": "2026-07-26",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 9,
+        "priority": 0
+       },
+       {
+        "date": "2026-07-19",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 10,
+        "priority": 7.41
+       },
+       {
+        "date": "2026-07-12",
+        "defrost": 0,
+        "heating": 0,
+        "idx": 11,
+        "priority": 7.2
+       },
+       {
+        "date": "2026-07-05",
+        "defrost": 0,
+        "heating": 0.2,
+        "idx": 12,
+        "priority": 13.83
+       }
+      ],
+      "yearly": [
+       {
+        "date": "2026-09-20",
+        "defrost": 0,
+        "heating": 0.2,
+        "idx": 1,
+        "priority": 82.71000000000001
+       }
+      ]
+     },
+     "name": "N2_EMHP",
+     "type": 3
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "notification",
+   "command": "overview"
+  },
+  "captured": "2026-09-20T22:18:35+02:00",
+  "responses": [
+   {
+    "notification": {
+     "current": []
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "weather",
+   "command": "detail"
+  },
+  "captured": "2026-09-20T22:18:37+02:00",
+  "responses": [
+   {
+    "weatherDetail": {
+     "forecast1": {
+      "cloudCover": 12.159299850463867,
+      "date": "21.09.2026",
+      "dayofweek": "N2_MO",
+      "rainProbability": 0.22347082197666168,
+      "sun": 28725,
+      "sym_w50": 3,
+      "temperature": {
+       "act": 15,
+       "max": 20,
+       "min": 13
+      },
+      "windSpeed": {
+       "max": 7.071000099182129,
+       "min": 3.7799999713897705
+      }
+     },
+     "forecast2": {
+      "cloudCover": 9.755600929260254,
+      "date": "22.09.2026",
+      "dayofweek": "N2_TU",
+      "rainProbability": 0.081733338534832,
+      "sun": 26833,
+      "sym_w50": 3,
+      "temperature": {
+       "act": 13,
+       "max": 18,
+       "min": 10
+      },
+      "windSpeed": {
+       "max": 5.5,
+       "min": 3.052000045776367
+      }
+     },
+     "forecast3": {
+      "date": "23.09.2026",
+      "dayofweek": "N2_WE",
+      "sun": 17770,
+      "sym_w50": 4,
+      "temperature": {
+       "act": 13,
+       "max": 19,
+       "min": 9
+      }
+     },
+     "forecast4": {
+      "date": "24.09.2026",
+      "dayofweek": "N2_TH",
+      "sun": 28211,
+      "sym_w50": 3,
+      "temperature": {
+       "act": 14,
+       "max": 22,
+       "min": 7
+      }
+     },
+     "forecast5": {
+      "date": "25.09.2026",
+      "dayofweek": "N2_FR",
+      "sun": 16316,
+      "sym_w50": 4,
+      "temperature": {
+       "act": 14,
+       "max": 20,
+       "min": 10
+      }
+     },
+     "forecast6": {
+      "date": "26.09.2026",
+      "dayofweek": "N2_SA",
+      "sun": 41883,
+      "sym_w50": 1,
+      "temperature": {
+       "act": 16,
+       "max": 26,
+       "min": 10
+      }
+     },
+     "today": {
+      "cloudCover": 14.186599731445312,
+      "date": "20.09.2026",
+      "dayofweek": "N2_TODAY",
+      "rainProbability": 0.004625000059604645,
+      "sun": 13366,
+      "sym_w50": 4,
+      "temperature": {
+       "act": 20,
+       "avg": "20°C/16.0h",
+       "max": 26,
+       "min": 10
+      },
+      "windSpeed": {
+       "max": 6.296999931335449,
+       "min": 0.29679998755455017
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "graph",
+   "command": "overview"
+  },
+  "captured": "2026-09-20T22:18:39+02:00",
+  "responses": [
+   {
+    "graph": {
+     "channels": [
+      {
+       "data": {
+        "843148264": 22.6299991607666,
+        "843156641": 20.825788497924805,
+        "843162471": 17.707059860229492,
+        "843168382": 16.197500228881836,
+        "843175196": 15.1274995803833,
+        "843179930": 14.392857551574707,
+        "843183695": 13.595000267028809,
+        "843188309": 13.146666526794434,
+        "843193688": 12.836000442504883,
+        "843202370": 13.965998649597168,
+        "843205495": 18.553998947143555,
+        "843210400": 21.112499237060547,
+        "843213544": 21.71999740600586,
+        "843216719": 22.90888786315918,
+        "843220464": 23.773332595825195,
+        "843224954": 24.535001754760742,
+        "843229073": 24.996665954589844,
+        "843232450": 25.079999923706055,
+        "843235887": 24.40666389465332,
+        "843239283": 23.4022216796875,
+        "843242581": 22.29800033569336,
+        "843254080": 21.33121109008789,
+        "843256227": 20.74889373779297,
+        "843256533": 20.694169998168945,
+        "843256841": 20.635080337524414,
+        "843257149": 20.57229232788086,
+        "843257456": 20.497758865356445,
+        "843257765": 20.443904876708984,
+        "843257996": 20.42996597290039
+       },
+       "id": 1,
+       "info": {
+        "bm": "B32",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 1,
+        "legend": true,
+        "name": "T25x_AIN_TAUS",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "Außentemperatur",
+       "settings": {
+        "color": "#7A838F",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843110554": 21.25,
+        "843174119": 21.19999885559082,
+        "843181269": 21.299999237060547,
+        "843181579": 21.3799991607666,
+        "843183742": 21.34000015258789,
+        "843193688": 21.28999900817871,
+        "843211304": 21.229999542236328,
+        "843254080": 21.215036392211914,
+        "843254385": 21.21627426147461,
+        "843254691": 21.215240478515625,
+        "843255000": 21.214935302734375,
+        "843255306": 21.213932037353516,
+        "843255612": 21.214448928833008,
+        "843255920": 21.21289825439453,
+        "843256227": 21.213144302368164,
+        "843256533": 21.213476181030273,
+        "843256841": 21.213443756103516,
+        "843257149": 21.21292495727539,
+        "843257456": 21.21390151977539,
+        "843257765": 21.21277618408203,
+        "843257996": 21.212629318237305
+       },
+       "id": 5,
+       "info": {
+        "bm": "B38",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 5,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_HEAT",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "Wärmespeichertemperatur",
+       "settings": {
+        "color": "#FFAB58",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843149907": 39.43000030517578,
+        "843157949": 39.02124786376953,
+        "843165493": 36.358177185058594,
+        "843173051": 34.87999725341797,
+        "843180630": 34.689998626708984,
+        "843187065": 34.483333587646484,
+        "843191938": 34.30999755859375,
+        "843196984": 34.18499755859375,
+        "843204852": 34.019996643066406,
+        "843211973": 38.46833419799805,
+        "843215079": 51.926002502441406,
+        "843219633": 57.91777801513672,
+        "843224254": 57.79199981689453,
+        "843228120": 57.35199737548828,
+        "843231344": 56.904998779296875,
+        "843234760": 55.14249801635742,
+        "843237943": 50.0260009765625,
+        "843241275": 49.11428451538086,
+        "843244500": 48.537498474121094,
+        "843247755": 44.650001525878906,
+        "843254080": 43.278106689453125,
+        "843256227": 42.83403015136719,
+        "843256533": 42.79621124267578,
+        "843256841": 42.75824737548828,
+        "843257149": 42.721900939941406,
+        "843257456": 42.685157775878906,
+        "843257765": 42.64893341064453,
+        "843257996": 42.60316467285156
+       },
+       "id": 7,
+       "info": {
+        "bm": "B41",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 7,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp.",
+       "settings": {
+        "color": "#FF84B0",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843149829": 51.71999740600586,
+        "843157560": 51.394287109375,
+        "843164268": 50.60667037963867,
+        "843171835": 49.875999450683594,
+        "843177208": 49.50249481201172,
+        "843181377": 49.20750045776367,
+        "843184647": 48.943328857421875,
+        "843189309": 48.644996643066406,
+        "843193688": 48.352500915527344,
+        "843198422": 48.019996643066406,
+        "843202806": 47.68333435058594,
+        "843207071": 47.394996643066406,
+        "843211475": 47.14999771118164,
+        "843214585": 52.3129997253418,
+        "843221194": 58.88111114501953,
+        "843224844": 59.304996490478516,
+        "843229011": 58.970001220703125,
+        "843232574": 58.66499710083008,
+        "843237725": 58.27799606323242,
+        "843241882": 57.91749572753906,
+        "843245372": 57.59499740600586,
+        "843254080": 57.22191619873047,
+        "843256227": 56.921836853027344,
+        "843256533": 56.89522933959961,
+        "843256841": 56.8800163269043,
+        "843257149": 56.858638763427734,
+        "843257456": 56.83159255981445,
+        "843257765": 56.80889892578125,
+        "843257996": 56.784786224365234
+       },
+       "id": 363,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 363,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA_TOP",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp. oben",
+       "settings": {
+        "color": "#BA1651",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 0,
+        "843210353": 1,
+        "843215532": 0,
+        "843257996": 0
+       },
+       "id": 10000,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10000,
+        "legend": false,
+        "name": "N2_STAGES",
+        "type": "step",
+        "unit": ""
+       },
+       "originalName": "Stufen",
+       "settings": {
+        "color": "#969696",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 0,
+        "843210353": 0,
+        "843215532": 0,
+        "843257996": 0
+       },
+       "id": 10001,
+       "info": {
+        "bm": "",
+        "defaultColor": "#ff0000",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10001,
+        "legend": false,
+        "name": "N2_HEATING",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Heizen",
+       "settings": {
+        "color": "#FFAB58",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 1,
+        "843210353": 1,
+        "843215532": 0,
+        "843257996": 0
+       },
+       "id": 10003,
+       "info": {
+        "bm": "",
+        "defaultColor": "#00cc00",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10003,
+        "legend": false,
+        "name": "N2_HOTWATER",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Warmwasser",
+       "settings": {
+        "color": "#FF5B96",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 0,
+        "843210353": 0,
+        "843215532": 0,
+        "843257996": 0
+       },
+       "id": 10004,
+       "info": {
+        "bm": "",
+        "defaultColor": "#ffff00",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10004,
+        "legend": false,
+        "name": "N2_DEFROSTING",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Abtauung",
+       "settings": {
+        "color": "#50565E",
+        "width": 1
+       }
+      }
+     ],
+     "graphs": [
+      {
+       "id": 1,
+       "name": "System",
+       "userLevel": 0
+      },
+      {
+       "id": 100,
+       "name": "WW",
+       "userLevel": 0
+      }
+     ],
+     "name": "System",
+     "navigation": {
+      "from": 843149997,
+      "step": 0,
+      "to": 843257997
+     },
+     "userLevel": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "graph",
+   "command": "traverse"
+  },
+  "captured": "2026-09-20T22:18:41+02:00",
+  "responses": [
+   {
+    "graphTraverse": {
+     "group": [
+      {
+       "channels": [
+        {
+         "bm": "B32",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 1,
+         "legend": true,
+         "name": "T25x_AIN_TAUS",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "B38",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 5,
+         "legend": true,
+         "name": "T25x_AIN_TBUFFER_HEAT",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "B41",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 7,
+         "legend": true,
+         "name": "T25x_AIN_TBUFFER_FRWA",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 36,
+         "legend": true,
+         "name": "T25x_EXT_REQ",
+         "type": "step",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 37,
+         "legend": true,
+         "name": "T25x_EXT_REQ_SWITCH",
+         "type": "line",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 38,
+         "legend": true,
+         "name": "T25x_EXT_GRID_SIGNAL",
+         "type": "line",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 73,
+         "legend": true,
+         "name": "T20x_SIPHON",
+         "type": "step",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 80,
+         "legend": true,
+         "name": "T15x_BETRIEBSART_SYSTEM",
+         "type": "step",
+         "unit": ""
+        },
+        {
+         "bm": "B45",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 213,
+         "legend": true,
+         "name": "T25x_AIN_THP_LOAD",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 1,
+         "id": 363,
+         "legend": true,
+         "name": "T25x_AIN_TBUFFER_FRWA_TOP",
+         "type": "line",
+         "unit": "N2_GRAD"
+        }
+       ],
+       "name": "N2_SITE"
+      },
+      {
+       "channels": [
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 2,
+         "id": 10000,
+         "legend": false,
+         "name": "N2_STAGES",
+         "type": "step",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#ff0000",
+         "defaultWidth": 2,
+         "group": 2,
+         "id": 10001,
+         "legend": false,
+         "name": "N2_HEATING",
+         "type": "binary",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#00cc00",
+         "defaultWidth": 2,
+         "group": 2,
+         "id": 10003,
+         "legend": false,
+         "name": "N2_HOTWATER",
+         "type": "binary",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#ffff00",
+         "defaultWidth": 2,
+         "group": 2,
+         "id": 10004,
+         "legend": false,
+         "name": "N2_DEFROSTING",
+         "type": "binary",
+         "unit": ""
+        }
+       ],
+       "name": "N2_HEAT_PUMP"
+      },
+      {
+       "channels": [
+        {
+         "bm": "B51",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 3,
+         "id": 9,
+         "legend": true,
+         "name": "T25x_AIN_THCA_VL",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "B61",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 3,
+         "id": 16,
+         "legend": true,
+         "name": "T25x_AIN_THCA_RF",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "M31",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 3,
+         "id": 63,
+         "legend": true,
+         "name": "T21x_PUMPHEATINGCIRCUIT_A",
+         "type": "step",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 3,
+         "id": 99,
+         "legend": true,
+         "name": "T25xDES_TEMP_HCA",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 3,
+         "id": 106,
+         "legend": true,
+         "name": "T25xDES_ROOM_HCA",
+         "type": "line",
+         "unit": "N2_GRAD"
+        }
+       ],
+       "name": "N2_HEATING_CIRCUIT_A"
+      },
+      {
+       "channels": [
+        {
+         "bm": "B53",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 5,
+         "id": 11,
+         "legend": true,
+         "name": "T25x_AIN_THCC_VL",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "B63",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 5,
+         "id": 18,
+         "legend": true,
+         "name": "T25x_AIN_THCC_RF",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "M33",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 5,
+         "id": 65,
+         "legend": true,
+         "name": "T21x_PUMPHEATINGCIRCUIT_C",
+         "type": "step",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 5,
+         "id": 101,
+         "legend": true,
+         "name": "T25xDES_TEMP_HCC",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 5,
+         "id": 108,
+         "legend": true,
+         "name": "T25xDES_ROOM_HCC",
+         "type": "line",
+         "unit": "N2_GRAD"
+        }
+       ],
+       "name": "N2_HEATING_CIRCUIT_C"
+      },
+      {
+       "channels": [
+        {
+         "bm": "B54",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 6,
+         "id": 12,
+         "legend": true,
+         "name": "T25x_AIN_THCD_VL",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "M34",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 6,
+         "id": 66,
+         "legend": true,
+         "name": "T21x_PUMPHEATINGCIRCUIT_D",
+         "type": "step",
+         "unit": ""
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 6,
+         "id": 102,
+         "legend": true,
+         "name": "T25xDES_TEMP_HCD",
+         "type": "line",
+         "unit": "N2_GRAD"
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 6,
+         "id": 109,
+         "legend": true,
+         "name": "T25xDES_ROOM_HCD",
+         "type": "line",
+         "unit": "N2_GRAD"
+        }
+       ],
+       "name": "N2_HEATING_CIRCUIT_D"
+      },
+      {
+       "channels": [
+        {
+         "bm": "M1",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 10,
+         "id": 53,
+         "legend": true,
+         "name": "T23x_COMPRESSOR",
+         "type": "step",
+         "unit": ""
+        }
+       ],
+       "name": "N2_REFRIG"
+      },
+      {
+       "channels": [
+        {
+         "bm": "M64",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 12,
+         "id": 58,
+         "legend": true,
+         "name": "T23x_CIRCULATION",
+         "type": "step",
+         "unit": ""
+        }
+       ],
+       "name": "N2_HCS"
+      },
+      {
+       "channels": [
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 13,
+         "id": 59,
+         "legend": true,
+         "name": "T26x_BIVALENTSTAGE",
+         "type": "step",
+         "unit": ""
+        }
+       ],
+       "name": "N2_BIVALENCE"
+      },
+      {
+       "channels": [
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 14,
+         "id": 112,
+         "legend": true,
+         "name": "T20x_QACT",
+         "type": "line",
+         "unit": "N2_KW"
+        },
+        {
+         "bm": "",
+         "defaultColor": "#000000",
+         "defaultWidth": 2,
+         "group": 14,
+         "id": 365,
+         "legend": true,
+         "name": "T20x_QACT",
+         "type": "line",
+         "unit": "N2_KW"
+        }
+       ],
+       "name": "N2_HEATQUANTITIES"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "graph",
+   "command": "detail",
+   "data": {
+    "id": 1,
+    "fromSecs": 108000,
+    "stepSecs": 0
+   }
+  },
+  "captured": "2026-09-20T22:18:43+02:00",
+  "responses": [
+   {
+    "graphDetail": {
+     "channels": [
+      {
+       "data": {
+        "843148264": 22.6299991607666,
+        "843156641": 20.825788497924805,
+        "843162471": 17.707059860229492,
+        "843168382": 16.197500228881836,
+        "843175196": 15.1274995803833,
+        "843179930": 14.392857551574707,
+        "843183695": 13.595000267028809,
+        "843188309": 13.146666526794434,
+        "843193688": 12.836000442504883,
+        "843202370": 13.965998649597168,
+        "843205495": 18.553998947143555,
+        "843210400": 21.112499237060547,
+        "843213544": 21.71999740600586,
+        "843216719": 22.90888786315918,
+        "843220464": 23.773332595825195,
+        "843224954": 24.535001754760742,
+        "843229073": 24.996665954589844,
+        "843232450": 25.079999923706055,
+        "843235887": 24.40666389465332,
+        "843239283": 23.4022216796875,
+        "843242581": 22.29800033569336,
+        "843254080": 21.33121109008789,
+        "843256227": 20.74889373779297,
+        "843256533": 20.694169998168945,
+        "843256841": 20.635080337524414,
+        "843257149": 20.57229232788086,
+        "843257456": 20.497758865356445,
+        "843257765": 20.443904876708984,
+        "843258001": 20.430885314941406
+       },
+       "id": 1,
+       "info": {
+        "bm": "B32",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 1,
+        "legend": true,
+        "name": "T25x_AIN_TAUS",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "Außentemperatur",
+       "settings": {
+        "color": "#7A838F",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843110554": 21.25,
+        "843174119": 21.19999885559082,
+        "843181269": 21.299999237060547,
+        "843181579": 21.3799991607666,
+        "843183742": 21.34000015258789,
+        "843193688": 21.28999900817871,
+        "843211304": 21.229999542236328,
+        "843254080": 21.215036392211914,
+        "843254385": 21.21627426147461,
+        "843254691": 21.215240478515625,
+        "843255000": 21.214935302734375,
+        "843255306": 21.213932037353516,
+        "843255612": 21.214448928833008,
+        "843255920": 21.21289825439453,
+        "843256227": 21.213144302368164,
+        "843256533": 21.213476181030273,
+        "843256841": 21.213443756103516,
+        "843257149": 21.21292495727539,
+        "843257456": 21.21390151977539,
+        "843257765": 21.21277618408203,
+        "843258001": 21.212629318237305
+       },
+       "id": 5,
+       "info": {
+        "bm": "B38",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 5,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_HEAT",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "Wärmespeichertemperatur",
+       "settings": {
+        "color": "#FFAB58",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843149907": 39.43000030517578,
+        "843157949": 39.02124786376953,
+        "843165493": 36.358177185058594,
+        "843173051": 34.87999725341797,
+        "843180630": 34.689998626708984,
+        "843187065": 34.483333587646484,
+        "843191938": 34.30999755859375,
+        "843196984": 34.18499755859375,
+        "843204852": 34.019996643066406,
+        "843211973": 38.46833419799805,
+        "843215079": 51.926002502441406,
+        "843219633": 57.91777801513672,
+        "843224254": 57.79199981689453,
+        "843228120": 57.35199737548828,
+        "843231344": 56.904998779296875,
+        "843234760": 55.14249801635742,
+        "843237943": 50.0260009765625,
+        "843241275": 49.11428451538086,
+        "843244500": 48.537498474121094,
+        "843247755": 44.650001525878906,
+        "843254080": 43.278106689453125,
+        "843256227": 42.83403015136719,
+        "843256533": 42.79621124267578,
+        "843256841": 42.75824737548828,
+        "843257149": 42.721900939941406,
+        "843257456": 42.685157775878906,
+        "843257765": 42.64893341064453,
+        "843258001": 42.60221481323242
+       },
+       "id": 7,
+       "info": {
+        "bm": "B41",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 7,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp.",
+       "settings": {
+        "color": "#FF84B0",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843149829": 51.71999740600586,
+        "843157560": 51.394287109375,
+        "843164268": 50.60667037963867,
+        "843171835": 49.875999450683594,
+        "843177208": 49.50249481201172,
+        "843181377": 49.20750045776367,
+        "843184647": 48.943328857421875,
+        "843189309": 48.644996643066406,
+        "843193688": 48.352500915527344,
+        "843198422": 48.019996643066406,
+        "843202806": 47.68333435058594,
+        "843207071": 47.394996643066406,
+        "843211475": 47.14999771118164,
+        "843214585": 52.3129997253418,
+        "843221194": 58.88111114501953,
+        "843224844": 59.304996490478516,
+        "843229011": 58.970001220703125,
+        "843232574": 58.66499710083008,
+        "843237725": 58.27799606323242,
+        "843241882": 57.91749572753906,
+        "843245372": 57.59499740600586,
+        "843254080": 57.22191619873047,
+        "843256227": 56.921836853027344,
+        "843256533": 56.89522933959961,
+        "843256841": 56.8800163269043,
+        "843257149": 56.858638763427734,
+        "843257456": 56.83159255981445,
+        "843257765": 56.80889892578125,
+        "843258001": 56.78668975830078
+       },
+       "id": 363,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 363,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA_TOP",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp. oben",
+       "settings": {
+        "color": "#BA1651",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 0,
+        "843210353": 1,
+        "843215532": 0,
+        "843258001": 0
+       },
+       "id": 10000,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10000,
+        "legend": false,
+        "name": "N2_STAGES",
+        "type": "step",
+        "unit": ""
+       },
+       "originalName": "Stufen",
+       "settings": {
+        "color": "#969696",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 0,
+        "843210353": 0,
+        "843215532": 0,
+        "843258001": 0
+       },
+       "id": 10001,
+       "info": {
+        "bm": "",
+        "defaultColor": "#ff0000",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10001,
+        "legend": false,
+        "name": "N2_HEATING",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Heizen",
+       "settings": {
+        "color": "#FFAB58",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 1,
+        "843210353": 1,
+        "843215532": 0,
+        "843258001": 0
+       },
+       "id": 10003,
+       "info": {
+        "bm": "",
+        "defaultColor": "#00cc00",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10003,
+        "legend": false,
+        "name": "N2_HOTWATER",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Warmwasser",
+       "settings": {
+        "color": "#FF5B96",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "843210040": 0,
+        "843210353": 0,
+        "843215532": 0,
+        "843258001": 0
+       },
+       "id": 10004,
+       "info": {
+        "bm": "",
+        "defaultColor": "#ffff00",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10004,
+        "legend": false,
+        "name": "N2_DEFROSTING",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Abtauung",
+       "settings": {
+        "color": "#50565E",
+        "width": 1
+       }
+      }
+     ],
+     "graphs": [
+      {
+       "id": 1,
+       "name": "System",
+       "userLevel": 0
+      },
+      {
+       "id": 100,
+       "name": "WW",
+       "userLevel": 0
+      }
+     ],
+     "name": "System",
+     "navigation": {
+      "from": 843150001,
+      "step": 0,
+      "to": 843258001
+     },
+     "userLevel": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "graph",
+   "command": "detail",
+   "data": {
+    "id": 1,
+    "fromSecs": 691200,
+    "stepSecs": 15
+   }
+  },
+  "captured": "2026-09-20T22:18:45+02:00",
+  "responses": [
+   {
+    "graphDetail": {
+     "channels": [
+      {
+       "data": {
+        "842675913": 16.253999710083008,
+        "842691992": 16.89307403564453,
+        "842703286": 19.941558837890625,
+        "842716192": 19.441999435424805,
+        "842727919": 18.27750015258789,
+        "842744011": 15.716499328613281,
+        "842755565": 13.499999046325684,
+        "842768579": 12.391666412353516,
+        "842779810": 15.23870849609375,
+        "842791224": 20.16517448425293,
+        "842803870": 22.33249855041504,
+        "842815123": 19.80848503112793,
+        "842827236": 15.985294342041016,
+        "842839437": 14.134998321533203,
+        "842851618": 12.69818115234375,
+        "842864768": 17.352590560913086,
+        "842875892": 21.84821128845215,
+        "842887198": 25.045001983642578,
+        "842899035": 24.940000534057617,
+        "842910212": 20.68071174621582,
+        "842922821": 17.962223052978516,
+        "842935111": 16.594615936279297,
+        "842947533": 15.451428413391113,
+        "842958828": 17.87961196899414,
+        "842974242": 19.02062225341797,
+        "842988861": 17.686246871948242,
+        "842998756": 14.63952350616455,
+        "843005211": 12.587499618530273,
+        "843013521": 11.559998512268066,
+        "843024179": 11.283332824707031,
+        "843032276": 14.922666549682617,
+        "843038012": 18.614545822143555,
+        "843043927": 20.623571395874023,
+        "843050973": 22.085712432861328,
+        "843058451": 22.838333129882812,
+        "843064432": 22.385713577270508,
+        "843070447": 20.1031551361084,
+        "843076910": 17.372499465942383,
+        "843084485": 16.91666603088379,
+        "843090473": 16.2785701751709,
+        "843096724": 15.03071403503418,
+        "843102737": 13.989998817443848,
+        "843113642": 13.995997428894043,
+        "843119666": 16.004375457763672,
+        "843125490": 19.789091110229492,
+        "843131433": 21.32866668701172,
+        "843137523": 22.760831832885742,
+        "843144382": 22.80857276916504,
+        "843151014": 22.435998916625977,
+        "843156953": 20.633155822753906,
+        "843162784": 17.578235626220703,
+        "843169990": 16.063749313354492,
+        "843175196": 15.064286231994629,
+        "843179930": 14.392857551574707,
+        "843183695": 13.595000267028809,
+        "843188309": 13.146666526794434,
+        "843193688": 12.836000442504883,
+        "843202370": 13.965998649597168,
+        "843205495": 18.553998947143555,
+        "843210400": 21.112499237060547,
+        "843213544": 21.71999740600586,
+        "843216719": 22.90888786315918,
+        "843220464": 23.773332595825195,
+        "843224954": 24.535001754760742,
+        "843229073": 24.996665954589844,
+        "843232450": 25.079999923706055,
+        "843235887": 24.40666389465332,
+        "843239283": 23.4022216796875,
+        "843242581": 22.29800033569336,
+        "843254080": 21.33121109008789,
+        "843256227": 20.74889373779297,
+        "843256533": 20.694169998168945,
+        "843256841": 20.635080337524414,
+        "843257149": 20.57229232788086,
+        "843257456": 20.497758865356445,
+        "843257765": 20.443904876708984,
+        "843258002": 20.429046630859375
+       },
+       "id": 1,
+       "info": {
+        "bm": "B32",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 1,
+        "legend": true,
+        "name": "T25x_AIN_TAUS",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "Außentemperatur",
+       "settings": {
+        "color": "#7A838F",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "842654612": 21.84000015258789,
+        "842673619": 21.78999900817871,
+        "842718603": 21.729999542236328,
+        "842747345": 21.670000076293945,
+        "842765001": 21.60999870300293,
+        "842825415": 21.549999237060547,
+        "842854699": 21.489999771118164,
+        "842921946": 21.439998626708984,
+        "843010577": 21.369998931884766,
+        "843029745": 21.309999465942383,
+        "843110554": 21.25,
+        "843174119": 21.19999885559082,
+        "843181269": 21.299999237060547,
+        "843181579": 21.3799991607666,
+        "843183742": 21.34000015258789,
+        "843193688": 21.28999900817871,
+        "843211304": 21.229999542236328,
+        "843254080": 21.215036392211914,
+        "843254385": 21.21627426147461,
+        "843254691": 21.215240478515625,
+        "843255000": 21.214935302734375,
+        "843255306": 21.213932037353516,
+        "843255612": 21.214448928833008,
+        "843255920": 21.21289825439453,
+        "843256227": 21.213144302368164,
+        "843256533": 21.213476181030273,
+        "843256841": 21.213443756103516,
+        "843257149": 21.21292495727539,
+        "843257456": 21.21390151977539,
+        "843257765": 21.21277618408203,
+        "843258002": 21.216276168823242
+       },
+       "id": 5,
+       "info": {
+        "bm": "B38",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 5,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_HEAT",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "Wärmespeichertemperatur",
+       "settings": {
+        "color": "#FFAB58",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "842665808": 51.334537506103516,
+        "842677431": 49.66722106933594,
+        "842688955": 47.60842514038086,
+        "842700772": 46.01091003417969,
+        "842713241": 45.040000915527344,
+        "842724986": 44.11399841308594,
+        "842736727": 42.13857650756836,
+        "842748782": 37.42153549194336,
+        "842761466": 36.49272537231445,
+        "842774585": 35.72333526611328,
+        "842788311": 50.24458694458008,
+        "842799677": 57.861534118652344,
+        "842811150": 56.65888595581055,
+        "842822555": 53.42667007446289,
+        "842834256": 48.9195442199707,
+        "842845911": 47.169044494628906,
+        "842857814": 45.46399688720703,
+        "842870474": 44.110836029052734,
+        "842883396": 43.14399719238281,
+        "842896696": 40.756874084472656,
+        "842911119": 36.52333450317383,
+        "842925200": 34.125999450683594,
+        "842941296": 33.409996032714844,
+        "842955261": 43.45062255859375,
+        "842967245": 57.56311798095703,
+        "842978588": 57.253570556640625,
+        "842990096": 38.21208572387695,
+        "842998881": 29.04461669921875,
+        "843005100": 28.789997100830078,
+        "843013086": 29.374998092651367,
+        "843021515": 29.838001251220703,
+        "843028370": 30.174999237060547,
+        "843037375": 30.395000457763672,
+        "843043504": 49.5421028137207,
+        "843049696": 58.36499786376953,
+        "843056748": 57.82374954223633,
+        "843063329": 57.13332748413086,
+        "843070150": 56.28636169433594,
+        "843076285": 55.387271881103516,
+        "843082268": 54.541812896728516,
+        "843088745": 51.0528564453125,
+        "843095197": 49.96999740600586,
+        "843101520": 49.159000396728516,
+        "843108503": 48.258995056152344,
+        "843114783": 47.413330078125,
+        "843121150": 42.42642593383789,
+        "843127625": 41.353328704833984,
+        "843135146": 40.839996337890625,
+        "843141856": 40.21333312988281,
+        "843148828": 39.68166732788086,
+        "843155891": 39.11375045776367,
+        "843165493": 36.552494049072266,
+        "843173051": 34.87999725341797,
+        "843180630": 34.689998626708984,
+        "843187065": 34.483333587646484,
+        "843191938": 34.30999755859375,
+        "843196984": 34.18499755859375,
+        "843204852": 34.019996643066406,
+        "843211973": 38.46833419799805,
+        "843215079": 51.926002502441406,
+        "843219633": 57.91777801513672,
+        "843224254": 57.79199981689453,
+        "843228120": 57.35199737548828,
+        "843231344": 56.904998779296875,
+        "843234760": 55.14249801635742,
+        "843237943": 50.0260009765625,
+        "843241275": 49.11428451538086,
+        "843244500": 48.537498474121094,
+        "843247755": 44.650001525878906,
+        "843254080": 43.278106689453125,
+        "843256227": 42.83403015136719,
+        "843256533": 42.79621124267578,
+        "843256841": 42.75824737548828,
+        "843257149": 42.721900939941406,
+        "843257456": 42.685157775878906,
+        "843257765": 42.64893341064453,
+        "843258002": 42.605037689208984
+       },
+       "id": 7,
+       "info": {
+        "bm": "B41",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 7,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp.",
+       "settings": {
+        "color": "#FF84B0",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "842665730": 56.28099822998047,
+        "842678957": 55.334163665771484,
+        "842691366": 54.40749740600586,
+        "842704893": 53.44181823730469,
+        "842717731": 52.528175354003906,
+        "842729677": 51.655006408691406,
+        "842744011": 50.46000289916992,
+        "842757550": 49.21778106689453,
+        "842770614": 48.37635803222656,
+        "842782495": 50.23389434814453,
+        "842793798": 59.09213638305664,
+        "842805901": 58.736663818359375,
+        "842818362": 57.78000259399414,
+        "842830096": 56.8316650390625,
+        "842842486": 55.81181716918945,
+        "842854699": 54.8799934387207,
+        "842867166": 53.9818115234375,
+        "842880271": 53.049163818359375,
+        "842892808": 52.01499557495117,
+        "842906577": 50.71154022216797,
+        "842920210": 49.47899627685547,
+        "842932989": 48.603336334228516,
+        "842946661": 47.70909118652344,
+        "842959093": 53.17680358886719,
+        "842972061": 59.2990837097168,
+        "842985332": 58.2576904296875,
+        "842997619": 57.18307876586914,
+        "843004462": 56.30142593383789,
+        "843010577": 55.6971435546875,
+        "843017420": 55.09000015258789,
+        "843024055": 54.49374771118164,
+        "843031338": 53.85499954223633,
+        "843037980": 53.271427154541016,
+        "843044314": 56.114444732666016,
+        "843052924": 59.53285598754883,
+        "843061054": 58.92856979370117,
+        "843068763": 58.349998474121094,
+        "843075570": 57.78571319580078,
+        "843082646": 57.20856857299805,
+        "843089199": 56.64999771118164,
+        "843095883": 56.1542854309082,
+        "843102333": 55.66666793823242,
+        "843109582": 55.11714553833008,
+        "843116268": 54.46333312988281,
+        "843125521": 53.6683349609375,
+        "843133370": 53.154998779296875,
+        "843140314": 52.65666198730469,
+        "843147033": 52.12285614013672,
+        "843154970": 51.5628547668457,
+        "843163019": 50.768001556396484,
+        "843170868": 49.959999084472656,
+        "843174757": 49.62333297729492,
+        "843178838": 49.3599967956543,
+        "843183291": 49.057498931884766,
+        "843187794": 48.724998474121094,
+        "843192408": 48.43000030517578,
+        "843196984": 48.10499954223633,
+        "843201299": 47.783329010009766,
+        "843207071": 47.43199920654297,
+        "843211475": 47.14999771118164,
+        "843214585": 52.3129997253418,
+        "843221194": 58.88111114501953,
+        "843224844": 59.304996490478516,
+        "843229011": 58.970001220703125,
+        "843232574": 58.66499710083008,
+        "843237725": 58.27799606323242,
+        "843241882": 57.91749572753906,
+        "843245372": 57.59499740600586,
+        "843254080": 57.22191619873047,
+        "843256227": 56.921836853027344,
+        "843256533": 56.89522933959961,
+        "843256841": 56.8800163269043,
+        "843257149": 56.858638763427734,
+        "843257456": 56.83159255981445,
+        "843257765": 56.80889892578125,
+        "843258002": 56.78573989868164
+       },
+       "id": 363,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 363,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA_TOP",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp. oben",
+       "settings": {
+        "color": "#BA1651",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "842654628": 0,
+        "842778033": 0,
+        "842778345": 1,
+        "842783619": 0,
+        "842950840": 0,
+        "842951153": 1,
+        "842956727": 0,
+        "843037234": 0,
+        "843037545": 1,
+        "843042705": 0,
+        "843210040": 0,
+        "843210353": 1,
+        "843215532": 0,
+        "843258002": 0
+       },
+       "id": 10000,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10000,
+        "legend": false,
+        "name": "N2_STAGES",
+        "type": "step",
+        "unit": ""
+       },
+       "originalName": "Stufen",
+       "settings": {
+        "color": "#969696",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "842654628": 0,
+        "842778033": 0,
+        "842778345": 0,
+        "842783619": 0,
+        "842950840": 0,
+        "842951153": 0,
+        "842956727": 0,
+        "843037234": 0,
+        "843037545": 0,
+        "843042705": 0,
+        "843210040": 0,
+        "843210353": 0,
+        "843215532": 0,
+        "843258002": 0
+       },
+       "id": 10001,
+       "info": {
+        "bm": "",
+        "defaultColor": "#ff0000",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10001,
+        "legend": false,
+        "name": "N2_HEATING",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Heizen",
+       "settings": {
+        "color": "#FFAB58",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "842654628": 0,
+        "842778033": 1,
+        "842778345": 1,
+        "842783619": 0,
+        "842950840": 1,
+        "842951153": 1,
+        "842956727": 0,
+        "843037234": 1,
+        "843037545": 1,
+        "843042705": 0,
+        "843210040": 1,
+        "843210353": 1,
+        "843215532": 0,
+        "843258002": 0
+       },
+       "id": 10003,
+       "info": {
+        "bm": "",
+        "defaultColor": "#00cc00",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10003,
+        "legend": false,
+        "name": "N2_HOTWATER",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Warmwasser",
+       "settings": {
+        "color": "#FF5B96",
+        "width": 1
+       }
+      },
+      {
+       "data": {
+        "842654628": 0,
+        "842778033": 0,
+        "842778345": 0,
+        "842783619": 0,
+        "842950840": 0,
+        "842951153": 0,
+        "842956727": 0,
+        "843037234": 0,
+        "843037545": 0,
+        "843042705": 0,
+        "843210040": 0,
+        "843210353": 0,
+        "843215532": 0,
+        "843258002": 0
+       },
+       "id": 10004,
+       "info": {
+        "bm": "",
+        "defaultColor": "#ffff00",
+        "defaultWidth": 2,
+        "group": 2,
+        "id": 10004,
+        "legend": false,
+        "name": "N2_DEFROSTING",
+        "type": "binary",
+        "unit": ""
+       },
+       "originalName": "Abtauung",
+       "settings": {
+        "color": "#50565E",
+        "width": 1
+       }
+      }
+     ],
+     "graphs": [
+      {
+       "id": 1,
+       "name": "System",
+       "userLevel": 0
+      },
+      {
+       "id": 100,
+       "name": "WW",
+       "userLevel": 0
+      }
+     ],
+     "name": "System",
+     "navigation": {
+      "from": 842566803,
+      "step": 15,
+      "to": 843258003
+     },
+     "userLevel": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "graph",
+   "command": "detail",
+   "data": {
+    "id": 100,
+    "fromSecs": 108000,
+    "stepSecs": 0
+   }
+  },
+  "captured": "2026-09-20T22:18:47+02:00",
+  "responses": [
+   {
+    "graphDetail": {
+     "channels": [
+      {
+       "data": {
+        "843149907": 39.43000030517578,
+        "843157949": 39.02124786376953,
+        "843165493": 36.358177185058594,
+        "843173051": 34.87999725341797,
+        "843180630": 34.689998626708984,
+        "843187065": 34.483333587646484,
+        "843191938": 34.30999755859375,
+        "843196984": 34.18499755859375,
+        "843204852": 34.019996643066406,
+        "843211973": 38.46833419799805,
+        "843215079": 51.926002502441406,
+        "843219633": 57.91777801513672,
+        "843224254": 57.79199981689453,
+        "843228120": 57.35199737548828,
+        "843231344": 56.904998779296875,
+        "843234760": 55.14249801635742,
+        "843237943": 50.0260009765625,
+        "843241275": 49.11428451538086,
+        "843244500": 48.537498474121094,
+        "843247755": 44.650001525878906,
+        "843254080": 43.278106689453125,
+        "843256227": 42.83403015136719,
+        "843256533": 42.79621124267578,
+        "843256841": 42.75824737548828,
+        "843257149": 42.721900939941406,
+        "843257456": 42.685157775878906,
+        "843257765": 42.64893341064453,
+        "843258004": 42.60316467285156
+       },
+       "id": 7,
+       "info": {
+        "bm": "B41",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 7,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp.",
+       "settings": {
+        "color": "#FFC92F",
+        "width": 65535
+       }
+      },
+      {
+       "data": {
+        "843149829": 51.71999740600586,
+        "843157560": 51.394287109375,
+        "843164268": 50.60667037963867,
+        "843171835": 49.875999450683594,
+        "843177208": 49.50249481201172,
+        "843181377": 49.20750045776367,
+        "843184647": 48.943328857421875,
+        "843189309": 48.644996643066406,
+        "843193688": 48.352500915527344,
+        "843198422": 48.019996643066406,
+        "843202806": 47.68333435058594,
+        "843207071": 47.394996643066406,
+        "843211475": 47.14999771118164,
+        "843214585": 52.3129997253418,
+        "843221194": 58.88111114501953,
+        "843224844": 59.304996490478516,
+        "843229011": 58.970001220703125,
+        "843232574": 58.66499710083008,
+        "843237725": 58.27799606323242,
+        "843241882": 57.91749572753906,
+        "843245372": 57.59499740600586,
+        "843254080": 57.22191619873047,
+        "843256227": 56.921836853027344,
+        "843256533": 56.89522933959961,
+        "843256841": 56.8800163269043,
+        "843257149": 56.858638763427734,
+        "843257456": 56.83159255981445,
+        "843257765": 56.80889892578125,
+        "843258004": 56.78000259399414
+       },
+       "id": 363,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 363,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA_TOP",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp. oben",
+       "settings": {
+        "color": "#FA4134",
+        "width": 65535
+       }
+      }
+     ],
+     "graphs": [
+      {
+       "id": 1,
+       "name": "System",
+       "userLevel": 0
+      },
+      {
+       "id": 100,
+       "name": "WW",
+       "userLevel": 0
+      }
+     ],
+     "name": "WW",
+     "navigation": {
+      "from": 843150005,
+      "step": 0,
+      "to": 843258005
+     },
+     "userLevel": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "graph",
+   "command": "detail",
+   "data": {
+    "id": 100,
+    "fromSecs": 691200,
+    "stepSecs": 15
+   }
+  },
+  "captured": "2026-09-20T22:18:49+02:00",
+  "responses": [
+   {
+    "graphDetail": {
+     "channels": [
+      {
+       "data": {
+        "842665808": 51.334537506103516,
+        "842677431": 49.66722106933594,
+        "842688955": 47.60842514038086,
+        "842700772": 46.01091003417969,
+        "842713241": 45.040000915527344,
+        "842724986": 44.11399841308594,
+        "842736727": 42.13857650756836,
+        "842748782": 37.42153549194336,
+        "842761466": 36.49272537231445,
+        "842774585": 35.72333526611328,
+        "842788311": 50.24458694458008,
+        "842799677": 57.861534118652344,
+        "842811150": 56.65888595581055,
+        "842822555": 53.42667007446289,
+        "842834256": 48.9195442199707,
+        "842845911": 47.169044494628906,
+        "842857814": 45.46399688720703,
+        "842870474": 44.110836029052734,
+        "842883396": 43.14399719238281,
+        "842896696": 40.756874084472656,
+        "842911119": 36.52333450317383,
+        "842925200": 34.125999450683594,
+        "842941296": 33.409996032714844,
+        "842955261": 43.45062255859375,
+        "842967245": 57.56311798095703,
+        "842978588": 57.253570556640625,
+        "842990096": 38.21208572387695,
+        "842998881": 29.04461669921875,
+        "843005100": 28.789997100830078,
+        "843013086": 29.374998092651367,
+        "843021515": 29.838001251220703,
+        "843028370": 30.174999237060547,
+        "843037375": 30.395000457763672,
+        "843043504": 49.5421028137207,
+        "843049696": 58.36499786376953,
+        "843056748": 57.82374954223633,
+        "843063329": 57.13332748413086,
+        "843070150": 56.28636169433594,
+        "843076285": 55.387271881103516,
+        "843082268": 54.541812896728516,
+        "843088745": 51.0528564453125,
+        "843095197": 49.96999740600586,
+        "843101520": 49.159000396728516,
+        "843108503": 48.258995056152344,
+        "843114783": 47.413330078125,
+        "843121150": 42.42642593383789,
+        "843127625": 41.353328704833984,
+        "843135146": 40.839996337890625,
+        "843141856": 40.21333312988281,
+        "843148828": 39.68166732788086,
+        "843155891": 39.11375045776367,
+        "843165493": 36.552494049072266,
+        "843173051": 34.87999725341797,
+        "843180630": 34.689998626708984,
+        "843187065": 34.483333587646484,
+        "843191938": 34.30999755859375,
+        "843196984": 34.18499755859375,
+        "843204852": 34.019996643066406,
+        "843211973": 38.46833419799805,
+        "843215079": 51.926002502441406,
+        "843219633": 57.91777801513672,
+        "843224254": 57.79199981689453,
+        "843228120": 57.35199737548828,
+        "843231344": 56.904998779296875,
+        "843234760": 55.14249801635742,
+        "843237943": 50.0260009765625,
+        "843241275": 49.11428451538086,
+        "843244500": 48.537498474121094,
+        "843247755": 44.650001525878906,
+        "843254080": 43.278106689453125,
+        "843256227": 42.83403015136719,
+        "843256533": 42.79621124267578,
+        "843256841": 42.75824737548828,
+        "843257149": 42.721900939941406,
+        "843257456": 42.685157775878906,
+        "843257765": 42.64893341064453,
+        "843258006": 42.605037689208984
+       },
+       "id": 7,
+       "info": {
+        "bm": "B41",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 7,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp.",
+       "settings": {
+        "color": "#FFC92F",
+        "width": 65535
+       }
+      },
+      {
+       "data": {
+        "842665730": 56.28099822998047,
+        "842678957": 55.334163665771484,
+        "842691366": 54.40749740600586,
+        "842704893": 53.44181823730469,
+        "842717731": 52.528175354003906,
+        "842729677": 51.655006408691406,
+        "842744011": 50.46000289916992,
+        "842757550": 49.21778106689453,
+        "842770614": 48.37635803222656,
+        "842782495": 50.23389434814453,
+        "842793798": 59.09213638305664,
+        "842805901": 58.736663818359375,
+        "842818362": 57.78000259399414,
+        "842830096": 56.8316650390625,
+        "842842486": 55.81181716918945,
+        "842854699": 54.8799934387207,
+        "842867166": 53.9818115234375,
+        "842880271": 53.049163818359375,
+        "842892808": 52.01499557495117,
+        "842906577": 50.71154022216797,
+        "842920210": 49.47899627685547,
+        "842932989": 48.603336334228516,
+        "842946661": 47.70909118652344,
+        "842959093": 53.17680358886719,
+        "842972061": 59.2990837097168,
+        "842985332": 58.2576904296875,
+        "842997619": 57.18307876586914,
+        "843004462": 56.30142593383789,
+        "843010577": 55.6971435546875,
+        "843017420": 55.09000015258789,
+        "843024055": 54.49374771118164,
+        "843031338": 53.85499954223633,
+        "843037980": 53.271427154541016,
+        "843044314": 56.114444732666016,
+        "843052924": 59.53285598754883,
+        "843061054": 58.92856979370117,
+        "843068763": 58.349998474121094,
+        "843075570": 57.78571319580078,
+        "843082646": 57.20856857299805,
+        "843089199": 56.64999771118164,
+        "843095883": 56.1542854309082,
+        "843102333": 55.66666793823242,
+        "843109582": 55.11714553833008,
+        "843116268": 54.46333312988281,
+        "843125521": 53.6683349609375,
+        "843133370": 53.154998779296875,
+        "843140314": 52.65666198730469,
+        "843147033": 52.12285614013672,
+        "843154970": 51.5628547668457,
+        "843163019": 50.768001556396484,
+        "843170868": 49.959999084472656,
+        "843174757": 49.62333297729492,
+        "843178838": 49.3599967956543,
+        "843183291": 49.057498931884766,
+        "843187794": 48.724998474121094,
+        "843192408": 48.43000030517578,
+        "843196984": 48.10499954223633,
+        "843201299": 47.783329010009766,
+        "843207071": 47.43199920654297,
+        "843211475": 47.14999771118164,
+        "843214585": 52.3129997253418,
+        "843221194": 58.88111114501953,
+        "843224844": 59.304996490478516,
+        "843229011": 58.970001220703125,
+        "843232574": 58.66499710083008,
+        "843237725": 58.27799606323242,
+        "843241882": 57.91749572753906,
+        "843245372": 57.59499740600586,
+        "843254080": 57.22191619873047,
+        "843256227": 56.921836853027344,
+        "843256533": 56.89522933959961,
+        "843256841": 56.8800163269043,
+        "843257149": 56.858638763427734,
+        "843257456": 56.83159255981445,
+        "843257765": 56.80889892578125,
+        "843258006": 56.784786224365234
+       },
+       "id": 363,
+       "info": {
+        "bm": "",
+        "defaultColor": "#000000",
+        "defaultWidth": 2,
+        "group": 1,
+        "id": 363,
+        "legend": true,
+        "name": "T25x_AIN_TBUFFER_FRWA_TOP",
+        "type": "line",
+        "unit": "N2_GRAD"
+       },
+       "originalName": "TW-Erw. Temp. oben",
+       "settings": {
+        "color": "#FA4134",
+        "width": 65535
+       }
+      }
+     ],
+     "graphs": [
+      {
+       "id": 1,
+       "name": "System",
+       "userLevel": 0
+      },
+      {
+       "id": 100,
+       "name": "WW",
+       "userLevel": 0
+      }
+     ],
+     "name": "WW",
+     "navigation": {
+      "from": 842566807,
+      "step": 15,
+      "to": 843258007
+     },
+     "userLevel": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "-1"
+   }
+  },
+  "captured": "2026-09-20T22:18:51+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "-1",
+     "items": [
+      {
+       "id": "4488",
+       "idx": 2,
+       "name": "N2_GENERAL_SETTINGS",
+       "type": "sub"
+      },
+      {
+       "id": "4747",
+       "idx": 3,
+       "name": "N2_INFORMATIONS",
+       "type": "sub"
+      },
+      {
+       "id": "6735",
+       "idx": 7,
+       "name": "N2_HEATING_CIRCUIT",
+       "type": "sub"
+      },
+      {
+       "id": "9878",
+       "idx": 8,
+       "name": "N2_BUFFER_MANAGEMENT",
+       "type": "sub"
+      },
+      {
+       "id": "10151",
+       "idx": 9,
+       "name": "N2_DHW_HEATING",
+       "type": "sub"
+      },
+      {
+       "id": "10256",
+       "idx": 10,
+       "name": "N2_PV",
+       "type": "sub"
+      },
+      {
+       "id": "10424",
+       "idx": 13,
+       "name": "N2_SMART_GRID",
+       "type": "sub"
+      },
+      {
+       "id": "11040",
+       "idx": 18,
+       "name": "N2_BIVALENCE",
+       "type": "sub"
+      },
+      {
+       "id": "12503",
+       "idx": 28,
+       "name": "N2_CODE_ENTRY_EXPERT",
+       "type": "action"
+      }
+     ],
+     "name": "N2_SETTINGS"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "4488"
+   }
+  },
+  "captured": "2026-09-20T22:18:53+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "4488",
+     "items": [
+      {
+       "displayValue": false,
+       "id": "4537",
+       "idx": 3,
+       "name": "N2_SETDATETIME",
+       "type": "iparam"
+      },
+      {
+       "id": "4544",
+       "idx": 5,
+       "name": "N2_HC_ROOM_DESCRIPTION",
+       "type": "sub"
+      },
+      {
+       "id": "4614",
+       "idx": 6,
+       "name": "N2_NETWORK_SETTINGS",
+       "type": "sub"
+      },
+      {
+       "displayValue": "180 <->N2_SEK<->",
+       "id": "4670",
+       "idx": 7,
+       "name": "N2_DISPLAY_TIMEOUT",
+       "type": "iparam"
+      },
+      {
+       "displayValue": "0 <->N2_MIN<->",
+       "id": "4677",
+       "idx": 8,
+       "name": "N2_DISPLAY_PIN_TIMEOUT",
+       "type": "iparam"
+      },
+      {
+       "displayValue": "N2_ECO",
+       "id": "4684",
+       "idx": 9,
+       "name": "N2_HOLIDAY_MODE",
+       "type": "iparam"
+      },
+      {
+       "displayValue": "N2_NO",
+       "id": "4719",
+       "idx": 15,
+       "name": "N2_BIVALENTMANUAL",
+       "type": "hparam"
+      },
+      {
+       "id": "4740",
+       "idx": 20,
+       "name": "N2_SYSTEM_REBOOT",
+       "type": "action"
+      }
+     ],
+     "name": "N2_GENERAL_SETTINGS"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4537"
+   }
+  },
+  "captured": "2026-09-20T22:18:55+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_SETDATETIME",
+     "id": "4537",
+     "name": "N2_SETDATETIME",
+     "param": "SETDATETIME",
+     "redirectId": "4488",
+     "type": "setdt",
+     "value": "2026-09-20 22:20:13"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "4544"
+   }
+  },
+  "captured": "2026-09-20T22:18:57+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "4544",
+     "items": [
+      {
+       "id": "4551",
+       "idx": 1,
+       "name": "N2_HEAT_PUMP",
+       "type": "sub"
+      }
+     ],
+     "name": "N2_HC_ROOM_DESCRIPTION"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "4551"
+   }
+  },
+  "captured": "2026-09-20T22:18:59+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "4551",
+     "items": [
+      {
+       "displayValue": "Erdgeschoss",
+       "id": "4558",
+       "idx": 1,
+       "name": "N2_HCA_DESCRIPTION",
+       "type": "iparam"
+      },
+      {
+       "displayValue": "Obergeschoss",
+       "id": "4572",
+       "idx": 3,
+       "name": "N2_HCC_DESCRIPTION",
+       "type": "iparam"
+      },
+      {
+       "displayValue": "Kellergeschoss",
+       "id": "4579",
+       "idx": 4,
+       "name": "N2_HCD_DESCRIPTION",
+       "type": "iparam"
+      }
+     ],
+     "name": "N2_HEAT_PUMP"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4558"
+   }
+  },
+  "captured": "2026-09-20T22:19:01+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_HCX_DESCRIPTION",
+     "id": "4558",
+     "name": "N2_HCA_DESCRIPTION",
+     "param": "SSYSHKANAME",
+     "redirectId": "4551",
+     "titel": "",
+     "type": "text",
+     "value": "Erdgeschoss"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4572"
+   }
+  },
+  "captured": "2026-09-20T22:19:03+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_HCX_DESCRIPTION",
+     "id": "4572",
+     "name": "N2_HCC_DESCRIPTION",
+     "param": "SSYSHKCNAME",
+     "redirectId": "4551",
+     "titel": "",
+     "type": "text",
+     "value": "Obergeschoss"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4579"
+   }
+  },
+  "captured": "2026-09-20T22:19:05+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_HCX_DESCRIPTION",
+     "id": "4579",
+     "name": "N2_HCD_DESCRIPTION",
+     "param": "SSYSHKDNAME",
+     "redirectId": "4551",
+     "titel": "",
+     "type": "text",
+     "value": "Kellergeschoss"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "4614"
+   }
+  },
+  "captured": "2026-09-20T22:19:07+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "4614",
+     "items": [
+      {
+       "id": "4621",
+       "idx": 1,
+       "name": "N2_NETWORK_INFORMATIONS",
+       "type": "info"
+      },
+      {
+       "displayValue": "N2_ON",
+       "id": "4628",
+       "idx": 2,
+       "name": "N2_DHCP",
+       "type": "iparam"
+      },
+      {
+       "displayValue": "N2_ON",
+       "id": "4656",
+       "idx": 6,
+       "name": "N2_MYIDM",
+       "type": "iparam"
+      },
+      {
+       "displayValue": "<redacted>",
+       "id": "4663",
+       "idx": 7,
+       "name": "N2_NETWORK_LOCAL_CODE",
+       "type": "iparam"
+      },
+      {
+       "id": "13351",
+       "idx": 9,
+       "name": "N2_PING",
+       "type": "execute"
+      }
+     ],
+     "name": "N2_NETWORK_SETTINGS"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4621"
+   }
+  },
+  "captured": "2026-09-20T22:19:09+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_NETWORK_INFORMATIONS",
+     "id": "4621",
+     "name": "N2_NETWORK_INFORMATIONS",
+     "redirectId": "4614",
+     "type": "info",
+     "value": "Netzwerk: <blockquote style=\"margin-top: 0px\"><table><tr><td>IP:</td><td>192.168.0.200</td></tr><tr><td>Subnet:</td><td>255.255.255.0</td></tr><tr><td>MAC:</td><td><redacted></td></tr><tr><td>Status:</td><td>verbunden</td><td></td></tr></table></blockquote>myIDM:<blockquote style=\"margin-top: 0px\"><table><tr><td>myIDMID:</td><td><redacted></td></tr></table></blockquote>LAN 1: Netzwerkkabel angeschlossen<br>LAN 2: Netzwerkkabel angeschlossen"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4628"
+   }
+  },
+  "captured": "2026-09-20T22:19:11+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_DHCP",
+     "id": "4628",
+     "intvalue": 1,
+     "name": "N2_DHCP",
+     "param": "SSYSDHCP",
+     "redirectId": "4614",
+     "titel": "",
+     "type": "bool",
+     "value": true
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4656"
+   }
+  },
+  "captured": "2026-09-20T22:19:13+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_MYIDM",
+     "id": "4656",
+     "intvalue": 1,
+     "name": "N2_MYIDM",
+     "param": "SSYSMYIDM",
+     "redirectId": "4614",
+     "titel": "",
+     "type": "bool",
+     "value": true
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4663"
+   }
+  },
+  "captured": "2026-09-20T22:19:15+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_NETWORK_LOCAL_CODE",
+     "id": "4663",
+     "max": 1000000000,
+     "min": 0,
+     "name": "N2_NETWORK_LOCAL_CODE",
+     "param": "SSYSLPIN",
+     "redirectId": "4614",
+     "titel": "",
+     "type": "inputnumber",
+     "value": "<redacted>"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "13351"
+   }
+  },
+  "captured": "2026-09-20T22:19:17+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "",
+     "id": "13351",
+     "name": "N2_PING",
+     "redirectId": "4614",
+     "type": "execute"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4670"
+   }
+  },
+  "captured": "2026-09-20T22:19:19+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 300,
+     "description": "N2D_DISPLAY_TIMEOUT",
+     "id": "4670",
+     "increment": "1",
+     "max": 3600,
+     "min": 0,
+     "name": "N2_DISPLAY_TIMEOUT",
+     "param": "SSYSDTO",
+     "redirectId": "4488",
+     "titel": "",
+     "type": "int",
+     "unit": "N2_SEK",
+     "value": 180
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4677"
+   }
+  },
+  "captured": "2026-09-20T22:19:21+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_DISPLAY_PIN_TIMEOUT",
+     "id": "4677",
+     "increment": "5",
+     "max": 300,
+     "min": 0,
+     "name": "N2_DISPLAY_PIN_TIMEOUT",
+     "param": "SSYSDPTO",
+     "redirectId": "4488",
+     "titel": "",
+     "type": "int",
+     "unit": "N2_MIN",
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4684"
+   }
+  },
+  "captured": "2026-09-20T22:19:23+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_HOLIDAY_MODE",
+     "id": "4684",
+     "name": "N2_HOLIDAY_MODE",
+     "param": "SSYSHMODE",
+     "redirectId": "4488",
+     "titel": "",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_ECO"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_FROST_PROTECTION"
+      }
+     ],
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4719"
+   }
+  },
+  "captured": "2026-09-20T22:19:25+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_BIVALENTMANUAL",
+     "id": "4719",
+     "name": "N2_BIVALENTMANUAL",
+     "param": "BV090",
+     "redirectId": "4488",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_NO"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_YES"
+      }
+     ],
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "4747"
+   }
+  },
+  "captured": "2026-09-20T22:19:27+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "4747",
+     "items": [
+      {
+       "id": "4754",
+       "idx": 1,
+       "name": "N2_SYSTEM_INFO",
+       "type": "info"
+      },
+      {
+       "id": "4761",
+       "idx": 2,
+       "name": "N2_INPUTS_OUTPUTS_INFO",
+       "type": "sub"
+      },
+      {
+       "id": "4824",
+       "idx": 10,
+       "name": "N2_NETWORK_INFORMATIONS",
+       "type": "info"
+      },
+      {
+       "id": "4845",
+       "idx": 14,
+       "name": "N2_MISC",
+       "type": "sub"
+      }
+     ],
+     "name": "N2_INFORMATIONS"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4754"
+   }
+  },
+  "captured": "2026-09-20T22:19:29+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_SYSTEM_INFO",
+     "id": "4754",
+     "name": "N2_SYSTEM_INFO",
+     "redirectId": "4747",
+     "type": "info",
+     "value": "<table id=\"idm_info\"><tr><td>Software Version</td><td>T_NAV10_20.24-1574-g183d9b17a</td></tr><tr><td>myIDMID</td><td><redacted></td></tr><tr><td>Regler Online</td><td>1949.0h</td></tr><tr><td>Laufzeit Stufe&nbsp1</td><td>39.9h</td></tr><tr><td>Schaltzyklen Stufe&nbsp1</td><td>39.0</td></tr><tr><td>Laufzeit 2.Wärmeerzeuger</td><td>0.0h</td></tr><tr><td>Schaltzyklen 2.Wärmeerzeuger</td><td>0.0</td></tr><tr><td>Laufzeit Heizen</td><td>0.2h</td></tr><tr><td>Laufzeit Warmwasser</td><td>39.7h</td></tr><tr><td>Laufzeit Abtauen</td><td>0.0h</td></tr></table>"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "4761"
+   }
+  },
+  "captured": "2026-09-20T22:19:31+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "4761",
+     "items": [
+      {
+       "id": "4768",
+       "idx": 1,
+       "name": "N2_SENSORS",
+       "type": "info"
+      },
+      {
+       "id": "4775",
+       "idx": 2,
+       "name": "N2_DIGITAL_INPUTS",
+       "type": "info"
+      },
+      {
+       "id": "4782",
+       "idx": 3,
+       "name": "N2_ANALOGUE_OUTPUTS",
+       "type": "info"
+      },
+      {
+       "id": "4789",
+       "idx": 4,
+       "name": "N2_DIGITAL_OUTPUTS",
+       "type": "info"
+      }
+     ],
+     "name": "N2_INPUTS_OUTPUTS_INFO"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4768"
+   }
+  },
+  "captured": "2026-09-20T22:19:33+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_SENSORS",
+     "id": "4768",
+     "name": "N2_SENSORS",
+     "redirectId": "4761",
+     "type": "info",
+     "value": "<table id=\"idm_info\"> <tr><td>B32</td><td>Außentemperatur</td><td>20.4</td><td>°C</td></tr> <tr><td>B38</td><td>Wärmespeichertemperatur</td><td>21.2</td><td>°C</td></tr> <tr><td>B48</td><td>TW-Erw. Temp. oben</td><td>56.8</td><td>°C</td></tr>  <tr><td>B41</td><td>TW-Erw. Temp.</td><td>42.6</td><td>°C</td></tr>           <tr><td colspan = \"4\" style=\"height:20px;\"></td></tr>    <tr><td>B71</td><td>Heißgastemperatur 1</td><td>37.4</td><td>°C</td></tr> <tr><td>B37</td><td>Ansauglufttemperatur</td><td>21.3</td><td>°C</td></tr> <tr><td>B79</td><td>Verdampferaustritt 1</td><td>37.5</td><td>°C</td></tr> <tr><td>B78</td><td>Verdampfungsdruck 1</td><td>8.0</td><td>bar</td></tr>  <tr><td>B78v</td><td>Verdampfungstemp. 1</td><td>22.8</td><td>°C</td></tr> <tr><td>B86</td><td>Kondensationsdruck 1</td><td>7.8</td><td>bar</td></tr> <tr><td>B86v</td><td>Kondensationstemp. 1</td><td>22.1</td><td>°C</td></tr> <tr><td>B87</td><td>Flüssigkeitsleit. Temp.</td><td>36.8</td><td>°C</td></tr>  <tr><td colspan = \"4\" style=\"height:20px;\"></td></tr>            <tr><td>B45</td><td>Ladefühler</td><td>23.0</td><td>°C</td></tr> <tr><td colspan = \"4\" style=\"height:20px;\"></td></tr> <tr><td>B51</td><td>Vorlauftemperatur HK A</td><td>22.7</td><td>°C</td></tr>  <tr><td>B53</td><td>Vorlauftemperatur HK C</td><td>21.8</td><td>°C</td></tr> <tr><td>B54</td><td>Vorlauftemperatur HK D</td><td>22.4</td><td>°C</td></tr>    <tr><td>B61</td><td>Raumtemperatur HK A</td><td>23.0</td><td>°C</td></tr>  <tr><td>B63</td><td>Raumtemperatur HK C</td><td>22.5</td><td>°C</td></tr>     <tr><td colspan = \"4\" style=\"height:20px;\"></td></tr>            <tr><td></td><td>Platinentemperatur</td><td>28.1</td><td>°C</td></tr> <tr><td>B124</td><td>Rücklauftemperatur Wärmesenke</td><td>25.9</td><td>°C</td></tr> <tr><td>B125</td><td>Vorlauftemperatur Wärmesenke</td><td>25.9</td><td>°C</td></tr> <tr><td>B2</td><td>Durchfluss Wärmesenke</td><td>0.0</td><td>l/min</td></tr> <tr><td>B33/B113</td><td>Vorlauftemperatur 1 Zwischenkreis</td><td>40.1</td><td>°C</td></tr> <tr><td>B34/B114</td><td>Rücklauftemperatur 1 Zwischenkreis</td><td>33.8</td><td>°C</td></tr>            <tr><td></td><td>Batteriespannung Zentraleinheit</td><td>3.00</td><td>V</td></tr> </table> "
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4775"
+   }
+  },
+  "captured": "2026-09-20T22:19:35+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_DIGITAL_INPUTS",
+     "id": "4775",
+     "name": "N2_DIGITAL_INPUTS",
+     "redirectId": "4761",
+     "type": "info",
+     "value": "<table id=\"idm_info\">  <tr><td></td><td>Externe Anforderung</td><td>0</td><td></td></tr> <tr><td></td><td>Ext. Umschaltung H/K</td><td>0</td><td></td></tr> <tr><td></td><td>EW/EVU Sperrkontakt</td><td>1</td><td></td></tr> <tr><td></td><td>ext. Vorrangladung</td><td>0</td><td></td></tr>    <tr><td></td><td>internal use</td><td>1</td><td></td></tr>  <tr><td colspan = \"4\" style=\"height:20px;\"><b>Störung: </b></td></tr>   <tr><td>B15</td><td>Störung E-Heizstab</td><td>1</td><td></td></tr>     <tr><td>B5</td><td>Taupunktwächter&nbsp;Heizkreis A</td><td>1</td><td></td></tr>                  <tr><td>M73</td><td>Störung Ladepumpe Wärmesenke</td><td>1</td><td></td></tr>   </table> "
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4782"
+   }
+  },
+  "captured": "2026-09-20T22:19:37+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_ANALOGUE_OUTPUTS",
+     "id": "4782",
+     "name": "N2_ANALOGUE_OUTPUTS",
+     "redirectId": "4761",
+     "type": "info",
+     "value": "<table id=\"idm_info\">                   <tr><td>M13</td><td>Ventilatordrehzahl 1</td><td>0.0</td><td>V</td></tr>       <tr><td>M73</td><td>Ladepumpe Wärmesenke Steuersignal</td><td>-1.0</td><td>%</td></tr> <tr><td>M125</td><td>Ladepumpe 1 Zwischenkreis Steuersignal</td><td>-1.0</td><td>%</td></tr>  <!-- iPumps + ILM + Solarerweiterung ok -->        </table>"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4789"
+   }
+  },
+  "captured": "2026-09-20T22:19:39+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_DIGITAL_OUTPUTS",
+     "id": "4789",
+     "name": "N2_DIGITAL_OUTPUTS",
+     "redirectId": "4761",
+     "type": "info",
+     "value": "<table id=\"idm_info\"> <tr><td>M1</td><td>Verdichter 1</td><td>0</td><td></td></tr> <tr><td>M51</td><td>4-Wegeventil Kreis 1</td><td>0</td><td></td></tr> <tr><td>E32.1</td><td>Siphonheizung 1</td><td>0</td><td></td></tr> <tr><td>M13</td><td>Drehrichtung Ventilator 1</td><td>0</td><td></td></tr> <tr><td>E1</td><td>Verdichterheizung</td><td>0</td><td></td></tr>                       <tr><td>M64</td><td>Zirkulationspumpe</td><td>0</td><td></td></tr>     <tr><td colspan = \"4\" style=\"height:20px;\"><b> </b></td></tr> <tr><td>M31</td><td>Pumpe Heizkreis A</td><td>0</td><td></td></tr> <tr><td>M41</td><td>Mischer Heizkreis A</td><td>Aus</td><td></td></tr> <tr><td>M33</td><td>Pumpe Heizkreis C</td><td>0</td><td></td></tr> <tr><td>M43</td><td>Mischer Heizkreis C</td><td>Aus</td><td></td></tr> <tr><td>M34</td><td>Pumpe Heizkreis D</td><td>0</td><td></td></tr> <tr><td>M44</td><td>Mischer Heizkreis D</td><td>Aus</td><td></td></tr>       <tr><td colspan = \"4\" style=\"height:20px;\"><b> </b></td></tr>    <tr><td colspan = \"4\" style=\"height:20px;\"><b> </b></td></tr> <tr><td></td><td>2./3. Wärmeerzeuger</td><td>0</td><td></td></tr> <tr><td></td><td>2. Wärmeerzeuger</td><td>0</td><td></td></tr>         <tr><td>M63</td><td>Ventil Heizen/Vorrang</td><td>Heizen</td><td></td></tr>               \t<tr><td colspan = \"4\" style=\"height:20px;\"><b> </b></td></tr> \t<tr><td>M73</td><td>Ladepumpe Wärmesenke EIN/AUS</td><td>100</td><td></td></tr> \t \t      <!-- iPumps + ILM + Solarerweiterung ok --> </table> "
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4824"
+   }
+  },
+  "captured": "2026-09-20T22:19:41+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_NETWORK_INFORMATIONS",
+     "id": "4824",
+     "name": "N2_NETWORK_INFORMATIONS",
+     "redirectId": "4747",
+     "type": "info",
+     "value": "Netzwerk: <blockquote style=\"margin-top: 0px\"><table><tr><td>IP:</td><td>192.168.0.200</td></tr><tr><td>Subnet:</td><td>255.255.255.0</td></tr><tr><td>MAC:</td><td><redacted></td></tr><tr><td>Status:</td><td>verbunden</td><td></td></tr></table></blockquote>myIDM:<blockquote style=\"margin-top: 0px\"><table><tr><td>myIDMID:</td><td><redacted></td></tr></table></blockquote>LAN 1: Netzwerkkabel angeschlossen<br>LAN 2: Netzwerkkabel angeschlossen"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "4845"
+   }
+  },
+  "captured": "2026-09-20T22:19:43+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "4845",
+     "items": [
+      {
+       "displayValue": false,
+       "id": "4852",
+       "idx": 1,
+       "name": "N2_LICENSE",
+       "type": "iparam"
+      }
+     ],
+     "name": "N2_MISC"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "4852"
+   }
+  },
+  "captured": "2026-09-20T22:19:45+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_LICENSE",
+     "id": "4852",
+     "license": "system",
+     "name": "N2_LICENSE",
+     "param": "LICSYSTEM",
+     "redirectId": "4845",
+     "type": "license"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "6735"
+   }
+  },
+  "captured": "2026-09-20T22:19:47+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "6735",
+     "items": [
+      {
+       "id": "6742",
+       "idx": 1,
+       "name": "N2_HEATING_CIRCUIT_A",
+       "type": "sub"
+      },
+      {
+       "id": "7638",
+       "idx": 3,
+       "name": "N2_HEATING_CIRCUIT_C",
+       "type": "sub"
+      },
+      {
+       "id": "8086",
+       "idx": 4,
+       "name": "N2_HEATING_CIRCUIT_D",
+       "type": "sub"
+      }
+     ],
+     "name": "N2_HEATING_CIRCUIT"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "6742"
+   }
+  },
+  "captured": "2026-09-20T22:19:49+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "6742",
+     "items": [
+      {
+       "displayValue": "N2_TIMETABLE",
+       "id": "6805",
+       "idx": 12,
+       "name": "N2_HC_A_MODE",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "22.0 <->N2_GRAD<->",
+       "id": "6833",
+       "idx": 16,
+       "name": "N2_HC_ROOM_TEMP_HEATING",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "18.0 <->N2_GRAD<->",
+       "id": "6840",
+       "idx": 17,
+       "name": "N2_HC_ROOM_TEMP_HEATING_ECO",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "15 <->N2_GRAD<->",
+       "id": "6847",
+       "idx": 18,
+       "name": "N2_HC_HEATING_LIMIT",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "1.0",
+       "id": "6854",
+       "idx": 19,
+       "name": "N2_HC_ROOM_FACTOR",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "0.40",
+       "id": "6861",
+       "idx": 20,
+       "name": "N2_HC_HEATING_SLOPE",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "15 <->N2_MIN<->",
+       "id": "6938",
+       "idx": 31,
+       "name": "N2_HC_ADD_ON_TIME_HEATING",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111",
+       "id": "6952",
+       "idx": 33,
+       "name": "N2_HC_A_PROGRAM",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "0 <->N2_GRAD<->",
+       "id": "6959",
+       "idx": 34,
+       "name": "N2_HC_PARALLEL_TRANSLATION",
+       "type": "hparam"
+      }
+     ],
+     "name": "N2_HEATING_CIRCUIT_A"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6805"
+   }
+  },
+  "captured": "2026-09-20T22:19:51+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 1,
+     "description": "N2D_HC_MODE",
+     "id": "6805",
+     "name": "N2_HC_A_MODE",
+     "param": "HKA01",
+     "redirectId": "6742",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_OFF"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_TIMETABLE"
+      },
+      {
+       "idx": 3,
+       "key": "2",
+       "name": "N2_NORMAL"
+      },
+      {
+       "idx": 4,
+       "key": "3",
+       "name": "N2_ECO"
+      },
+      {
+       "idx": 5,
+       "key": "4",
+       "name": "N2_MANUALHEAT"
+      }
+     ],
+     "value": 1
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6833"
+   }
+  },
+  "captured": "2026-09-20T22:19:53+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 22,
+     "description": "N2D_HC_ROOM_TEMP_HEATING",
+     "id": "6833",
+     "increment": "0.1",
+     "max": 30,
+     "min": 15,
+     "name": "N2_HC_ROOM_TEMP_HEATING",
+     "param": "HKA04",
+     "redirectId": "6742",
+     "type": "float",
+     "unit": "N2_GRAD",
+     "value": 22
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6840"
+   }
+  },
+  "captured": "2026-09-20T22:19:55+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 18,
+     "description": "N2D_HC_ROOM_TEMP_HEATING_ECO",
+     "id": "6840",
+     "increment": "0.1",
+     "max": 25,
+     "min": 10,
+     "name": "N2_HC_ROOM_TEMP_HEATING_ECO",
+     "param": "HKA05",
+     "redirectId": "6742",
+     "type": "float",
+     "unit": "N2_GRAD",
+     "value": 18
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6847"
+   }
+  },
+  "captured": "2026-09-20T22:19:57+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 15,
+     "description": "N2D_HC_HEATING_LIMIT",
+     "id": "6847",
+     "increment": "1",
+     "max": 50,
+     "min": 0,
+     "name": "N2_HC_HEATING_LIMIT",
+     "param": "HKA08",
+     "redirectId": "6742",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 15
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6854"
+   }
+  },
+  "captured": "2026-09-20T22:19:59+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 1,
+     "description": "N2D_HC_ROOM_FACTOR",
+     "id": "6854",
+     "increment": "0.1",
+     "max": 4,
+     "min": 0,
+     "name": "N2_HC_ROOM_FACTOR",
+     "param": "HKA09",
+     "redirectId": "6742",
+     "type": "float",
+     "value": 1
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6861"
+   }
+  },
+  "captured": "2026-09-20T22:20:01+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0.4000000059604645,
+     "description": "N2D_HC_HEATING_SLOPE",
+     "id": "6861",
+     "increment": 0.01,
+     "labelx": "Außentemperatur",
+     "labely": "Soll-Vorlauftemperatur",
+     "max": 3.5,
+     "min": 0.10000000149011612,
+     "name": "N2_HC_HEATING_SLOPE",
+     "offset": 0,
+     "param": "HKA10",
+     "redirectId": "6742",
+     "taumin": "-20.0",
+     "ti": "22.0",
+     "tvmax": 45,
+     "tvmin": "22.0",
+     "type": "graphheatcircuit",
+     "value": 0.4000000059604645
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6938"
+   }
+  },
+  "captured": "2026-09-20T22:20:03+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 15,
+     "description": "N2D_HC_ADD_ON_TIME_HEATING",
+     "id": "6938",
+     "increment": "1",
+     "max": 240,
+     "min": 1,
+     "name": "N2_HC_ADD_ON_TIME_HEATING",
+     "param": "HKA59",
+     "redirectId": "6742",
+     "type": "int",
+     "unit": "N2_MIN",
+     "value": 15
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6952"
+   }
+  },
+  "captured": "2026-09-20T22:20:05+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_HC_A_PROGRAM",
+     "id": "6952",
+     "name": "N2_HC_A_PROGRAM",
+     "param": "HKA06",
+     "redirectId": "6742",
+     "type": "ttw",
+     "value": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "6959"
+   }
+  },
+  "captured": "2026-09-20T22:20:07+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_HC_PARALLEL_TRANSLATION",
+     "id": "6959",
+     "increment": "1",
+     "max": 30,
+     "min": 0,
+     "name": "N2_HC_PARALLEL_TRANSLATION",
+     "param": "HSA03",
+     "redirectId": "6742",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "7638"
+   }
+  },
+  "captured": "2026-09-20T22:20:09+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "7638",
+     "items": [
+      {
+       "displayValue": "N2_TIMETABLE",
+       "id": "7701",
+       "idx": 11,
+       "name": "N2_HC_C_MODE",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "22.0 <->N2_GRAD<->",
+       "id": "7729",
+       "idx": 15,
+       "name": "N2_HC_ROOM_TEMP_HEATING",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "18.0 <->N2_GRAD<->",
+       "id": "7736",
+       "idx": 16,
+       "name": "N2_HC_ROOM_TEMP_HEATING_ECO",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "15 <->N2_GRAD<->",
+       "id": "7743",
+       "idx": 17,
+       "name": "N2_HC_HEATING_LIMIT",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "1.0",
+       "id": "7750",
+       "idx": 18,
+       "name": "N2_HC_ROOM_FACTOR",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "0.40",
+       "id": "7757",
+       "idx": 19,
+       "name": "N2_HC_HEATING_SLOPE",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "15 <->N2_MIN<->",
+       "id": "7834",
+       "idx": 30,
+       "name": "N2_HC_ADD_ON_TIME_HEATING",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111",
+       "id": "7848",
+       "idx": 32,
+       "name": "N2_HC_C_PROGRAM",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "0 <->N2_GRAD<->",
+       "id": "7855",
+       "idx": 33,
+       "name": "N2_HC_PARALLEL_TRANSLATION",
+       "type": "hparam"
+      }
+     ],
+     "name": "N2_HEATING_CIRCUIT_C"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7701"
+   }
+  },
+  "captured": "2026-09-20T22:20:11+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 1,
+     "description": "N2D_HC_C_MODE",
+     "id": "7701",
+     "name": "N2_HC_C_MODE",
+     "param": "HKC01",
+     "redirectId": "7638",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_OFF"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_TIMETABLE"
+      },
+      {
+       "idx": 3,
+       "key": "2",
+       "name": "N2_NORMAL"
+      },
+      {
+       "idx": 4,
+       "key": "3",
+       "name": "N2_ECO"
+      },
+      {
+       "idx": 5,
+       "key": "4",
+       "name": "N2_MANUALHEAT"
+      }
+     ],
+     "value": 1
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7729"
+   }
+  },
+  "captured": "2026-09-20T22:20:13+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 22,
+     "description": "N2D_HC_ROOM_TEMP_HEATING",
+     "id": "7729",
+     "increment": "0.1",
+     "max": 30,
+     "min": 15,
+     "name": "N2_HC_ROOM_TEMP_HEATING",
+     "param": "HKC04",
+     "redirectId": "7638",
+     "type": "float",
+     "unit": "N2_GRAD",
+     "value": 22
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7736"
+   }
+  },
+  "captured": "2026-09-20T22:20:15+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 18,
+     "description": "N2D_HC_ROOM_TEMP_HEATING_ECO",
+     "id": "7736",
+     "increment": "0.1",
+     "max": 25,
+     "min": 10,
+     "name": "N2_HC_ROOM_TEMP_HEATING_ECO",
+     "param": "HKC05",
+     "redirectId": "7638",
+     "type": "float",
+     "unit": "N2_GRAD",
+     "value": 18
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7743"
+   }
+  },
+  "captured": "2026-09-20T22:20:17+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 15,
+     "description": "N2D_HC_HEATING_LIMIT",
+     "id": "7743",
+     "increment": "1",
+     "max": 50,
+     "min": 0,
+     "name": "N2_HC_HEATING_LIMIT",
+     "param": "HKC08",
+     "redirectId": "7638",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 15
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7750"
+   }
+  },
+  "captured": "2026-09-20T22:20:19+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 1,
+     "description": "N2D_HC_ROOM_FACTOR",
+     "id": "7750",
+     "increment": "0.1",
+     "max": 4,
+     "min": 0,
+     "name": "N2_HC_ROOM_FACTOR",
+     "param": "HKC09",
+     "redirectId": "7638",
+     "type": "float",
+     "value": 1
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7757"
+   }
+  },
+  "captured": "2026-09-20T22:20:21+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0.4000000059604645,
+     "description": "N2D_HC_HEATING_SLOPE",
+     "id": "7757",
+     "increment": 0.01,
+     "labelx": "Außentemperatur",
+     "labely": "Soll-Vorlauftemperatur",
+     "max": 3.5,
+     "min": 0.10000000149011612,
+     "name": "N2_HC_HEATING_SLOPE",
+     "offset": 0,
+     "param": "HKC10",
+     "redirectId": "7638",
+     "taumin": "-20.0",
+     "ti": "22.0",
+     "tvmax": 45,
+     "tvmin": "22.0",
+     "type": "graphheatcircuit",
+     "value": 0.4000000059604645
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7834"
+   }
+  },
+  "captured": "2026-09-20T22:20:23+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 15,
+     "description": "N2D_HC_ADD_ON_TIME_HEATING",
+     "id": "7834",
+     "increment": "1",
+     "max": 240,
+     "min": 1,
+     "name": "N2_HC_ADD_ON_TIME_HEATING",
+     "param": "HKC59",
+     "redirectId": "7638",
+     "type": "int",
+     "unit": "N2_MIN",
+     "value": 15
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7848"
+   }
+  },
+  "captured": "2026-09-20T22:20:25+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_HC_C_PROGRAM",
+     "id": "7848",
+     "name": "N2_HC_C_PROGRAM",
+     "param": "HKC06",
+     "redirectId": "7638",
+     "type": "ttw",
+     "value": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "7855"
+   }
+  },
+  "captured": "2026-09-20T22:20:27+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_HC_PARALLEL_TRANSLATION",
+     "id": "7855",
+     "increment": "1",
+     "max": 30,
+     "min": 0,
+     "name": "N2_HC_PARALLEL_TRANSLATION",
+     "param": "HSC03",
+     "redirectId": "7638",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "8086"
+   }
+  },
+  "captured": "2026-09-20T22:20:29+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "8086",
+     "items": [
+      {
+       "displayValue": "N2_OFF",
+       "id": "8149",
+       "idx": 11,
+       "name": "N2_HC_D_MODE",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "22.0 <->N2_GRAD<->",
+       "id": "8177",
+       "idx": 15,
+       "name": "N2_HC_ROOM_TEMP_HEATING",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "18.0 <->N2_GRAD<->",
+       "id": "8184",
+       "idx": 16,
+       "name": "N2_HC_ROOM_TEMP_HEATING_ECO",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "15 <->N2_GRAD<->",
+       "id": "8191",
+       "idx": 17,
+       "name": "N2_HC_HEATING_LIMIT",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "0.40",
+       "id": "8205",
+       "idx": 19,
+       "name": "N2_HC_HEATING_SLOPE",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "15 <->N2_MIN<->",
+       "id": "8282",
+       "idx": 30,
+       "name": "N2_HC_ADD_ON_TIME_HEATING",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111",
+       "id": "8296",
+       "idx": 32,
+       "name": "N2_HC_D_PROGRAM",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "0 <->N2_GRAD<->",
+       "id": "8303",
+       "idx": 33,
+       "name": "N2_HC_PARALLEL_TRANSLATION",
+       "type": "hparam"
+      }
+     ],
+     "name": "N2_HEATING_CIRCUIT_D"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8149"
+   }
+  },
+  "captured": "2026-09-20T22:20:31+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 1,
+     "description": "N2D_HC_D_MODE",
+     "id": "8149",
+     "name": "N2_HC_D_MODE",
+     "param": "HKD01",
+     "redirectId": "8086",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_OFF"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_TIMETABLE"
+      },
+      {
+       "idx": 3,
+       "key": "2",
+       "name": "N2_NORMAL"
+      },
+      {
+       "idx": 4,
+       "key": "3",
+       "name": "N2_ECO"
+      },
+      {
+       "idx": 5,
+       "key": "4",
+       "name": "N2_MANUALHEAT"
+      }
+     ],
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8177"
+   }
+  },
+  "captured": "2026-09-20T22:20:33+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 22,
+     "description": "N2D_HC_ROOM_TEMP_HEATING",
+     "id": "8177",
+     "increment": "0.1",
+     "max": 30,
+     "min": 15,
+     "name": "N2_HC_ROOM_TEMP_HEATING",
+     "param": "HKD04",
+     "redirectId": "8086",
+     "type": "float",
+     "unit": "N2_GRAD",
+     "value": 22
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8184"
+   }
+  },
+  "captured": "2026-09-20T22:20:35+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 18,
+     "description": "N2D_HC_ROOM_TEMP_HEATING_ECO",
+     "id": "8184",
+     "increment": "0.1",
+     "max": 25,
+     "min": 10,
+     "name": "N2_HC_ROOM_TEMP_HEATING_ECO",
+     "param": "HKD05",
+     "redirectId": "8086",
+     "type": "float",
+     "unit": "N2_GRAD",
+     "value": 18
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8191"
+   }
+  },
+  "captured": "2026-09-20T22:20:37+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 15,
+     "description": "N2D_HC_HEATING_LIMIT",
+     "id": "8191",
+     "increment": "1",
+     "max": 50,
+     "min": 0,
+     "name": "N2_HC_HEATING_LIMIT",
+     "param": "HKD08",
+     "redirectId": "8086",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 15
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8205"
+   }
+  },
+  "captured": "2026-09-20T22:20:39+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0.4000000059604645,
+     "description": "N2D_HC_HEATING_SLOPE",
+     "id": "8205",
+     "increment": 0.01,
+     "labelx": "Außentemperatur",
+     "labely": "Soll-Vorlauftemperatur",
+     "max": 3.5,
+     "min": 0.10000000149011612,
+     "name": "N2_HC_HEATING_SLOPE",
+     "offset": 0,
+     "param": "HKD10",
+     "redirectId": "8086",
+     "taumin": "-20.0",
+     "ti": "22.0",
+     "tvmax": 45,
+     "tvmin": "25.0",
+     "type": "graphheatcircuit",
+     "value": 0.4000000059604645
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8282"
+   }
+  },
+  "captured": "2026-09-20T22:20:41+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 15,
+     "description": "N2D_HC_ADD_ON_TIME_HEATING",
+     "id": "8282",
+     "increment": "1",
+     "max": 240,
+     "min": 1,
+     "name": "N2_HC_ADD_ON_TIME_HEATING",
+     "param": "HKD59",
+     "redirectId": "8086",
+     "type": "int",
+     "unit": "N2_MIN",
+     "value": 15
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8296"
+   }
+  },
+  "captured": "2026-09-20T22:20:43+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_HC_D_PROGRAM",
+     "id": "8296",
+     "name": "N2_HC_D_PROGRAM",
+     "param": "HKD06",
+     "redirectId": "8086",
+     "type": "ttw",
+     "value": "111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111,111111111111111111111111111111111111111111111111"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "8303"
+   }
+  },
+  "captured": "2026-09-20T22:20:45+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_HC_PARALLEL_TRANSLATION",
+     "id": "8303",
+     "increment": "1",
+     "max": 30,
+     "min": 0,
+     "name": "N2_HC_PARALLEL_TRANSLATION",
+     "param": "HSD03",
+     "redirectId": "8086",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "9878"
+   }
+  },
+  "captured": "2026-09-20T22:20:47+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "9878",
+     "items": [
+      {
+       "id": "9885",
+       "idx": 1,
+       "name": "N2_DHW_BUFFER",
+       "type": "sub"
+      }
+     ],
+     "name": "N2_BUFFER_MANAGEMENT"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "9885"
+   }
+  },
+  "captured": "2026-09-20T22:20:49+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "9885",
+     "items": [
+      {
+       "id": "9941",
+       "idx": 2,
+       "name": "N2_HOTWATER_CHARGE",
+       "type": "sub"
+      }
+     ],
+     "name": "N2_DHW_BUFFER"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "9941"
+   }
+  },
+  "captured": "2026-09-20T22:20:51+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "9941",
+     "items": [
+      {
+       "displayValue": "52 <->N2_GRAD<->",
+       "id": "9948",
+       "idx": 1,
+       "name": "N2_HOTWATER_MAX_TEMP",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "48 <->N2_GRAD<->",
+       "id": "9955",
+       "idx": 2,
+       "name": "N2_HOTWATER_MIN_TEMP",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "N2_NO",
+       "id": "9962",
+       "idx": 3,
+       "name": "N2_HOTWATER_COMFORT",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000",
+       "id": "9997",
+       "idx": 11,
+       "name": "N2_HOTWATER_PROGRAM",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "N2_BIVALENCE_AUXILIARY_HEAT_1",
+       "id": "10011",
+       "idx": 13,
+       "name": "N2_AUTOEXAG_FUNCION",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "N2_HEATPUMP",
+       "id": "10018",
+       "idx": 14,
+       "name": "N2_LEGIONELLA_FUNCTION",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "60 <->N2_GRAD<->",
+       "id": "10025",
+       "idx": 15,
+       "name": "N2_LEGIONELLA_FUNCTION_TEMPERATURE",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "7 <->N2_DAY_S<->",
+       "id": "10032",
+       "idx": 16,
+       "name": "N2_LEGIONELLA_FUNCTION_TIMEINTERVALL",
+       "type": "hparam"
+      }
+     ],
+     "name": "N2_HOTWATER_CHARGE"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "9948"
+   }
+  },
+  "captured": "2026-09-20T22:20:53+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 50,
+     "description": "N2D_HOTWATER_MAX_TEMP",
+     "id": "9948",
+     "increment": "1",
+     "max": 64,
+     "min": 48,
+     "name": "N2_HOTWATER_MAX_TEMP",
+     "param": "FW028",
+     "redirectId": "9941",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 52
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "9955"
+   }
+  },
+  "captured": "2026-09-20T22:20:55+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 46,
+     "description": "N2D_HOTWATER_MIN_TEMP",
+     "id": "9955",
+     "increment": "1",
+     "max": 52,
+     "min": 30,
+     "name": "N2_HOTWATER_MIN_TEMP",
+     "param": "FW027",
+     "redirectId": "9941",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 48
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "9962"
+   }
+  },
+  "captured": "2026-09-20T22:20:57+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_HOTWATER_COMFORT",
+     "id": "9962",
+     "increment": "1",
+     "name": "N2_HOTWATER_COMFORT",
+     "param": "FW050",
+     "redirectId": "9941",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_NO"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_YES"
+      }
+     ],
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "9997"
+   }
+  },
+  "captured": "2026-09-20T22:20:59+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_HOTWATER_PROGRAM",
+     "id": "9997",
+     "name": "N2_HOTWATER_PROGRAM",
+     "param": "FW025",
+     "redirectId": "9941",
+     "type": "ttw",
+     "value": "000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000,000000000000000000001111000000000000000000000000"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10011"
+   }
+  },
+  "captured": "2026-09-20T22:21:01+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_AUTOEXAG_FUNCION",
+     "id": "10011",
+     "mask": 49152,
+     "name": "N2_AUTOEXAG_FUNCION",
+     "param": "FW049",
+     "redirectId": "9941",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_OFF"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_BIVALENCE_AUXILIARY_HEAT_1"
+      }
+     ],
+     "value": 1
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10018"
+   }
+  },
+  "captured": "2026-09-20T22:21:03+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_LEGIONELLA_FUNCTION",
+     "id": "10018",
+     "mask": 53248,
+     "name": "N2_LEGIONELLA_FUNCTION",
+     "param": "FW044",
+     "redirectId": "9941",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_OFF"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_BIVALENCE_AUXILIARY_HEAT_1"
+      },
+      {
+       "idx": 3,
+       "key": "3",
+       "name": "N2_HEATPUMP"
+      }
+     ],
+     "value": 3
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10025"
+   }
+  },
+  "captured": "2026-09-20T22:21:05+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 64,
+     "description": "N2D_LEGIONELLA_FUNCTION_TEMPERATURE",
+     "id": "10025",
+     "increment": "1",
+     "max": 64,
+     "min": 60,
+     "name": "N2_LEGIONELLA_FUNCTION_TEMPERATURE",
+     "param": "FW045",
+     "redirectId": "9941",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": 60
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10032"
+   }
+  },
+  "captured": "2026-09-20T22:21:07+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 7,
+     "description": "N2D_LEGIONELLA_FUNCTION_TIMEINTERVALL",
+     "id": "10032",
+     "increment": "1",
+     "max": 7,
+     "min": 0,
+     "name": "N2_LEGIONELLA_FUNCTION_TIMEINTERVALL",
+     "param": "FW046",
+     "redirectId": "9941",
+     "type": "int",
+     "unit": "N2_DAY_S",
+     "value": 7
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "10151"
+   }
+  },
+  "captured": "2026-09-20T22:21:09+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "10151",
+     "items": [
+      {
+       "id": "10207",
+       "idx": 3,
+       "name": "N2_HW_CIRCULATION",
+       "type": "sub"
+      }
+     ],
+     "name": "N2_DHW_HEATING"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "10207"
+   }
+  },
+  "captured": "2026-09-20T22:21:11+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "10207",
+     "items": [
+      {
+       "displayValue": "4 <->N2_MIN<->",
+       "id": "10221",
+       "idx": 2,
+       "name": "N2_CIRCULATION_RUNTIME",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "45 <->N2_MIN<->",
+       "id": "10228",
+       "idx": 3,
+       "name": "N2_CIRCULATION_BREAK_TIME",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000",
+       "id": "10235",
+       "idx": 4,
+       "name": "N2_CIRCULATION_PROGRAM",
+       "type": "hparam"
+      }
+     ],
+     "name": "N2_HW_CIRCULATION"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10221"
+   }
+  },
+  "captured": "2026-09-20T22:21:13+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 4,
+     "description": "N2D_CIRCULATION_RUNTIME",
+     "id": "10221",
+     "increment": "1",
+     "max": 60,
+     "min": 1,
+     "name": "N2_CIRCULATION_RUNTIME",
+     "param": "FW041",
+     "redirectId": "10207",
+     "type": "int",
+     "unit": "N2_MIN",
+     "value": 4
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10228"
+   }
+  },
+  "captured": "2026-09-20T22:21:15+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 30,
+     "description": "N2D_CIRCULATION_BREAK_TIME",
+     "id": "10228",
+     "increment": "5",
+     "max": 240,
+     "min": 0,
+     "name": "N2_CIRCULATION_BREAK_TIME",
+     "param": "FW042",
+     "redirectId": "10207",
+     "type": "int",
+     "unit": "N2_MIN",
+     "value": 45
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10235"
+   }
+  },
+  "captured": "2026-09-20T22:21:17+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_CIRCULATION_PROGRAM",
+     "id": "10235",
+     "name": "N2_CIRCULATION_PROGRAM",
+     "param": "FW040",
+     "redirectId": "10207",
+     "type": "ttw",
+     "value": "000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000,000000000000000000000000000000000000000000000000"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "10256"
+   }
+  },
+  "captured": "2026-09-20T22:21:19+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "10256",
+     "items": [
+      {
+       "displayValue": "N2_NONE",
+       "id": "13223",
+       "idx": 3,
+       "name": "N2_PV_SIGNAL",
+       "type": "iparam"
+      }
+     ],
+     "name": "N2_PV"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "13223"
+   }
+  },
+  "captured": "2026-09-20T22:21:21+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_PV_SIGNAL",
+     "id": "13223",
+     "name": "N2_PV_SIGNAL",
+     "param": "SSYSPVSIGNAL",
+     "redirectId": "10256",
+     "titel": "",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_NONE"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_PV_DIGITAL_INPUT"
+      },
+      {
+       "idx": 3,
+       "key": "2",
+       "name": "N2_PV_0-10V_SIGNAL"
+      },
+      {
+       "idx": 4,
+       "key": "3",
+       "name": "N2_PV_S0_SIGNAL"
+      },
+      {
+       "idx": 5,
+       "key": "4",
+       "name": "N2_PV_SOLARLOG"
+      },
+      {
+       "idx": 6,
+       "key": "5",
+       "name": "N2_GLTSF"
+      },
+      {
+       "idx": 7,
+       "key": "6",
+       "name": "N2_FENECON"
+      },
+      {
+       "idx": 8,
+       "key": "7",
+       "name": "N2_FRONIUS"
+      },
+      {
+       "idx": 9,
+       "key": "8",
+       "name": "N2_E3DC"
+      },
+      {
+       "idx": 10,
+       "key": "9",
+       "name": "N2_SMA"
+      },
+      {
+       "idx": 11,
+       "key": "11",
+       "name": "N2_SONNEN"
+      },
+      {
+       "idx": 12,
+       "key": "12",
+       "name": "N2_HUAWEI"
+      },
+      {
+       "idx": 13,
+       "key": "13",
+       "name": "N2_GOODWE"
+      },
+      {
+       "idx": 14,
+       "key": "14",
+       "name": "N2_SUNGROW"
+      },
+      {
+       "idx": 15,
+       "key": "15",
+       "name": "N2_KOSTAL"
+      },
+      {
+       "idx": 16,
+       "key": "16",
+       "name": "N2_SOLAREDGE"
+      },
+      {
+       "idx": 17,
+       "key": "17",
+       "name": "N2_SOLAX"
+      }
+     ],
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "10424"
+   }
+  },
+  "captured": "2026-09-20T22:21:23+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "10424",
+     "items": [
+      {
+       "displayValue": "000000000000000000000000000000000000000000000000",
+       "id": "10431",
+       "idx": 2,
+       "name": "N2_EVU_PROGRAM",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "N2_NO",
+       "id": "10438",
+       "idx": 3,
+       "name": "N2_VARTARIFF",
+       "type": "hparam"
+      }
+     ],
+     "name": "N2_SMART_GRID"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10431"
+   }
+  },
+  "captured": "2026-09-20T22:21:25+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "description": "N2D_EVU_PROGRAM",
+     "id": "10431",
+     "name": "N2_EVU_PROGRAM",
+     "param": "EV002",
+     "redirectId": "10424",
+     "type": "tt1",
+     "value": "000000000000000000000000000000000000000000000000"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "10438"
+   }
+  },
+  "captured": "2026-09-20T22:21:27+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": 0,
+     "description": "N2D_VARTARIFF",
+     "id": "10438",
+     "increment": "1",
+     "name": "N2_VARTARIFF",
+     "param": "PV017",
+     "redirectId": "10424",
+     "type": "chooselist",
+     "types": [
+      {
+       "idx": 1,
+       "key": "0",
+       "name": "N2_NO"
+      },
+      {
+       "idx": 2,
+       "key": "1",
+       "name": "N2_VARTARIFF_AWATTAR"
+      },
+      {
+       "idx": 3,
+       "key": "2",
+       "name": "N2_VARTARIFF_ENERGIEAG"
+      },
+      {
+       "idx": 4,
+       "key": "3",
+       "name": "N2_VARTARIFF_LINZAG"
+      },
+      {
+       "idx": 5,
+       "key": "4",
+       "name": "N2_VARTARIFF_AWATTAR_DE"
+      },
+      {
+       "idx": 6,
+       "key": "5",
+       "name": "N2_ENERGIEA"
+      },
+      {
+       "idx": 7,
+       "key": "6",
+       "name": "N2_SMARTENERGY"
+      },
+      {
+       "idx": 8,
+       "key": "7",
+       "name": "N2_PEUSA"
+      },
+      {
+       "idx": 9,
+       "key": "8",
+       "name": "N2_STROMEE"
+      },
+      {
+       "idx": 10,
+       "key": "9",
+       "name": "N2_EPEXSPOTDE"
+      },
+      {
+       "idx": 11,
+       "key": "10",
+       "name": "N2_EPEXSPOTAT"
+      },
+      {
+       "idx": 12,
+       "key": "11",
+       "name": "N2_VARTAR_EPEXSPOT_BE"
+      },
+      {
+       "idx": 13,
+       "key": "12",
+       "name": "N2_VARTAR_EPEXSPOT_PL"
+      },
+      {
+       "idx": 14,
+       "key": "13",
+       "name": "N2_VARTAR_EKZ_CH"
+      }
+     ],
+     "value": 0
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "11040"
+   }
+  },
+  "captured": "2026-09-20T22:21:29+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "11040",
+     "items": [
+      {
+       "id": "11047",
+       "idx": 1,
+       "name": "N2_BIVALENCE_AUXILIARY_HEAT_1",
+       "type": "sub"
+      }
+     ],
+     "name": "N2_BIVALENCE"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "overview",
+   "data": {
+    "settingId": "11047"
+   }
+  },
+  "captured": "2026-09-20T22:21:31+02:00",
+  "responses": [
+   {
+    "setting": {
+     "id": "11047",
+     "items": [
+      {
+       "displayValue": "-5 <->N2_GRAD<->",
+       "id": "11068",
+       "idx": 3,
+       "name": "N2_BIVALENCE_POINT_1",
+       "type": "hparam"
+      },
+      {
+       "displayValue": "-20 <->N2_GRAD<->",
+       "id": "11075",
+       "idx": 4,
+       "name": "N2_BIVALENCE_POINT_2",
+       "type": "hparam"
+      }
+     ],
+     "name": "N2_BIVALENCE_AUXILIARY_HEAT_1"
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "11068"
+   }
+  },
+  "captured": "2026-09-20T22:21:33+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": -5,
+     "description": "N2D_BIVALENCE_POINT_1",
+     "id": "11068",
+     "increment": "1",
+     "max": 40,
+     "min": -40,
+     "name": "N2_BIVALENCE_POINT_1",
+     "param": "BV002",
+     "redirectId": "11047",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": -5
+    }
+   }
+  ]
+ },
+ {
+  "request": {
+   "controller": "setting",
+   "command": "detail",
+   "data": {
+    "settingId": "11075"
+   }
+  },
+  "captured": "2026-09-20T22:21:35+02:00",
+  "responses": [
+   {
+    "settingDetail": {
+     "def": -20,
+     "description": "N2D_BIVALENCE_POINT_2",
+     "id": "11075",
+     "increment": "1",
+     "max": 40,
+     "min": -40,
+     "name": "N2_BIVALENCE_POINT_2",
+     "param": "BV003",
+     "redirectId": "11047",
+     "type": "int",
+     "unit": "N2_GRAD",
+     "value": -20
+    }
+   }
+  ]
+ }
+]
