@@ -9,7 +9,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal test                         # prints one line per check
     cabal run idm-dump -- HOST         # read the registers a reference machine answered for
     cabal run idm-dump -- HOST --all   # sweep the whole parameter list
-    tools/webprobe.py HOST PIN         # read what the controller's own web pages show
+    cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-YYYY-MM-DD-HHMM.json
+    tools/webprobe.py HOST PIN > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
     ormolu -i $(git ls-files '*.hs')   # formatting
     cabal-fmt -i idm-modbus.cabal
 
@@ -57,7 +58,14 @@ which is what a rise in a counter has to be attributed to. The capture is
 verbatim but for the code that opens the controller and the strings that name
 the machine, which are replaced by a visible marker. What the capture contains
 depends on the user level the controller is left at; the script never raises
-it.
+it. At Fachmann level the settings tree also holds controls — the relay test, a
+reboot, resets — so the walk asks `detail` only of the item types in
+`VALUE_ITEMS` and never opens the menus in `CLOSED_MENUS`; a new item type
+stays unasked until someone has looked at what it is.
+
+New captures of either kind go to `captures/`, which git ignores because the
+repository is public; `captures/README.md` names the files. A capture moves to
+`data/` only when a document in `doc/` rests on it.
 
 `manual/` holds the manufacturer's PDFs and is ignored by git; copy them in
 from the house documents to re-run the transcription. The list is printed

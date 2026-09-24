@@ -5,3 +5,6 @@ __pycache__/
 *.o
 # the manufacturer's documents, copied in to re-run tools/transcribe.py
 manual/
+# captures of the house's machine, kept out of a public repository
+captures/*
+!captures/README.md
