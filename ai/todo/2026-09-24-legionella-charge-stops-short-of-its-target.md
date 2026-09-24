@@ -7,8 +7,8 @@ and 48 °C, against a target of 60 °C (`FW045`; 62 °C from some time after
 09-20 until Dominik set it back to 60 on 09-24). A ceiling that does not move
 with the start is a limit or a setup error, not a lack of power, so the
 plumber's `IV022`/`IV023` at 90 % (default 70) is unlikely to be the fix. The
-run of 09-24 is the exception: it stopped at 54.9/53.6 °C after a large draw
-the evening before.
+run of 09-24 stopped at 54.9/53.6 °C because Dominik had switched the
+legionella function off; it was a normal charge.
 
 Open:
 
