@@ -5,7 +5,7 @@ The controller's web interface is a single-page application; the pages carry no
 values, they arrive over a websocket on port 61220 and the local PIN travels in
 the URL:
 
-    tools/webprobe.py 192.168.0.200 PIN > data/navigator-2.0-webapi-2026-09-20-2138.json
+    tools/webprobe.py 192.168.0.200 PIN > captures/navigator-2.0-webapi-2026-09-24-1535.json
 
 Every request this sends is a read: `overview`, `detail` or `traverse`, which is
 the whole read side of the protocol -- the controller's own JavaScript names
@@ -20,9 +20,12 @@ display, keyed by their own names. The settings tree answers with the
 manufacturer's parameter identifier -- `param`, the manual's `FW030`, `BV002`
 -- next to the live value, which is the one place the web interface and the
 register table speak the same vocabulary. The tree is walked: `overview` on a
-`sub` yields its children, `detail` on anything else yields the value. What the
-tree shows depends on the user level of the controller; this reads whatever the
-level it is left at exposes, and never raises it.
+`sub` yields its children, `detail` on an item that holds a value yields the
+value. What the tree shows depends on the user level of the controller; this
+reads whatever the level it is left at exposes, and never raises it. Above the
+user's own level the tree also holds controls -- the relay test, a reboot, a
+reset -- so an item is asked only when its type is known to hold a value, and
+the menus that exist to act on the machine are not opened.
 
 The third is the graph, and it is the only source here that carries time: the
 controller keeps a sampled history of the sensors it plots, and of whether it
@@ -97,6 +100,14 @@ REQUESTS = [
 READ_COMMANDS = ("overview", "detail", "traverse")
 # reads all the same, and none of this script's business
 FORBIDDEN_CONTROLLERS = ("relaytest", "authentication")
+
+# The settings items that hold a value. Every other type is a control -- a
+# button, the relay test, a recovery -- or unknown, and is left unasked: at
+# Fachmann level the tree carries `action`, `execute`, `relaytest`,
+# `treeview`, `vparam` and `frwaparam` items.
+VALUE_ITEMS = ("iparam", "hparam", "info")
+# menus whose purpose is to act on the machine, not to show it
+CLOSED_MENUS = ("N2_RELAY_TEST", "N2_RESET_DATA")
 
 # The spans of the graph, as the web interface's own tabs ask for them:
 # `fromSecs` reaches back from now, `stepSecs` 0 lets the controller choose the
@@ -319,11 +330,9 @@ def walk_settings(session, node_id):
         items += (message.get("setting") or {}).get("items") or []
     for item in items:
         if item.get("type") == "sub":
-            walk_settings(session, item["id"])
-        elif item.get("type") == "action":
-            # an action is a button, not a value; N2_CODE_ENTRY_EXPERT is one
-            continue
-        else:
+            if item.get("name") not in CLOSED_MENUS:
+                walk_settings(session, item["id"])
+        elif item.get("type") in VALUE_ITEMS:
             session.ask(
                 {
                     "controller": "setting",
