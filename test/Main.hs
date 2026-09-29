@@ -118,11 +118,11 @@ checks =
     ( "a status without a level is not read as one",
       status (json "{\"jsonVersion\":11,\"timestamp\":1790688878000}") == Nothing
     ),
-    ( "the code of the day is day and month",
-      fmap (fachmannCode . statusClock) (status statusPayload) == Just 2909
-        -- a number, as the web interface sends it
-        && fmap (fachmannCode . statusClock) (status (json "{\"userlevel\":0,\"timestamp\":1788566400000,\"jsonVersion\":11}"))
-          == Just 509
+    ( "the code is spelled from the controller's clock",
+      -- the two examples of the house document, and the code of 2026-09-29 15:52
+      map (fmap (fachmannCode . statusClock) . status . clockedAt) [1700832180000, 1790697120000] == [Just 31314, Just 51699]
+        -- a number, as the web interface sends it: 01294
+        && (fachmannCode . statusClock <$> status (clockedAt 1663150560000)) == Just 1294
     ),
     ( "the notice of an open level is found by its text",
       notifications (json "{\"current\":[{\"code\":\"20005\",\"dateTime\":\"2026-09-29 13:34:19\",\"index\":0,\"level\":1,\"quitType\":2,\"textEnum\":\"N2_USERLEVELACTIVE\",\"textEnum2\":\"\"}]}")
@@ -159,6 +159,10 @@ json :: String -> A.Value
 json s = case A.decode (BL.pack s) of
   Just v -> v
   Nothing -> error ("not JSON: " <> s)
+
+-- | A status at the given controller clock.
+clockedAt :: Integer -> A.Value
+clockedAt millis = json ("{\"userlevel\":0,\"jsonVersion\":11,\"timestamp\":" <> show millis <> "}")
 
 statusPayload :: A.Value
 statusPayload = json "{\"authenticationEnabled\":true,\"jsonVersion\":11,\"language\":\"de\",\"notificationCount\":2,\"timestamp\":1790688878000,\"userlevel\":2}"

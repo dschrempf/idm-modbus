@@ -84,9 +84,9 @@ usage = do
   putStrLn "  --watch asks the given settings every SECONDS until interrupted,"
   putStrLn "  and prints a line per request: the request, the local time it was"
   putStrLn "  asked, and the responses, verbatim but for what names the machine."
-  putStrLn "  --enter-fachmann sends the code of the controller's day;"
+  putStrLn "  --enter-fachmann sends the code of the controller's clock;"
   putStrLn "  --leave-fachmann acknowledges the notice that level raises. The"
-  putStrLn "  level holds for the display as well, until it is left."
+  putStrLn "  level holds, for the display as well, until it is left."
   exitFailure
 
 run :: Host -> Pin -> Mode -> IO ()

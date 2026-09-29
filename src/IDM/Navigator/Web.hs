@@ -146,7 +146,7 @@ answerIn _ _ = Nothing
 data UserLevel
   = -- | Kundenebene, no code
     Customer
-  | -- | Technikerbereich, the code of the day
+  | -- | the code of the hour, 'IDM.Navigator.Web.Level.fachmannCode'
     Fachmann
   | OtherLevel Int
   deriving (Show, Eq)

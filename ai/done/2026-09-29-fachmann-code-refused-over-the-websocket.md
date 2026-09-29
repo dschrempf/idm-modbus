@@ -56,3 +56,30 @@ Step 2 done: `enterFachmann` sends that, `fachmannCode` is now a number (509
 for 5 September), and the documents no longer say entering fails. Tested
 against the fake server only. Steps 3 and 4 remain.
 
+
+## The code, corrected by Dominik
+
+The Fachmann level wants the five-digit code of the house document's
+Servicebereich, not day and month: last digit of the hour, first digit of the
+hour, last digits of year, month and day. At 2026-09-29 15:5x it is 51699.
+`fachmannCode` now spells that from the controller's clock, as a number
+(`01294` goes as 1294, as `parseInt` would send it). Dominik also says the
+day-and-month code keeps only the second digit of each, so the 5th of
+September gives 59; that code is not sent anywhere. The code changes on the
+hour, so a run in the last seconds of an hour may send a stale one.
+
+## Done 2026-09-29
+
+Run on the machine by Dominik, each command its own connection:
+
+    --enter-fachmann
+    {"settingSave":{"note":{"text":"action has been executed successfully!","type":"success"},"redirect":{"command":"overview","controller":"setting","data":{"settingId":"-1"},"reloadDelay":300}}}
+    user level  Kunde (0) -> Fachmann (2)
+
+    --leave-fachmann
+    {"notificationSave":{"note":{"text":"cancellation has been executed successfully!","type":"success"}}}
+    user level  Fachmann (2) -> Kunde (0)
+
+Both writes work. The level outlived the entering connection, so it is the
+controller's, not the session's, and Dominik saw the display switch to
+Fachmann. Not observed: whether the level drops by itself after a while.

@@ -9,9 +9,10 @@
 -- The only writes this library sends, and the two the web interface itself
 -- sends to change the user level. They change no setting of the machine, but
 -- they do change what the controller shows, on its display as well as here,
--- until the level is closed again.
+-- and the level is the controller's, not the connection's: it holds until it
+-- is closed again.
 --
--- Entering saves the code of the day into the settings item
+-- Entering saves the code of the hour into the settings item
 -- @N2_CODE_ENTRY_EXPERT@, of type @actioncode@, as the settings page does.
 -- Leaving acknowledges the notice the controller raises while the level is
 -- open; the web interface has no other way out.
@@ -26,18 +27,21 @@ where
 import Data.Aeson (Value, object, (.=))
 import Data.List (find)
 import Data.Text (Text)
-import Data.Time (LocalTime (..), toGregorian)
+import Data.Time (LocalTime (..), TimeOfDay (..), toGregorian)
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Connection
 import IDM.Navigator.Web.Session (askNotifications, askStatus)
 
--- | The code of the Technikerbereich: day and month of the controller's date,
--- @DDMM@. The web interface sends it as a number, so the 5th of September is
--- 509.
+-- | The code of the Fachmann level, from the controller's clock: the last
+-- digit of the hour, the first digit of the hour, and the last digits of the
+-- year, the month and the day. 2026-09-29 15:52 gives 51699. The web interface
+-- sends it as a number, so a leading zero is lost: 10:16 on 2022-09-14 gives
+-- 1294. The code changes on the hour.
 fachmannCode :: LocalTime -> Int
-fachmannCode t = d * 100 + m
+fachmannCode t = foldl (\acc digit -> acc * 10 + digit) 0 [h `mod` 10, h `div` 10, fromInteger (y `mod` 10), m `mod` 10, d `mod` 10]
   where
-    (_, m, d) = toGregorian (localDay t)
+    (y, m, d) = toGregorian (localDay t)
+    h = todHour (localTimeOfDay t)
 
 -- | What a request to change the level achieved, by the controller's own
 -- account before and after, and what it answered to the request itself.
@@ -50,7 +54,7 @@ data LevelChange = LevelChange
   }
   deriving (Show, Eq)
 
--- | Enter the Fachmann level with the code of the controller's day.
+-- | Enter the Fachmann level with the code of the controller's clock.
 enterFachmann :: Session -> IO (Either Failure LevelChange)
 enterFachmann s = andThen (askStatus s) $ \before ->
   case statusUserLevel before of
