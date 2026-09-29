@@ -42,7 +42,7 @@ sensor values the web interface lists, among them the refrigerant side that
 Modbus does not carry. `--watch SECONDS SETTING...` asks them round after
 round and writes a line per request, verbatim but for what names the machine.
 `--enter-fachmann` opens the Fachmann level with the code of the controller's
-day, and `--leave-fachmann` closes it again.
+clock, and `--leave-fachmann` closes it again.
 
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The
@@ -83,6 +83,16 @@ apply cleanly.
 
 Not yet connected. The intended route is an MQTT bridge using Home Assistant's
 discovery protocol, which is what the rest of the non-Python ecosystem does.
+
+## No warranty
+
+This software comes with **no warranty of any kind**, and the authors take no
+responsibility for what it does to your heat pump, your house, or anything
+else. You use it entirely at your own risk. It talks to a controller through
+interfaces the manufacturer documents only in part or not at all, and it can
+change the controller's user level, which unlocks settings that are not meant
+for the owner. If your heat pump stops heating, breaks, or loses its warranty,
+that is on you, not on us.
 
 ## Licence
 

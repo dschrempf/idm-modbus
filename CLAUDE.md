@@ -102,11 +102,12 @@ The web backend has a stack of its own beside it, joined to the first only by
   package does not expose it.
 - `IDM.Navigator.Web.Session` — sends a `Query` and nothing else.
 - `IDM.Navigator.Web.Level` — the two writes: entering the Fachmann level
-  (`setting`/`save` of item 12503, the code of the controller's day as a
-  number) and leaving it (acknowledging the `N2_USERLEVELACTIVE` notice). The
-  level holds for the display too until it is left. The frost protection
-  wizard's code page is not a way in: it answers "wizard is not available!"
-  unless a wizard runs.
+  (`setting`/`save` of item 12503, a code spelled from the controller's clock,
+  as a number) and leaving it (acknowledging the `N2_USERLEVELACTIVE` notice).
+  Both work on the machine, and the display switches with them. The level is
+  the controller's, not the connection's: it holds until it is left. The frost protection wizard's code
+  page is not a way in: it answers "wizard is not available!" unless a wizard
+  runs.
 
 Read support only, but for the user level. Writing is deliberately absent: a third of the writable
 registers live in an EEPROM rated at 300000 cycles, and that needs an interface
