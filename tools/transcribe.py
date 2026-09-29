@@ -7,7 +7,11 @@ Loxone library mirrors revision 10), put it in manual/, which git ignores,
 extract its text preserving the column layout, and feed that in:
 
     pdftotext -layout manual/812170.pdf manual/812170.txt
-    tools/transcribe.py manual/812170.txt data/navigator-2.0-scan-2026-09-19.json
+    tools/transcribe.py manual/812170.txt [captures/navigator-2.0-scan-DATE.json]
+
+The observed column says whether the reference machine answered for an
+address. It comes from the scan when one is given, and is otherwise carried
+over from the table being replaced: the scans are not in the repository.
 
 The column layout is what carries the meaning: the list is not consistent about
 the order of its cells, so a cell is read according to where it is printed.
@@ -237,15 +241,24 @@ def main():
     if len(sys.argv) not in (2, 3):
         sys.exit(__doc__)
     text = Path(sys.argv[1]).read_text(encoding="utf-8")
-    scan = {}
+    data = HERE / "data"
+    table = data / "navigator-2.0-registers.tsv"
     if len(sys.argv) == 3:
-        scan = {r["address"]: r for r in json.loads(Path(sys.argv[2]).read_text())}
+        observed = {
+            r["address"]: {"ok": "present", "exception": "absent"}.get(r["status"])
+            for r in json.loads(Path(sys.argv[2]).read_text())
+        }
+    else:
+        with table.open(newline="") as fh:
+            observed = {
+                int(r["address"]): r["observed"]
+                for r in csv.DictReader(fh, delimiter="\t")
+            }
 
     registers = parse_rows(text)
     enums = share_within_families(parse_enums(text, registers), registers)
 
-    data = HERE / "data"
-    with (data / "navigator-2.0-registers.tsv").open("w", newline="") as fh:
+    with table.open("w", newline="") as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")
         w.writerow(
             "address datatype access persistence name parameter "
@@ -253,13 +266,12 @@ def main():
         )
         for a in sorted(registers):
             r = registers[a]
-            status = scan.get(a, {}).get("status")
             w.writerow(
                 [
                     r["address"], r["datatype"], r["access"], r["persistence"],
                     r["name"], r["parameter"], r["min"], r["max"], r["default"],
                     r["unit"],
-                    {"ok": "present", "exception": "absent"}.get(status, "untested"),
+                    observed.get(a) or "untested",
                 ]
             )
 

@@ -17,9 +17,12 @@ Two rounds, each a web page and a register sweep taken close together.
 
 | Round | Web pages | Capture | Offset |
 |---|---|---|---|
-| 1 | Fühlereingänge, Analogausgänge, Digitaleingänge, Digitalausgänge, 19:47–19:49 | `data/navigator-2.0-scan-2026-09-20-1954.json` | 5–7 min |
-| 2 | Expansionsventil, Modulation, Warmwasser, Heizkreis A/C/D, Wärmemenge, Fühlereingänge, System Informationen, 20:01–20:06 | `data/navigator-2.0-scan-2026-09-20-2007.json` | 1–8 min |
-| 3 | one setting changed on purpose, see below, around 20:30 | `data/navigator-2.0-scan-2026-09-20-2037.json` | — |
+| 1 | Fühlereingänge, Analogausgänge, Digitaleingänge, Digitalausgänge, 19:47–19:49 | `captures/navigator-2.0-scan-2026-09-20-1954.json` | 5–7 min |
+| 2 | Expansionsventil, Modulation, Warmwasser, Heizkreis A/C/D, Wärmemenge, Fühlereingänge, System Informationen, 20:01–20:06 | `captures/navigator-2.0-scan-2026-09-20-2007.json` | 1–8 min |
+| 3 | one setting changed on purpose, see below, around 20:30 | `captures/navigator-2.0-scan-2026-09-20-2037.json` | — |
+
+The captures are kept locally, not in the public repository;
+`captures/README.md` describes them.
 
 The web side is transcribed into `data/navigator-2.0-web-2026-09-20.tsv`: the
 page, the sensor designator, the label, the value, the unit and the minute it

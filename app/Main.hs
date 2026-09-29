@@ -29,7 +29,7 @@ import Text.Read (readMaybe)
 data Mode
   = -- | a line per register, for a person
     Report Scope
-  | -- | the capture format of @data\/navigator-2.0-scan-*.json@
+  | -- | the capture format of @captures\/navigator-2.0-scan-*.json@
     Capture
   | -- | the capture format of @captures\/navigator-2.0-watch-*.jsonl@: the
     -- same registers, round after round, until interrupted
