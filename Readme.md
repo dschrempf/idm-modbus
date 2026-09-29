@@ -34,6 +34,16 @@ ADDRESS...` it reads the given addresses every so many seconds until
 interrupted, and writes a line per read in the same format, stamped with the
 local time.
 
+`idm-web` reads the controller's web backend, the websocket its own web
+interface uses, with the web interface's PIN in `IDM_PIN`. `--status` prints
+the user level, the controller's clock and the notices standing; `--show
+SETTING...` reads settings by the id of the settings tree, e.g. 4768 for the
+sensor values the web interface lists, among them the refrigerant side that
+Modbus does not carry. `--watch SECONDS SETTING...` asks them round after
+round and writes a line per request, verbatim but for what names the machine.
+`--enter-fachmann` opens the Fachmann level with the code of the controller's
+day, and `--leave-fachmann` closes it again.
+
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The
 service code is the day and month of the current date. Port 502, unit id 1.
@@ -50,6 +60,7 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `src/IDM/Navigator/Register.hs` | what a register is, and how to decode one |
 | `src/IDM/Navigator/Table.hs` | the table, embedded at compile time |
 | `src/IDM/Navigator/Client.hs` | reading, paced |
+| `src/IDM/Navigator/Web.hs`, `Web/` | the web backend: its vocabulary, a read-only session, and the user level |
 | `doc/research.md` | sources, community projects, open questions |
 | `doc/verification-2026-09-19.md` | the measurements the decoding rests on |
 

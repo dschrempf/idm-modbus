@@ -56,6 +56,10 @@ the 09-24 capture: `FW044` 3 → 0 (legionella off), `FW027`/`FW028` 48/52 →
   this.
 - The sensor channels are still thinned to ~50 min, so TCOND at the stop is not
   in the history.
+- Live instead: `idm-web HOST --watch 10 4768` (level 0) carries B86v TCOND,
+  B71 hot gas, B78/B86 pressures and B33/B113, B34/B114, the Zwischenkreis
+  flow and return that Modbus reports unfitted, at 0.1 K. Run it beside
+  `idm-dump --watch` through a charge.
 
 Open:
 

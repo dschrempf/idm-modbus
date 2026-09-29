@@ -12,6 +12,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-YYYY-MM-DD-HHMM.json
     cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
     tools/webprobe.py HOST PIN > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
+    IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
+    IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
+    IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-2.0-webwatch-YYYY-MM-DD-HHMM.jsonl
+    IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann   # and --leave-fachmann
     ormolu -i $(git ls-files '*.hs')   # formatting
     cabal-fmt -i idm-modbus.cabal
 
@@ -88,7 +92,23 @@ The four modules stack, each refusing to know the next one's business:
   `readable`, `present`, `enumLabel`.
 - `IDM.Navigator.Client` — pacing, and pairing a read with its enum label.
 
-Read support only. Writing is deliberately absent: a third of the writable
+The web backend has a stack of its own beside it, joined to the first only by
+`Host` and by the parameter identifier:
+
+- `IDM.Navigator.Web` — the protocol's vocabulary: `Query`, which has a
+  constructor for each read and none for `save` or `execute`, and parsers that
+  hand back an answer they do not recognize rather than read it as empty.
+- `IDM.Navigator.Web.Connection` — the websocket; sends any JSON, so the
+  package does not expose it.
+- `IDM.Navigator.Web.Session` — sends a `Query` and nothing else.
+- `IDM.Navigator.Web.Level` — the two writes: entering the Fachmann level
+  (`setting`/`save` of item 12503, the code of the controller's day as a
+  number) and leaving it (acknowledging the `N2_USERLEVELACTIVE` notice). The
+  level holds for the display too until it is left. The frost protection
+  wizard's code page is not a way in: it answers "wizard is not available!"
+  unless a wizard runs.
+
+Read support only, but for the user level. Writing is deliberately absent: a third of the writable
 registers live in an EEPROM rated at 300000 cycles, and that needs an interface
 that makes the cost visible rather than an extra argument.
 

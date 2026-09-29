@@ -5,12 +5,18 @@
 -- License     :  BSD-3-Clause
 module Main (main) where
 
+import qualified Data.Aeson as A
+import qualified Data.Aeson.Key as K
+import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString as B
+import qualified Data.ByteString.Lazy.Char8 as BL
 import Data.List (group, sort)
 import qualified Data.Text as T
 import IDM.Modbus.TCP (Address (..), Quantity (..))
 import IDM.Navigator.Register
 import qualified IDM.Navigator.Table as Table
+import IDM.Navigator.Web
+import IDM.Navigator.Web.Level (fachmannCode)
 import System.Exit (exitFailure)
 
 main :: IO ()
@@ -94,8 +100,77 @@ checks =
     ),
     ( "presence was recorded for every register",
       all ((/= Untested) . registerPresence) Table.navigator20
+    ),
+    ( "a setting is asked for by its id as a string",
+      queryJSON (SettingDetail (SettingId (T.pack "4768")))
+        == json "{\"controller\":\"setting\",\"command\":\"detail\",\"data\":{\"settingId\":\"4768\"}}"
+        && queryJSON StatusOverview == json "{\"controller\":\"status\",\"command\":\"overview\"}"
+    ),
+    ( "an answer is found under its key",
+      (answerIn (SettingDetail settingsRoot) =<< Just (json "{\"settingDetail\":{}}")) == Just (json "{}")
+        && answerIn (SettingDetail settingsRoot) (json "{\"setting\":{}}") == Nothing
+    ),
+    ( "the status carries the level and the controller's clock",
+      -- the controller sends its wall clock as if it were UTC
+      fmap (\st -> (statusUserLevel st, show (statusClock st), statusProtocol st)) (status statusPayload)
+        == Just (Fachmann, "2026-09-29 13:34:38", 11)
+    ),
+    ( "a status without a level is not read as one",
+      status (json "{\"jsonVersion\":11,\"timestamp\":1790688878000}") == Nothing
+    ),
+    ( "the code of the day is day and month",
+      fmap (fachmannCode . statusClock) (status statusPayload) == Just 2909
+        -- a number, as the web interface sends it
+        && fmap (fachmannCode . statusClock) (status (json "{\"userlevel\":0,\"timestamp\":1788566400000,\"jsonVersion\":11}"))
+          == Just 509
+    ),
+    ( "the notice of an open level is found by its text",
+      notifications (json "{\"current\":[{\"code\":\"20005\",\"dateTime\":\"2026-09-29 13:34:19\",\"index\":0,\"level\":1,\"quitType\":2,\"textEnum\":\"N2_USERLEVELACTIVE\",\"textEnum2\":\"\"}]}")
+        == Just [Notification (NotificationCode (T.pack "20005")) userLevelNotice 2]
+    ),
+    ( "a setting carries the parameter identifier and the double as sent",
+      fmap (\st -> (settingParameter st, settingValue st)) (setting (json "{\"id\":\"6784\",\"name\":\"N2_HEATCURVE\",\"param\":\"HKA10\",\"type\":\"float\",\"value\":0.4000000059604645}"))
+        == Just (Just (ParameterId (T.pack "HKA10")), SettingFloat 0.4000000059604645)
+    ),
+    ( "a choice is a number or, for the language, a key",
+      fmap settingValue (setting (json "{\"id\":\"1\",\"name\":\"N2_X\",\"type\":\"chooselist\",\"value\":3}")) == Just (SettingChoice (ChoiceIndex 3))
+        && fmap settingValue (setting (json "{\"id\":\"4530\",\"name\":\"N2_LANGUAGE\",\"type\":\"chooselist\",\"value\":\"de\"}")) == Just (SettingChoice (ChoiceKey (T.pack "de")))
+    ),
+    ( "a setting of a type not known keeps the whole detail",
+      case setting (json "{\"id\":\"4537\",\"name\":\"N2_SETDATETIME\",\"type\":\"setdt\",\"value\":\"2026-09-29 13:35:36\"}") of
+        Just st | SettingOther kind (A.Object o) <- settingValue st -> kind == T.pack "setdt" && KM.member (K.fromString "value") o
+        _ -> False
+    ),
+    ( "an info table reads a sensor per row",
+      infoRows sensorTable
+        == [ InfoCells [T.pack "K1:"],
+             InfoReading Nothing (T.pack "Überhitzung 1") (InfoNumber 20.7) (T.pack "K"),
+             InfoReading (Just (T.pack "B86v")) (T.pack "Kondensationstemp. 1") (InfoNumber 22.8) (T.pack "°C"),
+             InfoCells [T.pack ""]
+           ]
+    ),
+    ( "what names the machine is redacted, and nothing else",
+      redact (json "{\"remoteSessionId\":\"x\",\"a\":{\"param\":\"SSYSLPIN\",\"value\":\"1234\"},\"b\":\"MAC 00:1A:2B:3C:4D:5E, m42@0a1b idm\",\"myidmInfo\":{\"k\":1},\"c\":\"B32 21.5\"}")
+        == json "{\"a\":{\"param\":\"SSYSLPIN\",\"value\":\"<redacted>\"},\"b\":\"MAC <redacted>, <redacted> idm\",\"myidmInfo\":\"<redacted>\",\"c\":\"B32 21.5\"}"
     )
   ]
+
+json :: String -> A.Value
+json s = case A.decode (BL.pack s) of
+  Just v -> v
+  Nothing -> error ("not JSON: " <> s)
+
+statusPayload :: A.Value
+statusPayload = json "{\"authenticationEnabled\":true,\"jsonVersion\":11,\"language\":\"de\",\"notificationCount\":2,\"timestamp\":1790688878000,\"userlevel\":2}"
+
+-- | The shape of @N2_EVR_OVERVIEW@: a heading, readings with and without a
+-- designator, an empty spacer row.
+sensorTable :: T.Text
+sensorTable =
+  T.pack
+    "<table id=\"idm_info\"> <tr><td colspan = \"4\" style=\"height:20px;\"><b>K1: </b></td></tr> \
+    \<tr><td> </td><td>Überhitzung 1</td><td>20.7</td><td>K</td></tr> \
+    \<tr><td>B86v</td><td>Kondensationstemp. 1</td><td>22.8</td><td>°C</td></tr> <tr><td></td></tr> </table>"
 
 register :: Int -> Register
 register a = case filter ((== Address (fromIntegral a)) . registerAddress) Table.navigator20 of
