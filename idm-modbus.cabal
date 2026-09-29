@@ -51,15 +51,22 @@ library
     IDM.Navigator.Client
     IDM.Navigator.Register
     IDM.Navigator.Table
+    IDM.Navigator.Web
+    IDM.Navigator.Web.Level
+    IDM.Navigator.Web.Session
 
+  other-modules:   IDM.Navigator.Web.Connection
   hs-source-dirs:  src
   build-depends:
+    , aeson
     , base        >=4.7 && <5
     , bytestring
     , containers
     , file-embed
     , network
     , text
+    , time
+    , websockets
 
 executable idm-dump
   import:         exec
@@ -73,12 +80,25 @@ executable idm-dump
     , text
     , time
 
+executable idm-web
+  import:         exec
+  main-is:        Main.hs
+  hs-source-dirs: app-web
+  build-depends:
+    , aeson
+    , base        >=4.7 && <5
+    , bytestring
+    , idm-modbus
+    , text
+    , time
+
 test-suite idm-modbus-test
   import:         test
   type:           exitcode-stdio-1.0
   main-is:        Main.hs
   hs-source-dirs: test
   build-depends:
+    , aeson
     , base        >=4.7 && <5
     , bytestring
     , idm-modbus
