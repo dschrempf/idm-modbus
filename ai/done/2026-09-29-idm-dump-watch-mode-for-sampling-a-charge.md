@@ -24,3 +24,19 @@ To raise with Dominik before code:
 - Time: wall clock per round or per read, and in which zone; the webapi graph
   already showed what an unstated epoch costs.
 - A failed read mid-run: recorded and continued, or the run ends.
+
+Done 2026-09-29, as agreed with Dominik:
+
+- `idm-dump HOST --watch SECONDS ADDRESS...`; addresses by number, checked
+  against the table and refused if unknown or write-only. Rounds start on a
+  fixed schedule; an overrunning round starts the next at once without
+  catching up. Runs until interrupted; stdout is line-buffered.
+- `captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl`, a line per read: the
+  scan entry plus `time`, local with offset and milliseconds, taken when the
+  read is asked.
+- Refusals are recorded and the run continues. A stall (5 s, for reads and
+  connects alike), a closed connection or a socket error drops the connection;
+  the rest of the round is recorded as `error`, and the next round reconnects.
+  `IDM.Modbus.TCP` gained `connect`/`disconnect` for this.
+- Tested only against a fake server in a network namespace (refused, stall,
+  close, exception 2), not yet against the machine.

@@ -13,6 +13,8 @@ module IDM.Modbus.TCP
     Port (..),
     UnitId (..),
     withConnection,
+    connect,
+    disconnect,
     FunctionCode (..),
     Address (..),
     Quantity (..),
@@ -23,7 +25,7 @@ module IDM.Modbus.TCP
   )
 where
 
-import Control.Exception (Exception, bracket)
+import Control.Exception (Exception, bracket, bracketOnError)
 import Data.Bits (testBit, (.&.))
 import qualified Data.ByteString as B
 import Data.IORef (IORef, atomicModifyIORef', newIORef)
@@ -109,21 +111,27 @@ data Connection = Connection
 -- One connection reused for many reads is deliberate: the Navigator is slow to
 -- accept sockets and has been reported to stall when hammered.
 withConnection :: Host -> Port -> UnitId -> (Connection -> IO a) -> IO a
-withConnection (Host host) (Port port) unit act =
-  bracket open close $ \sock -> do
-    ref <- newIORef 1
-    act (Connection sock unit ref)
+withConnection host port unit = bracket (connect host port unit) disconnect
+
+-- | Open a connection. Interrupted while connecting, it leaves no socket
+-- behind, so it may be run under a timeout.
+connect :: Host -> Port -> UnitId -> IO Connection
+connect (Host host) (Port port) unit = do
+  addrs <- N.getAddrInfo (Just hints) (Just host) (Just (show port))
+  case addrs of
+    [] -> ioError (userError ("cannot resolve " <> host))
+    (addr : _) -> do
+      sock <-
+        bracketOnError
+          (N.socket (N.addrFamily addr) (N.addrSocketType addr) (N.addrProtocol addr))
+          N.close
+          (\sock -> sock <$ N.connect sock (N.addrAddress addr))
+      Connection sock unit <$> newIORef 1
   where
     hints = N.defaultHints {N.addrSocketType = N.Stream}
-    open = do
-      addrs <- N.getAddrInfo (Just hints) (Just host) (Just (show port))
-      case addrs of
-        [] -> ioError (userError ("cannot resolve " <> host))
-        (addr : _) -> do
-          sock <- N.socket (N.addrFamily addr) (N.addrSocketType addr) (N.addrProtocol addr)
-          N.connect sock (N.addrAddress addr)
-          pure sock
-    close = N.close
+
+disconnect :: Connection -> IO ()
+disconnect = N.close . connectionSocket
 
 -- | Read @quantity@ consecutive registers, returning their raw bytes in wire
 -- order. Interpreting them is not this module's business.

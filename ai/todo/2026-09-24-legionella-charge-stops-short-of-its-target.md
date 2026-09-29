@@ -60,7 +60,10 @@ the 09-24 capture: `FW044` 3 → 0 (legionella off), `FW027`/`FW028` 48/52 →
 Open:
 
 - Confirm the envelope: B45 and TCOND at the moment a charge to ≥ 60 °C stops.
-  Needs sampling during a charge, not the graph history.
+  Needs sampling during a charge, not the graph history:
+  `idm-dump HOST --watch 10 1066 1012 1014 1100 1790 4122 4126 1754 >
+  captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl`, started before 10:00.
+  TCOND is not on Modbus, so B45 is the envelope's only witness there.
 - Whether `FW044` = auxiliary heat is the intended setup, i.e. whether a
   heating rod is physically fitted (1762 answers the sentinel).
 - Manual control over Modbus: 1712 "Anforderung Warmwasserladung" and 1713

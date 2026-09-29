@@ -29,7 +29,10 @@ prints address, access right, EEPROM marking, value, unit and name. With
 what your own machine has fitted. With `--json` it sweeps every address,
 write-only ones included, and writes the capture format of
 `data/navigator-2.0-scan-*.json`: address, status, exception code, bytes, and
-the number those bytes spell, uninterpreted.
+the number those bytes spell, uninterpreted. With `--watch SECONDS
+ADDRESS...` it reads the given addresses every so many seconds until
+interrupted, and writes a line per read in the same format, stamped with the
+local time.
 
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The
