@@ -42,7 +42,7 @@
   special case for degrees Celsius instead of adding a second one, and a
   bivalence point set to -1 °C is no longer swallowed.
 
-- `data/navigator-2.0-scan-2026-09-19.json` is a fresh sweep of all 663
+- `captures/navigator-2.0-scan-2026-09-19.json` is a fresh sweep of all 663
   addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress` and
   every one of them in the zone module block or write-only. It reproduces the
   earlier sweep of the 497 addresses then known, sentinel for sentinel.

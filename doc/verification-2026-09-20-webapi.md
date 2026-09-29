@@ -48,10 +48,13 @@ is evidence for anything here.
 
 | | |
 |---|---|
-| Web backend | `data/navigator-2.0-webapi-2026-09-20-2138.json`, 21:38–21:41 |
-| Registers | `data/navigator-2.0-scan-2026-09-20-2141.json`, 21:41–21:43 |
+| Web backend | `captures/navigator-2.0-webapi-2026-09-20-2138.json`, 21:38–21:41 |
+| Registers | `captures/navigator-2.0-scan-2026-09-20-2141.json`, 21:41–21:43 |
 | Offset | under 5 minutes |
-| Graph | `data/navigator-2.0-webapi-2026-09-20-2218.json`, 22:18–22:21 |
+| Graph | `captures/navigator-2.0-webapi-2026-09-20-2218.json`, 22:18–22:21 |
+
+The captures are kept locally, not in the public repository;
+`captures/README.md` describes them.
 
 The graph capture has no sweep beside it and needs none: it is history rather
 than live values, and the counters had not moved since 19:54.
@@ -187,7 +190,7 @@ minute the capture was taken. The window that arrives unasked is 2026-09-19
 15:39 to 2026-09-20 21:39, the 30 hours the interface's own second tab asks
 for.
 
-A second capture, `data/navigator-2.0-webapi-2026-09-20-2218.json` at
+A second capture, `captures/navigator-2.0-webapi-2026-09-20-2218.json` at
 22:18–22:21, asks for the graph on purpose: `graph`/`overview`, then
 `graph`/`traverse`, then `graph`/`detail` for each graph the controller offers
 over each span the interface plots. `fromSecs` reaches back from now rather than
@@ -285,8 +288,8 @@ at 10:00 on this machine, and has not been done.
 
 ## Reproducing
 
-    tools/webprobe.py 192.168.0.200 PIN > data/navigator-2.0-webapi-DATE.json
-    cabal run idm-dump -- 192.168.0.200 --json > data/navigator-2.0-scan-DATE.json
+    tools/webprobe.py 192.168.0.200 PIN > captures/navigator-2.0-webapi-DATE.json
+    cabal run idm-dump -- 192.168.0.200 --json > captures/navigator-2.0-scan-DATE.json
 
 Run them in that order and within a few minutes of each other. The script needs
 nothing but a Python interpreter, holds its own websocket client, and takes

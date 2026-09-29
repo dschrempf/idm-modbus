@@ -20,3 +20,16 @@ What rests on them, and has to change with the move:
   `app/Main.hs` name `data/` as their home.
 
 The files stay in git history either way.
+
+Done 2026-09-29, as agreed with Dominik:
+
+- The five scans and two webapi captures moved to `captures/`, untracked.
+- `tools/transcribe.py` takes the scan as an optional second argument. Without
+  it, the `observed` column carries over from the table it replaces. With the
+  09-19 scan and without it, the regenerated table matches the tracked table
+  byte for byte.
+- The documents cite `captures/` paths and give no pointer into history.
+- The second bullet above was wrong: `data/navigator-2.0-web-*.tsv` has no
+  `observed` column. The CLAUDE.md paragraph it came from attached the
+  scan to the wrong file, and it now describes the scan under
+  `tools/transcribe.py`.

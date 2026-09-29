@@ -1,10 +1,10 @@
 # Captures
 
-What the house's machine answered, kept here and out of git. The captures in
-`data/` are the ones a document in `doc/` cites; everything else lands here.
-A capture moves to `data/` unchanged when a document starts to rest on it.
+What the house's machine answered, kept here and out of git. A document in
+`doc/` cites a capture by its name here, and `tools/transcribe.py` takes a
+scan to fill the register table's `observed` column.
 
-The names are those of `data/`, so the kind of capture is in the name:
+The kind of capture is in the name:
 
     navigator-2.0-scan-YYYY-MM-DD-HHMM.json     idm-dump HOST --json
     navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl   idm-dump HOST --watch SECONDS ADDRESS...

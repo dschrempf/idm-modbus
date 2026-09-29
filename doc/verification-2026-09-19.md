@@ -3,7 +3,9 @@
 2026-09-19. Every one of the 663 addresses in document 812170 revision 10 was
 read once, sequentially, over one connection, with 150 ms between requests.
 Read access only; nothing was written. The raw result is
-`data/navigator-2.0-scan-2026-09-19.json`, which `idm-dump --json` writes.
+`captures/navigator-2.0-scan-2026-09-19.json`, which `idm-dump --json` writes.
+It is kept locally, not in the public repository; `captures/README.md`
+describes it.
 
 That file records what the machine said and nothing the parameter list already
 says: the address, whether it answered, the Modbus exception behind a refusal,
