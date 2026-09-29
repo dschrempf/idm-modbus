@@ -36,9 +36,8 @@
   designator, label, value and unit. `idm-web --watch` follows settings round
   after round, to `captures/navigator-2.0-webwatch-*.jsonl`.
 - `IDM.Navigator.Web.Level`: entering and leaving the Fachmann level, the
-  only writes the library knows. Entering does not work yet: sent through the
-  frost protection wizard, as one page of the web interface does, the code is
-  refused because the wizard is not available.
+  only writes the library knows, sent as the settings and notices pages of
+  the web interface send them.
 - A second verification, `doc/verification-2026-09-20.md`, checking the table
   against the controller's own display rather than against the machine alone,
   with the readings in `data/navigator-2.0-web-2026-09-20.tsv` and the two

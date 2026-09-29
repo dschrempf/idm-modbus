@@ -11,12 +11,10 @@
 -- they do change what the controller shows, on its display as well as here,
 -- until the level is closed again.
 --
--- Entering sends the code of the day through the frost protection wizard,
--- which doubles as the service menu: its item 2 is the code entry. The
--- controller answers that the wizard is not available and stays at the
--- customer level, so 'enterFachmann' does not work yet. Leaving acknowledges
--- the notice the controller raises while the level is open; the web interface
--- has no other way out.
+-- Entering saves the code of the day into the settings item
+-- @N2_CODE_ENTRY_EXPERT@, of type @actioncode@, as the settings page does.
+-- Leaving acknowledges the notice the controller raises while the level is
+-- open; the web interface has no other way out.
 module IDM.Navigator.Web.Level
   ( fachmannCode,
     LevelChange (..),
@@ -28,17 +26,16 @@ where
 import Data.Aeson (Value, object, (.=))
 import Data.List (find)
 import Data.Text (Text)
-import qualified Data.Text as T
 import Data.Time (LocalTime (..), toGregorian)
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Connection
 import IDM.Navigator.Web.Session (askNotifications, askStatus)
-import Text.Printf (printf)
 
 -- | The code of the Technikerbereich: day and month of the controller's date,
--- as @DDMM@.
-fachmannCode :: LocalTime -> Text
-fachmannCode t = T.pack (printf "%02d%02d" d m)
+-- @DDMM@. The web interface sends it as a number, so the 5th of September is
+-- 509.
+fachmannCode :: LocalTime -> Int
+fachmannCode t = d * 100 + m
   where
     (_, m, d) = toGregorian (localDay t)
 
@@ -61,10 +58,12 @@ enterFachmann s = andThen (askStatus s) $ \before ->
     level ->
       change s level $
         object
-          [ "controller" .= ("frostprotection" :: Text),
+          [ "controller" .= ("setting" :: Text),
             "command" .= ("save" :: Text),
-            "data" .= object ["itemId" .= ("2" :: Text), "value" .= fachmannCode (statusClock before)]
+            "data" .= object ["settingId" .= codeEntry, "value" .= fachmannCode (statusClock before)]
           ]
+  where
+    SettingId codeEntry = codeEntrySetting
 
 -- | Leave the Fachmann level by acknowledging its notice, as the notices page
 -- does. Only that notice: acknowledging all of them would also acknowledge a
@@ -99,6 +98,10 @@ change s before request =
 -- interface asks for the notifications a second after acknowledging one.
 settleMicroseconds :: Int
 settleMicroseconds = 1000000
+
+-- | @N2_CODE_ENTRY_EXPERT@, at the root of the settings tree.
+codeEntrySetting :: SettingId
+codeEntrySetting = SettingId "12503"
 
 andThen :: IO (Either e a) -> (a -> IO (Either e b)) -> IO (Either e b)
 andThen m k = m >>= either (pure . Left) k

@@ -41,9 +41,8 @@ SETTING...` reads settings by the id of the settings tree, e.g. 4768 for the
 sensor values the web interface lists, among them the refrigerant side that
 Modbus does not carry. `--watch SECONDS SETTING...` asks them round after
 round and writes a line per request, verbatim but for what names the machine.
-`--enter-fachmann` is meant to open the Fachmann level with the code of the
-controller's day, and `--leave-fachmann` to close it again; the controller
-does not yet accept the first.
+`--enter-fachmann` opens the Fachmann level with the code of the controller's
+day, and `--leave-fachmann` closes it again.
 
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The

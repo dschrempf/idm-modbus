@@ -42,3 +42,17 @@ Steps:
 
 Leaving via the display ("quittieren" on Meldungen) is known to work, so a
 failed step 3 can always be undone by hand.
+
+## 2026-09-29, later
+
+Step 1: `--show 12503` answered
+`{"description":"N2D_CODE_ENTRY_EXPERT","id":"12503","name":"N2_CODE_ENTRY_EXPERT","redirectId":"-1","type":"actioncode","value":""}`
+— the detail is itself of type `actioncode`, with no items. The page for that
+type (`idm-settings-actioncode`) sets `value` to `parseInt(code)` and saves
+through the generic path, so the request is
+`{"controller":"setting","command":"save","data":{"settingId":"12503","value":2909}}`.
+
+Step 2 done: `enterFachmann` sends that, `fachmannCode` is now a number (509
+for 5 September), and the documents no longer say entering fails. Tested
+against the fake server only. Steps 3 and 4 remain.
+

@@ -119,9 +119,10 @@ checks =
       status (json "{\"jsonVersion\":11,\"timestamp\":1790688878000}") == Nothing
     ),
     ( "the code of the day is day and month",
-      fmap (fachmannCode . statusClock) (status statusPayload) == Just (T.pack "2909")
+      fmap (fachmannCode . statusClock) (status statusPayload) == Just 2909
+        -- a number, as the web interface sends it
         && fmap (fachmannCode . statusClock) (status (json "{\"userlevel\":0,\"timestamp\":1788566400000,\"jsonVersion\":11}"))
-          == Just (T.pack "0509")
+          == Just 509
     ),
     ( "the notice of an open level is found by its text",
       notifications (json "{\"current\":[{\"code\":\"20005\",\"dateTime\":\"2026-09-29 13:34:19\",\"index\":0,\"level\":1,\"quitType\":2,\"textEnum\":\"N2_USERLEVELACTIVE\",\"textEnum2\":\"\"}]}")
