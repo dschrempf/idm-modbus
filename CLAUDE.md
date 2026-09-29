@@ -10,6 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal run idm-dump -- HOST         # read the registers a reference machine answered for
     cabal run idm-dump -- HOST --all   # sweep the whole parameter list
     cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-YYYY-MM-DD-HHMM.json
+    cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
     tools/webprobe.py HOST PIN > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
     ormolu -i $(git ls-files '*.hs')   # formatting
     cabal-fmt -i idm-modbus.cabal

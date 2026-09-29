@@ -68,8 +68,10 @@ executable idm-dump
   build-depends:
     , base        >=4.7 && <5
     , bytestring
+    , containers
     , idm-modbus
     , text
+    , time
 
 test-suite idm-modbus-test
   import:         test

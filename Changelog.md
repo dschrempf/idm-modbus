@@ -19,6 +19,12 @@
   as "the building management system may supply this value, and may read it
   back". This settles address 86, which `doc/research.md` had listed as
   documented nowhere: it is `Batteriefüllstand`.
+- `idm-dump HOST --watch SECONDS ADDRESS...`, which reads a few registers
+  round after round and writes a line per read, the capture format plus the
+  local time the read was asked, so a charge can be followed at a finer step
+  than the controller's own graph keeps. A stalled or lost connection is opened
+  again at the next round, and the reads it cost are recorded as errors.
+  `IDM.Modbus.TCP` exports `connect` and `disconnect` for it.
 - `Drive`, what a pump's control signal says: `NotDriven`, or `Driven` so many
   per cent. The controller's scale runs from -1, and `Driven 0` — a pump at its
   minimum speed — is not a pump at rest.
