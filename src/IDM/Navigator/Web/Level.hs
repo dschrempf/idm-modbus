@@ -10,7 +10,8 @@
 -- sends to change the user level. They change no setting of the machine, but
 -- they do change what the controller shows, on its display as well as here,
 -- and the level is the controller's, not the connection's: it holds until it
--- is closed again.
+-- is closed again, or for sixty minutes from the entry, however often it is
+-- read meanwhile.
 --
 -- Entering saves the code of the hour into the settings item
 -- @N2_CODE_ENTRY_EXPERT@, of type @actioncode@, as the settings page does.

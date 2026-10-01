@@ -105,7 +105,9 @@ The web backend has a stack of its own beside it, joined to the first only by
   (`setting`/`save` of item 12503, a code spelled from the controller's clock,
   as a number) and leaving it (acknowledging the `N2_USERLEVELACTIVE` notice).
   Both work on the machine, and the display switches with them. The level is
-  the controller's, not the connection's: it holds until it is left. The frost protection wizard's code
+  the controller's, not the connection's: it holds until it is left or for
+  sixty minutes from the entry, whichever comes first, however often it is
+  read meanwhile. The frost protection wizard's code
   page is not a way in: it answers "wizard is not available!" unless a wizard
   runs.
 
