@@ -221,6 +221,16 @@ suspect. It is worth knowing before anyone dates something by this graph, and
 nothing below rests on it: the duration of a run, the number of runs and the days
 they fall on are the same either way.
 
+The hour did not last. In `captures/navigator-2.0-webapi-2026-09-29-1333.json`
+the stage channel starts the charges at 10:02, inside the window, and agrees
+with the message log to the second; the controller had been restarted on 09-23
+at 08:40, the only change seen between the two captures. On 2026-10-01 a
+charge was timed on Modbus beside the graph, and every edge of the stage and
+hot water channels came 73 to 91 seconds after the register's
+(`doc/verification-2026-10-01-charge.md`). The controller's own clock ran 82
+seconds ahead of an NTP-synchronized one that day, so the stored history is
+stamped with the controller's clock and carries no offset of its own.
+
 **So the factor survives a single charge.** The sweep of 09-19 was taken at
 15:05, half an hour before the graph begins, and the graph's first samples show
 a tank already cooling, so nothing ran in the gap either.
@@ -284,7 +294,8 @@ integrating the second against the rise in the first. If they agree, the
 registers are a closed accounting of a measured power and the page is computing
 something else; if 1790 integrates to the page's figure instead, the counters
 are the odd ones. That needs a run during a charge window, which `FW025` opens
-at 10:00 on this machine, and has not been done.
+at 10:00 on this machine. It was done on 2026-10-01, and they agree:
+`doc/verification-2026-10-01-charge.md`.
 
 ## Reproducing
 

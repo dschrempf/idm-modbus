@@ -86,7 +86,8 @@ usage = do
   putStrLn "  asked, and the responses, verbatim but for what names the machine."
   putStrLn "  --enter-fachmann sends the code of the controller's clock;"
   putStrLn "  --leave-fachmann acknowledges the notice that level raises. The"
-  putStrLn "  level holds, for the display as well, until it is left."
+  putStrLn "  level holds, for the display as well, until it is left or for"
+  putStrLn "  sixty minutes from the entry."
   exitFailure
 
 run :: Host -> Pin -> Mode -> IO ()

@@ -61,15 +61,45 @@ the 09-24 capture: `FW044` 3 → 0 (legionella off), `FW027`/`FW028` 48/52 →
   flow and return that Modbus reports unfitted, at 0.1 K. Run it beside
   `idm-dump --watch` through a charge.
 
+Captured and written up 2026-10-01, `doc/verification-2026-10-01-charge.md`:
+a normal charge to 64 stopped after 2 h 19 min of compressor run, at TCOND
+69.4 °C with the inverter at its floor, B45 67.0, top 59.7 (60.1 after
+drift). Not a time limit; the R290 limit of 70 °C, passed down through the
+safety heat exchanger (3.8 K) and the tank side (7.3 K). The plumber's
+one-hour limit is refuted there in detail.
+
+`captures/navigator-2.0-webapi-2026-10-01-1158.json`, taken after the run and
+written up in the same doc: the page agrees with the registers on runtime and
+electricity and books 1.17 times 1754's heat; the graph is stamped with the
+controller's clock, 82 s fast, and the hour offset is gone (line added to
+`doc/verification-2026-09-20-webapi.md`); thinned graph points are step means.
+The message log names 371 of 09-27: `N2_ERROR` / `N2_FLOWSWITCH_HEATSINK`, the
+heat sink's flow switch, at the defrost that interrupted that charge.
+
+302 is legionella-only: Dominik, 2026-10-01 — the legionella run logs that it
+missed its target, a normal charge does not log missing `FW028`. The message
+log held no 302 for this run.
+
 Open:
 
-- Confirm the envelope: B45 and TCOND at the moment a charge to ≥ 60 °C stops.
-  Needs sampling during a charge, not the graph history:
-  `idm-dump HOST --watch 10 1066 1012 1014 1100 1790 4122 4126 1754 >
-  captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl`, started before 10:00.
-  TCOND is not on Modbus, so B45 is the envelope's only witness there.
-- Whether `FW044` = auxiliary heat is the intended setup, i.e. whether a
-  heating rod is physically fitted (1762 answers the sentinel).
+- Dominik's reading, 2026-10-01: a defect in the iDM software. `FW044`
+  offers the heat pump for legionella, but `FW045` cannot go below 60 and
+  the heat pump cannot bring the top there, so with `FW044` at heat pump the
+  function fails and runs again every day. Worth reporting to iDM with
+  `doc/verification-2026-10-01-charge.md`.
+- The heater: Dominik is sure a rod is fitted, the display calls it
+  "Bivalente Wassernachladung". The configuration agrees: `CF008` 3
+  (`N2_BIVALENCE_STRATEGY_HEATING_DHW`) sets auxiliary source 1 up for
+  heating and hot water, `CF009` 1, and `FW044` offers it as
+  `N2_BIVALENCE_AUXILIARY_HEAT_1`. 1762 answering the sentinel says only that
+  no heat meter is assigned to it. Witness on Modbus: 1124 "Bivalenz
+  Betriebszustand", 1 = "Bivalenz 1 aktiv". A legionella run with `FW044` at
+  auxiliary heat, watched with 1124 added, would show whether it reaches 60.
+- The 7.3 K from B45 to the tank top is the largest single loss: how the tank
+  is charged (internal coil or external exchanger, sensor positions) decides
+  whether anything can be won there.
+- What the stop keys on: TCOND, B86's pressure, or `WP026` applied to some
+  limit. A second run at a different outside temperature would separate them.
 - Manual control over Modbus: 1712 "Anforderung Warmwasserladung" and 1713
   "Einmalige WW-Ladung" are volatile, so triggering a charge costs no EEPROM
   cycle. Writing is absent by design; this needs the write interface

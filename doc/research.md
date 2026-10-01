@@ -220,6 +220,10 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
   which the registers can be called wrong. The manual names them "Wärmemenge
   Heizen", "Gesamt" and "Warmwasser" and says no more. See
   `doc/verification-2026-09-20-webapi.md`; 812184 is worth reading on this.
+  Over a charge 1754 is the running integral of 4126, to 0.6 %, and the
+  page's runtime and electrical energy for that day agree with the registers
+  while its heat is 1.17 times 1754's (`doc/verification-2026-10-01-charge.md`).
+  What remains open is the quantity the page computes as heat.
 - **Operating mode 3.** The parameter list gives 1005 the codes 0, 1, 2, 4 and
   5, within a documented range of 0 to 5, and prints no 3. The controller's own
   web interface offers 3 as a choice, and −1 besides. The transcription is
