@@ -59,7 +59,7 @@ to find. It covers the photovoltaic and the Smart Grid side:
 It adds no address. Its block — 74, 76, 78, 82, 84, 86 and 4122 — is the one
 812170 prints, with the same datatypes and the same defaults, and in revision
 13 it is a screenshot rather than text, so `pdftotext` drops it without saying
-so. Five things in it are not in 812170:
+so. Six things in it are not in 812170:
 
 - **A second switch gates the PV path.** 812170 asks only that "Modbus TCP" be
   "Ein" under "Gebäudeleittechnik". 812184 adds that the parameter PV008
@@ -75,6 +75,14 @@ so. Five things in it are not in 812170:
   the outside temperature, the storage or return temperature, the minimum speed
   and the "TWW-Erwärmer-Maximaltemperatur". A series logged from it is not
   measured electrical power.
+- **The surplus is weighed against that forecast.** The pump starts on PV
+  once the surplus exceeds its computed draw, shifted by `PV015` and with the
+  surplus averaged over `PV011` (2 minutes by default). What stops it depends
+  on the mode: a hot water charge (`PV002`) runs to its end however far the
+  surplus falls; heating, cooling and storage loading stop once the
+  compressor's minimum runtime has passed and the surplus is below the draw.
+  A surplus smaller than the pump's least draw in a mode never starts it in
+  that mode.
 - **The PV menu is not on Modbus.** 812184 documents the settings PV001 to
   PV016, PV025, PVPRIO and PV-ROOMS; not one of those identifiers appears in
   the parameter column of 812170. Only the live values are addressable.
@@ -206,6 +214,16 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
   and 4122 all read exactly 0.0 on this machine, which has no PV system. It
   matters only once writing exists, and it should be settled by writing a known
   value and reading the controller's own display back, not by argument.
+- **The least draw while heating.** The modulation floor is a setting per
+  mode, and this machine has both at the least they accept
+  (`captures/navigator-2.0-webapi-2026-10-01-1158.json`): `IV023` for hot
+  water at 40 %, where the charge of 2026-10-01 drew 1.5–1.7 kW by 4122
+  (`doc/verification-2026-10-01-charge.md`), and `IV003` for heating at 20 %.
+  The machine has not heated in any capture, so what 20 % draws is unknown.
+  The forecast it is compared against should be readable as 4122 at
+  standstill once `PV008` is set; until then 4122 reads 0.0 at standstill.
+  Both are the model's figures; a meter on the supply would say what the
+  pump actually draws.
 - **`UCHAR` value 254.** Addresses 1714 and 1715 return 254, where every other
   unfitted `UCHAR` returns 255. Whether 254 is a second sentinel or a real
   value is not known; the library currently treats both as absence.

@@ -115,6 +115,12 @@ Read support only, but for the user level. Writing is deliberately absent: a thi
 registers live in an EEPROM rated at 300000 cycles, and that needs an interface
 that makes the cost visible rather than an extra argument.
 
+The package is an interface to the controller and stays one: it reads, it
+sets the user level, and one day it writes. Deciding what the heat pump should
+do — from a PV surplus, a meter, a tariff, the household's appliances — belongs
+to its consumers, and no such strategy goes in here, not even as an example. A
+write of the surplus register 74 is interface; computing the surplus is not.
+
 ## Things the wire does that surprise people
 
 - A 32-bit float arrives **low word first**, against the usual Modbus habit.
