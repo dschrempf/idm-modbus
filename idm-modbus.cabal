@@ -23,6 +23,7 @@ extra-doc-files:
   doc/verification-2026-09-20-webapi.md
   doc/verification-2026-09-20.md
   doc/verification-2026-10-01-charge.md
+  doc/verification-2026-10-14-gltmon.md
   Readme.md
 
 extra-source-files:

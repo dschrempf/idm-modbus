@@ -8,7 +8,8 @@
 --
 -- The vocabulary of the manufacturer's parameter list, as types. Every
 -- distinction the manual draws in prose or in a footnote is a constructor here,
--- so that a caller cannot silently ignore it.
+-- so that a caller cannot silently ignore it. So is what a source other than
+-- the manual leaves unstated.
 module IDM.Navigator.Register
   ( Datatype (..),
     registerWidth,
@@ -16,6 +17,7 @@ module IDM.Navigator.Register
     isReadable,
     Persistence (..),
     Unit (..),
+    Source (..),
     Range (..),
     Presence (..),
     Register (..),
@@ -35,7 +37,8 @@ import Data.Word (Word16, Word32)
 import GHC.Float (castWord32ToFloat)
 import IDM.Modbus.TCP (Address, Quantity (..))
 
--- | Datatype as printed in the parameter list.
+-- | Datatype as printed in the parameter list, or as far as a read measured it
+-- where the list does not name the address.
 --
 -- The names are the manufacturer's. 'DWord' does not occur in revision 10 of
 -- the Navigator 2.0 list but is kept so that a later revision can be
@@ -50,6 +53,9 @@ data Datatype
   | -- | one register, 0 or 1
     Boolean
   | DWord
+  | -- | one register of an encoding no source states. Read unsigned, with no
+    -- sentinel claimed.
+    OneRegister
   deriving (Show, Eq, Ord)
 
 -- | How many 16-bit registers the datatype occupies.
@@ -59,6 +65,7 @@ registerWidth DWord = Quantity 2
 registerWidth UChar = Quantity 1
 registerWidth Word = Quantity 1
 registerWidth Boolean = Quantity 1
+registerWidth OneRegister = Quantity 1
 
 -- | Access right. Write-only registers exist and reading them is not an error
 -- worth reporting to a user, it is a mistake in the caller.
@@ -85,6 +92,9 @@ isReadable _ = True
 data Persistence
   = Volatile
   | Eeprom
+  | -- | a register the manual does not list, so no star says either way; a
+    -- writer must assume the EEPROM
+    UnknownPersistence
   deriving (Show, Eq, Ord)
 
 data Unit
@@ -97,6 +107,7 @@ data Unit
   | Bar
   | Liter
   | LiterPerHour
+  | LiterPerMinute
   | Minute
   | Unitless
   | -- | a unit string the transcription does not know yet
@@ -123,6 +134,16 @@ data Presence
   | Untested
   deriving (Show, Eq, Ord)
 
+-- | Which document describes a register.
+data Source
+  = -- | the parameter list, document 812170
+    Manual
+  | -- | the controller's own list of the addresses it serves, the web page
+    -- @N2_GLTMON@. It states a name, a unit and an access right, and nothing
+    -- else; the datatype is measured. See @doc\/verification-2026-10-14-gltmon.md@.
+    GltMonitor
+  deriving (Show, Eq, Ord)
+
 data Register = Register
   { registerAddress :: Address,
     registerDatatype :: Datatype,
@@ -134,6 +155,7 @@ data Register = Register
     registerRange :: Maybe Range,
     registerDefault :: Maybe Double,
     registerUnit :: Maybe Unit,
+    registerSource :: Source,
     registerPresence :: Presence
   }
   deriving (Show, Eq)
@@ -209,6 +231,9 @@ asWritten reg bytes = case registerDatatype reg of
   Boolean -> withWords 1 $ \ws -> case ws of
     [w] -> Just (Count (fromIntegral w))
     _ -> Nothing
+  OneRegister -> withWords 1 $ \ws -> case ws of
+    [w] -> Just (Count (fromIntegral w))
+    _ -> Nothing
   where
     wide lo hi = (fromIntegral hi `shiftL` 16) .|. fromIntegral lo :: Word32
     withWords n k
@@ -231,6 +256,7 @@ navigator reg v = case (registerDatatype reg, v) of
   (Word, Count n)
     | signedWord -> Measured (meaning (n - if n > 0x7FFF then 65536 else 0))
     | otherwise -> sentinel (n == 0xFFFF) v
+  (OneRegister, Count _) -> Measured v
   -- 'asWritten' pairs each datatype with one constructor; nothing else arises
   _ -> Measured v
   where

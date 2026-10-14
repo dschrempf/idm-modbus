@@ -32,7 +32,28 @@ check (name, ok) = do
 checks :: [(String, Bool)]
 checks =
   [ ( "the table parses to the number of rows in the file",
-      length Table.navigator20 == 663
+      length Table.navigator20 == 682
+    ),
+    ( "the controller's register page adds to the manual, and states only what it states",
+      length gltmon == 19
+        && all
+          ( \r ->
+              registerPersistence r == UnknownPersistence
+                && registerParameter r == Nothing
+                && registerRange r == Nothing
+                && registerDefault r == Nothing
+          )
+          gltmon
+        && all ((/= UnknownPersistence) . registerPersistence) (filter ((== Manual) . registerSource) Table.navigator20)
+    ),
+    ( "the maximum flow temperature is a float the manual does not list",
+      -- 45.0, as circuit A read on 2026-10-14
+      registerSource (register 1534) == GltMonitor
+        && decodeAt 1534 (B.pack [0x00, 0x00, 0x42, 0x34]) `approximately` 45
+    ),
+    ( "a register of unstated encoding is read as it came, never as absence",
+      decodeRaw 1074 (B.pack [0xff, 0xff]) == Just (Measured (Count 65535))
+        && registerWidth (registerDatatype (register 504)) == Quantity 1
     ),
     ( "addresses are unique",
       all ((== 1) . length) (group (sort (map registerAddress Table.navigator20)))
@@ -175,6 +196,9 @@ sensorTable =
     "<table id=\"idm_info\"> <tr><td colspan = \"4\" style=\"height:20px;\"><b>K1: </b></td></tr> \
     \<tr><td> </td><td>Überhitzung 1</td><td>20.7</td><td>K</td></tr> \
     \<tr><td>B86v</td><td>Kondensationstemp. 1</td><td>22.8</td><td>°C</td></tr> <tr><td></td></tr> </table>"
+
+gltmon :: [Register]
+gltmon = filter ((== GltMonitor) . registerSource) Table.navigator20
 
 register :: Int -> Register
 register a = case filter ((== Address (fromIntegral a)) . registerAddress) Table.navigator20 of

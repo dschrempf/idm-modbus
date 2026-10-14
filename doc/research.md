@@ -101,6 +101,19 @@ myiDM.
 The PDFs live in `manual/`, which git ignores; they are the manufacturer's, not
 ours to redistribute.
 
+## The controller's own list
+
+At Fachmann level the web backend serves an info page, 12763 `N2_GLTMON`,
+that lists the addresses the controller serves over Modbus, each with a name
+and unit, `RO` or `RW`, and its current value. On this machine it lists 115,
+and 24 of them are not in 812170: the minimum and maximum flow temperature per
+circuit at 1520 to 1540, the heat sink's return, flow and flow rate at 1068 to
+1074, the total electrical energy at 1746, a `PV-Zielwert` at 88, power limits
+and cascade powers from 4108 to 4140. It states no datatype, persistence,
+range or identifier, so the table takes its rows with the width measured and
+the rest left unstated, and marks them `gltmon`. See
+[verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md).
+
 ## Community work
 
 None of it is wrong to consult, and none of it should be trusted over the
@@ -199,7 +212,9 @@ cannot find the circuits. See
   above — and it is not itself addressable.
 - **Revision drift.** Revision 10 documents software 20.21-101; this machine
   runs 20.24. No address in the manual is missing from the machine, so nothing
-  was removed, but the manual cannot say what was *added*. Worth asking iDM
+  was removed, but the manual cannot say what was *added*. The controller's own
+  list says some of it, 24 addresses, above; whether those came with a later
+  software or were left out of the manual it cannot say. Worth asking iDM
   support whether a later revision exists — revision numbers run per document,
   so 812184 reaching revision 13 says nothing about 812170, and the Loxone
   mirror still serves revision 10 byte for byte

@@ -138,11 +138,14 @@ them report absence.
 
 Whether the manual has the designator wrong or this machine populates the pair
 only for other hydraulic schemes cannot be settled from here. What can be
-settled is the consequence: **this machine exposes no flow temperature, no
-return temperature and no flow rate over Modbus at all.** B124 and B125, the
+settled is the consequence: **the parameter list gives this machine no flow
+temperature, no return temperature and no flow rate.** B124 and B125, the
 heat sink flow and return, and B2, the flow rate, have no register anywhere in
-the list. Anyone reaching for a coefficient of performance will have to take
-1790 and 4122 and stop there.
+the list. The controller's own register page names three outside it after the
+heat sink, 1068 to 1072, and all three answer
+(`doc/verification-2026-10-14-gltmon.md`); until a reading of them is set
+against the display, a coefficient of performance has only 1790 and 4122 to go
+on.
 
 The table keeps saying `present` for 1050 and 1052, because they do answer.
 
@@ -190,6 +193,13 @@ suggested themselves.
 This rests on the change having reached the controller; it was made from the
 display and not read back there. The three circuits were set back to 45
 afterwards.
+
+It no longer rests on that. The controller's own register page puts the
+maximum flow temperature outside the list, at 1534, 1538 and 1540 for A, C and
+D, and leaves 1449 off; the settings tree gives it the identifier `HSA04`
+where 1449 is `HKA03` (`doc/verification-2026-10-14-gltmon.md`). 1449 is not
+the maximum flow temperature, and the maximum flow temperature does have an
+address, just not one the list prints.
 
 ### An existing circuit that reads exactly like a missing one
 
@@ -242,6 +252,10 @@ for. None of them has a register in the list:
 - most of the heating circuit settings: Raumeinflussfaktor, the mixer
   parameters, Estrich Heizen, Zuschaltzeit, and the minimum and maximum flow
   temperature
+
+The heat sink sensors and the minimum and maximum flow temperature have
+registers outside the list, which the controller's own register page names:
+`doc/verification-2026-10-14-gltmon.md`.
 
 The daily heat quantity chart was captured too, but its window starts after the
 machine did, so it cannot be summed against 1754 and is not evidence here.

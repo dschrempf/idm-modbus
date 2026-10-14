@@ -34,6 +34,9 @@ data Mode
   | -- | the capture format of @captures\/navigator-2.0-watch-*.jsonl@: the
     -- same registers, round after round, until interrupted
     Watch Period [Register]
+  | -- | the capture format of @captures\/navigator-2.0-widths-*.json@: how
+    -- wide the registers at addresses the parameter list does not name are
+    Widths [Address]
 
 -- | Seconds from the start of one round of a watch to the start of the next.
 newtype Period = Period Int
@@ -56,6 +59,10 @@ main = do
       case Watch <$> periodArg period <*> traverse registerArg addrs of
         Right mode -> run host mode
         Left e -> hPutStrLn stderr e >> exitFailure
+    (host : "--widths" : addrs@(_ : _)) ->
+      case traverse addressArg addrs of
+        Right as -> run host (Widths as)
+        Left e -> hPutStrLn stderr e >> exitFailure
     _ -> usage
 
 periodArg :: String -> Either String Period
@@ -74,11 +81,18 @@ registerArg a = case readMaybe a :: Maybe Integer of
           else Left (a <> ": write-only")
   _ -> Left (a <> ": not an address in the parameter list")
 
+-- | Any address; the one after it is read too, so the last cannot be 65535.
+addressArg :: String -> Either String Address
+addressArg a = case readMaybe a :: Maybe Integer of
+  Just n | n >= 0, n < 65535 -> Right (Address (fromInteger n))
+  _ -> Left (a <> ": not an address below 65535")
+
 usage :: IO ()
 usage = do
   name <- getProgName
   putStrLn $ "usage: " <> name <> " HOST [--all | --json]"
   putStrLn $ "       " <> name <> " HOST --watch SECONDS ADDRESS..."
+  putStrLn $ "       " <> name <> " HOST --widths ADDRESS..."
   putStrLn ""
   putStrLn "  Reads every register the reference machine answered for."
   putStrLn "  --all sweeps the whole parameter list instead, including"
@@ -91,6 +105,9 @@ usage = do
   putStrLn "  --watch reads the given addresses every SECONDS until"
   putStrLn "  interrupted, and prints a line per read in the same format,"
   putStrLn "  stamped with the local time the read was asked."
+  putStrLn "  --widths reads each address as one register and as two, and"
+  putStrLn "  the address after it as one, whether or not the parameter"
+  putStrLn "  list names it, and prints what the machine answered."
   exitFailure
 
 run :: String -> Mode -> IO ()
@@ -110,6 +127,9 @@ run host mode = case mode of
     samples <- probe conn defaultPoll Table.navigator20
     putStrLn (capture samples)
   Watch period regs -> watch (connect (Host host) port unit) period regs
+  Widths addrs -> connected $ \conn -> do
+    answers <- mapM (widths conn) addrs
+    putStrLn (list (map widthEntry (concat answers)))
   where
     connected = withConnection (Host host) port unit
     port = Port 502
@@ -151,21 +171,49 @@ render s =
 -- the Navigator means it: a capture that already applied the sentinel rule
 -- could not be the evidence for it.
 capture :: [Sample] -> String
-capture samples = "[\n" <> intercalate ",\n" (map entry samples) <> "\n]"
+capture = list . map (\s -> fields (sampleRegister s) (Returned (sampleResult s)))
 
-entry :: Sample -> String
-entry s =
-  " {\n"
-    <> intercalate ",\n" (map (("  " <>) . field) (fields (sampleRegister s) (Returned (sampleResult s))))
-    <> "\n }"
+list :: [[(String, String)]] -> String
+list entries = "[\n" <> intercalate ",\n" (map entry entries) <> "\n]"
+
+entry :: [(String, String)] -> String
+entry fs = " {\n" <> intercalate ",\n" (map (("  " <>) . field) fs) <> "\n }"
+
+-- | One read of a width probe: an address, how many registers were asked for
+-- from it, and what came back.
+data WidthRead = WidthRead Address Quantity (Either Failure B.ByteString)
+
+-- | What tells one register from two: a value two registers wide answers when
+-- asked for two, while the address inside it refuses on its own. A register
+-- followed by another answers for two as well, which is why the address after
+-- it is read too.
+widths :: Connection -> Address -> IO [WidthRead]
+widths conn a@(Address n) =
+  mapM
+    (\(at, q) -> WidthRead at q <$> readRegisters conn ReadHoldingRegisters at q <* pause)
+    [(a, Quantity 1), (a, Quantity 2), (Address (n + 1), Quantity 1)]
+  where
+    pause = threadDelay (pollIntervalMicroseconds defaultPoll)
+
+-- | Bytes and nothing else: no datatype is known to spell them as a number.
+widthEntry :: WidthRead -> [(String, String)]
+widthEntry (WidthRead (Address a) (Quantity q) r) =
+  [ ("address", show a),
+    ("quantity", show q),
+    ("status", quote (statusText o)),
+    ("exception", maybe "null" show (refusal o)),
+    ("raw", either (const "null") (quote . hex) r)
+  ]
+  where
+    o = Returned r
 
 -- | What became of a read: what the machine returned, or nothing, because no
 -- answer came in time or there was no connection to ask on.
-data Outcome
-  = Returned (Either Failure Answer)
+data Outcome a
+  = Returned (Either Failure a)
   | Unanswered
 
-fields :: Register -> Outcome -> [(String, String)]
+fields :: Register -> Outcome Answer -> [(String, String)]
 fields reg o =
   [ ("address", show addr),
     ("status", quote (statusText o)),
@@ -184,7 +232,7 @@ field (key, value) = quote key <> ": " <> value
 
 -- | Why an address holds no value: the machine refused it, or the read itself
 -- went wrong, which says nothing about the address.
-statusText :: Outcome -> String
+statusText :: Outcome a -> String
 statusText o = case o of
   Returned (Right _) -> "ok"
   Returned (Left (DeviceException _)) -> "exception"
@@ -192,7 +240,7 @@ statusText o = case o of
 
 -- | The Modbus exception code behind a refusal. An unfitted option answers 2,
 -- @IllegalDataAddress@, and the capture is where that is shown.
-refusal :: Outcome -> Maybe Word8
+refusal :: Outcome a -> Maybe Word8
 refusal o = case o of
   Returned (Left (DeviceException e)) -> Just (exceptionByte e)
   _ -> Nothing
@@ -247,7 +295,7 @@ watch opening (Period seconds) regs = do
 patienceMicroseconds :: Int
 patienceMicroseconds = 5000000
 
-watchLine :: ZonedTime -> Register -> Outcome -> String
+watchLine :: ZonedTime -> Register -> Outcome Answer -> String
 watchLine t reg o =
   "{" <> intercalate ", " (map field (("time", quote (stamp t)) : fields reg o)) <> "}"
   where
@@ -286,6 +334,7 @@ persistenceText :: Persistence -> String
 persistenceText p = case p of
   Eeprom -> "eeprom"
   Volatile -> ""
+  UnknownPersistence -> "?"
 
 unitText :: Unit -> String
 unitText u = case u of
@@ -298,6 +347,7 @@ unitText u = case u of
   Bar -> "bar"
   Liter -> "l"
   LiterPerHour -> "l/h"
+  LiterPerMinute -> "l/min"
   Minute -> "min"
   Unitless -> ""
   UnknownUnit t -> T.unpack t

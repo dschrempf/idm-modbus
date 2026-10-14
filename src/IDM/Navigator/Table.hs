@@ -43,7 +43,8 @@ enumFile :: B.ByteString
 enumFile = $(embedFile "data/navigator-2.0-enums.tsv")
 
 -- | Every register of the Navigator 2.0 parameter list, document 812170
--- revision 10, in address order.
+-- revision 10, and those the controller's own @N2_GLTMON@ page adds to it, in
+-- address order.
 navigator20 :: [Register]
 navigator20 = mapMaybe parseRegister (tsvRows registerFile)
 
@@ -75,11 +76,12 @@ tsvRows :: B.ByteString -> [[Text]]
 tsvRows = drop 1 . map (T.splitOn "\t") . T.lines . TE.decodeUtf8
 
 parseRegister :: [Text] -> Maybe Register
-parseRegister [addr, dtype, access, persistence, name, param, lo, hi, def, unit, presence] = do
+parseRegister [addr, dtype, access, persistence, name, param, lo, hi, def, unit, source, presence] = do
   a <- Address <$> readMaybeT addr
   d <- parseDatatype dtype
   acc <- parseAccess access
   p <- parsePersistence persistence
+  s <- parseSource source
   pr <- parsePresence presence
   pure
     Register
@@ -92,6 +94,7 @@ parseRegister [addr, dtype, access, persistence, name, param, lo, hi, def, unit,
         registerRange = Range <$> readMaybeT lo <*> readMaybeT hi,
         registerDefault = readMaybeT def,
         registerUnit = parseUnit <$> nonEmpty unit,
+        registerSource = s,
         registerPresence = pr
       }
 parseRegister _ = Nothing
@@ -110,6 +113,7 @@ parseDatatype t = case t of
   "WORD" -> Just Word
   "BOOL" -> Just Boolean
   "DWORD" -> Just DWord
+  "one-register" -> Just OneRegister
   _ -> Nothing
 
 parseAccess :: Text -> Maybe Access
@@ -124,6 +128,13 @@ parsePersistence :: Text -> Maybe Persistence
 parsePersistence t = case t of
   "eeprom" -> Just Eeprom
   "volatile" -> Just Volatile
+  "unknown" -> Just UnknownPersistence
+  _ -> Nothing
+
+parseSource :: Text -> Maybe Source
+parseSource t = case t of
+  "manual" -> Just Manual
+  "gltmon" -> Just GltMonitor
   _ -> Nothing
 
 parsePresence :: Text -> Maybe Presence
@@ -144,6 +155,7 @@ parseUnit t = case T.strip t of
   "bar" -> Bar
   "l" -> Liter
   "l/h" -> LiterPerHour
+  "l/min" -> LiterPerMinute
   "min" -> Minute
   "" -> Unitless
   other -> UnknownUnit other

@@ -7,11 +7,19 @@ Loxone library mirrors revision 10), put it in manual/, which git ignores,
 extract its text preserving the column layout, and feed that in:
 
     pdftotext -layout manual/812170.pdf manual/812170.txt
-    tools/transcribe.py manual/812170.txt [captures/navigator-2.0-scan-DATE.json]
+    tools/transcribe.py manual/812170.txt [--scan SCAN]
+        [--webapi WEBAPI --widths WIDTHS]
 
 The observed column says whether the reference machine answered for an
-address. It comes from the scan when one is given, and is otherwise carried
-over from the table being replaced: the scans are not in the repository.
+address. It comes from the scan, captures/navigator-2.0-scan-DATE.json, when
+one is given, and is otherwise carried over from the table being replaced: the
+captures are not in the repository.
+
+The controller lists the addresses it serves on a page of its own web
+interface, N2_GLTMON, and lists some the manual does not. Given a webapi
+capture holding that page and a widths capture of those addresses, the table
+gains them, marked as coming from that page rather than from the manual.
+Without the two, they are carried over like the observed column.
 
 The column layout is what carries the meaning: the list is not consistent about
 the order of its cells, so a cell is read according to where it is printed.
@@ -20,7 +28,9 @@ Writing the tables is the only way they should ever change. Editing them by
 hand makes the next revision of the manual impossible to apply cleanly.
 """
 
+import argparse
 import csv
+import html
 import json
 import re
 import sys
@@ -237,32 +247,132 @@ def parse_enums(text, known):
     return out
 
 
+# a row of the N2_GLTMON page: address, name, access, value, the value last
+# written over Modbus
+GLT_ROW = re.compile(
+    r"<tr><td>(\d+)</td><td>(.*?)</td><td>(\w+)</td>"
+    r"<td[^>]*>(.*?)</td><td[^>]*>(.*?)</td></tr>"
+)
+# the page appends the unit to the name, in parentheses
+GLT_NAME = re.compile(r"^(?P<name>.*?)\s*(?:\((?P<unit>[^()]*)\))?$")
+
+
+def gltmon_page(capture):
+    """The last N2_GLTMON page a webapi capture holds."""
+    pages = [
+        r["settingDetail"]["value"]
+        for frame in capture
+        for r in frame.get("responses") or []
+        if r.get("settingDetail", {}).get("name") == "N2_GLTMON"
+    ]
+    if not pages:
+        sys.exit("the webapi capture holds no N2_GLTMON page")
+    return pages[-1]
+
+
+def width(reads, a):
+    """How many registers the value at an address spans, by a widths capture.
+
+    Two registers answer when asked for two, and the address inside them
+    refuses on its own. One register refuses to be read as two, unless another
+    follows it; then the reads cannot tell, and neither does this.
+    """
+    def ok(at, q):
+        r = reads.get((at, q))
+        return r is not None and r["status"] == "ok"
+
+    if ok(a, 2) and (a + 1, 1) in reads and not ok(a + 1, 1):
+        return 2
+    if ok(a, 1) and (a, 2) in reads and not ok(a, 2):
+        return 1
+    return None
+
+
+def gltmon_rows(page, reads, manual):
+    """The registers the page lists and the manual does not.
+
+    The page states an address, a name with its unit, and an access right; the
+    datatype comes from the measured width, and nothing states persistence,
+    range or default. A row without a name, with a value that is not a number,
+    or with no decisive width stays out.
+    """
+    out = {}
+    for addr, name, access, value, _ in GLT_ROW.findall(page):
+        a = int(addr)
+        if a in manual:
+            continue
+        m = GLT_NAME.match(html.unescape(name).strip())
+        value = html.unescape(value).strip()
+        why = (
+            "no name" if not m.group("name")
+            else "its value is not a number" if value and not is_number(value)
+            else None
+        )
+        w = None if why else width(reads, a)
+        if not why and w is None:
+            why = "its width was not measured, or the reads cannot tell"
+        if why:
+            print(f"left out {a}: {why}", file=sys.stderr)
+            continue
+        out[a] = dict(
+            address=a,
+            datatype={2: "FLOAT", 1: "one-register"}[w],
+            access=access,
+            persistence="unknown",
+            name=m.group("name"),
+            parameter="", min="", max="", default="",
+            unit=m.group("unit") or "",
+            source="gltmon",
+        )
+    return out
+
+
 def main():
-    if len(sys.argv) not in (2, 3):
-        sys.exit(__doc__)
-    text = Path(sys.argv[1]).read_text(encoding="utf-8")
+    args = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    args.add_argument("manual", type=Path)
+    args.add_argument("--scan", type=Path)
+    args.add_argument("--webapi", type=Path)
+    args.add_argument("--widths", type=Path)
+    args = args.parse_args()
+    if (args.webapi is None) != (args.widths is None):
+        sys.exit("--webapi and --widths go together")
+
+    text = args.manual.read_text(encoding="utf-8")
     data = HERE / "data"
     table = data / "navigator-2.0-registers.tsv"
-    if len(sys.argv) == 3:
+    with table.open(newline="") as fh:
+        previous = {int(r["address"]): r for r in csv.DictReader(fh, delimiter="\t")}
+    if args.scan:
         observed = {
             r["address"]: {"ok": "present", "exception": "absent"}.get(r["status"])
-            for r in json.loads(Path(sys.argv[2]).read_text())
+            for r in json.loads(args.scan.read_text())
         }
     else:
-        with table.open(newline="") as fh:
-            observed = {
-                int(r["address"]): r["observed"]
-                for r in csv.DictReader(fh, delimiter="\t")
-            }
+        observed = {a: r["observed"] for a, r in previous.items()}
 
     registers = parse_rows(text)
     enums = share_within_families(parse_enums(text, registers), registers)
+    for r in registers.values():
+        r["source"] = "manual"
+    if args.webapi:
+        reads = {
+            (r["address"], r["quantity"]): r
+            for r in json.loads(args.widths.read_text())
+        }
+        page = gltmon_page(json.loads(args.webapi.read_text()))
+        registers |= gltmon_rows(page, reads, registers)
+    else:
+        registers |= {
+            a: {**r, "address": a}
+            for a, r in previous.items()
+            if r.get("source") == "gltmon"
+        }
 
     with table.open("w", newline="") as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")
         w.writerow(
             "address datatype access persistence name parameter "
-            "min max default unit observed".split()
+            "min max default unit source observed".split()
         )
         for a in sorted(registers):
             r = registers[a]
@@ -270,7 +380,7 @@ def main():
                 [
                     r["address"], r["datatype"], r["access"], r["persistence"],
                     r["name"], r["parameter"], r["min"], r["max"], r["default"],
-                    r["unit"],
+                    r["unit"], r["source"],
                     observed.get(a) or "untested",
                 ]
             )
@@ -282,7 +392,9 @@ def main():
             w.writerow([a, c, label])
 
     print(
-        f"{len(registers)} registers, {len(enums)} enumerated values over "
+        f"{len(registers)} registers, "
+        f"{sum(r['source'] == 'gltmon' for r in registers.values())} of them "
+        f"from N2_GLTMON, {len(enums)} enumerated values over "
         f"{len({a for a, _ in enums})} addresses",
         file=sys.stderr,
     )

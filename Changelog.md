@@ -43,6 +43,17 @@
   against the controller's own display rather than against the machine alone,
   with the readings in `data/navigator-2.0-web-2026-09-20.tsv` and the two
   captures taken beside them.
+- Nineteen registers the parameter list does not print, taken from the
+  controller's own list of what it serves, the web page `N2_GLTMON`: the
+  minimum and maximum flow temperature of circuits A, C and D, the heat sink's
+  return, flow and flow rate, the total electrical energy, and power limits.
+  The page states a name, a unit and an access right, so `Register` gained
+  `registerSource`, `Datatype` gained `OneRegister` for a width with no
+  encoding stated, and `Persistence` gained `UnknownPersistence`. The table has
+  682 registers. `idm-dump HOST --widths ADDRESS...` measures how many
+  registers wide the value at an address is, to
+  `captures/navigator-2.0-widths-*.json`; see
+  `doc/verification-2026-10-14-gltmon.md`.
 
 ### Changed
 
