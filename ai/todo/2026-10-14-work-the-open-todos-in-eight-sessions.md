@@ -29,6 +29,9 @@ and each function returns a type of its own, `Entry` and `Exit`.
 
 ## 3. Modbus client timeout and transaction id
 
+Done on 2026-10-14: `connect` takes a `Patience`, and a read that leaves the
+stream out of step ends the connection, `Ended` and then `Unsent`.
+
 `Modbus/TCP.hs`. First, because `~/nix/config` is about to be the caller the
 note warns of.
 

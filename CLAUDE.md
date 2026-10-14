@@ -90,7 +90,9 @@ page heading, not by the order they appear in.
 The four modules stack, each refusing to know the next one's business:
 
 - `IDM.Modbus.TCP` — framing and sockets for the two read function codes.
-  Returns raw bytes in wire order and a `Failure` for anything else.
+  Returns raw bytes in wire order and a `Failure` for anything else. A read
+  that leaves the stream out of step — no answer in time, an answer to
+  another request — ends the connection, and later reads fail unsent.
 - `IDM.Navigator.Register` — the manual's vocabulary as types, plus `decode`.
   Every distinction the manual draws in prose or a footnote is a constructor,
   so a caller cannot silently ignore it.

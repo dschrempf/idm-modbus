@@ -79,8 +79,22 @@
   reads bytes without applying the conventions the manual leaves out, which is
   what a capture must record if it is to be the evidence for them.
 
+- `connect` and `withConnection` take a `Patience`, which bounds connecting
+  and each read; `defaultPatience` is five seconds. A read that fails so that
+  the stream is out of step or gone ends the connection: it closes the socket,
+  and every later read fails without being sent. `Failure` says which, `Ended`
+  or `Unsent`, and why, an `Ending`: no answer in time, an answer to another
+  request, a malformed frame, the device closing the connection, or a socket
+  error, which `readRegisters` no longer throws. `ConnectionClosed` is an
+  `Ending` now. `parseResponse` reads a frame as the answer to its request.
+
 ### Fixed
 
+- `readRegisters` took whatever answer came next for the answer to its request.
+  A caller that timed a read out and kept the connection read the late answer
+  as the answer to its next request. It now checks the transaction id.
+- `idm-dump HOST` and `idm-dump HOST --json` waited for good on a Navigator
+  that stalled; only `--watch` timed its reads out.
 - Addresses 1104 to 1109 reported a fitted pump as absent. They are pump
   control signals documented from -1, so their 65535 means "not being driven",
   which the controller's display confirms for the charge pump M73 while showing

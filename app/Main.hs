@@ -21,7 +21,6 @@ import qualified IDM.Navigator.Table as Table
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure)
 import System.IO (BufferMode (..), hPutStrLn, hSetBuffering, stderr, stdout)
-import System.Timeout (timeout)
 import Text.Printf (printf)
 import Text.Read (readMaybe)
 
@@ -126,12 +125,12 @@ run host mode = case mode of
   Capture -> connected $ \conn -> do
     samples <- probe conn defaultPoll Table.navigator20
     putStrLn (capture samples)
-  Watch period regs -> watch (connect (Host host) port unit) period regs
+  Watch period regs -> watch (connect defaultPatience (Host host) port unit) period regs
   Widths addrs -> connected $ \conn -> do
     answers <- mapM (widths conn) addrs
     putStrLn (list (map widthEntry (concat answers)))
   where
-    connected = withConnection (Host host) port unit
+    connected = withConnection defaultPatience (Host host) port unit
     port = Port 502
     unit = UnitId 1
     registers Fitted = Table.present
@@ -207,8 +206,8 @@ widthEntry (WidthRead (Address a) (Quantity q) r) =
   where
     o = Returned r
 
--- | What became of a read: what the machine returned, or nothing, because no
--- answer came in time or there was no connection to ask on.
+-- | What became of a read: what the machine returned, or nothing, because
+-- there was no connection to ask on.
 data Outcome a
   = Returned (Either Failure a)
   | Unanswered
@@ -263,37 +262,29 @@ watch opening (Period seconds) regs = do
       -- a round that overran starts the next at once, without catching up
       getMonotonicTime >>= go conn' . max (due + fromIntegral seconds)
     open = do
-      r <- try (timeout patienceMicroseconds opening)
+      r <- try opening
       case r of
-        Right (Just conn) -> pure (Just conn)
-        Right Nothing -> Nothing <$ complain "connecting timed out"
+        Right conn -> pure (Just conn)
         Left e -> Nothing <$ complain (show (e :: IOException))
     sweep [] conn = pure conn
     sweep (r : rs) Nothing = emit r Unanswered >> sweep rs Nothing
     sweep (r : rs) (Just conn) = do
       t <- getZonedTime
-      result <- try (timeout patienceMicroseconds (readOne conn defaultPoll r))
-      let lose why o = do
-            complain why
-            putStrLn (watchLine t r o)
-            disconnect conn
-            sweep rs Nothing
-      case result of
-        Right (Just s) -> case sampleResult s of
-          Left ConnectionClosed -> lose "connection closed" (Returned (sampleResult s))
-          _ -> do
-            putStrLn (watchLine t r (Returned (sampleResult s)))
-            threadDelay (pollIntervalMicroseconds defaultPoll)
-            sweep rs (Just conn)
-        Right Nothing -> lose "no answer in time" Unanswered
-        Left e -> lose (show (e :: IOException)) Unanswered
+      s <- readOne conn defaultPoll r
+      putStrLn (watchLine t r (Returned (sampleResult s)))
+      case sampleResult s of
+        Left (Ended why) -> lose why
+        Left (Unsent why) -> lose why
+        _ -> do
+          threadDelay (pollIntervalMicroseconds defaultPoll)
+          sweep rs (Just conn)
+      where
+        lose why = do
+          complain (endingText why)
+          disconnect conn
+          sweep rs Nothing
     emit r o = getZonedTime >>= \t -> putStrLn (watchLine t r o)
     complain = hPutStrLn stderr
-
--- | How long a read or a connection attempt may take. The socket has no
--- timeout of its own, so without this a stalled Navigator hangs the run.
-patienceMicroseconds :: Int
-patienceMicroseconds = 5000000
 
 watchLine :: ZonedTime -> Register -> Outcome Answer -> String
 watchLine t reg o =
@@ -316,6 +307,14 @@ quote t = "\"" <> t <> "\""
 
 hex :: B.ByteString -> String
 hex = concatMap (printf "%02x") . B.unpack
+
+endingText :: Ending -> String
+endingText e = case e of
+  NoAnswer -> "no answer in time"
+  UnexpectedTransaction (TransactionId t) -> "an answer to another request, transaction " <> show t
+  Malformed frame -> "a malformed frame, " <> hex frame
+  ConnectionClosed -> "connection closed"
+  Lost why -> why
 
 failureText :: Failure -> String
 failureText f = case f of

@@ -12,7 +12,7 @@ import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy.Char8 as BL
 import Data.List (group, sort)
 import qualified Data.Text as T
-import IDM.Modbus.TCP (Address (..), Quantity (..))
+import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity (..), TransactionId (..), parseResponse)
 import IDM.Navigator.Register
 import qualified IDM.Navigator.Table as Table
 import IDM.Navigator.Web
@@ -31,7 +31,25 @@ check (name, ok) = do
 
 checks :: [(String, Bool)]
 checks =
-  [ ( "the table parses to the number of rows in the file",
+  [ ( "an answer is read only as the answer to its own request",
+      -- transaction 7, unit 1, two bytes from function code 3
+      let frame = B.pack [0, 7, 0, 0, 0, 5, 1, 3, 2, 0x12, 0x34]
+       in parseResponse (TransactionId 7) ReadHoldingRegisters frame == Right (B.pack [0x12, 0x34])
+            && parseResponse (TransactionId 8) ReadHoldingRegisters frame == Left (Ended (UnexpectedTransaction (TransactionId 7)))
+    ),
+    ( "a refusal is the device's, and leaves the connection open",
+      parseResponse (TransactionId 7) ReadHoldingRegisters (B.pack [0, 7, 0, 0, 0, 3, 1, 0x83, 2])
+        == Left (DeviceException IllegalDataAddress)
+    ),
+    ( "a frame whose length field disagrees with its length ends the connection",
+      all
+        (\frame -> parseResponse (TransactionId 7) ReadHoldingRegisters frame == Left (Ended (Malformed frame)))
+        [ B.pack [0, 7, 0, 0, 0, 1, 1, 3],
+          B.pack [0, 7, 0, 0, 0, 5, 1, 3, 2, 0x12],
+          B.pack [0, 7, 0, 0]
+        ]
+    ),
+    ( "the table parses to the number of rows in the file",
       length Table.navigator20 == 682
     ),
     ( "the controller's register page adds to the manual, and states only what it states",

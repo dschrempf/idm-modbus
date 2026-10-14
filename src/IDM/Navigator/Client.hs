@@ -100,5 +100,8 @@ probe conn poll = go
     go [] = pure []
     go (r : rs) = do
       s <- readOne conn poll r
-      threadDelay (pollIntervalMicroseconds poll)
+      case sampleResult s of
+        -- nothing was sent, so there is nothing to pace
+        Left (Unsent _) -> pure ()
+        _ -> threadDelay (pollIntervalMicroseconds poll)
       (s :) <$> go rs
