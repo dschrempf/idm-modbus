@@ -18,6 +18,7 @@ module IDM.Navigator.Web.Session
     Session,
     open,
     close,
+    ended,
     withSession,
     ask,
     askFor,
@@ -29,7 +30,7 @@ where
 
 import Control.Exception (bracket)
 import Data.Aeson (Value)
-import qualified Data.Aeson.Key as K
+import Data.Maybe (isJust)
 import IDM.Modbus.TCP (Host)
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Connection
@@ -42,16 +43,8 @@ withSession pace host pin action =
 
 -- | Send a query and return every message that arrived until its answer, the
 -- answer last, redacted but otherwise verbatim. This is what a capture keeps.
---
--- 'NoAnswer' to an 'Anonymous' query ends the session.
 ask :: Session -> Query -> IO (Either Failure [Value])
-ask s q = do
-  r <- exchange s (queryJSON q) (maybe False (const True) . answerIn q)
-  case (r, attribution q) of
-    (Left NoAnswer, Anonymous) ->
-      abandon s ("a late " <> K.toString (answerKey q) <> " could not be told from the next")
-    _ -> pure ()
-  pure r
+ask s q = exchange s (queryJSON q) (isJust . answerIn q)
 
 -- | Send a query and read its answer.
 askFor :: (Value -> Maybe a) -> Session -> Query -> IO (Either Failure a)

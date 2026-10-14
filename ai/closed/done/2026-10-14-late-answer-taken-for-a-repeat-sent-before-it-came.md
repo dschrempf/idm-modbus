@@ -25,3 +25,13 @@ Options, for Dominik to choose:
   discarded as the late one.
 
 Related: `2026-10-14-patience-timeout-duplicates-collect-deadline`.
+
+Fixed on 2026-10-14 with the first option. `paced` ends the session after
+`NoAnswer` and `Garbled`, whatever the query; `Attribution`, `attribution`
+and `abandon` are gone, and `answerIn` still checks the names. `ended` says
+whether a session has ended, and `idm-web --watch` opens a new one for the next
+setting rather than writing `not connected` for the rest of the round, so the
+6245 after a 5888 that stalls at Kunde level is still read. A fake controller
+that answered setting 1 six seconds late and sent a message that is not JSON
+before an answer to setting 2 gave `NoAnswer` on 1, the next 2 clean on a new
+session, `Garbled` on 2 a round later, and neither stray answer in any line.

@@ -147,10 +147,6 @@ checks =
             && answerIn asked (detail "WW" 844063227 844171227) == Nothing
             && answerIn asked (detail "System" 843480027 844171227) == Nothing
     ),
-    ( "only the answers without parameters are anonymous",
-      map attribution [StatusOverview, NotificationOverview, GraphOverview, GraphTraverse] == replicate 4 Anonymous
-        && map attribution [SettingOverview settingsRoot, SettingDetail settingsRoot, GraphDetail (GraphId 1) (Span 0 0)] == replicate 3 NamesItsQuery
-    ),
     ( "a setting's answer is its own only if it names the setting",
       answerIn (SettingDetail (SettingId (T.pack "4768"))) (json "{\"settingDetail\":{\"id\":\"5888\"}}") == Nothing
         && answerIn (SettingOverview settingsRoot) (json "{\"setting\":{}}") == Nothing

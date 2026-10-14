@@ -107,6 +107,3 @@ settleMicroseconds = 1000000
 -- | @N2_CODE_ENTRY_EXPERT@, at the root of the settings tree.
 codeEntrySetting :: SettingId
 codeEntrySetting = SettingId "12503"
-
-andThen :: IO (Either e a) -> (a -> IO (Either e b)) -> IO (Either e b)
-andThen m k = m >>= either (pure . Left) k

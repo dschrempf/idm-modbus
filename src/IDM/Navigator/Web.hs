@@ -30,8 +30,6 @@ module IDM.Navigator.Web
     queryJSON,
     answerKey,
     answerIn,
-    Attribution (..),
-    attribution,
 
     -- * Status
     UserLevel (..),
@@ -146,18 +144,6 @@ answerIn q (Object o) = do
   a <- KM.lookup (answerKey q) o
   a <$ guard (maybe True ($ a) (naming q))
 answerIn _ _ = Nothing
-
--- | Whether an answer that comes late can be told from the next answer of its
--- kind.
-data Attribution
-  = -- | the answer names what was asked, and 'answerIn' checks it
-    NamesItsQuery
-  | -- | the answer names nothing, so a late one is taken for the next
-    Anonymous
-  deriving (Show, Eq)
-
-attribution :: Query -> Attribution
-attribution = maybe Anonymous (const NamesItsQuery) . naming
 
 -- | Whether a payload under the query's key answers this very query, for the
 -- queries whose answer says.

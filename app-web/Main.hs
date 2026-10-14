@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- |
@@ -143,8 +144,8 @@ levelText l = case l of
 -- | Ask the same settings round after round, a line per request, until
 -- interrupted.
 --
--- A lost connection is opened again at the next round. Each request it cost is
--- still a line, with an @error@, so the gap is in the capture.
+-- A session that ends is opened again for the next request. Each request it
+-- cost is still a line, with an @error@, so the gap is in the capture.
 watch :: Host -> Pin -> Period -> [SettingId] -> IO ()
 watch host pin (Period seconds) ids = do
   hSetBuffering stdout LineBuffering
@@ -158,23 +159,19 @@ watch host pin (Period seconds) ids = do
     go s due = do
       now <- getMonotonicTime
       threadDelay (round (max 0 (due - now) * 1e6))
-      s' <- maybe reopen (pure . Just) s >>= sweep ids
+      s' <- sweep ids s
       -- a round that overran starts the next at once, without catching up
       getMonotonicTime >>= go s' . max (due + fromIntegral seconds)
     reopen = open defaultPace host pin >>= either (\e -> Nothing <$ complain (show e)) (pure . Just)
     sweep [] s = pure s
-    sweep (i : is) Nothing = getZonedTime >>= \t -> line t i (Left "not connected") >> sweep is Nothing
-    sweep (i : is) (Just s) = do
-      t <- getZonedTime
-      r <- ask s (SettingDetail i)
-      case r of
-        Right ms -> line t i (Right ms) >> sweep is (Just s)
-        Left e -> do
-          complain (show e)
-          line t i (Left (show e))
-          case e of
-            Lost _ -> close s >> sweep is Nothing
-            _ -> sweep is (Just s)
+    sweep (i : is) s =
+      maybe reopen (pure . Just) s >>= \case
+        Nothing -> getZonedTime >>= \t -> line t i (Left "not connected") >> sweep is Nothing
+        Just s' -> do
+          t <- getZonedTime
+          r <- ask s' (SettingDetail i)
+          either (\e -> complain (show e) >> line t i (Left (show e))) (line t i . Right) r
+          ended s' >>= maybe (sweep is (Just s')) (const (close s' >> sweep is Nothing))
     line t i r = BL.putStrLn (encode (watchLine t i r))
     complain = hPutStrLn stderr
 

@@ -10,3 +10,9 @@ list, and so from a capture.
 
 Fix: put the timeout around `send` alone, where it is the only guard, and
 let `collect` own the wait. `open` keeps `guarded` as it is.
+
+Fixed on 2026-10-14 as proposed. `send` runs under the patience timeout and
+answers `Lost "a send was cut"`; `paced` only turns exceptions into `Lost`
+(`caught`), and `open` keeps `guarded`. `send` no longer records its own loss:
+`paced` records the reason the request failed with, so every later request
+fails with that same reason.
