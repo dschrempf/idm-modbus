@@ -1,5 +1,12 @@
 # Legionella charge stops short of its target
 
+**Outcome, 2026-10-14.** Explained, not fixed. The heat crosses two
+exchangers, the safety heat exchanger and the tank side, so the R290 limit of
+70 °C leaves about 60 °C at the tank top: the heat pump alone cannot reach the
+legionella target, which `FW045` does not let go below 60. Dominik reported
+this to iDM and will not work around their software. The items under "Open"
+below were left unpursued.
+
 The legionella function (`FW044` heat pump, `FW046` 7 days) charges every day
 instead of weekly. From 09-17 to 09-23 every run ended at 59.0–59.7 °C on the
 upper sensor and 57.2–58.5 °C on B41, from starting temperatures between 22
