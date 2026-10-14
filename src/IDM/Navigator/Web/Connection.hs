@@ -65,16 +65,20 @@ defaultPace =
 
 -- | Why a request did not produce its answer.
 --
--- No failure but 'Lost' ends a session.
+-- A session that has ended answers every later request with 'Lost'. The
+-- request that ended it may have failed otherwise: see 'NoAnswer'.
 data Failure
   = -- | the controller refused the PIN; its greeting, if it sent one
     NotAuthorized (Maybe Value)
-  | -- | an answer that comes late arrives among the messages of the next
-    -- request; where it cannot be told from the next one of its kind,
-    -- 'IDM.Navigator.Web.Session.ask' ends the session
+  | -- | the answer may still come. If it comes before the next request is
+    -- sent, it is among that request's messages and never its answer; if
+    -- later, it is taken for the next answer of its kind that
+    -- 'IDM.Navigator.Web.answerIn' cannot tell from it, so
+    -- 'IDM.Navigator.Web.Session.ask' ends the session where the answer
+    -- names nothing
     NoAnswer
-  | -- | the connection, or a send that was cut; every later request fails
-    -- with the same reason, unsent
+  | -- | the connection, a send that was cut, or a session given up; every
+    -- later request fails with the same reason, unsent
     Lost String
   | -- | a message that is not JSON
     Garbled B.ByteString
@@ -150,17 +154,21 @@ loseWith :: TVar (Maybe String) -> String -> IO ()
 loseWith lost reason = atomically (modifyTVar' lost (<|> Just reason))
 
 -- | Send a request and collect the messages that arrive until one satisfies
--- the predicate, which is last in the list. Every message is redacted.
+-- the predicate, which is last in the list. What arrived before the request
+-- was sent comes first and is not tested. Every message is redacted.
 exchange :: Session -> Value -> (Value -> Bool) -> IO (Either Failure [Value])
 exchange s request done = do
   started <- getMonotonicTime
   let deadline = started + fromIntegral (pacePatienceMicroseconds (sessionPace s)) / 1e6
-  paced s $ do
-    send s request
-    collect s deadline done >>= \case
-      Right (ms, True) -> pure (Right ms)
-      Right (_, False) -> pure (Left NoAnswer)
+  paced s $
+    traverse decoded <$> atomically (flushTQueue (sessionInbox s)) >>= \case
       Left e -> pure (Left e)
+      Right earlier -> do
+        send s request
+        collect s deadline done (map redact earlier) >>= \case
+          Right (ms, True) -> pure (Right ms)
+          Right (_, False) -> pure (Left NoAnswer)
+          Left e -> pure (Left e)
 
 -- | Send a request and collect whatever arrives for a while. For a request
 -- whose answer is not known in advance.
@@ -169,7 +177,7 @@ drain s request micros = do
   started <- getMonotonicTime
   paced s $ do
     send s request
-    fmap fst <$> collect s (started + fromIntegral micros / 1e6) (const False)
+    fmap fst <$> collect s (started + fromIntegral micros / 1e6) (const False) []
 
 -- | A send cut by a timeout leaves half a frame on the wire, after which the
 -- controller cannot read another.
@@ -178,8 +186,8 @@ send s request =
   WS.sendTextData (sessionConnection s) (encode request)
     `onException` abandon s "a send was cut"
 
-collect :: Session -> Double -> (Value -> Bool) -> IO (Either Failure ([Value], Bool))
-collect s deadline done = go []
+collect :: Session -> Double -> (Value -> Bool) -> [Value] -> IO (Either Failure ([Value], Bool))
+collect s deadline done earlier = go (reverse earlier)
   where
     go acc = do
       now <- getMonotonicTime
@@ -188,13 +196,16 @@ collect s deadline done = go []
       case message of
         Nothing -> pure (Right (reverse acc, False))
         Just (Left reason) -> pure (Left (Lost reason))
-        Just (Right bytes) -> case decodeStrict bytes of
-          Nothing -> pure (Left (Garbled bytes))
-          Just v
+        Just (Right bytes) -> case decoded bytes of
+          Left e -> pure (Left e)
+          Right v
             | done v -> pure (Right (reverse (redact v : acc), True))
             | otherwise -> go (redact v : acc)
     -- what arrived before the connection was lost comes first
     next = (Right <$> readTQueue (sessionInbox s)) `orElse` (readTVar (sessionLost s) >>= maybe retry (pure . Left))
+
+decoded :: B.ByteString -> Either Failure Value
+decoded bytes = maybe (Left (Garbled bytes)) Right (decodeStrict bytes)
 
 -- | Run a request, turn a lost connection into a 'Failure', and pause
 -- afterwards, whatever came of it.

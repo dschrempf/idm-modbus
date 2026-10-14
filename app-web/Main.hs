@@ -66,7 +66,8 @@ periodArg a = case readMaybe a of
 
 settingArg :: String -> IO SettingId
 settingArg a = case readMaybe a :: Maybe Int of
-  Just _ -> pure (SettingId (T.pack a))
+  -- the controller names a setting in its answer as it spells the id
+  Just n -> pure (SettingId (T.pack (show n)))
   Nothing -> die (a <> ": not a setting id")
 
 usage :: IO a
