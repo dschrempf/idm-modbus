@@ -49,9 +49,6 @@ checks =
           B.pack [0, 7, 0, 0]
         ]
     ),
-    ( "the table parses to the number of rows in the file",
-      length Table.navigator20 == 682
-    ),
     ( "the controller's register page adds to the manual, and states only what it states",
       length gltmon == 19
         && all
@@ -96,6 +93,10 @@ checks =
       Table.enumLabel (Address 1395) 1 == Just (T.pack "Zeitprogramm")
         && Table.enumLabel (Address 1504) 0 == Just (T.pack "Aus")
         && Table.enumLabel (Address 1103) 1 == Just (T.pack "Ein")
+    ),
+    ( "an enumeration printed for zone module 1 reaches the other nine",
+      Table.enumLabel (Address 2072) 1 == Just (T.pack "Automatik")
+        && Table.enumLabel (Address 2585) 1 == Just (T.pack "Heizen")
     ),
     ( "a float arrives low word first",
       -- 0x41ab4a89 is 21.41; the machine sends 4a89 41ab

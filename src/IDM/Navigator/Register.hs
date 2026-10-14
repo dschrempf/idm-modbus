@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE DeriveLift #-}
 
 -- |
 -- Module      :  IDM.Navigator.Register
@@ -36,6 +37,7 @@ import Data.Text (Text)
 import Data.Word (Word16, Word32)
 import GHC.Float (castWord32ToFloat)
 import IDM.Modbus.TCP (Address, Quantity (..))
+import Language.Haskell.TH.Syntax (Lift)
 
 -- | Datatype as printed in the parameter list, or as far as a read measured it
 -- where the list does not name the address.
@@ -56,7 +58,7 @@ data Datatype
   | -- | one register of an encoding no source states. Read unsigned, with no
     -- sentinel claimed.
     OneRegister
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Lift)
 
 -- | How many 16-bit registers the datatype occupies.
 registerWidth :: Datatype -> Quantity
@@ -77,7 +79,7 @@ data Access
     -- and may read back. Printed @RW\/RO@, which chapter 4.1 does not define;
     -- whether the pump uses what is written depends on a menu setting.
     Supplied
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Lift)
 
 isReadable :: Access -> Bool
 isReadable WriteOnly = False
@@ -95,7 +97,7 @@ data Persistence
   | -- | a register the manual does not list, so no star says either way; a
     -- writer must assume the EEPROM
     UnknownPersistence
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Lift)
 
 data Unit
   = DegreeCelsius
@@ -111,14 +113,14 @@ data Unit
   | Minute
   | -- | a unit string the transcription does not know yet
     UnknownUnit Text
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Lift)
 
 -- | Documented bounds for a writable register.
 data Range = Range
   { rangeMinimum :: Double,
     rangeMaximum :: Double
   }
-  deriving (Show, Eq)
+  deriving (Show, Eq, Lift)
 
 -- | Whether the reference machine answered for this address.
 --
@@ -131,7 +133,7 @@ data Presence
   = Present
   | Absent
   | Untested
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Lift)
 
 -- | Which document describes a register.
 data Source
@@ -141,7 +143,7 @@ data Source
     -- @N2_GLTMON@. It states a name, a unit and an access right, and nothing
     -- else; the datatype is measured. See @doc\/verification-2026-10-14-gltmon.md@.
     GltMonitor
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Lift)
 
 data Register = Register
   { registerAddress :: Address,
@@ -157,7 +159,7 @@ data Register = Register
     registerSource :: Source,
     registerPresence :: Presence
   }
-  deriving (Show, Eq)
+  deriving (Show, Eq, Lift)
 
 -- | A register that holds no value answers with a datatype-specific sentinel.
 -- That is not a measurement, and this type refuses to let it be mistaken for

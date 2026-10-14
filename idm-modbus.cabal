@@ -59,16 +59,19 @@ library
     IDM.Navigator.Web.Level
     IDM.Navigator.Web.Session
 
-  other-modules:   IDM.Navigator.Web.Connection
+  other-modules:
+    IDM.Navigator.Table.Parse
+    IDM.Navigator.Web.Connection
+
   hs-source-dirs:  src
   build-depends:
     , aeson
-    , base        >=4.7 && <5
+    , base              >=4.7 && <5
     , bytestring
     , containers
-    , file-embed
     , network
     , stm
+    , template-haskell
     , text
     , time
     , websockets

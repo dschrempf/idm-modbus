@@ -34,7 +34,7 @@ and month of the current date). Port 502, unit id 1.
 The register table is data, not code, and it flows one way:
 
     manual/812170.pdf → pdftotext -layout → tools/transcribe.py
-      → data/navigator-2.0-{registers,enums}.tsv → embedFile → IDM.Navigator.Table
+      → data/navigator-2.0-{registers,enums}.tsv → splice → IDM.Navigator.Table
 
 `tools/transcribe.py` is the only thing that may write those two TSVs — editing
 them by hand makes the next revision of the manual impossible to apply cleanly.
@@ -96,8 +96,9 @@ The four modules stack, each refusing to know the next one's business:
 - `IDM.Navigator.Register` — the manual's vocabulary as types, plus `decode`.
   Every distinction the manual draws in prose or a footnote is a constructor,
   so a caller cannot silently ignore it.
-- `IDM.Navigator.Table` — parses the embedded TSVs; exposes `navigator20`,
-  `readable`, `present`, `enumLabel`.
+- `IDM.Navigator.Table` — parses the TSVs at compile time, so a row that does
+  not parse fails the build; exposes `navigator20`, `readable`, `present`,
+  `enumLabel`.
 - `IDM.Navigator.Client` — pacing, and pairing a read with its enum label.
 
 The web backend has a stack of its own beside it, joined to the first only by

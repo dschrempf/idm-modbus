@@ -190,16 +190,19 @@ def one(found):
 
 # the letter or number that tells one member of a family from the next
 FAMILY_TAIL = re.compile(r" (?:[A-G]|[1-9])$")
+# the zone module, which leads a name rather than ending it
+FAMILY_MODULE = re.compile(r"^Zonenmodul \d+ ")
 
 
 def family(r):
     """What a register shares with the others the manual lists it beside.
 
-    Heating circuits A to G, and compressors 1 to 4, get an address each, but
-    the enumeration of their values is printed once, beside the first of them.
-    Members are alike in everything but the letter or number ending the name.
+    Heating circuits A to G, compressors 1 to 4, and zone modules 1 to 10 with
+    their rooms 1 to 8 get an address each, but the enumeration of their values
+    is printed once, beside the first of them. Members are alike in everything
+    but the letter or number ending the name and the number of the zone module.
     """
-    stem = FAMILY_TAIL.sub("", r["name"])
+    stem = FAMILY_MODULE.sub("Zonenmodul ", FAMILY_TAIL.sub("", r["name"]))
     if stem == r["name"]:
         return None
     return (stem, r["datatype"], r["access"], r["min"], r["max"], r["unit"])

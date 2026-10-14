@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveLift #-}
 {-# LANGUAGE LambdaCase #-}
 
 -- |
@@ -37,6 +38,7 @@ import Data.Bits (testBit, (.&.))
 import qualified Data.ByteString as B
 import Data.IORef (IORef, atomicModifyIORef', newIORef, readIORef, writeIORef)
 import Data.Word (Word16, Word8)
+import Language.Haskell.TH.Syntax (Lift)
 import qualified Network.Socket as N
 import qualified Network.Socket.ByteString as NB
 import System.Timeout (timeout)
@@ -61,7 +63,7 @@ defaultPatience :: Patience
 defaultPatience = Patience 5000000
 
 newtype Address = Address Word16
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Lift)
 
 -- | Number of 16-bit registers to read.
 newtype Quantity = Quantity Word16

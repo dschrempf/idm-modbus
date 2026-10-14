@@ -53,6 +53,9 @@ the redundant case is in the function the sentinel fix rewrites.
 
 ## 5. Table pipeline
 
+Done on 2026-10-14: the TSVs are parsed in a splice, so a bad row fails the
+build, and the zone module's number is a family index.
+
 `Table.hs`, `tools/transcribe.py`, `test/Main.hs`. After 4, so a splice that
 parses the table parses the final types; 4 and 5 can share one Changelog
 entry. The zone-module fix regenerates the enums TSV, which the new count

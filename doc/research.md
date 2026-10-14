@@ -233,9 +233,9 @@ cannot find the circuits. See
   implicit, and likewise for zone modules. `tools/transcribe.py` shares an
   encoding across registers that differ only in the letter or digit ending
   their name, which reaches heating circuits B to G, compressors 2 to 4 and
-  the eight rooms of zone module 1. Zone modules 2 to 10 differ in a digit
-  inside the name, `Zonenmodul 2 Betriebsart Raum 1`, and still carry no
-  labels.
+  the eight rooms of zone module 1, or in the number of the zone module, which
+  stands inside the name, `Zonenmodul 2 Betriebsart Raum 1`, and reaches
+  modules 2 to 10.
 - **The unit of address 74.** Both manuals print `[kW]`, and that is what
   `data/` records. The evcc discussions describe writing watts. The Smartfox
   setup asks for the pump's rated power in watts too, but that is a field in

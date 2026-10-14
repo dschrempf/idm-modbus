@@ -74,6 +74,12 @@
   for one and counts them apart.
 - `Unit` lost `Unitless`, which nothing built: a register whose source states
   no unit has `registerUnit` `Nothing`.
+- The table is parsed when the library is compiled, and a row that does not
+  parse fails the build. It used to be dropped, so a revision of the manual
+  using a datatype the library does not know, such as `CHAR`, would have lost
+  its rows without a word. A cell that is stated is read or refused: a
+  default or bound that is not a number, or a range with one bound, fails too.
+  `ParseError` is gone, and the types of a register derive `Lift`.
 
 - `captures/navigator-2.0-scan-2026-09-19.json` is a fresh sweep of all 663
   addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress` and
@@ -115,6 +121,10 @@
   enumeration across the registers that differ only in the letter or digit
   ending their name and agree in everything else, and refuses to share where
   two of them carry enumerations of their own. Sixteen addresses became 45.
+- Zone modules 2 to 10 had no labels: the manual prints them beside zone module
+  1, and a zone module's number is inside the name, not at its end. The family
+  rule now reads that number as an index too, and 45 labeled addresses became
+  207.
 - `tools/transcribe.py` read the parameter list by the order of its cells,
   which the list does not keep. It now reads each cell by the column it is
   printed in. Sixty-six names were wrong — 59 cut short of their sensor

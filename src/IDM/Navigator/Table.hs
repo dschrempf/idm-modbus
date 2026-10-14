@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 -- |
@@ -8,9 +7,11 @@
 -- License     :  BSD-3-Clause
 --
 -- The register table is data, not code. It lives in @data\/@ as a tab separated
--- file transcribed from the manufacturer's manual, is embedded at compile time,
--- and is parsed into 'Register' values here. There is one place to correct when
--- a new revision of the manual appears.
+-- file, is parsed when this module is compiled, and a row that does not parse
+-- fails the build. @tools\/transcribe.py@ writes it from two sources: the
+-- manufacturer's manual, and the controller's own web page @N2_GLTMON@, which
+-- lists addresses the manual does not. 'registerSource' says which a row is
+-- from. There is one place to correct when a new revision of either appears.
 module IDM.Navigator.Table
   ( navigator20,
     navigator20Enums,
@@ -18,44 +19,29 @@ module IDM.Navigator.Table
     readable,
     present,
     enumLabel,
-    ParseError (..),
   )
 where
 
-import qualified Data.ByteString as B
-import Data.FileEmbed (embedFile)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as M
-import Data.Maybe (mapMaybe)
 import Data.Text (Text)
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as TE
-import IDM.Modbus.TCP (Address (..))
+import IDM.Modbus.TCP (Address)
 import IDM.Navigator.Register
-
-newtype ParseError = ParseError Text
-  deriving (Show, Eq)
-
-registerFile :: B.ByteString
-registerFile = $(embedFile "data/navigator-2.0-registers.tsv")
-
-enumFile :: B.ByteString
-enumFile = $(embedFile "data/navigator-2.0-enums.tsv")
+import IDM.Navigator.Table.Parse (parseEnums, parseRegisters, parsedFile)
 
 -- | Every register of the Navigator 2.0 parameter list, document 812170
--- revision 10, and those the controller's own @N2_GLTMON@ page adds to it, in
--- address order.
+-- revision 10, and of @N2_GLTMON@, in address order.
 navigator20 :: [Register]
-navigator20 = mapMaybe parseRegister (tsvRows registerFile)
+navigator20 = $$(parsedFile parseRegisters "data/navigator-2.0-registers.tsv")
 
 -- | Enumerated values, keyed by address and code.
 --
 -- The manual prints an encoding once for a family of addresses;
 -- @tools\/transcribe.py@ gives it to every member whose name differs only in
--- its final letter or digit. Zone modules 2 to 10 differ elsewhere and carry
--- no entry. See @doc\/research.md@.
+-- its final letter or digit, or in the number of its zone module. See
+-- @doc\/research.md@.
 navigator20Enums :: Map (Address, Int) Text
-navigator20Enums = M.fromList (mapMaybe parseEnum (tsvRows enumFile))
+navigator20Enums = M.fromList $$(parsedFile parseEnums "data/navigator-2.0-enums.tsv")
 
 byAddress :: Map Address Register
 byAddress = M.fromList [(registerAddress r, r) | r <- navigator20]
@@ -71,98 +57,3 @@ present = filter ((== Present) . registerPresence) readable
 
 enumLabel :: Address -> Int -> Maybe Text
 enumLabel addr code = M.lookup (addr, code) navigator20Enums
-
-tsvRows :: B.ByteString -> [[Text]]
-tsvRows = drop 1 . map (T.splitOn "\t") . T.lines . TE.decodeUtf8
-
-parseRegister :: [Text] -> Maybe Register
-parseRegister [addr, dtype, access, persistence, name, param, lo, hi, def, unit, source, presence] = do
-  a <- Address <$> readMaybeT addr
-  d <- parseDatatype dtype
-  acc <- parseAccess access
-  p <- parsePersistence persistence
-  s <- parseSource source
-  pr <- parsePresence presence
-  pure
-    Register
-      { registerAddress = a,
-        registerDatatype = d,
-        registerAccess = acc,
-        registerPersistence = p,
-        registerName = name,
-        registerParameter = nonEmpty param,
-        registerRange = Range <$> readMaybeT lo <*> readMaybeT hi,
-        registerDefault = readMaybeT def,
-        registerUnit = parseUnit <$> nonEmpty unit,
-        registerSource = s,
-        registerPresence = pr
-      }
-parseRegister _ = Nothing
-
-parseEnum :: [Text] -> Maybe ((Address, Int), Text)
-parseEnum [addr, code, label] = do
-  a <- Address <$> readMaybeT addr
-  c <- readMaybeT code
-  pure ((a, c), label)
-parseEnum _ = Nothing
-
-parseDatatype :: Text -> Maybe Datatype
-parseDatatype t = case t of
-  "FLOAT" -> Just Float32
-  "UCHAR" -> Just UChar
-  "WORD" -> Just Word
-  "BOOL" -> Just Boolean
-  "DWORD" -> Just DWord
-  "one-register" -> Just OneRegister
-  _ -> Nothing
-
-parseAccess :: Text -> Maybe Access
-parseAccess t = case t of
-  "RO" -> Just ReadOnly
-  "RW" -> Just ReadWrite
-  "W" -> Just WriteOnly
-  "RW/RO" -> Just Supplied
-  _ -> Nothing
-
-parsePersistence :: Text -> Maybe Persistence
-parsePersistence t = case t of
-  "eeprom" -> Just Eeprom
-  "volatile" -> Just Volatile
-  "unknown" -> Just UnknownPersistence
-  _ -> Nothing
-
-parseSource :: Text -> Maybe Source
-parseSource t = case t of
-  "manual" -> Just Manual
-  "gltmon" -> Just GltMonitor
-  _ -> Nothing
-
-parsePresence :: Text -> Maybe Presence
-parsePresence t = case t of
-  "present" -> Just Present
-  "absent" -> Just Absent
-  "untested" -> Just Untested
-  _ -> Nothing
-
-parseUnit :: Text -> Unit
-parseUnit t = case T.strip t of
-  "°C" -> DegreeCelsius
-  "%" -> Percent
-  "%rF" -> RelativeHumidity
-  "kW" -> Kilowatt
-  "kWh" -> KilowattHour
-  "h" -> Hour
-  "bar" -> Bar
-  "l" -> Liter
-  "l/h" -> LiterPerHour
-  "l/min" -> LiterPerMinute
-  "min" -> Minute
-  other -> UnknownUnit other
-
-nonEmpty :: Text -> Maybe Text
-nonEmpty t = if T.null (T.strip t) then Nothing else Just (T.strip t)
-
-readMaybeT :: (Read a) => Text -> Maybe a
-readMaybeT t = case reads (T.unpack (T.strip t)) of
-  [(v, "")] -> Just v
-  _ -> Nothing

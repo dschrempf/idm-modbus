@@ -58,7 +58,7 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `tools/transcribe.py` | rebuilds both TSVs from the manual's extracted text |
 | `src/IDM/Modbus/TCP.hs` | framing |
 | `src/IDM/Navigator/Register.hs` | what a register is, and how to decode one |
-| `src/IDM/Navigator/Table.hs` | the table, embedded at compile time |
+| `src/IDM/Navigator/Table.hs` | the table, parsed at compile time |
 | `src/IDM/Navigator/Client.hs` | reading, paced |
 | `src/IDM/Navigator/Web.hs`, `Web/` | the web backend: its vocabulary, a read-only session, and the user level |
 | `doc/research.md` | sources, community projects, open questions |
