@@ -10,3 +10,7 @@ A rename (`NoValue`, `Sentinel`) is a public API change and touches the
 Readme, `CLAUDE.md` and the docs that name `NotFitted`. Decide together with
 `2026-10-14-float-sentinel-swallows-averaged-outdoor-temperature`, which may
 change the type anyway.
+
+The `gltmon` rows add two more: 4108 and 4112, `Leistungsbegrenzung Wärmepumpe`
+and `Kaskade`, read -1.0 and decode to `NotFitted`, where -1 more likely means
+"no limit".
