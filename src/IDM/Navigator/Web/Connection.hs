@@ -21,6 +21,7 @@ module IDM.Navigator.Web.Connection
     close,
     exchange,
     drain,
+    abandon,
   )
 where
 
@@ -69,8 +70,8 @@ data Failure
   = -- | the controller refused the PIN; its greeting, if it sent one
     NotAuthorized (Maybe Value)
   | -- | an answer that comes late arrives among the messages of the next
-    -- request, and is taken for its answer if 'IDM.Navigator.Web.answerIn'
-    -- cannot tell the two apart
+    -- request; where it cannot be told from the next one of its kind,
+    -- 'IDM.Navigator.Web.Session.ask' ends the session
     NoAnswer
   | -- | the connection, or a send that was cut; every later request fails
     -- with the same reason, unsent
@@ -141,6 +142,10 @@ hangUp sock conn = do
     `catch` (\(_ :: IOException) -> pure ())
   N.close sock
 
+-- | End a session that can still send, for a reason of the caller's.
+abandon :: Session -> String -> IO ()
+abandon s = loseWith (sessionLost s)
+
 loseWith :: TVar (Maybe String) -> String -> IO ()
 loseWith lost reason = atomically (modifyTVar' lost (<|> Just reason))
 
@@ -171,7 +176,7 @@ drain s request micros = do
 send :: Session -> Value -> IO ()
 send s request =
   WS.sendTextData (sessionConnection s) (encode request)
-    `onException` loseWith (sessionLost s) "a send was cut"
+    `onException` abandon s "a send was cut"
 
 collect :: Session -> Double -> (Value -> Bool) -> IO (Either Failure ([Value], Bool))
 collect s deadline done = go []

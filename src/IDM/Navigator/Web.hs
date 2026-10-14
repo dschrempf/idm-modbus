@@ -30,6 +30,8 @@ module IDM.Navigator.Web
     queryJSON,
     answerKey,
     answerIn,
+    Attribution (..),
+    attribution,
 
     -- * Status
     UserLevel (..),
@@ -66,6 +68,7 @@ import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
 import Data.Aeson.Types (Parser, parseMaybe, withObject)
 import Data.Char (isDigit, isHexDigit, isUpper)
+import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Time (LocalTime, utc, utcToLocalTime)
@@ -137,20 +140,48 @@ answerKey q = case q of
   GraphTraverse -> "graphTraverse"
   GraphDetail _ _ -> "graphDetail"
 
--- | The payload of a message, if it is the answer to the query. An answer
--- that comes late is told from the next one of its kind only where it names
--- what was asked: a setting by its @id@. A @graphDetail@ does not.
+-- | The payload of a message, if it is the answer to the query.
 answerIn :: Query -> Value -> Maybe Value
 answerIn q (Object o) = do
   a <- KM.lookup (answerKey q) o
-  case q of
-    SettingOverview i -> a <$ guard (names i a)
-    SettingDetail i -> a <$ guard (names i a)
-    _ -> pure a
-  where
-    names (SettingId i) (Object p) = KM.lookup "id" p == Just (String i)
-    names _ _ = False
+  a <$ guard (maybe True ($ a) (naming q))
 answerIn _ _ = Nothing
+
+-- | Whether an answer that comes late can be told from the next answer of its
+-- kind.
+data Attribution
+  = -- | the answer names what was asked, and 'answerIn' checks it
+    NamesItsQuery
+  | -- | the answer names nothing, so a late one is taken for the next
+    Anonymous
+  deriving (Show, Eq)
+
+attribution :: Query -> Attribution
+attribution = maybe Anonymous (const NamesItsQuery) . naming
+
+-- | Whether a payload under the query's key answers this very query, for the
+-- queries whose answer says.
+naming :: Query -> Maybe (Value -> Bool)
+naming q = case q of
+  StatusOverview -> Nothing
+  NotificationOverview -> Nothing
+  SettingOverview i -> Just (namesSetting i)
+  SettingDetail i -> Just (namesSetting i)
+  GraphOverview -> Nothing
+  GraphTraverse -> Nothing
+  GraphDetail g s -> Just (namesGraph g s)
+  where
+    namesSetting (SettingId i) = holds $ withObject "setting" $ \o -> (== i) <$> o .: "id"
+    -- the answer names its graph only by the name @graphs@ gives the id, and
+    -- its span by the instants it reaches from and to
+    namesGraph (GraphId g) (Span from step) = holds $ withObject "graphDetail" $ \o -> do
+      name <- o .: "name"
+      graphs <- o .: "graphs" >>= mapM (withObject "graph" $ \x -> (,) <$> x .: "name" <*> x .: "id")
+      navigation <- o .: "navigation"
+      reached <- (-) <$> navigation .: "to" <*> navigation .: "from"
+      stepped <- navigation .: "step"
+      pure ([i | (n, i) <- graphs, n == (name :: Text)] == [g] && reached == from && stepped == step)
+    holds p = fromMaybe False . parseMaybe p
 
 -- | Who the controller takes the web interface to be. The house document on
 -- the codes names three levels; the captures have seen 0 and 2 only.

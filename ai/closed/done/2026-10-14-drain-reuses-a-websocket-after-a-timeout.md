@@ -24,7 +24,9 @@ Keeping a session after `NoAnswer` showed a second defect: `answerIn` matched
 on the key alone, so the late answer to one setting was taken for the next
 setting's, and every later line of a watch was off by one. A setting's answer
 must now name its `id`; every one in the captures does, `redirectId` or not.
-A `graphDetail` names nothing and stays ambiguous. With that, `idm-web --watch`
+A `graphDetail` names its graph by the name `graphs` gives the id, and its
+span by `navigation`, which all 28 in the captures do. The queries without
+parameters name nothing, so a `NoAnswer` to one ends the session. With that, `idm-web --watch`
 closes its session after `Lost` only, and the fake controller showed the late
 answer to setting 1 in the line of setting 2, before 2's own, and setting 3
 clean. The `not connected` after 5888 in
