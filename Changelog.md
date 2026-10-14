@@ -134,6 +134,15 @@
   Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
   number where the controller's parameter identifier belongs; nine more lost
   their unit.
+- Info rows kept HTML entities: `Taupunktwächter&nbsp;Heizkreis A`. A cell now
+  reads a no-break space as a space, with or without the semicolon the
+  controller sometimes leaves off, and decodes the escapes of markup; any other
+  entity stays as it is.
+- `redact` and `tools/webprobe.py` stripped the machine's identity by
+  different rules, and both missed a MAC address in lowercase. Both now match
+  the myIDM identifier and the MAC address in either case, in keys as well as
+  values, after the JSON is decoded, and drop the session identifier at any
+  depth.
 
 ### Not yet
 

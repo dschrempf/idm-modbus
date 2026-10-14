@@ -25,8 +25,10 @@ register table speak the same vocabulary. The tree is walked: `overview` on a
 value. What the tree shows depends on the user level of the controller; this
 reads whatever the level it is left at exposes, and never raises it. Above the
 user's own level the tree also holds controls -- the relay test, a reboot, a
-reset -- so an item is asked only when its type is known to hold a value, and
-the menus that exist to act on the machine are not opened.
+reset. The web interface acts only on a `save` or `execute`, but of the
+controls only `N2_PING` has been asked its `detail`, so an item is asked only
+when its type is known to hold a value, and the menus that exist to act on the
+machine are not opened.
 
 The third is the graph, and it is the only source here that carries time: the
 controller keeps a sampled history of the sensors it plots, and of whether it
@@ -103,9 +105,9 @@ READ_COMMANDS = ("overview", "detail", "traverse")
 FORBIDDEN_CONTROLLERS = ("relaytest", "authentication")
 
 # The settings items that hold a value. Every other type is a control -- a
-# button, the relay test, a recovery -- or unknown, and is left unasked: at
-# Fachmann level the tree carries `action`, `execute`, `relaytest`,
-# `treeview`, `vparam` and `frwaparam` items.
+# button, the relay test, a recovery -- or unknown, and is left unasked until
+# someone has seen what its `detail` does: at Fachmann level the tree carries
+# `action`, `execute`, `relaytest`, `treeview`, `vparam` and `frwaparam` items.
 VALUE_ITEMS = ("iparam", "hparam", "info")
 # menus whose purpose is to act on the machine, not to show it
 CLOSED_MENUS = ("N2_RELAY_TEST", "N2_RESET_DATA")
@@ -128,27 +130,31 @@ REDACTED_PARAMS = {"SSYSLPIN"}
 REDACTED_NAMES = {"N2_NETWORK_LOCAL_CODE"}
 REDACTED_VALUE_KEYS = ("value", "displayValue")
 REDACTED_KEYS = {"myidmInfo"}
+# the session identifier the controller stamps on every message, dropped
+DROPPED_KEYS = {"remoteSessionId"}
+# matched in keys and values alike, after the JSON is decoded, so an escape
+# cannot hide them
 IDENTIFIERS = [
-    re.compile(r"m\d+@[0-9a-f]+"),  # the myIDM identifier
-    re.compile(r"(?:[0-9A-F]{2}:){5}[0-9A-F]{2}"),  # the MAC address
+    re.compile(r"m[0-9]+@[0-9A-Fa-f]+"),  # the myIDM identifier
+    re.compile(r"(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}"),  # the MAC address
 ]
 
 
 def redact(node):
-    """Strip the machine's identity out of a response, in place."""
+    """The response, stripped of the machine's identity at any depth."""
     if isinstance(node, dict):
+        hidden = REDACTED_KEYS
         if node.get("param") in REDACTED_PARAMS or node.get("name") in REDACTED_NAMES:
-            for key in REDACTED_VALUE_KEYS:
-                if key in node:
-                    node[key] = REDACTED
-        for key in list(node):
-            if key in REDACTED_KEYS:
-                node[key] = REDACTED
-            else:
-                redact(node[key])
-    elif isinstance(node, list):
-        for item in node:
-            redact(item)
+            hidden = hidden | set(REDACTED_VALUE_KEYS)
+        return {
+            redact_text(key): REDACTED if key in hidden else redact(value)
+            for key, value in node.items()
+            if key not in DROPPED_KEYS
+        }
+    if isinstance(node, list):
+        return [redact(item) for item in node]
+    if isinstance(node, str):
+        return redact_text(node)
     return node
 
 
@@ -292,9 +298,7 @@ class Session:
         messages = []
         deadline = time.monotonic() + seconds
         while (text := self.ws.recv_text(deadline)) is not None:
-            message = json.loads(redact_text(text))
-            message.pop("remoteSessionId", None)
-            messages.append(redact(message))
+            messages.append(redact(json.loads(text)))
         return messages
 
 

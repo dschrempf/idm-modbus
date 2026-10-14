@@ -9,3 +9,9 @@
 
 None of it leaked in the 16 captures checked on 2026-10-14. Pick one
 behavior and make the other match.
+
+Fixed on 2026-10-14 by taking the stricter rule of each: both drop
+`remoteSessionId` at any depth, match keys and values after decoding the JSON
+(Python matched raw text, which a `@` escape could evade), and take hex
+in either case, a MAC joined by `:` or `-`. Re-redacting every capture under
+the new rules changed nothing.

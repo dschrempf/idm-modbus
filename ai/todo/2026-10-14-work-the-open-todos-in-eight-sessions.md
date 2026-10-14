@@ -67,6 +67,10 @@ check should cover.
 
 ## 6. Web parsing against webprobe
 
+Done on 2026-10-14: info cells decode `&nbsp` to a space, both redactions take
+the stricter rule of each, and the `detail` fence stays in `webprobe.py` with
+the library claiming no more than `N2_PING`.
+
 `Web.hs`, `tools/webprobe.py`, `CLAUDE.md`. In each, the Haskell and the
 Python side disagree, and one position goes.
 

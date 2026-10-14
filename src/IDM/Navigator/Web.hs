@@ -65,10 +65,11 @@ import Data.Aeson (Value (..), object, (.:), (.:?), (.=))
 import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
 import Data.Aeson.Types (Parser, parseMaybe, withObject)
-import Data.Char (isDigit, isHexDigit, isUpper)
-import Data.Maybe (fromMaybe)
+import Data.Char (chr, isDigit, isHexDigit)
+import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
+import qualified Data.Text.Read as TR
 import Data.Time (LocalTime, utc, utcToLocalTime)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
 import Text.Read (readMaybe)
@@ -100,8 +101,9 @@ data Query
   = StatusOverview
   | NotificationOverview
   | SettingOverview SettingId
-  | -- | a read for every item type: the web interface asks it of each item it
-    -- opens, and acts only on a later @save@ or @execute@
+  | -- | a read: the web interface asks it of each item it opens, and acts
+    -- only on a later @save@ or @execute@. Of the controls, only the @execute@
+    -- item @N2_PING@ has been asked, and it answered with its detail.
     SettingDetail SettingId
   | GraphOverview
   | -- | every channel that could be plotted, whether or not a graph holds it
@@ -327,7 +329,7 @@ infoRows :: Text -> [InfoRow]
 infoRows = map (row . cells . fst . T.breakOn "</tr>") . drop 1 . T.splitOn "<tr"
   where
     -- a cell opens with a tag that may carry attributes, @<td colspan = "4">@
-    cells = map (T.strip . stripTags . T.drop 1 . T.dropWhile (/= '>')) . drop 1 . T.splitOn "<td"
+    cells = map (T.strip . decodeEntities . stripTags . T.drop 1 . T.dropWhile (/= '>')) . drop 1 . T.splitOn "<td"
     row [d, l, v, u]
       | not (T.null l) = InfoReading (if T.null d then Nothing else Just d) l (valueOf v) u
     row cs = InfoCells cs
@@ -337,13 +339,47 @@ infoRows = map (row . cells . fst . T.breakOn "</tr>") . drop 1 . T.splitOn "<tr
         | T.null rest -> before
         | otherwise -> before <> stripTags (T.drop 1 (T.dropWhile (/= '>') rest))
 
+-- | Replace an entity a cell may hold: a no-break space, which a label holds
+-- only to keep its words on one line, and the escapes of markup. The controller
+-- also writes @&nbsp@ without its semicolon, as browsers accept. Any other
+-- entity stays as it is.
+decodeEntities :: Text -> Text
+decodeEntities t = case T.breakOn "&" t of
+  (before, rest)
+    | T.null rest -> before
+    | otherwise ->
+        let s = T.drop 1 rest
+         in before <> maybe ("&" <> decodeEntities s) (\(c, more) -> c <> decodeEntities more) (named s <|> numeric s)
+  where
+    named s = listToMaybe [(c, more) | (n, c) <- names, Just more <- [T.stripPrefix n s]]
+    names =
+      [ ("nbsp;", " "),
+        ("nbsp", " "),
+        ("amp;", "&"),
+        ("lt;", "<"),
+        ("gt;", ">"),
+        ("quot;", "\""),
+        ("apos;", "'")
+      ]
+    numeric s = do
+      body <- T.stripPrefix "#" s
+      (n, more) <- either (const Nothing) Just $ case T.uncons body of
+        Just (x, hex) | x `elem` ['x', 'X'] -> TR.hexadecimal hex
+        _ -> TR.decimal body
+      more' <- T.stripPrefix ";" more
+      guard (n <= (0x10FFFF :: Integer))
+      pure (T.singleton (chr (fromInteger n)), more')
+
 -- | Strip a response of what identifies the machine, as @tools\/webprobe.py@
--- does: the code that opens the controller, the myIDM identifier, the MAC
--- address, and the session identifier the controller stamps on every message.
--- The marker stays, so a reader can tell a removal from an absence.
+-- does: the code that opens the controller, the myIDM identifier and the MAC
+-- address, in keys and values alike, and the session identifier the
+-- controller stamps on every message, at any depth. The marker stays, so a
+-- reader can tell a removal from an absence.
 redact :: Value -> Value
 redact v = case v of
-  Object o -> Object (KM.mapWithKey field (KM.delete "remoteSessionId" (hide o)))
+  Object o ->
+    Object . KM.fromList $
+      [(K.fromText (redactText (K.toText k)), field k x) | (k, x) <- KM.toList (hide o), k /= "remoteSessionId"]
   Array a -> Array (fmap redact a)
   String t -> String (redactText t)
   _ -> v
@@ -361,8 +397,8 @@ redact v = case v of
 redacted :: Text
 redacted = "<redacted>"
 
--- | Replace every myIDM identifier, @m@ digits @\@@ lowercase hex, and every
--- MAC address, uppercase hex in six pairs.
+-- | Replace every myIDM identifier, @m@ digits @\@@ hex, and every MAC
+-- address, hex in six pairs joined by @:@ or @-@. Hex in either case.
 redactText :: Text -> Text
 redactText = T.concat . go
   where
@@ -371,16 +407,15 @@ redactText = T.concat . go
       Just (c, rest) -> case myIdm s <|> mac s of
         Just n -> redacted : go (T.drop n s)
         Nothing -> let (plain, more) = T.break starts rest in T.cons c plain : go more
-    starts c = c == 'm' || upperHex c
-    upperHex c = isDigit c || (isHexDigit c && isUpper c)
-    lowerHex c = isDigit c || (isHexDigit c && not (isUpper c))
+    starts c = c == 'm' || isHexDigit c
     myIdm s = do
       rest <- T.stripPrefix "m" s
       let digits = T.takeWhile isDigit rest
-      hex <- T.takeWhile lowerHex <$> T.stripPrefix "@" (T.drop (T.length digits) rest)
+      hex <- T.takeWhile isHexDigit <$> T.stripPrefix "@" (T.drop (T.length digits) rest)
       if T.null digits || T.null hex then Nothing else Just (2 + T.length digits + T.length hex)
     mac s =
-      let pairs = T.splitOn ":" (T.take 17 s)
-       in if length pairs == 6 && all (\p -> T.length p == 2 && T.all upperHex p) pairs
+      let candidate = T.unpack (T.take 17 s)
+          fits i c = if i `mod` 3 == 2 then c `elem` [':', '-'] else isHexDigit c
+       in if length candidate == 17 && and (zipWith fits [0 :: Int ..] candidate)
             then Just 17
             else Nothing

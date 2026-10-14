@@ -219,6 +219,17 @@ checks =
     ( "what names the machine is redacted, and nothing else",
       redact (json "{\"remoteSessionId\":\"x\",\"a\":{\"param\":\"SSYSLPIN\",\"value\":\"1234\"},\"b\":\"MAC 00:1A:2B:3C:4D:5E, m42@0a1b idm\",\"myidmInfo\":{\"k\":1},\"c\":\"B32 21.5\"}")
         == json "{\"a\":{\"param\":\"SSYSLPIN\",\"value\":\"<redacted>\"},\"b\":\"MAC <redacted>, <redacted> idm\",\"myidmInfo\":\"<redacted>\",\"c\":\"B32 21.5\"}"
+    ),
+    ( "redaction reaches keys, any depth, and hex in either case",
+      redact (json "{\"a\":{\"remoteSessionId\":\"x\",\"00-1a-2b-3c-4d-5e\":\"m42@0A1B\"},\"b\":[\"ff:ee:dd:cc:bb:aa\",\"12:34\"]}")
+        == json "{\"a\":{\"<redacted>\":\"<redacted>\"},\"b\":[\"<redacted>\",\"12:34\"]}"
+    ),
+    ( "an info cell decodes the entities the controller writes",
+      infoRows (T.pack "<tr><td>B5</td><td>Taupunktwächter&nbsp;Heizkreis A</td><td>1</td><td></td></tr><tr><td>Laufzeit Stufe&nbsp1</td><td>39.9h</td></tr><tr><td>a &amp; b &#x41;&#66; &copy; &</td></tr>")
+        == [ InfoReading (Just (T.pack "B5")) (T.pack "Taupunktwächter Heizkreis A") (InfoNumber 1) T.empty,
+             InfoCells [T.pack "Laufzeit Stufe 1", T.pack "39.9h"],
+             InfoCells [T.pack "a & b AB &copy; &"]
+           ]
     )
   ]
 

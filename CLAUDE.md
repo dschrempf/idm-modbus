@@ -73,9 +73,11 @@ verbatim but for the code that opens the controller and the strings that name
 the machine, which are replaced by a visible marker. What the capture contains
 depends on the user level the controller is left at; the script never raises
 it. At Fachmann level the settings tree also holds controls — the relay test, a
-reboot, resets — so the walk asks `detail` only of the item types in
-`VALUE_ITEMS` and never opens the menus in `CLOSED_MENUS`; a new item type
-stays unasked until someone has looked at what it is.
+reboot, resets. The web interface acts only on a `save` or `execute`, but of
+the controls only `N2_PING` has been asked its `detail`, so the walk asks
+`detail` only of the item types in `VALUE_ITEMS` and never opens the menus in
+`CLOSED_MENUS`; a new item type stays unasked until someone has seen what its
+`detail` does. `idm-web --show` asks whatever id it is given.
 
 Captures of either kind live in `captures/`, which git ignores because the
 repository is public; `captures/README.md` names the files. A document in
