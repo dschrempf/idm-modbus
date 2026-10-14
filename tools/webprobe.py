@@ -3,9 +3,10 @@
 
 The controller's web interface is a single-page application; the pages carry no
 values, they arrive over a websocket on port 61220 and the local PIN travels in
-the URL:
+the URL. The PIN is read from IDM_PIN, as idm-web reads it, so that it stays
+out of the shell history and the process list:
 
-    tools/webprobe.py 192.168.0.200 PIN > captures/navigator-2.0-webapi-2026-09-24-1535.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
 
 Every request this sends is a read: `overview`, `detail` or `traverse`, which is
 the whole read side of the protocol -- the controller's own JavaScript names
@@ -164,6 +165,8 @@ class WebSocket:
         self.sock = socket.create_connection((host, port), timeout=timeout)
         self.sock.settimeout(timeout)
         self.buffer = b""
+        # the fragments of a message not yet whole
+        self.message = b""
         key = base64.b64encode(os.urandom(16)).decode()
         handshake = (
             f"GET {path} HTTP/1.1\r\n"
@@ -188,11 +191,6 @@ class WebSocket:
             raise ConnectionError("connection closed by the controller")
         self.buffer += chunk
 
-    def _take(self, n):
-        while len(self.buffer) < n:
-            self._fill()
-        out, self.buffer = self.buffer[:n], self.buffer[n:]
-        return out
 
     def send_text(self, text):
         payload = text.encode()
@@ -212,19 +210,31 @@ class WebSocket:
         self.sock.sendall(bytes(header) + masked)
 
     def _frame(self):
-        first, second = self._take(2)
-        fin, opcode = first & 0x80, first & 0x0F
-        length = second & 0x7F
+        """The next frame. It leaves the buffer only once it is whole, so a
+        timeout while it arrives loses nothing."""
+        while (frame := self._whole_frame()) is None:
+            self._fill()
+        return frame
+
+    def _whole_frame(self):
+        b = self.buffer
+        if len(b) < 2:
+            return None
+        fin, opcode = b[0] & 0x80, b[0] & 0x0F
+        length, at = b[1] & 0x7F, 2
         if length == 126:
-            length = int.from_bytes(self._take(2), "big")
+            length, at = int.from_bytes(b[2:4], "big"), 4
         elif length == 127:
-            length = int.from_bytes(self._take(8), "big")
+            length, at = int.from_bytes(b[2:10], "big"), 10
+        if len(b) < at + length:
+            return None
         # a server frame is never masked
-        return fin, opcode, self._take(length)
+        self.buffer = b[at + length :]
+        return fin, opcode, b[at : at + length]
 
     def recv_text(self, deadline):
-        """The next text message, or None once the deadline passes."""
-        message = b""
+        """The next text message, or None once the deadline passes. A message
+        still arriving then is kept for the next call."""
         while True:
             remaining = deadline - time.monotonic()
             if remaining <= 0:
@@ -241,8 +251,9 @@ class WebSocket:
                 continue
             if opcode == 0xA:  # pong
                 continue
-            message += payload
+            self.message += payload
             if fin:
+                message, self.message = self.message, b""
                 return message.decode()
 
     def close(self):
@@ -364,6 +375,7 @@ def main(host, pin):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        raise SystemExit(f"usage: {sys.argv[0]} HOST PIN")
-    main(sys.argv[1], sys.argv[2])
+    pin = os.environ.get("IDM_PIN")
+    if len(sys.argv) != 2 or not pin:
+        raise SystemExit(f"usage: IDM_PIN=... {sys.argv[0]} HOST")
+    main(sys.argv[1], pin)

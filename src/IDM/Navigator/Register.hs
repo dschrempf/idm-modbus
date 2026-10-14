@@ -95,8 +95,8 @@ data Unit
   | KilowattHour
   | Hour
   | Bar
-  | Litre
-  | LitrePerHour
+  | Liter
+  | LiterPerHour
   | Minute
   | Unitless
   | -- | a unit string the transcription does not know yet

@@ -8,7 +8,8 @@
 - The Navigator 2.0 parameter list of document 812170 revision 10, transcribed
   to `data/navigator-2.0-registers.tsv`, embedded at compile time.
 - Decoding that distinguishes a measurement from the sentinel an unfitted
-  sensor returns, and that reads a temperature-carrying `WORD` as signed.
+  sensor returns, and that reads a `WORD` as signed where the parameter list
+  documents a negative minimum for it.
 - `idm-dump`, which reads every register and prints it.
 - The research behind all of this, in `doc/`.
 - The 166 registers the parameter list marks `RW/RO`, an access right chapter

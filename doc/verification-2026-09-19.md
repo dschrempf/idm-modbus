@@ -155,7 +155,7 @@ cannot find the circuits. See `doc/verification-2026-09-20.md`.
 
 ## Reproducing
 
-    idm-dump 192.168.0.200 --all
+    idm-dump HOST --all
 
 sweeps the full parameter list; without `--all` it reads only the addresses
 recorded as present here.

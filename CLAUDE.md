@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal run idm-dump -- HOST --all   # sweep the whole parameter list
     cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-YYYY-MM-DD-HHMM.json
     cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
-    tools/webprobe.py HOST PIN > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
     IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
     IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
     IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-2.0-webwatch-YYYY-MM-DD-HHMM.jsonl

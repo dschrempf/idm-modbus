@@ -259,7 +259,7 @@ machine did, so it cannot be summed against 1754 and is not evidence here.
 
 ## Reproducing
 
-    cabal run idm-dump -- 192.168.0.200 --json > capture.json
+    cabal run idm-dump -- HOST --json > capture.json
 
 taken within a minute or two of the web page being read. The page is at the
 controller's address in a browser; the service pages used here are under

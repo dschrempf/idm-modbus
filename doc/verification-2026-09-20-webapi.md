@@ -20,8 +20,9 @@ register table already has, and the join is stated in one place: the table.
 The websocket is `ws://HOST:61220`; the local PIN travels in the URL as
 `auth_code`. Messages are JSON, `{controller, command, data}`. The protocol has
 four commands, and two of them write: `save` and `execute`. `tools/webprobe.py`
-sends only `overview` and `detail`, refuses anything else before it opens the
-socket, and never touches the user level — everything below was read at the
+refuses any command but the three reads before sending it, and never touches
+the user level; this capture holds `overview` and `detail` only. Everything
+below was read at the
 level the controller was already standing at, `userlevel` 0 in this capture.
 Nothing was set, on the controller or over Modbus, at any point.
 
@@ -299,8 +300,8 @@ at 10:00 on this machine. It was done on 2026-10-01, and they agree:
 
 ## Reproducing
 
-    tools/webprobe.py 192.168.0.200 PIN > captures/navigator-2.0-webapi-DATE.json
-    cabal run idm-dump -- 192.168.0.200 --json > captures/navigator-2.0-scan-DATE.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-DATE.json
+    cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-DATE.json
 
 Run them in that order and within a few minutes of each other. The script needs
 nothing but a Python interpreter, holds its own websocket client, and takes

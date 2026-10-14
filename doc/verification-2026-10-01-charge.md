@@ -212,10 +212,10 @@ at 09:27 and one at 10:28, while 4768 and every register read on.
 
 ## Reproducing
 
-    IDM_PIN=... cabal run idm-web -- 192.168.0.200 --enter-fachmann
-    cabal run idm-dump -- 192.168.0.200 --watch 10 1066 1012 1014 1100 1790 4122 4126 1754 1090 1093 1099 1112 1032 1033 1034 \
+    IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann
+    cabal run idm-dump -- HOST --watch 10 1066 1012 1014 1100 1790 4122 4126 1754 1090 1093 1099 1112 1032 1033 1034 \
       > captures/navigator-2.0-watch-DATE.jsonl
-    IDM_PIN=... cabal run idm-web -- 192.168.0.200 --watch 10 4768 5888 6245 \
+    IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 6245 \
       > captures/navigator-2.0-webwatch-DATE.jsonl
 
 Start both before the charge, and enter the level again within the hour for

@@ -21,7 +21,7 @@ implemented.
 
     nix develop
     cabal build
-    cabal run idm-dump -- 192.168.0.200
+    cabal run idm-dump -- HOST
 
 `idm-dump` reads every register that a reference machine answered for and
 prints address, access right, EEPROM marking, value, unit and name. With
@@ -63,6 +63,9 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `src/IDM/Navigator/Web.hs`, `Web/` | the web backend: its vocabulary, a read-only session, and the user level |
 | `doc/research.md` | sources, community projects, open questions |
 | `doc/verification-2026-09-19.md` | the measurements the decoding rests on |
+| `doc/verification-2026-09-20.md` | the table against the controller's own display |
+| `doc/verification-2026-09-20-webapi.md` | the settings against the web backend, joined on the parameter identifier |
+| `doc/verification-2026-10-01-charge.md` | a hot water charge, sampled through both interfaces |
 
 Correcting the table means re-running `tools/transcribe.py` against a newer
 revision of the manual, which goes in `manual/`, ignored by git because the
@@ -94,7 +97,7 @@ change the controller's user level, which unlocks settings that are not meant
 for the owner. If your heat pump stops heating, breaks, or loses its warranty,
 that is on you, not on us.
 
-## Licence
+## License
 
 BSD-3-Clause.
 

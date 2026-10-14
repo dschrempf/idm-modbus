@@ -296,8 +296,8 @@ unitText u = case u of
   KilowattHour -> "kWh"
   Hour -> "h"
   Bar -> "bar"
-  Litre -> "l"
-  LitrePerHour -> "l/h"
+  Liter -> "l"
+  LiterPerHour -> "l/h"
   Minute -> "min"
   Unitless -> ""
   UnknownUnit t -> T.unpack t

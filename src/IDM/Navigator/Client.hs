@@ -29,7 +29,7 @@ import IDM.Navigator.Table (enumLabel)
 --
 -- The Navigator answers one request at a time and is reported to stall when
 -- several clients poll it hard, so a pause between requests is the default
--- rather than an optimisation to be discovered later.
+-- rather than an optimization to be discovered later.
 data Poll = Poll
   { pollFunctionCode :: FunctionCode,
     -- | pause between requests

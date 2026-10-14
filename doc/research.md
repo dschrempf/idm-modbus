@@ -126,11 +126,12 @@ specification plus reverse engineering, not from 812170.
 of 812049, the Navigator 1.0/1.7 manual. Useful as a reminder that the
 generations differ; useless for this controller.
 
-**evcc** discussions
-([#11905](https://github.com/evcc-io/evcc/discussions/11905),
-[#19002](https://github.com/evcc-io/evcc/issues/19002)) are the best source for
-the PV surplus path in practice: address 74 to tell the pump the current
-surplus in watts, 1710 to request heating, 4122 to read power draw.
+**evcc** discussions, idm-waermepumpe-einbinden
+([evcc-io/evcc#11905](https://github.com/evcc-io/evcc/discussions/11905)) and
+idm-waermepumpen
+([evcc-io/evcc#19002](https://github.com/evcc-io/evcc/issues/19002)), are the
+best source for the PV surplus path in practice: address 74 to tell the pump
+the current surplus in watts, 1710 to request heating, 4122 to read power draw.
 
 The **Home Assistant community thread** "IDM heatpump integration via modbus
 (pure HA)" documents the plain-YAML approach with the stock `modbus:`
@@ -155,15 +156,19 @@ answered three questions the documentation leaves open. The measurements are in
 
 1. **Absence has a sentinel value, per datatype.** A sensor that is not fitted
    does not fail to answer — it answers with `-1.0` for a float, `255` for a
-   `UCHAR`, `65535` for a `WORD`. Since no documented `UCHAR` has a maximum
-   above 95 and no `WORD` above 100, these cannot collide with real readings.
-   This is the "unavailable status indicator" kodebach could not pin down.
+   `UCHAR`, `65535` for a `WORD`. No documented `UCHAR` has a maximum above
+   95, and every `WORD` documented from 0 up stays at or below 100, so for
+   these the sentinel cannot collide with a real reading. This is the
+   "unavailable status indicator" kodebach could not pin down.
 
-2. **A `WORD` carrying a temperature is two's complement.** The bivalence
-   points read 65531 and 65516, which are the documented -5 and -20 degrees.
-   The manual calls the type `WORD` and says nothing about sign. One
-   consequence is an ambiguity the protocol cannot resolve: a bivalence point
-   genuinely set to -1 degree is indistinguishable from the absence sentinel.
+2. **A `WORD` documented from a negative minimum is two's complement.** The
+   bivalence points read 65531 and 65516, which are the documented -5 and -20
+   degrees, and the pump control signals 1104 to 1109, documented from -1,
+   read 65535 for a pump that is fitted but not being driven. The manual calls
+   the type `WORD` and says nothing about sign; its minimum decides it, and
+   where the minimum is negative 65535 is a value the register may hold, not
+   the sentinel. See
+   [verification-2026-09-20.md](verification-2026-09-20.md).
 
 3. **Function codes 3 and 4 serve the same address space.** The manual and the
    community are inconsistent about which to use — 812184 calls 74 a holding
@@ -172,11 +177,15 @@ answered three questions the documentation leaves open. The measurements are in
    need them.
 
 A fourth finding matters for anyone auto-detecting a system's layout:
-**configured heating circuits cannot be told apart from unconfigured ones by
-their settings.** The parameters for circuits B and E to G, which do not exist
-on this machine, hold plausible factory defaults (heating curve 1.2, heating
-limit 15 degrees), not sentinels. Only the read-only sensor values and the
-"active operating mode" registers 1498 to 1504 report absence honestly.
+**the heating circuits a machine has cannot be read off Modbus.** The
+parameters for circuits E to G, which do not exist on this machine, hold
+plausible factory defaults (heating curve 1.2, heating limit 15 degrees), not
+sentinels. The read-only sensor values and the "active operating mode"
+registers 1498 to 1504 do not settle it either: circuit B, the machine's
+internal heating circuit, exists, and reads `-1.0` and `255` there exactly as
+E to G do. Auto-detection can find the circuits that have sensors on them; it
+cannot find the circuits. See
+[verification-2026-09-20.md](verification-2026-09-20.md).
 
 ## Open questions
 
@@ -204,9 +213,12 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
   "Nein/Automatik/Immer", and PV008 gained four inverter manufacturers.
 - **Enumerations are printed once per family.** The manual gives the operating
   mode codes beside heating circuit A (address 1393) and leaves B to G
-  implicit, and likewise for zone modules. The transcription in `data/` records
-  only what is literally printed; extending an encoding across a family is a
-  judgement call and has not been made yet.
+  implicit, and likewise for zone modules. `tools/transcribe.py` shares an
+  encoding across registers that differ only in the letter or digit ending
+  their name, which reaches heating circuits B to G, compressors 2 to 4 and
+  the eight rooms of zone module 1. Zone modules 2 to 10 differ in a digit
+  inside the name, `Zonenmodul 2 Betriebsart Raum 1`, and still carry no
+  labels.
 - **The unit of address 74.** Both manuals print `[kW]`, and that is what
   `data/` records. The evcc discussions describe writing watts. The Smartfox
   setup asks for the pump's rated power in watts too, but that is a field in
@@ -259,7 +271,7 @@ limit 15 degrees), not sentinels. Only the read-only sensor values and the
 - [kodebach/hacs-idm-heatpump](https://github.com/kodebach/hacs-idm-heatpump)
 - [Xerolux/idm-heatpump-api](https://github.com/Xerolux/idm-heatpump-api)
 - [chincherpa/idm_control](https://github.com/chincherpa/idm_control/blob/master/modbus_tcp_navigator.md)
-- [evcc discussion 11905](https://github.com/evcc-io/evcc/discussions/11905)
+- [idm-waermepumpe-einbinden (evcc-io/evcc#11905)](https://github.com/evcc-io/evcc/discussions/11905)
 - [Home Assistant community: IDM heatpump integration via modbus](https://community.home-assistant.io/t/idm-heatpump-integration-via-modbus-pure-ha/701473)
 
 ## Finding documents on the iDM site

@@ -49,10 +49,10 @@ navigator20 = mapMaybe parseRegister (tsvRows registerFile)
 
 -- | Enumerated values, keyed by address and code.
 --
--- The manual prints an encoding once for a family of addresses, so a circuit
--- other than A carries no entry even though it uses the same codes. See
--- @doc\/research.md@; resolving this is deliberately left to a later revision
--- rather than guessed at here.
+-- The manual prints an encoding once for a family of addresses;
+-- @tools\/transcribe.py@ gives it to every member whose name differs only in
+-- its final letter or digit. Zone modules 2 to 10 differ elsewhere and carry
+-- no entry. See @doc\/research.md@.
 navigator20Enums :: Map (Address, Int) Text
 navigator20Enums = M.fromList (mapMaybe parseEnum (tsvRows enumFile))
 
@@ -142,8 +142,8 @@ parseUnit t = case T.strip t of
   "kWh" -> KilowattHour
   "h" -> Hour
   "bar" -> Bar
-  "l" -> Litre
-  "l/h" -> LitrePerHour
+  "l" -> Liter
+  "l/h" -> LiterPerHour
   "min" -> Minute
   "" -> Unitless
   other -> UnknownUnit other

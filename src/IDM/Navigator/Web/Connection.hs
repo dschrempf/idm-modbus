@@ -25,7 +25,7 @@ module IDM.Navigator.Web.Connection
 where
 
 import Control.Concurrent (threadDelay)
-import Control.Exception (IOException, SomeException, bracketOnError, catch, fromException, throwIO, try)
+import Control.Exception (IOException, bracketOnError, catch, fromException, throwIO, try)
 import Data.Aeson (Value (..), decodeStrict, encode)
 import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString as B
@@ -110,7 +110,9 @@ open pace (Host host) (Pin pin) =
 
 close :: Session -> IO ()
 close s = do
-  WS.sendClose (sessionConnection s) ("" :: B.ByteString) `catch` \e -> const (pure ()) (e :: SomeException)
+  WS.sendClose (sessionConnection s) ("" :: B.ByteString)
+    `catch` (\(_ :: WS.ConnectionException) -> pure ())
+    `catch` (\(_ :: IOException) -> pure ())
   N.close (sessionSocket s)
 
 -- | Send a request and collect the messages that arrive until one satisfies
