@@ -109,7 +109,7 @@ The web backend has a stack of its own beside it, joined to the first only by
 - `IDM.Navigator.Web.Session` — sends a `Query` and nothing else.
 - `IDM.Navigator.Web.Level` — the two writes: entering the Fachmann level
   (`setting`/`save` of item 12503, a code spelled from the controller's clock,
-  as a number) and leaving it (acknowledging the `N2_USERLEVELACTIVE` notice).
+  as a number, from Kunde only) and leaving it (acknowledging the `N2_USERLEVELACTIVE` notice).
   Both work on the machine, and the display switches with them. The level is
   the controller's, not the connection's: it holds until it is left or for
   sixty minutes from the entry, whichever comes first, however often it is

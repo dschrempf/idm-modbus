@@ -38,7 +38,9 @@
   after round, to `captures/navigator-2.0-webwatch-*.jsonl`.
 - `IDM.Navigator.Web.Level`: entering and leaving the Fachmann level, the
   only writes the library knows, sent as the settings and notices pages of
-  the web interface send them.
+  the web interface send them. The code is sent from Kunde only, and never
+  so close to the hour that it could arrive in the next one; the result says
+  whether anything was sent.
 - A second verification, `doc/verification-2026-09-20.md`, checking the table
   against the controller's own display rather than against the machine alone,
   with the readings in `data/navigator-2.0-web-2026-09-20.tsv` and the two

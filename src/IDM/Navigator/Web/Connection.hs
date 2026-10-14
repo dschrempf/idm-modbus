@@ -17,6 +17,7 @@ module IDM.Navigator.Web.Connection
     defaultPace,
     Failure (..),
     Session,
+    paceOf,
     open,
     close,
     ended,
@@ -97,6 +98,9 @@ data Session = Session
     sessionLost :: TVar (Maybe String),
     sessionReader :: ThreadId
   }
+
+paceOf :: Session -> Pace
+paceOf = sessionPace
 
 webPort :: String
 webPort = "61220"

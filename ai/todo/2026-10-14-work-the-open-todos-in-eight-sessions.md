@@ -7,6 +7,8 @@ later joins a session here or stands alone.
 
 ## 1. Websocket session correctness
 
+Done on 2026-10-14.
+
 `Web/Connection.hs`, `Web/Session.hs`. Both concern how `collect`, `drain` and
 `guarded` wait, and the notes cite each other.
 
@@ -14,6 +16,9 @@ later joins a session here or stands alone.
 - `2026-10-14-patience-timeout-duplicates-collect-deadline`
 
 ## 2. User level
+
+Done on 2026-10-14: `enterFachmann` refuses at a level other than Kunde,
+and each function returns a type of its own, `Entry` and `Exit`.
 
 `Web/Level.hs` and `idm-web`'s report, which then changes once. After 1:
 `Level` uses `drain`.

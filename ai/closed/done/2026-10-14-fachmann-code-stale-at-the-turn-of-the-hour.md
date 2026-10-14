@@ -11,3 +11,9 @@ Fix: when the clock read is within a few seconds of the hour, wait for it to
 turn and read the status again. A retry after a refusal is the other way, but
 it sends a second code and the controller's reaction to a wrong one is
 unknown.
+
+Fixed on 2026-10-14 as proposed. `statusForCode` reads the status again once
+the hour has turned when the clock is within the session's pace interval plus
+twice its patience of the hour, 10.5 s by default: the answer's way back, the
+pause and the send. It waits once only, so a controller clock that stands
+still cannot keep it waiting.

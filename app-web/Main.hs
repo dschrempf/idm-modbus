@@ -86,10 +86,10 @@ usage = do
   putStrLn "  --watch asks the given settings every SECONDS until interrupted,"
   putStrLn "  and prints a line per request: the request, the local time it was"
   putStrLn "  asked, and the responses, verbatim but for what names the machine."
-  putStrLn "  --enter-fachmann sends the code of the controller's clock;"
-  putStrLn "  --leave-fachmann acknowledges the notice that level raises. The"
-  putStrLn "  level holds, for the display as well, until it is left or for"
-  putStrLn "  sixty minutes from the entry."
+  putStrLn "  --enter-fachmann sends the code of the controller's clock, from"
+  putStrLn "  Kunde only; --leave-fachmann acknowledges the notice that level"
+  putStrLn "  raises. The level holds, for the display as well, until it is left"
+  putStrLn "  or for sixty minutes from the entry."
   exitFailure
 
 run :: Host -> Pin -> Mode -> IO ()
@@ -104,16 +104,34 @@ run host pin mode = case mode of
         standing <- askNotifications s >>= orDie
         mapM_ (\n -> printf "notice      %s %s\n" (codeText (notificationCode n)) (notificationText n)) standing
       Show ids -> mapM_ (\i -> askSetting s i >>= orDie >>= putStr . renderSetting) ids
-      Enter -> enterFachmann s >>= orDie >>= reportChange Fachmann
-      Leave -> leaveFachmann s >>= orDie >>= reportChange Customer
+      Enter -> enterFachmann s >>= orDie >>= reportEntry
+      Leave -> leaveFachmann s >>= orDie >>= reportExit
       Watch _ _ -> pure ()
     codeText (NotificationCode c) = c
 
-reportChange :: UserLevel -> LevelChange -> IO ()
-reportChange wanted c = do
-  mapM_ (BL.putStrLn . encode) (levelResponses c)
-  printf "user level  %s -> %s\n" (levelText (levelBefore c)) (levelText (levelAfter c))
-  if levelAfter c == wanted then pure () else die "the level did not change"
+reportEntry :: Entry -> IO ()
+reportEntry e = case e of
+  AlreadyFachmann -> reportLevel Fachmann
+  EntryDeclined n -> die ("user level " <> levelText (OtherLevel n) <> ": the code is sent from " <> levelText Customer <> " only")
+  EntrySent sent -> reportSent Fachmann sent
+
+reportExit :: Exit -> IO ()
+reportExit x = case x of
+  AlreadyCustomer -> reportLevel Customer
+  NoNotice level -> die ("user level " <> levelText level <> ", but no " <> T.unpack userLevelNotice <> " notice to acknowledge")
+  ExitSent sent -> reportSent Customer sent
+
+-- | Nothing was sent.
+reportLevel :: UserLevel -> IO ()
+reportLevel = printf "user level  %s\n" . levelText
+
+reportSent :: UserLevel -> Sent -> IO ()
+reportSent wanted sent = do
+  case sentResponses sent of
+    [] -> putStrLn "answer      none"
+    responses -> mapM_ (BL.putStrLn . encode) responses
+  printf "user level  %s -> %s\n" (levelText (sentBefore sent)) (levelText (sentAfter sent))
+  if sentAfter sent == wanted then pure () else die "the level did not change"
 
 renderSetting :: Setting -> String
 renderSetting st = header <> body (settingValue st)
