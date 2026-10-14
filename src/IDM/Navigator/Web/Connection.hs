@@ -24,8 +24,11 @@ module IDM.Navigator.Web.Connection
   )
 where
 
-import Control.Concurrent (threadDelay)
-import Control.Exception (IOException, bracketOnError, catch, fromException, throwIO, try)
+import Control.Applicative ((<|>))
+import Control.Concurrent (ThreadId, forkIO, killThread, threadDelay)
+import Control.Concurrent.STM
+import Control.Exception (IOException, SomeException, bracketOnError, catch, fromException, onException, throwIO, try)
+import Control.Monad (forever)
 import Data.Aeson (Value (..), decodeStrict, encode)
 import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString as B
@@ -61,23 +64,33 @@ defaultPace =
 
 -- | Why a request did not produce its answer.
 --
--- After 'NoAnswer' or 'Lost' the session is not to be used again: a frame may
--- have been cut in half.
+-- No failure but 'Lost' ends a session.
 data Failure
   = -- | the controller refused the PIN; its greeting, if it sent one
     NotAuthorized (Maybe Value)
-  | NoAnswer
-  | Lost String
+  | -- | an answer that comes late arrives among the messages of the next
+    -- request, and is taken for its answer if 'IDM.Navigator.Web.answerIn'
+    -- cannot tell the two apart
+    NoAnswer
+  | -- | the connection, or a send that was cut; every later request fails
+    -- with the same reason, unsent
+    Lost String
   | -- | a message that is not JSON
     Garbled B.ByteString
   | -- | an answer the parsers of "IDM.Navigator.Web" do not read
     Unrecognized Value
   deriving (Show, Eq)
 
+-- | A thread receives every message as it arrives, so a request that runs out
+-- of patience never interrupts a frame half read.
 data Session = Session
   { sessionSocket :: N.Socket,
     sessionConnection :: WS.Connection,
-    sessionPace :: Pace
+    sessionPace :: Pace,
+    sessionInbox :: TQueue B.ByteString,
+    -- | why the session ended, first reason only
+    sessionLost :: TVar (Maybe String),
+    sessionReader :: ThreadId
   }
 
 webPort :: String
@@ -98,22 +111,38 @@ open pace (Host host) (Pin pin) =
         N.connect sock (N.addrAddress addr)
         stream <- WS.makeSocketStream sock
         conn <- WS.newClientConnection stream host ("/?auth_code=" <> pin) WS.defaultConnectionOptions []
-        let session = Session sock conn pace
         hello <- decodeStrict <$> WS.receiveData conn
         case hello of
           Just greeting@(Object o)
-            | KM.lookup "authorized" o == Just (Bool True) -> pure (Right session)
-            | otherwise -> Left (NotAuthorized (Just greeting)) <$ close session
-          _ -> Left (NotAuthorized Nothing) <$ close session
+            | KM.lookup "authorized" o == Just (Bool True) -> Right <$> listen sock conn
+            | otherwise -> Left (NotAuthorized (Just greeting)) <$ hangUp sock conn
+          _ -> Left (NotAuthorized Nothing) <$ hangUp sock conn
   where
     hints = N.defaultHints {N.addrSocketType = N.Stream}
 
+    listen sock conn = do
+      inbox <- newTQueueIO
+      lost <- newTVarIO Nothing
+      reader <-
+        forkIO $
+          forever (WS.receiveData conn >>= atomically . writeTQueue inbox)
+            `catch` (\(e :: SomeException) -> loseWith lost (show e))
+      pure (Session sock conn pace inbox lost reader)
+
 close :: Session -> IO ()
 close s = do
-  WS.sendClose (sessionConnection s) ("" :: B.ByteString)
+  hangUp (sessionSocket s) (sessionConnection s)
+  killThread (sessionReader s)
+
+hangUp :: N.Socket -> WS.Connection -> IO ()
+hangUp sock conn = do
+  WS.sendClose conn ("" :: B.ByteString)
     `catch` (\(_ :: WS.ConnectionException) -> pure ())
     `catch` (\(_ :: IOException) -> pure ())
-  N.close (sessionSocket s)
+  N.close sock
+
+loseWith :: TVar (Maybe String) -> String -> IO ()
+loseWith lost reason = atomically (modifyTVar' lost (<|> Just reason))
 
 -- | Send a request and collect the messages that arrive until one satisfies
 -- the predicate, which is last in the list. Every message is redacted.
@@ -122,7 +151,7 @@ exchange s request done = do
   started <- getMonotonicTime
   let deadline = started + fromIntegral (pacePatienceMicroseconds (sessionPace s)) / 1e6
   paced s $ do
-    WS.sendTextData (sessionConnection s) (encode request)
+    send s request
     collect s deadline done >>= \case
       Right (ms, True) -> pure (Right ms)
       Right (_, False) -> pure (Left NoAnswer)
@@ -134,8 +163,15 @@ drain :: Session -> Value -> Int -> IO (Either Failure [Value])
 drain s request micros = do
   started <- getMonotonicTime
   paced s $ do
-    WS.sendTextData (sessionConnection s) (encode request)
+    send s request
     fmap fst <$> collect s (started + fromIntegral micros / 1e6) (const False)
+
+-- | A send cut by a timeout leaves half a frame on the wire, after which the
+-- controller cannot read another.
+send :: Session -> Value -> IO ()
+send s request =
+  WS.sendTextData (sessionConnection s) (encode request)
+    `onException` loseWith (sessionLost s) "a send was cut"
 
 collect :: Session -> Double -> (Value -> Bool) -> IO (Either Failure ([Value], Bool))
 collect s deadline done = go []
@@ -143,22 +179,28 @@ collect s deadline done = go []
     go acc = do
       now <- getMonotonicTime
       let remaining = round ((deadline - now) * 1e6)
-      message <- if remaining <= 0 then pure Nothing else timeout remaining (WS.receiveData (sessionConnection s))
+      message <- if remaining <= 0 then pure Nothing else timeout remaining (atomically next)
       case message of
         Nothing -> pure (Right (reverse acc, False))
-        Just bytes -> case decodeStrict bytes of
+        Just (Left reason) -> pure (Left (Lost reason))
+        Just (Right bytes) -> case decodeStrict bytes of
           Nothing -> pure (Left (Garbled bytes))
           Just v
             | done v -> pure (Right (reverse (redact v : acc), True))
             | otherwise -> go (redact v : acc)
+    -- what arrived before the connection was lost comes first
+    next = (Right <$> readTQueue (sessionInbox s)) `orElse` (readTVar (sessionLost s) >>= maybe retry (pure . Left))
 
 -- | Run a request, turn a lost connection into a 'Failure', and pause
 -- afterwards, whatever came of it.
 paced :: Session -> IO (Either Failure a) -> IO (Either Failure a)
-paced s action = do
-  r <- guarded (sessionPace s) action
-  threadDelay (paceIntervalMicroseconds (sessionPace s))
-  pure r
+paced s action =
+  readTVarIO (sessionLost s) >>= \case
+    Just reason -> pure (Left (Lost reason))
+    Nothing -> do
+      r <- guarded (sessionPace s) action
+      threadDelay (paceIntervalMicroseconds (sessionPace s))
+      pure r
 
 -- | The websocket library and the socket signal a lost connection by
 -- exception, and a stalled controller does not signal at all.

@@ -60,6 +60,7 @@ module IDM.Navigator.Web
 where
 
 import Control.Applicative ((<|>))
+import Control.Monad (guard)
 import Data.Aeson (Value (..), object, (.:), (.:?), (.=))
 import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
@@ -136,9 +137,19 @@ answerKey q = case q of
   GraphTraverse -> "graphTraverse"
   GraphDetail _ _ -> "graphDetail"
 
--- | The payload of a message, if it is the answer to the query.
+-- | The payload of a message, if it is the answer to the query. An answer
+-- that comes late is told from the next one of its kind only where it names
+-- what was asked: a setting by its @id@. A @graphDetail@ does not.
 answerIn :: Query -> Value -> Maybe Value
-answerIn q (Object o) = KM.lookup (answerKey q) o
+answerIn q (Object o) = do
+  a <- KM.lookup (answerKey q) o
+  case q of
+    SettingOverview i -> a <$ guard (names i a)
+    SettingDetail i -> a <$ guard (names i a)
+    _ -> pure a
+  where
+    names (SettingId i) (Object p) = KM.lookup "id" p == Just (String i)
+    names _ _ = False
 answerIn _ _ = Nothing
 
 -- | Who the controller takes the web interface to be. The house document on

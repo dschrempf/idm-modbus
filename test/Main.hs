@@ -128,8 +128,13 @@ checks =
         && queryJSON StatusOverview == json "{\"controller\":\"status\",\"command\":\"overview\"}"
     ),
     ( "an answer is found under its key",
-      (answerIn (SettingDetail settingsRoot) =<< Just (json "{\"settingDetail\":{}}")) == Just (json "{}")
-        && answerIn (SettingDetail settingsRoot) (json "{\"setting\":{}}") == Nothing
+      answerIn (SettingDetail settingsRoot) (json "{\"settingDetail\":{\"id\":\"-1\"}}") == Just (json "{\"id\":\"-1\"}")
+        && answerIn (SettingDetail settingsRoot) (json "{\"setting\":{\"id\":\"-1\"}}") == Nothing
+        && answerIn StatusOverview (json "{\"status\":{}}") == Just (json "{}")
+    ),
+    ( "a setting's answer is its own only if it names the setting",
+      answerIn (SettingDetail (SettingId (T.pack "4768"))) (json "{\"settingDetail\":{\"id\":\"5888\"}}") == Nothing
+        && answerIn (SettingOverview settingsRoot) (json "{\"setting\":{}}") == Nothing
     ),
     ( "the status carries the level and the controller's clock",
       -- the controller sends its wall clock as if it were UTC

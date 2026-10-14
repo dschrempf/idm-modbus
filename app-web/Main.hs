@@ -171,8 +171,9 @@ watch host pin (Period seconds) ids = do
         Left e -> do
           complain (show e)
           line t i (Left (show e))
-          close s
-          sweep is Nothing
+          case e of
+            Lost _ -> close s >> sweep is Nothing
+            _ -> sweep is (Just s)
     line t i r = BL.putStrLn (encode (watchLine t i r))
     complain = hPutStrLn stderr
 
