@@ -157,7 +157,6 @@ parseUnit t = case T.strip t of
   "l/h" -> LiterPerHour
   "l/min" -> LiterPerMinute
   "min" -> Minute
-  "" -> Unitless
   other -> UnknownUnit other
 
 nonEmpty :: Text -> Maybe Text

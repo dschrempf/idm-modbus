@@ -109,7 +109,6 @@ data Unit
   | LiterPerHour
   | LiterPerMinute
   | Minute
-  | Unitless
   | -- | a unit string the transcription does not know yet
     UnknownUnit Text
   deriving (Show, Eq, Ord)
@@ -160,27 +159,30 @@ data Register = Register
   }
   deriving (Show, Eq)
 
--- | A register that reports hardware which is not fitted answers with a
--- datatype-specific sentinel. That is not a measurement, and this type refuses
--- to let it be mistaken for one.
+-- | A register that holds no value answers with a datatype-specific sentinel.
+-- That is not a measurement, and this type refuses to let it be mistaken for
+-- one.
 --
 -- The sentinels are not documented. They were determined by reading every
 -- address of a machine whose configuration is known; see
 -- @doc\/verification-2026-09-19.md@.
---
--- 'NotFitted' is claimed only where the sentinel lies outside the documented
--- range, so that it cannot be a value the register may hold. Where it lies
--- inside, absence is indistinguishable from a reading and none is claimed;
--- 'Drive' is the case that arises in practice.
 data Reading a
-  = NotFitted
+  = -- | the sentinel, where no value the register may hold equals it. It says
+    -- that the register holds no value, not why: an unfitted sensor answers
+    -- it, and so do the fitted B33 and B34 at 1050 and 1052.
+    NoValue
+  | -- | the sentinel, where a value the register may hold equals it: no value,
+    -- or this one. An outdoor temperature passes through -1 °C, and no
+    -- documented range tells it from an unfitted sensor.
+    NoValueOr a
   | Measured a
   deriving (Show, Eq, Functor)
 
 -- | Eliminator for 'Reading'.
-reading :: b -> (a -> b) -> Reading a -> b
-reading nothing just r = case r of
-  NotFitted -> nothing
+reading :: b -> (a -> b) -> (a -> b) -> Reading a -> b
+reading none noneOr just r = case r of
+  NoValue -> none
+  NoValueOr a -> noneOr a
   Measured a -> just a
 
 -- | How hard a pump is being driven.
@@ -244,23 +246,30 @@ asWritten reg bytes = case registerDatatype reg of
 decode :: Register -> B.ByteString -> Maybe (Reading Value)
 decode reg bytes = navigator reg <$> asWritten reg bytes
 
--- | The conventions the parameter list does not state: the sentinel an
--- unfitted sensor answers with, the sign of a @WORD@, and the 0 or 1 of a
--- @BOOL@.
+-- | The conventions the parameter list does not state: the sentinel a
+-- register without a value answers with, the sign of a @WORD@, and the 0 or 1
+-- of a @BOOL@.
 navigator :: Register -> Value -> Reading Value
 navigator reg v = case (registerDatatype reg, v) of
-  (Float32, Real x) -> sentinel (x == -1) v
+  -- No @FLOAT@ documents a negative minimum, and most document none at all,
+  -- so only a printed range can rule -1 out.
+  (Float32, Real x)
+    | x /= -1 -> Measured v
+    | outOfRange x -> NoValue
+    | otherwise -> NoValueOr v
   (DWord, Count n) -> sentinel (n == 0xFFFFFFFF) v
   (UChar, Count n) -> sentinel (n >= 254) v
   (Boolean, Count n) -> sentinel (n >= 254) (Flag (n /= 0))
   (Word, Count n)
     | signedWord -> Measured (meaning (n - if n > 0x7FFF then 65536 else 0))
     | otherwise -> sentinel (n == 0xFFFF) v
-  (OneRegister, Count _) -> Measured v
-  -- 'asWritten' pairs each datatype with one constructor; nothing else arises
+  -- 'OneRegister' claims no sentinel; 'asWritten' pairs each other datatype
+  -- with one constructor, so nothing else arises
   _ -> Measured v
   where
-    sentinel isSentinel w = if isSentinel then NotFitted else Measured w
+    sentinel isSentinel w = if isSentinel then NoValue else Measured w
+    outOfRange x =
+      maybe False (\r -> x < rangeMinimum r || x > rangeMaximum r) (registerRange reg)
     -- The manual's own minimum decides the sign, and with it which words are
     -- reachable. A bivalence point is documented down to -90 and a pump's
     -- control signal down to -1, so both are two's complement and 65535 is a

@@ -171,7 +171,9 @@ answered three questions the documentation leaves open. The measurements are in
    does not fail to answer — it answers with `-1.0` for a float, `255` for a
    `UCHAR`, `65535` for a `WORD`. No documented `UCHAR` has a maximum above
    95, and every `WORD` documented from 0 up stays at or below 100, so for
-   these the sentinel cannot collide with a real reading. This is the
+   these the sentinel cannot collide with a real reading. A `FLOAT` can: no
+   negative minimum is printed for one, yet -1 °C is an outdoor temperature,
+   so -1.0 is absence only where a documented range excludes it. This is the
    "unavailable status indicator" kodebach could not pin down.
 
 2. **A `WORD` documented from a negative minimum is two's complement.** The

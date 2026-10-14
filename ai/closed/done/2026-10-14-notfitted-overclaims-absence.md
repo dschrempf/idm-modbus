@@ -14,3 +14,7 @@ change the type anyway.
 The `gltmon` rows add two more: 4108 and 4112, `Leistungsbegrenzung Wärmepumpe`
 and `Kaskade`, read -1.0 and decode to `NotFitted`, where -1 more likely means
 "no limit".
+
+Fixed on 2026-10-14: `NotFitted` is `NoValue`, with the float sentinel note's
+`NoValueOr` beside it. 4108 and 4112 have no range, so they decode to
+`NoValueOr`, which leaves "no limit" open.

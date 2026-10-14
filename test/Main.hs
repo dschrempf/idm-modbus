@@ -101,9 +101,16 @@ checks =
       -- 0x41ab4a89 is 21.41; the machine sends 4a89 41ab
       decodeAt 1000 (B.pack [0x4a, 0x89, 0x41, 0xab]) `approximately` 21.41
     ),
-    ( "minus one is not a temperature",
-      -- the documented sentinel for an unfitted sensor
-      decodeRaw 1000 (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just NotFitted
+    ( "minus one degree is no value or a temperature",
+      -- an unfitted sensor answers -1.0, and so does an outdoor temperature
+      -- averaged to hundredths when it stands at -1 degree
+      decodeRaw 1000 (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just (NoValueOr (Real (-1)))
+        && decodeRaw 1002 (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just (NoValueOr (Real (-1)))
+    ),
+    ( "a float documented above minus one has no value at minus one",
+      -- a room temperature supplied from 15 to 30 degrees, a humidity from 0
+      decodeRaw 1650 (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just NoValue
+        && decodeRaw 1392 (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just NoValue
     ),
     ( "a word documented below zero is signed",
       -- 65531 is the documented -5 degree bivalence point
@@ -127,9 +134,9 @@ checks =
     ),
     ( "a word documented from zero up keeps the sentinel",
       -- the circulation pump runs or does not; a percentage it is not
-      decodeRaw 1118 (B.pack [0xff, 0xff]) == Just NotFitted
+      decodeRaw 1118 (B.pack [0xff, 0xff]) == Just NoValue
         -- and a battery charge level is not a pump, for all it is in per cent
-        && decodeRaw 86 (B.pack [0xff, 0xff]) == Just NotFitted
+        && decodeRaw 86 (B.pack [0xff, 0xff]) == Just NoValue
     ),
     ( "a byte-sized register reads only its low byte",
       decodeRaw 1032 (B.pack [0x00, 0x2e]) == Just (Measured (Count 46))

@@ -115,12 +115,11 @@ run host mode = case mode of
     samples <- readMany conn defaultPoll (registers scope)
     mapM_ (putStrLn . render) samples
     let readings = [answerReading a | s <- samples, Right a <- [sampleResult s]]
-        fitted = length [() | Measured _ <- readings]
-        notFitted = length [() | NotFitted <- readings]
     printf
-      "\n%d read, %d not fitted, %d refused\n"
-      fitted
-      notFitted
+      "\n%d read, %d no value, %d perhaps no value, %d refused\n"
+      (length [() | Measured _ <- readings])
+      (length [() | NoValue <- readings])
+      (length [() | NoValueOr _ <- readings])
       (length samples - length readings)
   Capture -> connected $ \conn -> do
     samples <- probe conn defaultPoll Table.navigator20
@@ -153,14 +152,16 @@ render s =
     value = case sampleResult s of
       Left e -> failureText e
       Right a -> case answerReading a of
-        NotFitted -> "--"
-        Measured v -> case (v, sampleLabel s) of
-          (Count n, Just l) -> show n <> " " <> T.unpack l
-          (Count n, Nothing) -> show n
-          (Real x, _) -> printf "%.2f" x
-          (Flag b, _) -> if b then "on" else "off"
-          (DriveSignal NotDriven, _) -> "not driven"
-          (DriveSignal (Driven n), _) -> show n
+        NoValue -> "--"
+        NoValueOr v -> "-- or " <> shown v
+        Measured v -> shown v
+    shown v = case (v, sampleLabel s) of
+      (Count n, Just l) -> show n <> " " <> T.unpack l
+      (Count n, Nothing) -> show n
+      (Real x, _) -> printf "%.2f" x
+      (Flag b, _) -> if b then "on" else "off"
+      (DriveSignal NotDriven, _) -> "not driven"
+      (DriveSignal (Driven n), _) -> show n
 
 -- | The capture: what the machine answered and nothing else.
 --
@@ -348,5 +349,4 @@ unitText u = case u of
   LiterPerHour -> "l/h"
   LiterPerMinute -> "l/min"
   Minute -> "min"
-  Unitless -> ""
   UnknownUnit t -> T.unpack t

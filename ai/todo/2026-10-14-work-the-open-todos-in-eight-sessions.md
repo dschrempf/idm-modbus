@@ -39,6 +39,9 @@ note warns of.
 
 ## 4. What a reading means
 
+Done on 2026-10-14: `NotFitted` is `NoValue`, a `FLOAT` -1.0 is `NoValueOr`
+where no documented range excludes it, and `Unitless` is gone.
+
 `Register.hs`, public API. `Unit` is the other breaking change to its types;
 the redundant case is in the function the sentinel fix rewrites.
 

@@ -78,8 +78,9 @@ apply cleanly.
 - **A 32-bit float arrives low word first.** Against the usual Modbus habit,
   and the most common bug in community configurations.
 - **An unfitted sensor answers with a sentinel, not an error**: `-1.0`,
-  `255` or `65535` depending on datatype. This library returns `NotFitted`
-  rather than letting a -1 into your temperature series.
+  `255` or `65535` depending on datatype. This library returns `NoValue`
+  rather than letting a -1 into your temperature series, and `NoValueOr` where
+  the sentinel is also a value the register may hold: -1 °C outdoors.
 - **The Navigator stalls when polled hard.** Requests are paced by default.
 
 ## Home Assistant

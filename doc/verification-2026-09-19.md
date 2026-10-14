@@ -101,6 +101,19 @@ a `WORD` is documented from a negative minimum, 65535 is inside its range and
 is a value the register may hold; the table's `min` column, not its `max`, is
 what says whether a sentinel is available at all.
 
+**Corrected on 2026-10-14.** The same holds for a `FLOAT`, and the dash in the
+table above hid it: no `FLOAT` in the parameter list documents a negative
+minimum, most document no range at all, and outdoor, air intake and heat
+source temperatures pass through -1 °C every winter. A live sensor arrives at
+full precision, so an exact -1.0 is unlikely there, but 1002 `Gemittelte
+Außentemperatur` arrives rounded to hundredths — 18.52, 20.26, 9.39 in the
+scans — and stands at -1.00 whenever the average does. The library therefore
+returns `NoValue` for a `FLOAT` -1.0 only where a documented range excludes
+it, and `NoValueOr` elsewhere: no value, or -1. The same day `NotFitted`
+became `NoValue`, because the sentinel says that a register holds no value,
+not that hardware is missing: 1050 and 1052 answer it for the fitted B33 and
+B34 (`doc/verification-2026-09-20.md`).
+
 Addresses 1714 and 1715, "Externe Anforderung Grundwasserpumpe", return `254`
 rather than `255`. There is no groundwater pump here, so this is most likely a
 second sentinel, but it could be a real value. Treated as absence for now.

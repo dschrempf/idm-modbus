@@ -21,3 +21,11 @@ Options, for Dominik to choose:
 - no rule for `FLOAT` registers whose quantity can be negative
 
 Related: `2026-10-14-notfitted-overclaims-absence`.
+
+Fixed on 2026-10-14, by the third constructor. A `FLOAT` -1.0 is `NoValue`
+where a documented range excludes -1 (1392, 1650 to 1662, 1692 among those
+that answer it), and `NoValueOr (Real (-1))` everywhere else; the rule reads
+the `min` and `max` columns only, not the unit, so the `kWh` counters at 1752
+to 1762 are `NoValueOr` too. `UCHAR`, `WORD` and `DWORD` sentinels keep their
+datatype-wide argument. `doc/verification-2026-09-19.md` carries the
+correction.

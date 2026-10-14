@@ -133,8 +133,10 @@ write of the surplus register 74 is interface; computing the surplus is not.
 
 - A 32-bit float arrives **low word first**, against the usual Modbus habit.
 - An unfitted sensor answers with a sentinel (`-1.0`, `255`, `65535`), not an
-  exception; `decode` returns `NotFitted` so a -1 never enters a temperature
-  series. A `WORD` is two's complement where the parameter list documents a
+  exception; `decode` returns `NoValue` so a -1 never enters a temperature
+  series. A `FLOAT` whose documented range does not rule -1 out — most
+  document none — decodes it to `NoValueOr`, since -1 °C is a temperature;
+  the caller decides. A `WORD` is two's complement where the parameter list documents a
   negative minimum for it, and there 65535 is a value rather than a sentinel:
   the pump control signals at 1104 to 1109 read it as "not being driven".
 - The Navigator stalls when polled hard, hence `pollIntervalMicroseconds`.

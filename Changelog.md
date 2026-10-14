@@ -65,6 +65,15 @@
   65535 is a value they may hold rather than a sentinel. This replaces the
   special case for degrees Celsius instead of adding a second one, and a
   bivalence point set to -1 °C is no longer swallowed.
+- `Reading`'s `NotFitted` is `NoValue`: the sentinel says that a register
+  holds no value, not that hardware is missing, and the fitted B33 and B34
+  answer it at 1050 and 1052. A `FLOAT` -1.0 is `NoValue` only where a
+  documented range excludes -1; elsewhere it is the new `NoValueOr`, no value
+  or -1, which an outdoor temperature averaged to hundredths reads every
+  winter. `reading` takes a function for each. `idm-dump` prints `-- or -1.00`
+  for one and counts them apart.
+- `Unit` lost `Unitless`, which nothing built: a register whose source states
+  no unit has `registerUnit` `Nothing`.
 
 - `captures/navigator-2.0-scan-2026-09-19.json` is a fresh sweep of all 663
   addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress` and

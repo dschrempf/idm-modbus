@@ -7,4 +7,4 @@ own haddock already says so. Say it once, in the header, and point there.
 
 While there: `navigator` in `IDM.Navigator.Register` has a case
 `(OneRegister, Count _) -> Measured v` that the catch-all below it already
-covers.
+covers. Removed on 2026-10-14, in session 4.
