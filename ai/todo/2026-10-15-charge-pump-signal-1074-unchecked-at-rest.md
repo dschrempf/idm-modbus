@@ -34,8 +34,10 @@ holds 1074 together with either page, and none holds the page while 1074 read
 93–97. The table therefore still reads 65535: a resemblance is not a source.
 
 1104, `Status Ladepumpe (M73)`, is the manual's register for this pump. It
-read `ffff` on every scan, including while 1074 read 93–97, so on this machine
-it does not report M73's signal (`doc/verification-2026-10-15-heat-sink.md`).
+read `ffff` on every scan, including while 1074 read 93–97, so the two can't
+both be M73's signal (`doc/verification-2026-10-15-heat-sink.md`). That
+discrepancy is `2026-10-15-charge-pump-status-1104-reads-not-driven-while-pumping`.
+The measurement below settles both.
 
 ## The measurement
 
