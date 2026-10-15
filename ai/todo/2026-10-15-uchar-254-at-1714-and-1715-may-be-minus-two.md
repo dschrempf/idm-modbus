@@ -29,6 +29,15 @@ external request, the controller decides", which fits the footnote, or the
 absence of a pump. This machine has neither pump, so it can't tell those
 apart.
 
+## Done on 2026-10-15
+
+Steps 1 and 2: `doc/verification-2026-10-15-web-app.md` records the facts,
+`doc/research.md` has the open question as "-2 at 1714 and 1715", and
+`asWritten` reads a `UCHAR` as a signed word, `decode` taking every negative
+one for no value. Of step 3, the web app was searched: it names the
+registers, `N2_ERBP` and `N2_ERGP`, and says nothing of -2; no settings tree
+holds the pumps, at Fachmann level either. Left: asking iDM support.
+
 ## How we might solve it
 
 1. Record the two facts above in a dated `doc/`, and correct the open

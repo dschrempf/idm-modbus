@@ -172,10 +172,13 @@ answered three questions the documentation leaves open. The measurements are in
 [verification-2026-09-19.md](verification-2026-09-19.md); the conclusions:
 
 1. **Absence has a sentinel value, per datatype.** A sensor that is not fitted
-   does not fail to answer — it answers with `-1.0` for a float, `255` for a
-   `UCHAR`, `65535` for a `WORD`. No documented `UCHAR` has a maximum above
-   95, and every `WORD` documented from 0 up stays at or below 100, so for
-   these the sentinel cannot collide with a real reading. A `FLOAT` can: no
+   does not fail to answer — it answers with `-1.0` for a float, `-1` for a
+   `UCHAR`, `65535` for a `WORD`. A `UCHAR` arrives as a whole register,
+   `ffff`, which the controller reads as a signed word
+   ([verification-2026-10-15-web-app.md](verification-2026-10-15-web-app.md)).
+   No documented `UCHAR` has a negative minimum, and every `WORD` documented
+   from 0 up stays at or below 100, so for these the sentinel cannot collide
+   with a real reading. A `FLOAT` can: no
    negative minimum is printed for one, yet -1 °C is an outdoor temperature,
    so -1.0 is absence only where a documented range excludes it. This is the
    "unavailable status indicator" kodebach could not pin down.
@@ -201,7 +204,7 @@ parameters for circuits E to G, which do not exist on this machine, hold
 plausible factory defaults (heating curve 1.2, heating limit 15 degrees), not
 sentinels. The read-only sensor values and the "active operating mode"
 registers 1498 to 1504 do not settle it either: circuit B, the machine's
-internal heating circuit, exists, and reads `-1.0` and `255` there exactly as
+internal heating circuit, exists, and reads `-1.0` and `ffff` there exactly as
 E to G do. Auto-detection can find the circuits that have sensors on them; it
 cannot find the circuits. See
 [verification-2026-09-20.md](verification-2026-09-20.md).
@@ -259,9 +262,13 @@ cannot find the circuits. See
   standstill once `PV008` is set; until then 4122 reads 0.0 at standstill.
   Both are the model's figures; a meter on the supply would say what the
   pump actually draws.
-- **`UCHAR` value 254.** Addresses 1714 and 1715 return 254, where every other
-  unfitted `UCHAR` returns 255. Whether 254 is a second sentinel or a real
-  value is not known; the library currently treats both as absence.
+- **-2 at 1714 and 1715.** The two external pump requests answer `fffe`,
+  where every other unfitted `UCHAR` answers `ffff`, and the controller's own
+  register page prints them as -2. The library treats -1 and -2 alike as
+  absence. Whether -2 means "no external request" or "no such pump" this
+  machine, which has neither pump, cannot tell, and the web app names the two
+  registers without saying
+  ([verification-2026-10-15-web-app.md](verification-2026-10-15-web-app.md)).
 - **What the Wärmemenge registers accumulate.** 1748, 1750 and 1754 add up
   among themselves and disagree with the totals the controller's own statistics
   print, by a factor near 1.19 rather than the fixed offset a counter reset
@@ -277,11 +284,15 @@ cannot find the circuits. See
   page's runtime and electrical energy for that day agree with the registers
   while its heat is 1.17 times 1754's (`doc/verification-2026-10-01-charge.md`).
   What remains open is the quantity the page computes as heat.
-- **Operating mode 3.** The parameter list gives 1005 the codes 0, 1, 2, 4 and
-  5, within a documented range of 0 to 5, and prints no 3. The controller's own
-  web interface offers 3 as a choice, and −1 besides. The transcription is
-  faithful to the manual; the gap is the manual's, and what the two codes mean
-  is unknown.
+- **Operating modes -1 and 3.** The parameter list gives 1005 the codes 0, 1,
+  2, 4 and 5, within a documented range of 0 to 5. The controller's web app
+  offers -1 and 3 besides, and labels them "Aus", without frost protection,
+  and "Urlaub"
+  ([verification-2026-10-15-web-app.md](verification-2026-10-15-web-app.md)).
+  Over Modbus, "Urlaub" reads 3 and "Aus" `ffff`, the word of an unfitted
+  sensor, so `decode` takes a machine switched off for no value. The table
+  carries the manual's five, since `tools/transcribe.py` takes enumerations
+  from the manual alone.
 
 ## Sources
 

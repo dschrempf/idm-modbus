@@ -11,6 +11,22 @@ and 4, in that order, as bare numbers without labels
 mean? Until that's known, `enumLabel` has no label for a 3 and the table
 can't say whether -1 is a value 1005 can hold.
 
+## Answered on 2026-10-15
+
+The web app's own script labels -1 `RD_OFF`, "Aus" (no frost protection),
+and 3 `RD_HOLIDAY`, "Urlaub"; its 0, 1, 2, 4 and 5 carry the manual's labels
+(`doc/verification-2026-10-15-web-app.md`). What stays open:
+
+- how the two labels enter the table: session 4 of
+  `2026-10-15-run-the-open-todos-in-six-sessions`;
+- `decode` reads "Aus" as no value. Switched at the display on 2026-10-15,
+  1005 read `ffff` in "Aus" and `0003` in "Urlaub"
+  (`captures/navigator-2.0-watch-2026-10-15-1418.jsonl`). -1 is therefore a
+  value 1005 holds, not its sentinel, and the fix belongs with the labels in
+  session 4.
+
+The rest of this note is how it was approached.
+
 ## How we might solve it
 
 All of these read; none sets the mode.
