@@ -22,11 +22,8 @@ the grouping and the order.
 
 Only needs the machine reachable.
 
-Done on 2026-10-15: 1005 answered, -2 left to iDM support, no setting for
-4108; see each note. One finding for session 4: 1714/1715 found no label, so
-of the four questions there, three remain. And one for session 4 to decide
-first: 1005 reads `ffff` in "Aus", so `decode` takes the machine switched off
-for no value.
+Done on 2026-10-15: 1005 answered and measured, -2 left to iDM support, no
+setting for 4108; see each note, and session 4 below.
 
 ## 2. One long heating run, read-only, Fachmann level
 
@@ -60,19 +57,24 @@ against the stall.
 
 ## 4. Design: how a measured fact enters the table
 
-Four notes end at the same question, what of a source other than the manual
+Three notes end at the same question, what of a source other than the manual
 `tools/transcribe.py` takes in:
 
 - 1074, option 1: a measured datatype, range and unit for a `gltmon` row.
 - 1104, option 1: a `Presence` constructor, and how a watch enters the table.
-- 1005: an enum code the manual does not print.
-- 1714/1715: the same shape, if session 1 finds a label.
+- 1005: two enum codes the manual does not print, -1 "Aus" and 3 "Urlaub",
+  measured over Modbus in session 1. "Aus" arrives as `ffff`, so -1 is a
+  value of 1005, not its sentinel, and `decode` reads a switched-off machine
+  as no value. The manual's range, 0 to 5, cannot tell `decode` otherwise.
+  Fix this first.
+
+1714/1715 dropped out: session 1 found no label for -2.
 
 `facts-from-812184-have-no-home-in-the-table` was dropped for prose on
 2026-09-20, on the premise that nothing in the table is typed by hand.
 `data/navigator-2.0-gltmon-parameters.tsv` has since broken that premise.
-Either reopen it with that as what has changed, or choose prose for all four
-again.
+Either reopen it with that as what has changed, or choose prose for all three
+again; prose leaves the 1005 defect standing.
 
 That note also says 812184 calls 4122 a model output, while
 `least-draw-at-heating-modulation-floor-unknown` says nothing yet says which;
