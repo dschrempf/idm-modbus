@@ -33,6 +33,7 @@ where
 
 import Data.Bits (shiftL, (.|.))
 import qualified Data.ByteString as B
+import Data.Int (Int16)
 import Data.Text (Text)
 import Data.Word (Word16, Word32)
 import GHC.Float (castWord32ToFloat)
@@ -48,7 +49,8 @@ import Language.Haskell.TH.Syntax (Lift)
 data Datatype
   = -- | IEEE 754 single precision across two registers, low word first
     Float32
-  | -- | one register, only the low byte carries the value
+  | -- | one register, a byte by the manual's name, signed by the controller's
+    -- reading
     UChar
   | -- | one register; signed where the documented minimum is negative
     Word
@@ -215,7 +217,9 @@ data Value
 --
 -- Two things about the wire format are easy to get wrong and are handled here.
 -- A 32-bit float arrives low word first, against the usual Modbus habit. And a
--- @UCHAR@ occupies a whole register of which only the low byte is meaningful.
+-- @UCHAR@ occupies a whole register, which the controller reads as a signed
+-- word: its own register page prints @fffe@ as -2. See
+-- @doc\/verification-2026-10-15-web-app.md@.
 --
 -- None of the conventions the manual leaves out are applied: a sentinel is
 -- still a -1 here, and a temperature-carrying @WORD@ is still unsigned. This
@@ -230,7 +234,7 @@ asWritten reg bytes = case registerDatatype reg of
     [lo, hi] -> Just (Count (fromIntegral (wide lo hi)))
     _ -> Nothing
   UChar -> withWords 1 $ \ws -> case ws of
-    [w] -> Just (Count (fromIntegral w `mod` 256))
+    [w] -> Just (Count (fromIntegral (fromIntegral w :: Int16)))
     _ -> Nothing
   Word -> withWords 1 $ \ws -> case ws of
     [w] -> Just (Count (fromIntegral w))
@@ -263,7 +267,9 @@ navigator reg v = case (registerDatatype reg, v) of
     | outOfRange x -> NoValue
     | otherwise -> NoValueOr v
   (DWord, Count n) -> sentinel (n == 0xFFFFFFFF) v
-  (UChar, Count n) -> sentinel (n >= 254) v
+  -- -1 answers for an unfitted sensor, and -2 at 1714 and 1715, whose meaning
+  -- is unknown
+  (UChar, Count n) -> sentinel (n < 0) v
   (Boolean, Count n) -> sentinel (n >= 254) (Flag (n /= 0))
   (Word, Count n)
     | signedWord -> Measured (meaning (n - if n > 0x7FFF then 65536 else 0))

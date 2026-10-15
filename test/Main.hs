@@ -144,8 +144,15 @@ checks =
         -- and a battery charge level is not a pump, for all it is in per cent
         && decodeRaw 86 (B.pack [0xff, 0xff]) == Just NoValue
     ),
-    ( "a byte-sized register reads only its low byte",
+    ( "a byte-sized register reads the whole word, signed",
       decodeRaw 1032 (B.pack [0x00, 0x2e]) == Just (Measured (Count 46))
+        -- the controller's own page prints 1714's fffe as -2
+        && asWritten (register 1714) (B.pack [0xff, 0xfe]) == Just (Count (-2))
+        && asWritten (register 1006) (B.pack [0xff, 0xff]) == Just (Count (-1))
+    ),
+    ( "a byte-sized register answers -1 and -2 for no value",
+      decodeRaw 1006 (B.pack [0xff, 0xff]) == Just NoValue
+        && decodeRaw 1714 (B.pack [0xff, 0xfe]) == Just NoValue
     ),
     ( "widths match the datatypes",
       registerWidth Float32 == Quantity 2 && registerWidth UChar == Quantity 1
