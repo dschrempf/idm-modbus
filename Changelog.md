@@ -89,10 +89,10 @@
   default or bound that is not a number, or a range with one bound, fails too.
   `ParseError` is gone, and the types of a register derive `Lift`.
 
-- `captures/navigator-2.0-scan-2026-09-19.json` is a fresh sweep of all 663
-  addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress` and
-  every one of them in the zone module block or write-only. It reproduces the
-  earlier sweep of the 497 addresses then known, sentinel for sentinel.
+- `captures/navigator-2.0-scan-2026-09-19-1503.json` is a fresh sweep of all
+  663 addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress`
+  and every one of them in the zone module block or write-only. It reproduces
+  the earlier sweep of the 497 addresses then known, sentinel for sentinel.
 - The same file holds what the machine said and nothing else: address, status,
   the exception code behind a refusal, the bytes, and the number those bytes
   spell. It used to repeat the parameter list's own columns, transcribed a
@@ -154,6 +154,6 @@
 
 ### Not yet
 
-- Writing. Eighty-eight registers are stored in an EEPROM rated for 300000
-  cycles, so writes need an interface that makes the cost visible rather than
-  an extra argument on a read function.
+- Writing. Writing some registers wears out an EEPROM (a register's
+  `Persistence`), so writes need an interface that makes the cost visible
+  rather than an extra argument on a read function.

@@ -127,9 +127,10 @@ The web backend has a stack of its own beside it, joined to the first only by
   page is not a way in: it answers "wizard is not available!" unless a wizard
   runs.
 
-Read support only, but for the user level. Writing is deliberately absent: a third of the writable
-registers live in an EEPROM rated at 300000 cycles, and that needs an interface
-that makes the cost visible rather than an extra argument.
+Read support only, but for the user level. Writing is deliberately absent:
+writing some registers wears out an EEPROM (a register's `Persistence`), and
+that needs an interface that makes the cost visible rather than an extra
+argument.
 
 The package is an interface to the controller and stays one: it reads, it
 sets the user level, and one day it writes. Deciding what the heat pump should

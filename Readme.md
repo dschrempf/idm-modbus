@@ -8,9 +8,10 @@ own parameter list, and that every claim in it has been checked against a
 running machine. Existing projects in this space are frank about guessing;
 `doc/research.md` says which parts and why.
 
-Reading only, for now. Eighty-eight registers are stored in an EEPROM the
-manufacturer rates at 300000 cycles, and that deserves an interface
-that makes the cost visible rather than a boolean argument.
+Reading only, for now. Writing some registers wears out an EEPROM — a
+register's `Persistence`, in `IDM.Navigator.Register`, says whether and how
+fast — and that deserves an interface that makes the cost visible rather than a
+boolean argument.
 
 ## Status
 

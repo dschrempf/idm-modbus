@@ -94,8 +94,15 @@ the level works, and after 6, so `idm-web --watch 4768` shows clean labels.
 
 ## 8. Housekeeping
 
+Done on 2026-10-15: no prose states the EEPROM count, the first scan is
+`-1503`, and the address stays in the history.
+
 Mostly Dominik's answers.
 
 - `2026-10-14-eeprom-count-stated-four-times`
 - `2026-10-14-first-scan-lacks-its-minute`
 - `2026-10-14-house-address-remains-in-git-history`
+
+All eight sessions done on 2026-10-15.
+`2026-10-15-charge-pump-signal-1074-unchecked-at-rest`, added during session
+7, stands alone: it needs the machine at rest and the `Analogausgänge` page.
