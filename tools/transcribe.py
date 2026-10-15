@@ -21,6 +21,13 @@ capture holding that page and a widths capture of those addresses, the table
 gains them, marked as coming from that page rather than from the manual.
 Without the two, they are carried over like the observed column.
 
+The page names no parameter identifier, and the settings tree, which does,
+names no address. Which identifier a row of the page carries was settled by
+moving a setting and watching which register followed, and is written by hand
+in data/navigator-2.0-gltmon-parameters.tsv, which this script reads and never
+writes. Given a webapi capture, each identifier is checked against it: the
+tree must hold it, at the value the page printed for its address.
+
 The column layout is what carries the meaning: the list is not consistent about
 the order of its cells, so a cell is read according to where it is printed.
 
@@ -260,17 +267,72 @@ GLT_ROW = re.compile(
 GLT_NAME = re.compile(r"^(?P<name>.*?)\s*(?:\((?P<unit>[^()]*)\))?$")
 
 
+def setting_details(capture):
+    """Every setting a webapi capture asked the detail of, in order."""
+    return [
+        r["settingDetail"]
+        for frame in capture
+        for r in frame.get("responses") or []
+        if "settingDetail" in r
+    ]
+
+
 def gltmon_page(capture):
     """The last N2_GLTMON page a webapi capture holds."""
     pages = [
-        r["settingDetail"]["value"]
-        for frame in capture
-        for r in frame.get("responses") or []
-        if r.get("settingDetail", {}).get("name") == "N2_GLTMON"
+        d["value"] for d in setting_details(capture) if d.get("name") == "N2_GLTMON"
     ]
     if not pages:
         sys.exit("the webapi capture holds no N2_GLTMON page")
     return pages[-1]
+
+
+def read_joins(path):
+    """The hand-written parameter identifiers of the page's rows, by address."""
+    with path.open(newline="") as fh:
+        rows = csv.DictReader(fh, delimiter="\t")
+        return {int(r["address"]): r["parameter"] for r in rows}
+
+
+def join_parameters(joins, registers):
+    """Give the page's rows the identifiers written for them.
+
+    Refused: an address that is not a row of the page, and an identifier some
+    other row already carries, since the join would then name two registers.
+    """
+    for a, p in joins.items():
+        if registers.get(a, {}).get("source") != "gltmon":
+            sys.exit(f"{a} is given the parameter {p} but is not a row of N2_GLTMON")
+    for a, p in joins.items():
+        holders = [b for b, r in registers.items() if r["parameter"] == p]
+        holders += [b for b, q in joins.items() if q == p and b != a]
+        if holders:
+            sys.exit(f"{a} is given the parameter {p}, which {holders[0]} carries too")
+    for a, p in joins.items():
+        registers[a]["parameter"] = p
+
+
+def check_joins(joins, page, capture):
+    """Refuse a join the capture contradicts.
+
+    Both values come from the same walk, minutes apart: the page's for the
+    address and the tree's for the identifier. Agreeing proves little where
+    circuits share a value, but disagreeing proves the join wrong.
+    """
+    tree = {
+        d["param"]: d["value"]
+        for d in setting_details(capture)
+        if "param" in d and "value" in d
+    }
+    shown = {
+        int(a): html.unescape(v).strip() for a, _, _, v, _ in GLT_ROW.findall(page)
+    }
+    for a, p in joins.items():
+        if p not in tree:
+            sys.exit(f"the settings tree of the capture lacks {p}, given to {a}")
+        v = shown.get(a)
+        if v is None or not is_number(v) or float(v) != float(tree[p]):
+            sys.exit(f"{a} printed {v!r} on the page, where {p} holds {tree[p]}")
 
 
 def width(reads, a):
@@ -357,19 +419,24 @@ def main():
     enums = share_within_families(parse_enums(text, registers), registers)
     for r in registers.values():
         r["source"] = "manual"
+    joins = read_joins(data / "navigator-2.0-gltmon-parameters.tsv")
     if args.webapi:
         reads = {
             (r["address"], r["quantity"]): r
             for r in json.loads(args.widths.read_text())
         }
-        page = gltmon_page(json.loads(args.webapi.read_text()))
+        capture = json.loads(args.webapi.read_text())
+        page = gltmon_page(capture)
         registers |= gltmon_rows(page, reads, registers)
     else:
         registers |= {
-            a: {**r, "address": a}
+            a: {**r, "address": a, "parameter": ""}
             for a, r in previous.items()
             if r.get("source") == "gltmon"
         }
+    join_parameters(joins, registers)
+    if args.webapi:
+        check_joins(joins, page, capture)
 
     with table.open("w", newline="") as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")

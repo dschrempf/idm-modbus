@@ -112,7 +112,11 @@ circuit at 1520 to 1540, the heat sink's return, flow and flow rate at 1068 to
 and cascade powers from 4108 to 4140. It states no datatype, persistence,
 range or identifier, so the table takes its rows with the width measured and
 the rest left unstated, and marks them `gltmon`. See
-[verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md).
+[verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md). The
+heat sink rows were since read beside the display, and the flow temperature
+rows joined to their identifiers by moving the settings:
+[verification-2026-10-15-heat-sink.md](verification-2026-10-15-heat-sink.md),
+[verification-2026-10-15-flow-temperature.md](verification-2026-10-15-flow-temperature.md).
 
 ## Community work
 
@@ -248,7 +252,9 @@ cannot find the circuits. See
   (`captures/navigator-2.0-webapi-2026-10-01-1158.json`): `IV023` for hot
   water at 40 %, where the charge of 2026-10-01 drew 1.5–1.7 kW by 4122
   (`doc/verification-2026-10-01-charge.md`), and `IV003` for heating at 20 %.
-  The machine has not heated in any capture, so what 20 % draws is unknown.
+  The machine heated in one capture, drawing 2.7–3.1 kW by 4122
+  (`doc/verification-2026-10-15-heat-sink.md`), but the modulation was not
+  captured beside it, so what 20 % draws is still unknown.
   The forecast it is compared against should be readable as 4122 at
   standstill once `PV008` is set; until then 4122 reads 0.0 at standstill.
   Both are the model's figures; a meter on the supply would say what the

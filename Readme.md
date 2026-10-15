@@ -54,6 +54,7 @@ service code is the day and month of the current date. Port 502, unit id 1.
 |---|---|
 | `data/navigator-2.0-registers.tsv` | the parameter list, transcribed; the single source of truth |
 | `data/navigator-2.0-enums.tsv` | enumerated values, as literally printed in the manual |
+| `data/navigator-2.0-gltmon-parameters.tsv` | the parameter identifier of a register the manual does not list, where a moved setting showed it; written by hand |
 | `captures/` | what a real machine answered, and nothing the list already says; kept out of git |
 | `tools/transcribe.py` | rebuilds both TSVs from the manual's extracted text |
 | `src/IDM/Modbus/TCP.hs` | framing |
@@ -66,6 +67,9 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `doc/verification-2026-09-20.md` | the table against the controller's own display |
 | `doc/verification-2026-09-20-webapi.md` | the settings against the web backend, joined on the parameter identifier |
 | `doc/verification-2026-10-01-charge.md` | a hot water charge, sampled through both interfaces |
+| `doc/verification-2026-10-14-gltmon.md` | the controller's own list of the registers it serves |
+| `doc/verification-2026-10-15-heat-sink.md` | the heat sink's flow, return and flow rate against the display |
+| `doc/verification-2026-10-15-flow-temperature.md` | which circuit's flow temperature limit each register holds |
 
 Correcting the table means re-running `tools/transcribe.py` against a newer
 revision of the manual, which goes in `manual/`, ignored by git because the

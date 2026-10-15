@@ -143,9 +143,9 @@ temperature, no return temperature and no flow rate.** B124 and B125, the
 heat sink flow and return, and B2, the flow rate, have no register anywhere in
 the list. The controller's own register page names three outside it after the
 heat sink, 1068 to 1072, and all three answer
-(`doc/verification-2026-10-14-gltmon.md`); until a reading of them is set
-against the display, a coefficient of performance has only 1790 and 4122 to go
-on.
+(`doc/verification-2026-10-14-gltmon.md`). Read beside the display while the
+machine heated, they are B124, B125 and B2, and 4126 is computed from them
+(`doc/verification-2026-10-15-heat-sink.md`).
 
 The table keeps saying `present` for 1050 and 1052, because they do answer.
 
@@ -255,7 +255,9 @@ for. None of them has a register in the list:
 
 The heat sink sensors and the minimum and maximum flow temperature have
 registers outside the list, which the controller's own register page names:
-`doc/verification-2026-10-14-gltmon.md`.
+`doc/verification-2026-10-14-gltmon.md`, checked in
+`doc/verification-2026-10-15-heat-sink.md` and
+`doc/verification-2026-10-15-flow-temperature.md`.
 
 The daily heat quantity chart was captured too, but its window starts after the
 machine did, so it cannot be summed against 1754 and is not evidence here.

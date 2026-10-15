@@ -56,6 +56,14 @@
   registers wide the value at an address is, to
   `captures/navigator-2.0-widths-*.json`; see
   `doc/verification-2026-10-14-gltmon.md`.
+- The minimum and maximum flow temperature of circuits A, C and D, 1520 to
+  1540, carry their parameter identifiers, `HSA05` to `HSD04`, joined by
+  moving one circuit's setting at a time and watching which register followed
+  (`doc/verification-2026-10-15-flow-temperature.md`). The join is written by
+  hand in `data/navigator-2.0-gltmon-parameters.tsv`, which
+  `tools/transcribe.py` reads and checks against a webapi capture. The heat
+  sink's 1068 to 1072 are B124, B125 and B2, read beside the display, and 4126
+  is computed from them (`doc/verification-2026-10-15-heat-sink.md`).
 
 ### Changed
 

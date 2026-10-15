@@ -142,6 +142,9 @@ data Source
   | -- | the controller's own list of the addresses it serves, the web page
     -- @N2_GLTMON@. It states a name, a unit and an access right, and nothing
     -- else; the datatype is measured. See @doc\/verification-2026-10-14-gltmon.md@.
+    -- The parameter identifier is joined by hand, where moving a setting
+    -- showed which register followed it; see
+    -- @doc\/verification-2026-10-15-flow-temperature.md@.
     GltMonitor
   deriving (Show, Eq, Ord, Lift)
 

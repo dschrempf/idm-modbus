@@ -193,12 +193,12 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 1509	UCHAR	RW	eeprom	Parallelverschiebung HK E	HKE03	0	30	0	°C	manual	present
 1510	UCHAR	RW	eeprom	Parallelverschiebung HK F	HKF03	0	30	0	°C	manual	present
 1511	UCHAR	RW	eeprom	Parallelverschiebung HK G	HKG03	0	30	0	°C	manual	present
-1520	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen A					°C	gltmon	present
-1524	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen C					°C	gltmon	present
-1526	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen D					°C	gltmon	present
-1534	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen A					°C	gltmon	present
-1538	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen C					°C	gltmon	present
-1540	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen D					°C	gltmon	present
+1520	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen A	HSA05				°C	gltmon	present
+1524	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen C	HSC05				°C	gltmon	present
+1526	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen D	HSD05				°C	gltmon	present
+1534	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen A	HSA04				°C	gltmon	present
+1538	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen C	HSC04				°C	gltmon	present
+1540	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen D	HSD04				°C	gltmon	present
 1650	FLOAT	W	volatile	Externe Raumtemperatur HK A		15	30		°C	manual	present
 1652	FLOAT	W	volatile	Externe Raumtemperatur HK B		15	30		°C	manual	present
 1654	FLOAT	W	volatile	Externe Raumtemperatur HK C		15	30		°C	manual	present

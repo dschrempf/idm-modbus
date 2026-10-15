@@ -96,7 +96,9 @@ parameter list. The minimum is beside it, at 1520, 1524 and 1526.
 
 That 1534 is `HSA04` rests on the name and on both reading 45. The page carries
 no identifier and the settings tree no address, and every circuit sits at the
-same 45, so the values cannot tell the circuits apart either.
+same 45, so the values cannot tell the circuits apart either. Moving one
+circuit's setting at a time joined all six on 2026-10-15:
+[verification-2026-10-15-flow-temperature.md](verification-2026-10-15-flow-temperature.md).
 
 ## The heat sink
 
@@ -106,4 +108,6 @@ return, flow and flow rate that
 [verification-2026-09-20.md](verification-2026-09-20.md) lists among what the
 web interface shows and Modbus does not: B124, B125 and B2. No capture yet
 holds a web reading and a register reading of them at the same minute, so the
-join to the designators is the names' claim alone.
+join to the designators is the names' claim alone. The capture of 2026-10-15
+does, and the join holds:
+[verification-2026-10-15-heat-sink.md](verification-2026-10-15-heat-sink.md).

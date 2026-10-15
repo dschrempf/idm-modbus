@@ -54,7 +54,6 @@ checks =
         && all
           ( \r ->
               registerPersistence r == UnknownPersistence
-                && registerParameter r == Nothing
                 && registerRange r == Nothing
                 && registerDefault r == Nothing
           )
@@ -65,6 +64,12 @@ checks =
       -- 45.0, as circuit A read on 2026-10-14
       registerSource (register 1534) == GltMonitor
         && decodeAt 1534 (B.pack [0x00, 0x00, 0x42, 0x34]) `approximately` 45
+    ),
+    ( "of the page's rows, only the flow temperatures a moved setting joined carry an identifier",
+      [(registerAddress r, p) | r <- gltmon, Just p <- [registerParameter r]]
+        == zip
+          (map Address [1520, 1524, 1526, 1534, 1538, 1540])
+          (map T.pack ["HSA05", "HSC05", "HSD05", "HSA04", "HSC04", "HSD04"])
     ),
     ( "a register of unstated encoding is read as it came, never as absence",
       decodeRaw 1074 (B.pack [0xff, 0xff]) == Just (Measured (Count 65535))

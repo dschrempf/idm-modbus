@@ -45,7 +45,12 @@ does not have the scan. The rows of the `source` `gltmon` come the same way:
 the controller's web page `N2_GLTMON` lists addresses the manual does not,
 and given a webapi capture holding that page and a widths capture of those
 addresses, the script adds them, with the width measured and everything the
-page does not state left unstated; without the two it carries them over. The scan holds no transcribed data of its own —
+page does not state left unstated; without the two it carries them over. Their
+parameter identifier is the one input written by hand,
+`data/navigator-2.0-gltmon-parameters.tsv`: the page names no identifier and
+the settings tree no address, so only moving a setting and watching which
+register follows can join them. The script reads that file in either case
+and, given the webapi capture, refuses a join the capture contradicts. The scan holds no transcribed data of its own —
 `idm-dump --json` writes it, and it records only address, status, exception
 code, raw bytes and the uninterpreted number, so a correction to the table
 cannot leave it saying something else. A defect in a register name, unit or

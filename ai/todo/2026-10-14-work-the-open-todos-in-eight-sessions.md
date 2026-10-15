@@ -80,6 +80,10 @@ Python side disagree, and one position goes.
 
 ## 7. On the machine
 
+Done on 2026-10-15: 1068 to 1072 are B124, B125 and B2, and 1520 to 1540
+carry `HSA05` to `HSD04`, joined by moving the settings and written by hand
+in `data/navigator-2.0-gltmon-parameters.tsv`.
+
 Needs Dominik, the machine running, and Fachmann level. After 2, so entering
 the level works, and after 6, so `idm-web --watch 4768` shows clean labels.
 
