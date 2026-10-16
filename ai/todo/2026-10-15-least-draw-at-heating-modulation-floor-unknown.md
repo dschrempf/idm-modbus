@@ -18,7 +18,7 @@ or a model's, and nothing yet says which.
 
 ## Found on 2026-10-16
 
-Step 1 and 2 of the list below, over the heating run of 08:10 to 08:55
+Over the heating run of 08:10 to 08:55
 (`doc/verification-2026-10-16-draw.md`):
 
 - 4122 follows 6245's `motor power` to its 0.1 kW rounding in every mode:
@@ -29,29 +29,44 @@ Step 1 and 2 of the list below, over the heating run of 08:10 to 08:55
   percent, so even a run that slows down leaves how 20 % maps to a speed to
   be read off the lowest steady speed.
 
-Left: a heating run with less demand, watched the same way, 6245 beside
-1090, 1100 and 4122.
+Left: the floor itself. Waiting for the controller to choose it may take
+many runs, so the next run forces it as far as the settings allow.
 
-## How we might solve it
+## The next run
 
-1. While the machine heats, watch setting 6245, `N2_MODULATION_OVERVIEW`,
-   beside 4122, 1100 and 1090. The overview is an info page; at rest it
-   printed the inverter's `motor speed` (rps), `motor power` (kW),
-   `drive status` and `dc bus voltage`. Do it over a long run: whether
-   and when the controller modulates down to the floor isn't known, so a
-   short run may never reach it.
+The settings cannot pin heating at 20 %: `IV003` is already at its least,
+20, and `IV002`, `N2_MOD_MAX_POWER_HEATING`, accepts 50 to 100, set to 100
+(`captures/navigator-2.0-webapi-2026-10-01-1158.json`). So:
+
+1. Before the run, at the display: `IV002` from 100 to 50, and the heating
+   curve of circuit A a step lower, so the controller has a reason to go
+   below the cap. Write down both values first. Each change is presumably an
+   EEPROM write; a handful by hand is a small cost.
+2. Watch a heating run as on 2026-10-16, 6245 beside 1090, 1100, 4122 and
+   4126, at 10 s, renewing the Fachmann level with a pause after leaving
+   (`fachmann-entry-right-after-leaving-is-ignored`):
 
        IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann
-       IDM_PIN=... cabal run idm-web -- HOST --watch 30 6245 > captures/navigator-2.0-webwatch-YYYY-MM-DD-HHMM.jsonl
-       cabal run idm-dump -- HOST --watch 30 1090 1100 4122 4126 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
+       IDM_PIN=... cabal run idm-web -- HOST --watch 10 6245 > captures/navigator-2.0-webwatch-YYYY-MM-DD-HHMM.jsonl
+       cabal run idm-dump -- HOST --watch 10 1090 1100 4122 4126 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
        IDM_PIN=... cabal run idm-web -- HOST --leave-fachmann
+3. Restore both settings after the run.
 
-   The Fachmann level lasts sixty minutes, so a longer run has to enter it
-   again.
-2. If `motor power` tracks 4122, then 4122 is the inverter's figure; if it
-   doesn't, 4122 is the polynomial's.
-3. A meter on the supply would say what the machine actually draws, as
-   against what it reports.
+The run tests a hypothesis. The defrost, set by `IV007` to 65 %, ran at
+78.0 rps, which puts 100 % near 120 rps. Then the heating run of 2026-10-16
+ran at 85 to 94 %, hot water at 54 %, the start program at 42 %, and the
+floor is near 24 rps. Capped at 50 %, the compressor should top out near
+60 rps. If it does, the scale holds, and the lowest steady speed of the run
+says how far toward 24 rps the controller went; what 4122 reads there is
+the answer. If it tops out elsewhere, the cap's speed gives a second point
+of the scale.
+
+Should the controller stay at the cap, the run still bounds the floor's
+draw from above. The other way to force it, the power limit at 4108, needs
+writing (`power-limit-4108-semantics-unknown`).
+
+4122 is the inverter's figure; a meter on the supply would say what the
+machine draws besides it.
 
 Record the outcome in a dated `doc/`, and close the open question in
 `doc/research.md`.

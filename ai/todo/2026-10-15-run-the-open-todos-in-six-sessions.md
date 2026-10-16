@@ -52,8 +52,9 @@ then a hot water charge with a defrost. Settled: 1074 and 1104
 (`doc/verification-2026-10-16-charge-pump.md`), 4122 is the inverter's
 figure, and 4108 and 4112 stay at -1.0 in every mode
 (`doc/verification-2026-10-16-draw.md`). Not settled: the heating floor, as
-the run never slowed below 101 rps. It needs a run with less demand, and is
-the one item of this session left; its watch is the second Modbus client
+the run never slowed below 101 rps. The next run caps heating at 50 % and
+lowers the heating curve, as `least-draw-at-heating-modulation-floor-unknown`
+says; it is the one item of this session left, and its watch is the second Modbus client
 session 3 waits for. Renewing the level found
 `fachmann-entry-right-after-leaving-is-ignored`.
 
