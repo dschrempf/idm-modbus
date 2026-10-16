@@ -41,9 +41,11 @@ The measurement below settles both.
 
 ## Found on 2026-10-16
 
-Yes. Watched at rest and across the start of a heating run, `ffff` on 1074
-stood beside -1.0 for M73 on 4782 at every read, and every other value beside
-the same value. `N2_GLTMON` prints its own reading of 1074 the same way
+Yes. Watched at rest, through a heating run with its start and stop, a hot
+water charge and a defrost, `ffff` on 1074 stood beside -1.0 for M73 on 4782
+at every read, and every other value beside the same value. 1074 also reads
+0, minimum speed, for minutes at the start of a hot water charge, so a
+decoding must keep 0 apart from -1. `N2_GLTMON` prints its own reading of 1074 the same way
 (`doc/verification-2026-10-16-charge-pump.md`). What is left is the decision
 below, which is session 4 of
 `2026-10-15-run-the-open-todos-in-six-sessions`.

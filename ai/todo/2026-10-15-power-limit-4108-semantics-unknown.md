@@ -29,6 +29,13 @@ parameter's stored value. `N2_GLTMON`'s `GLT Value` column reads -1 for 4108,
 (`doc/verification-2026-10-15-web-app.md`). Step 1's second half, a watch of
 12763 beside the registers, is in session 2.
 
+## Found on 2026-10-16
+
+Step 1's second half: 4108 and 4112 read -1.0 at every read of a heating run,
+a hot water charge and a defrost, and `N2_GLTMON` printed -1.0, `GLT Value`
+-1, throughout (`doc/verification-2026-10-16-draw.md`). Nothing joins them to
+a setting; step 1 is done, and only writing can go further.
+
 ## How we might solve it
 
 1. Read 4108 and 4112 beside their web settings, if the settings tree has a

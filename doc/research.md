@@ -261,12 +261,16 @@ cannot find the circuits. See
   water at 40 %, where the charge of 2026-10-01 drew 1.5–1.7 kW by 4122
   (`doc/verification-2026-10-01-charge.md`), and `IV003` for heating at 20 %.
   The machine heated in one capture, drawing 2.7–3.1 kW by 4122
-  (`doc/verification-2026-10-15-heat-sink.md`), but the modulation was not
-  captured beside it, so what 20 % draws is still unknown.
+  (`doc/verification-2026-10-15-heat-sink.md`), and in a second, watched
+  beside the inverter's speed, it never slowed below 101 rps or 2.48 kW after
+  a start at a fixed 50.4 rps that hot water uses too
+  (`doc/verification-2026-10-16-draw.md`). What 20 % draws is still unknown.
+  4122 itself is the inverter's figure on this machine: it follows the motor
+  power the controller's page prints to that page's rounding, in every mode.
   The forecast it is compared against should be readable as 4122 at
   standstill once `PV008` is set; until then 4122 reads 0.0 at standstill.
-  Both are the model's figures; a meter on the supply would say what the
-  pump actually draws.
+  That one is a model's figure; a meter on the supply would say what the
+  pump draws besides the inverter.
 - **-2 at 1714 and 1715.** The two external pump requests answer `fffe`,
   where every other unfitted `UCHAR` answers `ffff`, and the controller's own
   register page prints them as -2. The library treats -1 and -2 alike as

@@ -47,9 +47,15 @@ The least-draw note asks for 30 s; whether the Navigator keeps up with nine
 registers every 10 s is untested.
 
 Run on 2026-10-16, 07:45 to 10:30, at 10 s; a round of nine registers takes
-about 1.5 s, and no read failed. The start at 08:10 settled 1074 and 1104
-(`doc/verification-2026-10-16-charge-pump.md`); the floor, 4122 and 4108 wait
-for the end of the run.
+about 1.5 s, and no read failed. It caught a heating run from 08:10 to 08:55,
+then a hot water charge with a defrost. Settled: 1074 and 1104
+(`doc/verification-2026-10-16-charge-pump.md`), 4122 is the inverter's
+figure, and 4108 and 4112 stay at -1.0 in every mode
+(`doc/verification-2026-10-16-draw.md`). Not settled: the heating floor, as
+the run never slowed below 101 rps. It needs a run with less demand, and is
+the one item of this session left; its watch is the second Modbus client
+session 3 waits for. Renewing the level found
+`fachmann-entry-right-after-leaving-is-ignored`.
 
 ## 3. Passive capture over days
 
@@ -81,9 +87,8 @@ Three notes end at the same question, what of a source other than the manual
 Either reopen it with that as what has changed, or choose prose for all three
 again; prose leaves the 1005 defect standing.
 
-That note also says 812184 calls 4122 a model output, while
-`least-draw-at-heating-modulation-floor-unknown` says nothing yet says which;
-session 2 settles it.
+That note also says 812184 calls 4122 a model output. Session 2 found it the
+inverter's figure on this machine (`doc/verification-2026-10-16-draw.md`).
 
 ## 5. Code: the write interface
 

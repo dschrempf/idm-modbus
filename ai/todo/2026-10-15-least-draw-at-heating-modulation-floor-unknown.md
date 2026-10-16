@@ -16,6 +16,22 @@ There is a second question inside it. `N2_GLTMON` describes 4122 as
 wird jener vom Polynom verwendet)". So 4122 is either the inverter's figure
 or a model's, and nothing yet says which.
 
+## Found on 2026-10-16
+
+Step 1 and 2 of the list below, over the heating run of 08:10 to 08:55
+(`doc/verification-2026-10-16-draw.md`):
+
+- 4122 follows 6245's `motor power` to its 0.1 kW rounding in every mode:
+  the inverter's figure, not the polynomial's.
+- The floor was not reached. After a start at a fixed 50.4 rps, 0.9–1.1 kW,
+  which hot water uses too, the compressor turned at 101–113 rps and drew
+  2.48–3.06 kW until the stop. 6245 prints a speed, not a modulation in
+  percent, so even a run that slows down leaves how 20 % maps to a speed to
+  be read off the lowest steady speed.
+
+Left: a heating run with less demand, watched the same way, 6245 beside
+1090, 1100 and 4122.
+
 ## How we might solve it
 
 1. While the machine heats, watch setting 6245, `N2_MODULATION_OVERVIEW`,
