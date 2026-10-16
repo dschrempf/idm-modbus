@@ -68,7 +68,8 @@ of 2026-10-14 12:11, with the machine at rest and 1072 at 0, both read `ffff`.
 1104 does not report this pump's signal while the machine heats; 1074 does.
 Whether 1074's `ffff` at rest is the -1 of the pump signals at 1104 to 1109,
 "not driven", needs the display's `Analogausgänge` page beside it. The table
-still reads it as 65535.
+still reads it as 65535. It is, and 1104 does not follow the pump:
+[verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md).
 
 ## Reproducing
 

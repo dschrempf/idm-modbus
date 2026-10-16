@@ -46,6 +46,11 @@ Merged:
 The least-draw note asks for 30 s; whether the Navigator keeps up with nine
 registers every 10 s is untested.
 
+Run on 2026-10-16, 07:45 to 10:30, at 10 s; a round of nine registers takes
+about 1.5 s, and no read failed. The start at 08:10 settled 1074 and 1104
+(`doc/verification-2026-10-16-charge-pump.md`); the floor, 4122 and 4108 wait
+for the end of the run.
+
 ## 3. Passive capture over days
 
 - `page-heat-exceeds-waermemenge-registers-by-1-19`: `idm-dump --watch 600`

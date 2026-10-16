@@ -116,7 +116,9 @@ the rest left unstated, and marks them `gltmon`. See
 heat sink rows were since read beside the display, and the flow temperature
 rows joined to their identifiers by moving the settings:
 [verification-2026-10-15-heat-sink.md](verification-2026-10-15-heat-sink.md),
-[verification-2026-10-15-flow-temperature.md](verification-2026-10-15-flow-temperature.md).
+[verification-2026-10-15-flow-temperature.md](verification-2026-10-15-flow-temperature.md),
+and 1074 beside the page that prints the charge pump's signal:
+[verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md).
 
 ## Community work
 
@@ -190,7 +192,10 @@ answered three questions the documentation leaves open. The measurements are in
    the type `WORD` and says nothing about sign; its minimum decides it, and
    where the minimum is negative 65535 is a value the register may hold, not
    the sentinel. See
-   [verification-2026-09-20.md](verification-2026-09-20.md).
+   [verification-2026-09-20.md](verification-2026-09-20.md). On this machine
+   1104 reads 65535 while its pump is driven too: the charge pump's signal is
+   at 1074, which the manual does not list
+   ([verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md)).
 
 3. **Function codes 3 and 4 serve the same address space.** The manual and the
    community are inconsistent about which to use — 812184 calls 74 a holding

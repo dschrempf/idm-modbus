@@ -39,6 +39,15 @@ both be M73's signal (`doc/verification-2026-10-15-heat-sink.md`). That
 discrepancy is `2026-10-15-charge-pump-status-1104-reads-not-driven-while-pumping`.
 The measurement below settles both.
 
+## Found on 2026-10-16
+
+Yes. Watched at rest and across the start of a heating run, `ffff` on 1074
+stood beside -1.0 for M73 on 4782 at every read, and every other value beside
+the same value. `N2_GLTMON` prints its own reading of 1074 the same way
+(`doc/verification-2026-10-16-charge-pump.md`). What is left is the decision
+below, which is session 4 of
+`2026-10-15-run-the-open-todos-in-six-sessions`.
+
 ## The measurement
 
 Watch 1074 against both pages at the same time, at rest and ideally across

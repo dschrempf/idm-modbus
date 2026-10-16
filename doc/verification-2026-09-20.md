@@ -110,7 +110,9 @@ and shows `M73 Ladepumpe Wärmesenke Steuersignal` at −1.0 %, while the
 Digitalausgänge page shows the same pump's `EIN/AUS` at 100. The pump is fitted
 and running. Address 1104, `Status Ladepumpe (M73)`, reads 65535.
 
-So 65535 is −1 and −1 is a state, not an absence. The parameter list says as
+So 65535 is −1 and −1 is a state, not an absence. (On this machine 1104
+reads 65535 while the pump is driven as well; the pump's signal is at 1074,
+`doc/verification-2026-10-16-charge-pump.md`.) The parameter list says as
 much and was not being read: it documents 1104 to 1109 from a **minimum of −1**
 to a maximum of 100. Meanwhile 1106, the groundwater pump of a machine that has
 no groundwater pump, reads the identical word. The wire cannot separate a pump
