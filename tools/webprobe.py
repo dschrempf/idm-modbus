@@ -151,6 +151,11 @@ IDENTIFIERS = [
     re.compile(r"m[0-9]+@[0-9A-Fa-f]+"),  # the myIDM identifier
     re.compile(r"(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}"),  # the MAC address
 ]
+# N2_GLTMON prints the myIDM identifier as a number, in the value cell of the
+# row of register 500: address, name, access, value
+GLTMON_MYIDM = re.compile(
+    r"(<tr><td>500</td><td>[^<]*</td><td>[^<]*</td><td[^>]*>)[^<]*(</td>)"
+)
 
 
 def redact(node):
@@ -174,7 +179,7 @@ def redact(node):
 def redact_text(text):
     for identifier in IDENTIFIERS:
         text = identifier.sub(REDACTED, text)
-    return text
+    return GLTMON_MYIDM.sub(rf"\g<1>{REDACTED}\g<2>", text)
 
 
 # A websocket client small enough to read, so that this file keeps the one

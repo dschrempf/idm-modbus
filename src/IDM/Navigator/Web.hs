@@ -400,7 +400,7 @@ redacted = "<redacted>"
 -- | Replace every myIDM identifier, @m@ digits @\@@ hex, and every MAC
 -- address, hex in six pairs joined by @:@ or @-@. Hex in either case.
 redactText :: Text -> Text
-redactText = T.concat . go
+redactText = redactGltMonitor . T.concat . go
   where
     go s = case T.uncons s of
       Nothing -> []
@@ -419,3 +419,25 @@ redactText = T.concat . go
        in if length candidate == 17 && and (zipWith fits [0 :: Int ..] candidate)
             then Just 17
             else Nothing
+
+-- | @N2_GLTMON@ prints the myIDM identifier as a number, in the value cell of
+-- the row of register 500: address, name, access, value.
+redactGltMonitor :: Text -> Text
+redactGltMonitor t
+  | T.null found = t
+  | otherwise = case valueCell after of
+      Just (kept, rest) -> before <> row <> kept <> redacted <> redactGltMonitor rest
+      Nothing -> before <> row <> redactGltMonitor after
+  where
+    row = "<tr><td>500</td><td>"
+    (before, found) = T.breakOn row t
+    after = T.drop (T.length row) found
+    -- the name, the access and the opening of the value cell, and what
+    -- follows the value
+    valueCell s = do
+      s1 <- T.stripPrefix "</td><td>" (T.dropWhile (/= '<') s)
+      s2 <- T.stripPrefix "</td><td" (T.dropWhile (/= '<') s1)
+      s3 <- T.stripPrefix ">" (T.dropWhile (/= '>') s2)
+      let rest = T.dropWhile (/= '<') s3
+      guard ("</td>" `T.isPrefixOf` rest)
+      pure (T.take (T.length s - T.length s3) s, rest)

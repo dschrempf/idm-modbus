@@ -229,6 +229,10 @@ Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
   the myIDM identifier and the MAC address in either case, in keys as well as
   values, after the JSON is decoded, and drop the session identifier at any
   depth.
+- `N2_GLTMON` prints the myIDM identifier as the value of 500, as a number,
+  where neither rule matched it. Both now redact the value cell of that row,
+  and `tools/transcribe.py` takes the marker for a page value, so 500 stays a
+  row of the table.
 
 ### Not yet
 

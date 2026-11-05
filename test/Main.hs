@@ -265,6 +265,16 @@ checks =
       redact (json "{\"a\":{\"remoteSessionId\":\"x\",\"00-1a-2b-3c-4d-5e\":\"m42@0A1B\"},\"b\":[\"ff:ee:dd:cc:bb:aa\",\"12:34\"]}")
         == json "{\"a\":{\"<redacted>\":\"<redacted>\"},\"b\":[\"<redacted>\",\"12:34\"]}"
     ),
+    ( "the page of the GLT values loses the value of 500, and only that",
+      let page v5000 v500 =
+            json $
+              "{\"value\":\"<table><tr><td>5000</td><td>a </td><td>RO</td><td align=\\\"center\\\">"
+                <> v5000
+                <> "</td><td></td></tr><tr><td>500</td><td>myiDM-ID </td><td>RO</td><td align=\\\"center\\\">"
+                <> v500
+                <> "</td><td align=\\\"right\\\"></td></tr></table>\"}"
+       in redact (page "123456.0" "123456.0") == page "123456.0" "<redacted>"
+    ),
     ( "an info cell decodes the entities the controller writes",
       infoRows (T.pack "<tr><td>B5</td><td>Taupunktwächter&nbsp;Heizkreis A</td><td>1</td><td></td></tr><tr><td>Laufzeit Stufe&nbsp1</td><td>39.9h</td></tr><tr><td>a &amp; b &#x41;&#66; &copy; &</td></tr>")
         == [ InfoReading (Just (T.pack "B5")) (T.pack "Taupunktwächter Heizkreis A") (InfoNumber 1) T.empty,

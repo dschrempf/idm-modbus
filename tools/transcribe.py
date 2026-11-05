@@ -67,6 +67,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from webprobe import REDACTED
+
 ROW = re.compile(
     r"^\s*(?P<eeprom>\*?)(?P<addr>\d{1,4})\s+"
     r"(?P<dtype>FLOAT|UCHAR|WORD|CHAR|BOOL|INT|DWORD)\s+"
@@ -580,8 +582,8 @@ def gltmon_rows(page, reads, manual):
     The page states an address, a name with its unit, and an access right; the
     datatype comes from the measured width, and nothing states persistence,
     range or default. A row without a name, with a value that is neither a
-    number nor true or false, or with no decisive width stays out; where the
-    width contradicts the manual, the manual's row goes out with it.
+    number, true, false nor redacted, or with no decisive width stays out;
+    where the width contradicts the manual, the manual's row goes out with it.
     """
     out = {}
     for addr, name, access, value, _ in GLT_ROW.findall(page):
@@ -591,10 +593,10 @@ def gltmon_rows(page, reads, manual):
         manual.pop(a, None)
         m = GLT_NAME.match(html.unescape(name))
         value = html.unescape(value).strip()
+        read = not value or is_number(value) or value in ("true", "false", REDACTED)
         why = (
             "no name" if not m.group("name")
-            else "its value is not a number"
-            if value and not is_number(value) and value not in ("true", "false")
+            else "its value is not a number" if not read
             else None
         )
         w = None if why else width(reads, a)
