@@ -10,14 +10,14 @@ circuit held, and watching both sides, joins all six.
 
 ## What was recorded
 
-|             |                                                                                                                  |
-| ----------- | ---------------------------------------------------------------------------------------------------------------- |
-| Registers   | `captures/navigator-2.0-watch-2026-10-15-0836.jsonl`, 1520, 1524, 1526, 1534, 1538, 1540                         |
-| Web backend | `captures/navigator-2.0-webwatch-2026-10-15-0836.jsonl`, the settings 6966, 6980, 7862, 7876, 8310, 8324         |
-| Interval    | 10 s, both, 08:36–08:47                                                                                          |
-| Scans       | `captures/navigator-2.0-scan-2026-10-15-0837.json` before, `-0841.json` with all three moved, `-0847.json` after |
-| Widths      | `captures/navigator-2.0-widths-2026-10-15-0836.json` and `-0841.json`, 1520 to 1546, circuits A to G             |
-| User level  | Fachmann, entered for the run and left afterwards                                                                |
+|             |                                                                                                                             |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Registers   | `captures/navigator-2.0-watch-20.24-1574-2026-10-15-0836.jsonl`, 1520, 1524, 1526, 1534, 1538, 1540                         |
+| Web backend | `captures/navigator-2.0-webwatch-20.24-1574-2026-10-15-0836.jsonl`, the settings 6966, 6980, 7862, 7876, 8310, 8324         |
+| Interval    | 10 s, both, 08:36–08:47                                                                                                     |
+| Scans       | `captures/navigator-2.0-scan-20.24-1574-2026-10-15-0837.json` before, `-0841.json` with all three moved, `-0847.json` after |
+| Widths      | `captures/navigator-2.0-widths-20.24-1574-2026-10-15-0836.json` and `-0841.json`, 1520 to 1546, circuits A to G             |
+| User level  | Fachmann, entered for the run and left afterwards                                                                           |
 
 The settings were changed by hand, at the controller; the library sent only
 reads and the two level changes.

@@ -14,7 +14,7 @@ surplus will act on the answer.
 
 On this machine 74 reads 0.0, and the PV signal setting `SSYSPVSIGNAL`
 (setting 5335 / 13223, `N2_PV_SIGNAL`) is `N2_NONE`
-(`captures/navigator-2.0-webapi-2026-10-01-1158.json`). Without a PV source
+(`captures/navigator-2.0-webapi-20.24-1574-2026-10-01-1158.json`). Without a PV source
 configured, the controller has no reason to look at 74. Looking at a stored
 number shows only that it is stored, not how it is scaled.
 

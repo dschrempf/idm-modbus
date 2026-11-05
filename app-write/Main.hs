@@ -10,8 +10,10 @@ module Main (main) where
 import qualified Data.ByteString as B
 import qualified Data.Text as T
 import IDM.Modbus.TCP
-import IDM.Navigator.Client (defaultPoll)
+import IDM.Navigator.Client (defaultPoll, withSession, writable)
 import IDM.Navigator.Register
+import IDM.Navigator.Software (mismatchText, modbusVersionText)
+import IDM.Navigator.Table (navigator20Software)
 import IDM.Navigator.Target
 import IDM.Navigator.Write
 import System.Environment (getArgs, getProgName)
@@ -42,6 +44,8 @@ usage = do
   putStrLn "  costs one of the controller's 300000 EEPROM cycles, so without"
   putStrLn "  --eeprom nothing is done for one, not even a read. With it, the"
   putStrLn "  register is read first and left alone if it holds VALUE already."
+  putStrLn "  Nothing is written unless the controller runs the software the"
+  putStrLn "  table describes, data/navigator-2.0-software.tsv."
   putStrLn ""
   putStrLn "  Targets:"
   mapM_ (\(SomeTarget t) -> putStrLn ("    " <> describe (targetRegister t) <> costText (targetCost t))) targets
@@ -64,12 +68,15 @@ run host addrArg valueArg consent = case find addrArg of
             <> " is stored in EEPROM; a write that changes it costs one of"
             <> " 300000 cycles. Repeat with --eeprom."
       _ -> do
-        outcome <- withConnection defaultPatience (Host host) (Port 502) (UnitId 1) $ \conn ->
-          write conn defaultPoll t v
+        outcome <- withSession defaultPatience defaultPoll (Host host) (Port 502) (UnitId 1) $ \s ->
+          either (die . refusal) (\w -> write w t v) (writable s)
         let (line, ok) = report reg (targetCost t) v outcome
         putStrLn (describe reg <> ": " <> line)
         if ok then pure () else exitFailure
   where
+    refusal m =
+      "refused, nothing written: "
+        <> T.unpack (mismatchText (T.pack . show) modbusVersionText navigator20Software m)
     find a = case readMaybe a :: Maybe Integer of
       Just n
         | n >= 0 && n <= 65535 ->

@@ -8,7 +8,7 @@ logs the versions and what the reads of 16:17 to 16:41 found changed.
 ## Re-checked on 2026-11-05, by reads
 
 - Every table address answers as before, at the same width, but 1999 and
-  4112 (scan `…-2026-11-05-1617`).
+  4112 (scan `…-20.24-2608-2026-11-05-1617`).
 - The settings tree has the same ids and parameter identifiers, plus
   `SSYSPV030` and `SSYSPV031`. The 26 settings that join to a register by
   parameter agree with it, `BV002` and `BV003` as two's complement.

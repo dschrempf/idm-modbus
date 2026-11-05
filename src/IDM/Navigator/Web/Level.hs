@@ -17,6 +17,9 @@
 -- @N2_CODE_ENTRY_EXPERT@, of type @actioncode@, as the settings page does.
 -- Leaving acknowledges the notice the controller raises while the level is
 -- open; the web interface has no other way out.
+--
+-- Both go only to a controller running the software the table describes,
+-- which 'IDM.Navigator.Web.Session.writable' checks.
 module IDM.Navigator.Web.Level
   ( fachmannCode,
     Entry (..),
@@ -33,8 +36,8 @@ import Data.List (find)
 import Data.Text (Text)
 import Data.Time (LocalTime (..), TimeOfDay (..), toGregorian)
 import IDM.Navigator.Web
-import IDM.Navigator.Web.Connection
-import IDM.Navigator.Web.Session (askNotifications, askStatus)
+import IDM.Navigator.Web.Connection (Failure, Pace (..), andThen, drain, paceOf)
+import IDM.Navigator.Web.Session (Session, Writable, askNotifications, askStatus, sessionLink, writableSession)
 
 -- | The code of the Fachmann level, from the controller's clock: the last
 -- digit of the hour, the first digit of the hour, and the last digits of the
@@ -80,8 +83,8 @@ data Sent = Sent
 -- | Enter the Fachmann level with the code of the controller's clock, from
 -- Kunde only. Near the hour it waits for the hour to turn first, at most
 -- 'paceIntervalMicroseconds' and twice 'pacePatienceMicroseconds'.
-enterFachmann :: Session -> IO (Either Failure Entry)
-enterFachmann s = andThen (statusForCode s) $ \before ->
+enterFachmann :: Writable -> IO (Either Failure Entry)
+enterFachmann w = andThen (statusForCode s) $ \before ->
   case statusUserLevel before of
     Fachmann -> pure (Right AlreadyFachmann)
     OtherLevel n -> pure (Right (EntryDeclined n))
@@ -97,6 +100,7 @@ enterFachmann s = andThen (statusForCode s) $ \before ->
               ]
           )
   where
+    s = writableSession w
     SettingId codeEntry = codeEntrySetting
 
 -- | The status whose clock spells the code. The code arrives later than the
@@ -109,7 +113,7 @@ statusForCode s = andThen (askStatus s) $ \st ->
   let left = untilTheHour (statusClock st)
    in if left > margin then pure (Right st) else threadDelay (ceiling (left * 1e6)) >> askStatus s
   where
-    Pace {paceIntervalMicroseconds = interval, pacePatienceMicroseconds = patience} = paceOf s
+    Pace {paceIntervalMicroseconds = interval, pacePatienceMicroseconds = patience} = paceOf (sessionLink s)
     margin = fromIntegral (interval + 2 * patience) / 1e6
 
 -- | Seconds until the clock reaches the next full hour.
@@ -121,8 +125,8 @@ untilTheHour t = 3600 - realToFrac (fromIntegral (todMin tod * 60) + todSec tod)
 -- | Leave the Fachmann level by acknowledging its notice, as the notices page
 -- does. Only that notice: acknowledging all of them would also acknowledge a
 -- fault.
-leaveFachmann :: Session -> IO (Either Failure Exit)
-leaveFachmann s = andThen (askStatus s) $ \before ->
+leaveFachmann :: Writable -> IO (Either Failure Exit)
+leaveFachmann w = andThen (askStatus s) $ \before ->
   case statusUserLevel before of
     Customer -> pure (Right AlreadyCustomer)
     level -> andThen (askNotifications s) $ \standing ->
@@ -144,12 +148,13 @@ leaveFachmann s = andThen (askStatus s) $ \before ->
                   ]
               )
   where
+    s = writableSession w
     code (NotificationCode c) = c
 
 -- | Send a request whose answer is not known, and ask for the level after.
 change :: Session -> UserLevel -> Value -> IO (Either Failure Sent)
 change s before request =
-  andThen (drain s request settleMicroseconds) $ \responses ->
+  andThen (drain (sessionLink s) request settleMicroseconds) $ \responses ->
     andThen (askStatus s) $ \after ->
       pure (Right (Sent before (statusUserLevel after) responses))
 

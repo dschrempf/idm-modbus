@@ -10,13 +10,13 @@ computed from these three registers.
 
 ## What was recorded
 
-|             |                                                                                         |
-| ----------- | --------------------------------------------------------------------------------------- |
-| Registers   | `captures/navigator-2.0-watch-2026-10-15-0835.jsonl`, 08:35–08:47                       |
-| Web backend | `captures/navigator-2.0-webwatch-2026-10-15-0835.jsonl`, 08:35–08:47, 4768 `N2_SENSORS` |
-| Interval    | 10 s, both                                                                              |
-| User level  | Fachmann, entered for the run and left afterwards                                       |
-| Scans       | `captures/navigator-2.0-scan-2026-10-15-0837.json`, `-0841.json`, `-0847.json`          |
+|             |                                                                                                    |
+| ----------- | -------------------------------------------------------------------------------------------------- |
+| Registers   | `captures/navigator-2.0-watch-20.24-1574-2026-10-15-0835.jsonl`, 08:35–08:47                       |
+| Web backend | `captures/navigator-2.0-webwatch-20.24-1574-2026-10-15-0835.jsonl`, 08:35–08:47, 4768 `N2_SENSORS` |
+| Interval    | 10 s, both                                                                                         |
+| User level  | Fachmann, entered for the run and left afterwards                                                  |
+| Scans       | `captures/navigator-2.0-scan-20.24-1574-2026-10-15-0837.json`, `-0841.json`, `-0847.json`          |
 
 The registers are 1066 to 1074, 1104, 1100, 1090, 1091, 1350, 4122 and 4126.
 The machine was heating throughout: 1090 read 1, `Heizbetrieb`, 1091 and 1100

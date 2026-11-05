@@ -14,11 +14,11 @@ web backend at once, and the answer is the refrigerant circuit.
 
 | | |
 |---|---|
-| Registers | `captures/navigator-2.0-watch-2026-10-01-0828.jsonl`, 08:28–11:10 |
-| Web backend | `captures/navigator-2.0-webwatch-2026-10-01-0828.jsonl`, 08:28–11:10 |
+| Registers | `captures/navigator-2.0-watch-20.24-1574-2026-10-01-0828.jsonl`, 08:28–11:10 |
+| Web backend | `captures/navigator-2.0-webwatch-20.24-1574-2026-10-01-0828.jsonl`, 08:28–11:10 |
 | Interval | 10 s, both |
 | User level | Fachmann, so that 5888 and 6245 answer |
-| Afterwards | `captures/navigator-2.0-webapi-2026-10-01-1158.json`, 11:58–12:09, Fachmann |
+| Afterwards | `captures/navigator-2.0-webapi-20.24-1574-2026-10-01-1158.json`, 11:58–12:09, Fachmann |
 
 The registers are B45 (1066), B41 (1012), B48 (1014), `Status Verdichter 1`
 (1100), the three powers 1790, 4122 and 4126, `Wärmemenge Warmwasser` (1754),
@@ -98,7 +98,7 @@ a minute by then.
 **A time limit.** The compressor ran 2 h 19 min without a break, the charge
 pump 2 h 10 min; 1090 never showed defrost and 1100 never dropped. The runs
 of 09-25, 09-27 and 09-28 lasted 69 to 103 minutes and ended at the same top
-temperature (`captures/navigator-2.0-webapi-2026-09-29-1333.json`). A limit of
+temperature (`captures/navigator-2.0-webapi-20.24-1574-2026-09-29-1333.json`). A limit of
 one hour, or of any fixed duration, would have ended all four at the same
 duration and at different temperatures; they ended at different durations
 and the same temperature. The settings tree, as far as the Fachmann walk of 09-29 reached, holds no

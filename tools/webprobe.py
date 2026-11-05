@@ -6,7 +6,7 @@ values, they arrive over a websocket on port 61220 and the local PIN travels in
 the URL. The PIN is read from IDM_PIN, as idm-web reads it, so that it stays
 out of the shell history and the process list:
 
-    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
 
 Every request this sends is a read: `overview`, `detail` or `traverse`, which is
 the whole read side of the protocol -- the controller's own JavaScript names
@@ -42,6 +42,11 @@ creating one, and that is a `save`.
 Two of the controller's reads are deliberately not sent. `relaytest`/`overview`
 opens the relay test, and `authentication`/`overview` asks with `userlevel` 4.
 
+The capture records the software it was read on: the first request asks
+N2_SYSTEM_INFO, and the version it prints is the capture's `software`, beside
+its `entries`. Where it is not the software the register table describes, a
+warning names it. The walk goes on all the same: it only reads.
+
 One thing is not verbatim: the settings tree hands out the code that opens the
 controller, and the pages name the machine. Those are redacted, in the open.
 
@@ -51,6 +56,7 @@ settings page every 500 ms and a status page every 5 s.
 """
 
 import base64
+import csv
 import json
 import os
 import re
@@ -58,6 +64,13 @@ import socket
 import sys
 import time
 from datetime import datetime, timezone
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent.parent
+# the software the register table describes
+SOFTWARE = HERE / "data" / "navigator-2.0-software.tsv"
+# N2_SYSTEM_INFO, which Kunde level shows
+SYSTEM_INFO = "4754"
 
 PORT = 61220
 # how long to wait for a response, which is also the pause before the next
@@ -357,6 +370,32 @@ def walk_settings(session, node_id):
             )
 
 
+def read_software(session):
+    """The version N2_SYSTEM_INFO prints, or why it could not be read."""
+    responses = session.ask(
+        {"controller": "setting", "command": "detail", "data": {"settingId": SYSTEM_INFO}}
+    )
+    for r in responses:
+        page = r.get("settingDetail") or {}
+        if page.get("id") == SYSTEM_INFO:
+            m = re.search(r"<td>Software Version</td><td>([^<]*)</td>", page.get("value", ""))
+            return m.group(1) if m else {"error": "no row Software Version"}
+    return {"error": "no answer"}
+
+
+def described():
+    """Series, major and minor of the software the table describes."""
+    with SOFTWARE.open(newline="") as fh:
+        (row,) = csv.DictReader(fh, delimiter="\t")
+    return int(row["series"]), int(row["major"]), int(row["minor"])
+
+
+def web_version(text):
+    """Series, major and minor of T_NAV10_20.24-2608-g0c686ed41, or None."""
+    m = re.fullmatch(r"(\d+)\.(\d+)-(\d+)(?:-.*)?", text.rsplit("_", 1)[-1])
+    return tuple(int(g) for g in m.groups()) if m else None
+
+
 def main(host, pin):
     ws = WebSocket(host, PORT, f"/?auth_code={pin}")
     session = Session(ws)
@@ -364,6 +403,13 @@ def main(host, pin):
         hello = ws.recv_text(time.monotonic() + 10.0)
         if hello is None or not json.loads(hello).get("authorized"):
             raise SystemExit(f"the controller did not authorize us: {hello}")
+        software = read_software(session)
+        if not isinstance(software, str) or web_version(software) != described():
+            print(
+                f"warning: the controller runs {software}; "
+                f"{SOFTWARE.relative_to(HERE)} states another software",
+                file=sys.stderr,
+            )
         for request in REQUESTS:
             session.ask(request)
         walk_graphs(session)
@@ -374,7 +420,12 @@ def main(host, pin):
             )
     finally:
         ws.close()
-    json.dump(session.capture, sys.stdout, indent=1, ensure_ascii=False)
+    json.dump(
+        {"software": software, "entries": session.capture},
+        sys.stdout,
+        indent=1,
+        ensure_ascii=False,
+    )
     sys.stdout.write("\n")
 
 

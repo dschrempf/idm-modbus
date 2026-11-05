@@ -28,6 +28,15 @@ in data/navigator-2.0-gltmon-parameters.tsv, which this script reads and never
 writes. Given a webapi capture, each identifier is checked against it: the
 tree must hold it, at the value the page printed for its address.
 
+The table describes one software of the controller, the one its captures
+were read on, and data/navigator-2.0-software.tsv states it by hand; this
+script reads that file and never writes it. A capture read on another
+software is refused: a scan or a widths capture by the major, minor and patch
+it records, a webapi capture by the series, major and minor of the version it
+records, or, in a capture from before captures recorded it, of the version its
+N2_SYSTEM_INFO page prints. A capture that names no software is taken
+unchecked, with a note.
+
 Of the writable registers, those listed in data/navigator-2.0-targets.tsv,
 which this script reads and never writes, are the ones a write may go to. The
 file gives each an English name, and the script writes them as the type
@@ -271,6 +280,87 @@ GLT_ROW = re.compile(
 )
 # the page appends the unit to the name, in parentheses
 GLT_NAME = re.compile(r"^(?P<name>.*?)\s*(?:\((?P<unit>[^()]*)\))?$")
+
+
+def read_software(path):
+    """The software the table describes, written by hand: series, major and
+    minor, and the patch, None where it is unknown."""
+    with path.open(newline="") as fh:
+        rows = list(csv.DictReader(fh, delimiter="\t"))
+    if len(rows) != 1:
+        sys.exit(f"{path}: one row expected, found {len(rows)}")
+    (r,) = rows
+    return {
+        "series": int(r["series"]),
+        "major": int(r["major"]),
+        "minor": int(r["minor"]),
+        "patch": None if r["patch"] == "unknown" else int(r["patch"]),
+    }
+
+
+def software_text(s):
+    patch = "unknown" if s["patch"] is None else s["patch"]
+    return f"{s['series']}.{s['major']}-{s['minor']}, patch {patch}"
+
+
+def web_version(text):
+    """Series, major and minor of the version N2_SYSTEM_INFO prints,
+    T_NAV10_20.24-2608-g0c686ed41, or None."""
+    m = re.fullmatch(r"(\d+)\.(\d+)-(\d+)(?:-.*)?", text.rsplit("_", 1)[-1])
+    return tuple(int(g) for g in m.groups()) if m else None
+
+
+def system_info_version(frames):
+    """The version the N2_SYSTEM_INFO page of a webapi capture prints, if it
+    holds the page."""
+    for d in setting_details(frames):
+        if d.get("name") == "N2_SYSTEM_INFO":
+            m = re.search(r"<td>Software Version</td><td>([^<]*)</td>", d["value"])
+            if m:
+                return m.group(1)
+    return None
+
+
+def modbus_entries(path, capture, software):
+    """The entries of a scan or a widths capture, once the software it
+    records is the table's. A capture from before captures recorded it is a
+    bare list, and is taken unchecked."""
+    if isinstance(capture, list):
+        print(f"{path}: records no software; not checked", file=sys.stderr)
+        return capture
+    read = capture["software"]
+    if read is None or read["status"] != "ok":
+        sys.exit(f"{path}: the software could not be read: {read}")
+    if (read["major"], read["minor"], read["patch"]) != (
+        software["major"], software["minor"], software["patch"]
+    ):
+        sys.exit(
+            f"{path}: read on major {read['major']}, minor {read['minor']}, "
+            f"patch {read['patch']}; data/navigator-2.0-software.tsv states "
+            f"{software_text(software)}"
+        )
+    return capture["entries"]
+
+
+def webapi_entries(path, capture, software):
+    """The entries of a webapi capture, once the software it was read on is
+    the table's: as the capture records it, or, in a capture from before, as
+    its N2_SYSTEM_INFO page prints it."""
+    if isinstance(capture, list):
+        frames, text = capture, system_info_version(capture)
+        if text is None:
+            print(f"{path}: names no software; not checked", file=sys.stderr)
+            return frames
+    else:
+        frames, text = capture["entries"], capture["software"]
+        if not isinstance(text, str):
+            sys.exit(f"{path}: the software could not be read: {text}")
+    if web_version(text) != (software["series"], software["major"], software["minor"]):
+        sys.exit(
+            f"{path}: read on {text}; data/navigator-2.0-software.tsv states "
+            f"{software_text(software)}"
+        )
+    return frames
 
 
 def setting_details(capture):
@@ -536,10 +626,12 @@ def main():
     table = data / "navigator-2.0-registers.tsv"
     with table.open(newline="") as fh:
         previous = {int(r["address"]): r for r in csv.DictReader(fh, delimiter="\t")}
+    software = read_software(data / "navigator-2.0-software.tsv")
     if args.scan:
+        scan = json.loads(args.scan.read_text())
         observed = {
             r["address"]: {"ok": "present", "exception": "absent"}.get(r["status"])
-            for r in json.loads(args.scan.read_text())
+            for r in modbus_entries(args.scan, scan, software)
         }
     else:
         observed = {a: r["observed"] for a, r in previous.items()}
@@ -550,11 +642,14 @@ def main():
         r["source"] = "manual"
     joins = read_joins(data / "navigator-2.0-gltmon-parameters.tsv")
     if args.webapi:
+        widths = json.loads(args.widths.read_text())
         reads = {
             (r["address"], r["quantity"]): r
-            for r in json.loads(args.widths.read_text())
+            for r in modbus_entries(args.widths, widths, software)
         }
-        capture = json.loads(args.webapi.read_text())
+        capture = webapi_entries(
+            args.webapi, json.loads(args.webapi.read_text()), software
+        )
         page = gltmon_page(capture)
         registers |= gltmon_rows(page, reads, registers)
     else:

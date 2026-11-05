@@ -16,6 +16,10 @@
 -- marks @RW\/RO@ it depends on a menu setting: the PV surplus is used only
 -- where @PV008@ is "Gebäudeleittechnik/Smartfox". What the controller does
 -- once repeated writes stop is not known for any register.
+--
+-- A write goes only to a controller running the software the table
+-- describes, which 'IDM.Navigator.Client.writable' checks: an update may have
+-- moved the register.
 module IDM.Navigator.Write
   ( Outcome (..),
     Confirmation (..),
@@ -25,15 +29,19 @@ where
 
 import Control.Concurrent (threadDelay)
 import IDM.Modbus.TCP
-import IDM.Navigator.Client (Poll (..))
+import IDM.Navigator.Client (Poll (..), Writable, sessionConnection, sessionPoll, writableSession)
 import IDM.Navigator.Register (Value)
 import IDM.Navigator.Target
 import IDM.Navigator.Write.Core
 
--- | Write a value to a target, pausing between requests as a sweep does.
-write :: Connection -> Poll -> Target c -> Value -> IO (Outcome c)
-write conn poll target = writeWith requests (targetCost target) (targetRegister target)
+-- | Write a value to a target, on a session that read the software the table
+-- describes, pausing between requests as a sweep does.
+write :: Writable -> Target c -> Value -> IO (Outcome c)
+write w target = writeWith requests (targetCost target) (targetRegister target)
   where
+    s = writableSession w
+    conn = sessionConnection s
+    poll = sessionPoll s
     requests =
       Requests
         { requestRead = readRegisters conn (pollFunctionCode poll),

@@ -15,6 +15,7 @@
 module IDM.Navigator.Table
   ( navigator20,
     navigator20Enums,
+    navigator20Software,
     byAddress,
     readable,
     present,
@@ -27,7 +28,8 @@ import qualified Data.Map.Strict as M
 import Data.Text (Text)
 import IDM.Modbus.TCP (Address)
 import IDM.Navigator.Register
-import IDM.Navigator.Table.Parse (parseEnums, parseRegisters, parsedFile)
+import IDM.Navigator.Software (Software)
+import IDM.Navigator.Table.Parse (parseEnums, parseRegisters, parseSoftware, parsedFile)
 
 -- | Every register of the Navigator 2.0 parameter list, document 812170
 -- revision 10, and of @N2_GLTMON@, in address order.
@@ -42,6 +44,13 @@ navigator20 = $$(parsedFile parseRegisters "data/navigator-2.0-registers.tsv")
 -- @doc\/research.md@.
 navigator20Enums :: Map (Address, Int) Text
 navigator20Enums = M.fromList $$(parsedFile parseEnums "data/navigator-2.0-enums.tsv")
+
+-- | The software the table describes: the one the captures behind its
+-- @observed@ column and its @gltmon@ rows were read on. Written by hand;
+-- @tools\/transcribe.py@ refuses a capture read on another. A write goes
+-- ahead only on it.
+navigator20Software :: Software
+navigator20Software = $$(parsedFile parseSoftware "data/navigator-2.0-software.tsv")
 
 byAddress :: Map Address Register
 byAddress = M.fromList [(registerAddress r, r) | r <- navigator20]

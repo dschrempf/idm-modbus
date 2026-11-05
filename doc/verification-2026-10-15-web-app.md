@@ -12,12 +12,12 @@ join.
 
 ## What was recorded
 
-|               |                                                                                                                       |
-| ------------- | --------------------------------------------------------------------------------------------------------------------- |
-| The web app   | `captures/navigator-2.0-webui-2026-10-15-1407/`: `index.html`, `main-LF3VJISP.js`, `assets/translations/{de,en}.json` |
-| The settings  | `captures/navigator-2.0-webapi-2026-10-01-1158.json`, Fachmann, with 12763 `N2_GLTMON`                                |
-| The registers | the ten scans from `captures/navigator-2.0-scan-2026-09-19-1503.json` to `-2026-10-15-0847.json`                      |
-| The modes     | `captures/navigator-2.0-watch-2026-10-15-1418.jsonl`, 1005, 1090 and 4122 every 5 s                                   |
+|               |                                                                                                                                  |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| The web app   | `captures/navigator-2.0-webui-20.24-1574-2026-10-15-1407/`: `index.html`, `main-LF3VJISP.js`, `assets/translations/{de,en}.json` |
+| The settings  | `captures/navigator-2.0-webapi-20.24-1574-2026-10-01-1158.json`, Fachmann, with 12763 `N2_GLTMON`                                |
+| The registers | the ten scans from `captures/navigator-2.0-scan-20.24-1574-2026-09-19-1503.json` to `-20.24-1574-2026-10-15-0847.json`           |
+| The modes     | `captures/navigator-2.0-watch-20.24-1574-2026-10-15-1418.jsonl`, 1005, 1090 and 4122 every 5 s                                   |
 
 The files were fetched with plain HTTP `GET`s, and nothing was sent over the
 websocket. The script's `Last-Modified` is 2026-08-20. One setting was

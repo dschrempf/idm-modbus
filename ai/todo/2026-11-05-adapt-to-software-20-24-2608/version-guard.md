@@ -46,22 +46,43 @@ so the check stays for good.
   They are verbatim and cannot take a field. Update the citations in `doc/`
   and the naming scheme in `captures/README.md` with them.
 
-## Choices to raise before building
+## Decided in the second round, and built
 
-1. **Where the expected version is stated.** State it once. The table
-   describes one software, so it belongs with the table: a field the
-   transcription writes, see `table-rebuild.md`. The guard and the docs
-   derive it from there.
-2. **What is compared.** Major, minor and patch, or the whole string with
-   the build hash? The hash is only on the web page; 528 reads 0.
-3. **In the library or the executables.** In the library, as a type: the
-   session holds a witness of the version it read, and `write` asks for a
-   witness of the expected one. A consumer then cannot write without the
-   check. In the executables only, consumers stay unguarded.
-4. **The web check from Python.** `webprobe.py` has its own session, so
-   either it reads 4754 itself, or a shared expected version is read from
-   the table data.
+Built on 2026-11-05; `Changelog.md` and `CLAUDE.md` describe it.
 
-Tell the consumers when it lands: a refused write, and a read on another
-software, are new outcomes for `idm-manager`. `~/nix/config` runs nothing
-against the pump yet (`beyond-this-update.md`).
+1. **Stated by hand, checked.** `data/navigator-2.0-software.tsv`, series,
+   major, minor, patch, like `navigator-2.0-gltmon-parameters.tsv`: the
+   transcription reads it and refuses a capture read on another software,
+   and `IDM.Navigator.Table.navigator20Software` splices it. It reads 20,
+   24, 1574, `unknown`: no capture of 1574 holds a patch. The rebuild
+   (`table-rebuild.md`) sets it to 2608 and patch 0, and the script then
+   refuses any capture of 1574 that records its software.
+2. **Each channel compares what it reads.** Modbus: major, minor and patch
+   (526 reads 0, and the owner wants it used). Web: series, major and minor;
+   the string has no patch, and the build hash is not compared. An unknown
+   patch confirms nothing, so on the current file every Modbus write
+   refuses.
+3. **A witness in the library.** `Client.Session` and `Web.Session` read the
+   version when they open; `writable` gives a `Writable`, which `write`,
+   `enterFachmann` and `leaveFachmann` take. A refusal is a `Mismatch`.
+4. **Captures wrap their entries.** `{"software": …, "entries": […]}` for a
+   scan, widths and webapi capture, a `software` field on each watch line,
+   a first `software` line in what `idm-web` prints. `webprobe.py` reads
+   4754 itself, and reads the data file to warn.
+
+The existing captures are renamed `navigator-2.0-KIND-SOFTWARE-DATE-TIME`,
+and the citations in `doc/` and in `todo` with them; `closed` keeps the old
+names.
+
+## Open
+
+- Try it on the machine: a read should warn (2608 against 1574), and
+  `idm-write HOST 74 …` refuse before it sends anything.
+- `IDM.Modbus.TCP`, which the library re-exports, still exports `connect`
+  and `writeRegisters`, so a consumer can write any address without a
+  target or the guard. `CLAUDE.md` says a consumer reaches a register only
+  through a target, which that export contradicts.
+- Tell the consumers: a refused write, and a read on another software, are
+  new outcomes for `idm-manager`, and its notes on reading the version
+  (`beyond-this-update.md`) are to be checked against the API above.
+  `~/nix/config` runs nothing against the pump yet.

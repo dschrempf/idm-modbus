@@ -15,6 +15,12 @@ leaves a measurement standing only as far as it is measured again.
 Info)` and prints `g0c686ed`, but the register reads 0, as 4116 does for the
   whole version string. These addresses are not in the table yet.
 
+Every session of `idm-dump`, `idm-write`, `idm-web` and `tools/webprobe.py`
+reads the version when it opens, over Modbus from 522 to 526 or over the web
+from `N2_SYSTEM_INFO`, and every capture since 2026-11-05 records it. The
+software the table describes is stated in `data/navigator-2.0-software.tsv`,
+and a write goes ahead only on it.
+
 ## Log
 
 | Component               | until 2026-11-05                        | since 2026-11-05                |
@@ -30,18 +36,18 @@ Info)` and prints `g0c686ed`, but the register reads 0, as 4116 does for the
 | uPC OS-/Boot-Version    | `5.1.6` / `5.1.6`                       | unchanged                       |
 | uPC BoardSize, CoreType | `medium`, `4`                           | unchanged                       |
 
-The first column was read in `captures/navigator-2.0-webapi-2026-09-24-1544.json`,
-`…-2026-09-29-1333.json` and `…-2026-10-01-1158.json`, all alike, and the
+The first column was read in `captures/navigator-2.0-webapi-20.24-1574-2026-09-24-1544.json`,
+`…-20.24-1574-2026-09-29-1333.json` and `…-20.24-1574-2026-10-01-1158.json`, all alike, and the
 software version on 2026-09-19 (`research.md`). The second was read in
-`captures/navigator-2.0-webapi-2026-11-05-1624.json`, and over Modbus in
-`captures/navigator-2.0-widths-2026-11-05-1639.json`.
+`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1624.json`, and over Modbus in
+`captures/navigator-2.0-widths-20.24-2608-2026-11-05-1639.json`.
 
 ## 2026-11-05: 20.24-1574 to 20.24-2608
 
 ### The update
 
 The controller's log, `N2_LOG_HISTORY` in
-`captures/navigator-2.0-webapi-2026-11-05-1624.json`, shows the restart and
+`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1624.json`, shows the restart and
 nothing of an update itself:
 
     2026-11-5 16:09:46    997  T20ERR_NEUSTART_1
@@ -59,15 +65,15 @@ recorded.
 ### What changed
 
 Read on 2026-11-05 between 16:17 and 16:39. The register scan,
-`captures/navigator-2.0-scan-2026-11-05-1617.json`, is compared with
-`…-2026-10-15-0847.json`. The settings walk, `…-webapi-2026-11-05-1624.json`
-completed by `…-1636.json`, is compared with `…-webapi-2026-10-01-1158.json`.
+`captures/navigator-2.0-scan-20.24-2608-2026-11-05-1617.json`, is compared with
+`…-20.24-1574-2026-10-15-0847.json`. The settings walk, `…-webapi-20.24-2608-2026-11-05-1624.json`
+completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01-1158.json`.
 
 - **The register table, as the scan reads it:** the same 682 addresses, the
   same widths, every status the same but one. 1999 `Störmeldungen quittieren`,
   write-only, answered exception 2 before and reads `0000` now.
 - **4112 is no longer a `FLOAT`.** Before, 4113 refused a read on its own, so
-  4112 was two registers wide (`…-widths-2026-10-14-1208.json`). Now 4110 to 4114 each
+  4112 was two registers wide (`…-widths-20.24-1574-2026-10-14-1208.json`). Now 4110 to 4114 each
   answer alone. `N2_GLTMON` lists 4112 without a name, at 0.00. It names 4113
   `Sperre Booster 1` and 4114 `Sperre Booster 2`, both RW and `false`, and
   4110 `Sperre` and 4111 without a name, both RW. 4112 reads 0.0 where it
@@ -93,14 +99,14 @@ completed by `…-1636.json`, is compared with `…-webapi-2026-10-01-1158.json`
   before, are now `N2_THERMAL_PERFORMANCE_POLY` and
   `N2_THERMAL_PERFORMANCE_FLOWSENSOR`.
 - **At Kunde level** the legionella settings `FW045` and `FW046` and
-  `N2_PING` no longer show, against `…-webapi-2026-09-20-2218.json`. At
+  `N2_PING` no longer show, against `…-webapi-20.24-1574-2026-09-20-2218.json`. At
   Fachmann level they do. A setting changed since may hide them, as well as
   the update.
 - **The Fachmann level** is still entered with the code spelled from the
-  clock (`captures/navigator-2.0-level-2026-11-05-1624.log`). It fell back to
+  clock (`captures/navigator-2.0-level-20.24-2608-2026-11-05-1624.log`). It fell back to
   Kunde during the walk, between 16:34:02 and 16:34:04, ten minutes after it
   was entered. Entered again at 16:36:33
-  and read every 30 s (`…-level-2026-11-05-1636.log`), it held at 16:43:56
+  and read every 30 s (`…-level-20.24-2608-2026-11-05-1636.log`), it held at 16:43:56
   and was Kunde at 16:44:27, after seven and a half to eight minutes. Two
   durations that differ by two minutes are no fixed timeout, and neither is
   the sixty minutes measured on 20.24-1574. What ends the level now is not

@@ -49,6 +49,11 @@ clock, and `--leave-fachmann` closes it again.
 stored in the EEPROM is not touched without `--eeprom`, not even read; with
 it, it is read first and left alone if it holds the value already.
 
+Each of them first reads the controller's software. A write, and a change of
+the user level, goes ahead only on the software the table describes,
+`data/navigator-2.0-software.tsv`; a read goes ahead on any, warns where it
+differs, and every capture records it.
+
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The
 service code is the day and month of the current date. Port 502, unit id 1.
@@ -61,12 +66,14 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `data/navigator-2.0-enums.tsv` | enumerated values, as literally printed in the manual |
 | `data/navigator-2.0-gltmon-parameters.tsv` | the parameter identifier of a register the manual does not list, where a moved setting showed it; written by hand |
 | `data/navigator-2.0-targets.tsv` | the registers a write may go to, with an English name each; written by hand |
+| `data/navigator-2.0-software.tsv` | the controller software the table describes, the only one a write goes to; written by hand |
 | `captures/` | what a real machine answered, and nothing the list already says; kept out of git |
 | `tools/transcribe.py` | rebuilds both TSVs from the manual's extracted text, and the targets module |
 | `core/IDM/Modbus/TCP.hs` | framing |
 | `core/IDM/Navigator/Register.hs` | what a register is, and how to decode one |
 | `src/IDM/Navigator/Table.hs` | the table, parsed at compile time |
-| `src/IDM/Navigator/Client.hs` | reading, paced |
+| `src/IDM/Navigator/Software.hs` | the controller's software, as the table states it and as a session reads it |
+| `src/IDM/Navigator/Client.hs` | a session, and reading, paced |
 | `src/IDM/Navigator/Target.hs` | the targets of a write, generated |
 | `src/IDM/Navigator/Write.hs` | writing, at a cost the type states |
 | `core/IDM/Navigator/Write/Core.hs` | what a write sends and comes to, for any register; private to the package |

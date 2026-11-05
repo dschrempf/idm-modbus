@@ -17,6 +17,7 @@ import GHC.Clock (getMonotonicTime)
 import IDM.Modbus.TCP
 import IDM.Navigator.Client
 import IDM.Navigator.Register
+import IDM.Navigator.Software (ModbusVersion (..), mismatchText, modbusVersionText)
 import qualified IDM.Navigator.Table as Table
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure)
@@ -107,29 +108,35 @@ usage = do
   putStrLn "  --widths reads each address as one register and as two, and"
   putStrLn "  the address after it as one, whether or not the parameter"
   putStrLn "  list names it, and prints what the machine answered."
+  putStrLn "  Each connection first reads the controller's software, which"
+  putStrLn "  every capture records. Where it is not the software the table"
+  putStrLn "  describes, a warning on stderr names both."
   exitFailure
 
 run :: String -> Mode -> IO ()
 run host mode = case mode of
-  Report scope -> connected $ \conn -> do
-    samples <- readMany conn defaultPoll (registers scope)
+  Report scope -> connected $ \s -> do
+    warn s
+    samples <- readMany s (registers scope)
     mapM_ (putStrLn . render) samples
-    let readings = [answerReading a | s <- samples, Right a <- [sampleResult s]]
+    let readings = [answerReading a | sample <- samples, Right a <- [sampleResult sample]]
     printf
       "\n%d read, %d no value, %d perhaps no value, %d refused\n"
       (length [() | Measured _ <- readings])
       (length [() | NoValue <- readings])
       (length [() | NoValueOr _ <- readings])
       (length samples - length readings)
-  Capture -> connected $ \conn -> do
-    samples <- probe conn defaultPoll Table.navigator20
-    putStrLn (capture samples)
-  Watch period regs -> watch (connect defaultPatience (Host host) port unit) period regs
-  Widths addrs -> connected $ \conn -> do
-    answers <- mapM (widths conn) addrs
-    putStrLn (list (map widthEntry (concat answers)))
+  Capture -> connected $ \s -> do
+    warn s
+    samples <- probe s Table.navigator20
+    putStrLn (capture s (map (\sample -> fields (sampleRegister sample) (Returned (sampleResult sample))) samples))
+  Watch period regs -> watch (open defaultPatience defaultPoll (Host host) port unit) period regs
+  Widths addrs -> connected $ \s -> do
+    warn s
+    answers <- mapM (widths (sessionConnection s)) addrs
+    putStrLn (capture s (map widthEntry (concat answers)))
   where
-    connected = withConnection defaultPatience (Host host) port unit
+    connected = withSession defaultPatience defaultPoll (Host host) port unit
     port = Port 502
     unit = UnitId 1
     registers Fitted = Table.present
@@ -163,18 +170,42 @@ render s =
       (DriveSignal NotDriven, _) -> "not driven"
       (DriveSignal (Driven n), _) -> show n
 
--- | The capture: what the machine answered and nothing else.
+-- | On the terminal, both versions, where the session read another software
+-- than the table describes.
+warn :: Session -> IO ()
+warn s =
+  either
+    (hPutStrLn stderr . ("warning: " <>) . T.unpack . mismatchText (T.pack . show) modbusVersionText Table.navigator20Software)
+    (const (pure ()))
+    (writable s)
+
+-- | A capture: the software the session read, and the entries.
 --
 -- The parameter list is in @data\/navigator-2.0-registers.tsv@ and is not
 -- repeated here, so that a correction to the transcription cannot leave the
 -- capture saying something else. The value is the number as written, not as
 -- the Navigator means it: a capture that already applied the sentinel rule
 -- could not be the evidence for it.
-capture :: [Sample] -> String
-capture = list . map (\s -> fields (sampleRegister s) (Returned (sampleResult s)))
+capture :: Session -> [[(String, String)]] -> String
+capture s entries =
+  "{\n"
+    <> field ("software", software (Just s))
+    <> ",\n"
+    <> field ("entries", "[\n" <> intercalate ",\n" (map entry entries) <> "\n]")
+    <> "\n}"
 
-list :: [[(String, String)]] -> String
-list entries = "[\n" <> intercalate ",\n" (map entry entries) <> "\n]"
+-- | The version a session read, as a capture records it: like a read, with
+-- the three numbers where it answered. A read made on no session has none.
+software :: Maybe Session -> String
+software Nothing = "null"
+software (Just s) =
+  "{" <> intercalate ", " (map field (status <> parts)) <> "}"
+  where
+    o = Returned (sessionSoftware s)
+    status = [("status", quote (statusText o)), ("exception", maybe "null" show (refusal o))]
+    parts = case sessionSoftware s of
+      Right v -> [("major", show (modbusMajor v)), ("minor", show (modbusMinor v)), ("patch", show (modbusPatch v))]
+      Left _ -> []
 
 entry :: [(String, String)] -> String
 entry fs = " {\n" <> intercalate ",\n" (map (("  " <>) . field) fs) <> "\n }"
@@ -251,45 +282,47 @@ refusal o = case o of
 -- A lost connection is opened again at the next round, so that a stall does
 -- not end a run left to watch a charge. Each read it cost is still a line, with
 -- status @error@, so the gap is in the capture rather than only on stderr.
-watch :: IO Connection -> Period -> [Register] -> IO ()
+-- Every line carries the software of the session it was read on, which a new
+-- connection reads anew.
+watch :: IO Session -> Period -> [Register] -> IO ()
 watch opening (Period seconds) regs = do
   hSetBuffering stdout LineBuffering
   getMonotonicTime >>= go Nothing
   where
-    go conn due = do
+    go session due = do
       now <- getMonotonicTime
       threadDelay (round (max 0 (due - now) * 1e6))
-      conn' <- maybe open (pure . Just) conn >>= sweep regs
+      session' <- maybe reopen (pure . Just) session >>= sweep regs
       -- a round that overran starts the next at once, without catching up
-      getMonotonicTime >>= go conn' . max (due + fromIntegral seconds)
-    open = do
+      getMonotonicTime >>= go session' . max (due + fromIntegral seconds)
+    reopen = do
       r <- try opening
       case r of
-        Right conn -> pure (Just conn)
+        Right s -> Just s <$ warn s
         Left e -> Nothing <$ complain (show (e :: IOException))
-    sweep [] conn = pure conn
+    sweep [] session = pure session
     sweep (r : rs) Nothing = emit r Unanswered >> sweep rs Nothing
-    sweep (r : rs) (Just conn) = do
+    sweep (r : rs) (Just s) = do
       t <- getZonedTime
-      s <- readOne conn defaultPoll r
-      putStrLn (watchLine t r (Returned (sampleResult s)))
-      case sampleResult s of
+      sample <- readOne s r
+      putStrLn (watchLine t (Just s) r (Returned (sampleResult sample)))
+      case sampleResult sample of
         Left (Ended why) -> lose why
         Left (Unsent why) -> lose why
         _ -> do
-          threadDelay (pollIntervalMicroseconds defaultPoll)
-          sweep rs (Just conn)
+          threadDelay (pollIntervalMicroseconds (sessionPoll s))
+          sweep rs (Just s)
       where
         lose why = do
           complain (endingText why)
-          disconnect conn
+          close s
           sweep rs Nothing
-    emit r o = getZonedTime >>= \t -> putStrLn (watchLine t r o)
+    emit r o = getZonedTime >>= \t -> putStrLn (watchLine t Nothing r o)
     complain = hPutStrLn stderr
 
-watchLine :: ZonedTime -> Register -> Outcome Answer -> String
-watchLine t reg o =
-  "{" <> intercalate ", " (map field (("time", quote (stamp t)) : fields reg o)) <> "}"
+watchLine :: ZonedTime -> Maybe Session -> Register -> Outcome Answer -> String
+watchLine t s reg o =
+  "{" <> intercalate ", " (map field (("time", quote (stamp t)) : ("software", software s) : fields reg o)) <> "}"
   where
     stamp = formatTime defaultTimeLocale "%Y-%m-%dT%H:%M:%S%3Q%Ez"
 

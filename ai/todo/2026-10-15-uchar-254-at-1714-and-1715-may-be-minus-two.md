@@ -18,7 +18,7 @@ and a request over the building management system "ist somit nicht sinnvoll".
   arrives as `00ff` or `00fe`. `asWritten` keeps only the low byte, so it
   turns these into 255 and 254.
 - **The controller prints -2.** `N2_GLTMON` in
-  `captures/navigator-2.0-webapi-2026-10-01-1158.json` prints 1714
+  `captures/navigator-2.0-webapi-20.24-1574-2026-10-01-1158.json` prints 1714
   (`externe Anforderung Sole-/Zwischenkreispumpe`) and 1715 (`externe
   Anforderung Grundwasserpumpe`) as `-2`. In the same capture it prints 86, a
   `WORD` reading `ffff`, as `-1`.

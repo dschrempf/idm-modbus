@@ -13,13 +13,13 @@ page's -1.0, "not driven", and its 0 the page's 0, minimum speed. 1104 reads
 
 ## What was recorded
 
-|             |                                                                                                                                       |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Registers   | `captures/navigator-2.0-watch-2026-10-16-0745.jsonl`: 1072, 1074, 1090, 1100, 1104, 4108, 4112, 4122, 4126                            |
-| Web backend | `captures/navigator-2.0-webwatch-2026-10-16-0748.jsonl`: 4782 `N2_ANALOGUE_OUTPUTS`, 12763 `N2_GLTMON`, 6245 `N2_MODULATION_OVERVIEW` |
-| Interval    | 10 s, both                                                                                                                            |
-| User level  | Fachmann, entered at 07:47:58, renewed by leaving and entering it again: `captures/navigator-2.0-level-2026-10-16-0748.log`           |
-| Span        | 07:45 to 10:30                                                                                                                        |
+|             |                                                                                                                                                  |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Registers   | `captures/navigator-2.0-watch-20.24-1574-2026-10-16-0745.jsonl`: 1072, 1074, 1090, 1100, 1104, 4108, 4112, 4122, 4126                            |
+| Web backend | `captures/navigator-2.0-webwatch-20.24-1574-2026-10-16-0748.jsonl`: 4782 `N2_ANALOGUE_OUTPUTS`, 12763 `N2_GLTMON`, 6245 `N2_MODULATION_OVERVIEW` |
+| Interval    | 10 s, both                                                                                                                                       |
+| User level  | Fachmann, entered at 07:47:58, renewed by leaving and entering it again: `captures/navigator-2.0-level-20.24-1574-2026-10-16-0748.log`           |
+| Span        | 07:45 to 10:30                                                                                                                                   |
 
 Times are the laptop's. None of the 8874 register reads failed. Of the 2910
 web requests, 23 to 12763 and 6245 got no answer, in the two stretches the

@@ -49,10 +49,10 @@ is evidence for anything here.
 
 | | |
 |---|---|
-| Web backend | `captures/navigator-2.0-webapi-2026-09-20-2138.json`, 21:38–21:41 |
-| Registers | `captures/navigator-2.0-scan-2026-09-20-2141.json`, 21:41–21:43 |
+| Web backend | `captures/navigator-2.0-webapi-20.24-1574-2026-09-20-2138.json`, 21:38–21:41 |
+| Registers | `captures/navigator-2.0-scan-20.24-1574-2026-09-20-2141.json`, 21:41–21:43 |
 | Offset | under 5 minutes |
-| Graph | `captures/navigator-2.0-webapi-2026-09-20-2218.json`, 22:18–22:21 |
+| Graph | `captures/navigator-2.0-webapi-20.24-1574-2026-09-20-2218.json`, 22:18–22:21 |
 
 The captures are kept locally, not in the public repository;
 `captures/README.md` describes them.
@@ -191,7 +191,7 @@ minute the capture was taken. The window that arrives unasked is 2026-09-19
 15:39 to 2026-09-20 21:39, the 30 hours the interface's own second tab asks
 for.
 
-A second capture, `captures/navigator-2.0-webapi-2026-09-20-2218.json` at
+A second capture, `captures/navigator-2.0-webapi-20.24-1574-2026-09-20-2218.json` at
 22:18–22:21, asks for the graph on purpose: `graph`/`overview`, then
 `graph`/`traverse`, then `graph`/`detail` for each graph the controller offers
 over each span the interface plots. `fromSecs` reaches back from now rather than
@@ -222,7 +222,7 @@ suspect. It is worth knowing before anyone dates something by this graph, and
 nothing below rests on it: the duration of a run, the number of runs and the days
 they fall on are the same either way.
 
-The hour did not last. In `captures/navigator-2.0-webapi-2026-09-29-1333.json`
+The hour did not last. In `captures/navigator-2.0-webapi-20.24-1574-2026-09-29-1333.json`
 the stage channel starts the charges at 10:02, inside the window, and agrees
 with the message log to the second; the controller had been restarted on 09-23
 at 08:40, the only change seen between the two captures. On 2026-10-01 a

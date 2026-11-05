@@ -17,10 +17,12 @@ import qualified Data.Text as T
 import GHC.Float (double2Float, float2Double)
 import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
 import IDM.Navigator.Register
+import IDM.Navigator.Software
 import qualified IDM.Navigator.Table as Table
 import IDM.Navigator.Target
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Level (fachmannCode)
+import IDM.Navigator.Web.Session (softwareOf)
 import IDM.Navigator.Write.Core
 import System.Exit (exitFailure)
 
@@ -333,6 +335,43 @@ checks =
     ( "a value the register cannot hold sends nothing, not even a check",
       writeAgainst [] [] SEepromCycle (register 1032) (Count 20)
         == (Refused (OutOfRange (Range 35 95) 20), [])
+    ),
+    ( "the system page's version reads as series, major and minor",
+      -- N2_SYSTEM_INFO as 20.24-2608 printed it on 2026-11-05, ASCII rows only
+      let page =
+            json
+              "{\"id\":\"4754\",\"name\":\"N2_SYSTEM_INFO\",\"type\":\"info\",\"value\":\
+              \\"<table id=\\\"idm_info\\\"><tr><td>Software Version</td><td>T_NAV10_20.24-2608-g0c686ed41</td></tr>\
+              \<tr><td>myIDMID</td><td><redacted></td></tr><tr><td>Regler Online</td><td>3047.0h</td></tr></table>\"}"
+          version = T.pack "T_NAV10_20.24-2608-g0c686ed41"
+       in fmap softwareOf (setting page) == Just (Right (WebVersion version 20 24 2608))
+            && webVersion (T.pack "T_NAV10_20.24") == Nothing
+            && webVersion (T.pack "T_NAV10_20.x-2608-g0") == Nothing
+    ),
+    ( "over Modbus, a version agrees in major, minor and patch",
+      let expected = Software 20 24 2608 (Patch 0)
+       in modbusAgreement expected (ModbusVersion 24 2608 0) == Agrees
+            && modbusAgreement expected (ModbusVersion 24 2608 1) == Disagrees
+            && modbusAgreement expected (ModbusVersion 24 1574 0) == Disagrees
+            && modbusAgreement expected (ModbusVersion 25 2608 0) == Disagrees
+    ),
+    ( "an unknown patch confirms no version, but refutes one of another minor",
+      let expected = Software 20 24 1574 UnknownPatch
+       in modbusAgreement expected (ModbusVersion 24 1574 0) == Undecided
+            && modbusAgreement expected (ModbusVersion 24 2608 0) == Disagrees
+            && checked modbusAgreement expected (Right (ModbusVersion 24 1574 0) :: Either () ModbusVersion)
+              == Left (Unconfirmable (ModbusVersion 24 1574 0))
+    ),
+    ( "over the web, a version agrees in series, major and minor",
+      let expected = Software 20 24 2608 UnknownPatch
+          at s ma mi = WebVersion (T.pack "") s ma mi
+       in webAgreement expected (at 20 24 2608) == Agrees
+            && webAgreement expected (at 21 24 2608) == Disagrees
+            && webAgreement expected (at 20 24 1574) == Disagrees
+    ),
+    ( "a version that could not be read refuses a write",
+      checked modbusAgreement (Software 20 24 2608 (Patch 0)) (Left (Ended NoAnswer))
+        == Left (NotRead (Ended NoAnswer) :: Mismatch Failure ModbusVersion)
     )
   ]
 

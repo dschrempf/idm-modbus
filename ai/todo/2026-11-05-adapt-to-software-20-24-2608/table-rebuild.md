@@ -3,9 +3,9 @@
 ## The table
 
 - Run `tools/transcribe.py manual/812170-rev12.txt --scan
-  captures/navigator-2.0-scan-2026-11-05-1617.json --webapi
-  captures/navigator-2.0-webapi-2026-11-05-1636.json --widths
-  captures/navigator-2.0-widths-2026-11-05-1639.json`. The webapi capture of
+  captures/navigator-2.0-scan-20.24-2608-2026-11-05-1617.json --webapi
+  captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1636.json --widths
+  captures/navigator-2.0-widths-20.24-2608-2026-11-05-1639.json`. The webapi capture of
   1636 holds `N2_GLTMON`; that of 1624 lost the level before reaching it.
 - Expected: the 18 new `gltmon` addresses (500, 506, 508, 520 to 528, 1174,
   1950 to 1958, 4110, 4111, 4113, 4114); 4112 one register wide, no longer

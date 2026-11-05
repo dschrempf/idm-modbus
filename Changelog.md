@@ -78,9 +78,30 @@
   and every write is read back. The one target is the PV surplus at 74.
   `idm-write HOST ADDRESS VALUE` writes it, and writes an EEPROM target only
   with `--eeprom`.
+- A guard against an unannounced update of the controller's software. The
+  software the table describes is stated by hand in
+  `data/navigator-2.0-software.tsv`, now 20.24-1574 with its patch unknown,
+  and `tools/transcribe.py` refuses a capture read on another. A session reads
+  the software when it opens: `IDM.Navigator.Client.open` over Modbus, major,
+  minor and patch at 522, 524 and 526; `IDM.Navigator.Web.Session.open` over
+  the web, series, major and minor from `N2_SYSTEM_INFO`. `write`,
+  `enterFachmann` and `leaveFachmann` take a `Writable`, which `writable`
+  gives only for a session on the table's software, and an `IDM.Navigator.Software.Mismatch`
+  otherwise: not read, another software, or one the table cannot confirm.
+  `idm-write` and `idm-web --enter-fachmann`/`--leave-fachmann` refuse with
+  both versions; a read goes ahead and warns with both.
+- Every capture records the software its session read: a scan, a widths
+  and a webapi capture as `software` beside `entries`, each line of a watch
+  as a field `software`, the output of `idm-web` as a first line. A capture's
+  name carries the software, and the captures made before were renamed by
+  the controller's log.
 
 ### Changed
 
+- `readOne`, `readMany` and `probe` take a `Session`, which holds its `Poll`,
+  rather than a `Connection` and a `Poll`; `idm-dump` opens one per connection.
+  A scan and a widths capture are an object rather than a list, and a webapi
+  capture too; `tools/transcribe.py` reads both forms.
 - The sign of a `WORD` follows the minimum the parameter list documents for it,
   not its unit. Registers documented from a negative minimum — the bivalence
   points from -90, the pump control signals from -1 — are two's complement, and
@@ -103,7 +124,7 @@
   default or bound that is not a number, or a range with one bound, fails too.
   `ParseError` is gone, and the types of a register derive `Lift`.
 
-- `captures/navigator-2.0-scan-2026-09-19-1503.json` is a fresh sweep of all
+- `captures/navigator-2.0-scan-20.24-1574-2026-09-19-1503.json` is a fresh sweep of all
   663 addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress`
   and every one of them in the zone module block or write-only. It reproduces
   the earlier sweep of the 497 addresses then known, sentinel for sentinel.

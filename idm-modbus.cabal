@@ -29,6 +29,7 @@ extra-doc-files:
 extra-source-files:
   data/navigator-2.0-enums.tsv
   data/navigator-2.0-registers.tsv
+  data/navigator-2.0-software.tsv
 
 source-repository head
   location: https://github.com/dschrempf/idm-modbus
@@ -73,6 +74,7 @@ library
 
   exposed-modules:
     IDM.Navigator.Client
+    IDM.Navigator.Software
     IDM.Navigator.Table
     IDM.Navigator.Target
     IDM.Navigator.Web

@@ -12,6 +12,7 @@ module IDM.Navigator.Table.Parse
   ( parsedFile,
     parseRegisters,
     parseEnums,
+    parseSoftware,
   )
 where
 
@@ -21,6 +22,7 @@ import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import IDM.Modbus.TCP (Address (..))
 import IDM.Navigator.Register
+import IDM.Navigator.Software (Patch (..), Software (..))
 import Language.Haskell.TH.Syntax (Code, Lift, Q, addDependentFile, joinCode, liftTyped, runIO)
 
 -- | The file at a path relative to the package, parsed when the module that
@@ -39,6 +41,26 @@ parseRegisters =
 
 parseEnums :: B.ByteString -> Either String [((Address, Int), Text)]
 parseEnums = tsv ["address", "code", "label"] parseEnum
+
+-- | The one row of @data\/navigator-2.0-software.tsv@.
+parseSoftware :: B.ByteString -> Either String Software
+parseSoftware bytes = tsv ["series", "major", "minor", "patch"] row bytes >>= one
+  where
+    row [series, major, minor, patch] =
+      Software
+        <$> cell "series" readMaybeT series
+        <*> cell "major" readMaybeT major
+        <*> cell "minor" readMaybeT minor
+        <*> cell "patch" parsePatch patch
+    row cells = Left ("4 cells expected, found " <> show (length cells))
+    one rows = case rows of
+      [s] -> Right s
+      _ -> Left ("one row expected, found " <> show (length rows))
+
+parsePatch :: Text -> Maybe Patch
+parsePatch t = case T.strip t of
+  "unknown" -> Just UnknownPatch
+  n -> Patch <$> readMaybeT n
 
 -- | Rows after a header that must read as given; an error names the line.
 tsv :: [Text] -> ([Text] -> Either String a) -> B.ByteString -> Either String [a]

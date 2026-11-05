@@ -12,7 +12,7 @@ percent. The cap itself was never reached, so this run does not test it.
 ## What was set
 
 At Fachmann level, through the web interface, before the run and back after
-it (read by `idm-web --show`, before, `captures/navigator-2.0-show-2026-11-05-1113.txt`;
+it (read by `idm-web --show`, before, `captures/navigator-2.0-show-20.24-1574-2026-11-05-1113.txt`;
 during, `-1115.txt`; after, `-1233.txt`):
 
 | Setting                                  | Before | During | After |
@@ -29,11 +29,11 @@ back to 18 °C at about 12:33.
 
 Every 10 s from 11:13 to 12:33: over Modbus 1000, 1090, 1100, 4122, 4126,
 1350, 1354, 1378 and 1382, 482 reads each and none failed
-(`captures/navigator-2.0-watch-2026-11-05-1113.jsonl`); over the web
+(`captures/navigator-2.0-watch-20.24-1574-2026-11-05-1113.jsonl`); over the web
 interface 6245, `N2_MODULATION_OVERVIEW`, 482 requests
-(`captures/navigator-2.0-webwatch-2026-11-05-1113.jsonl`). Three of these
+(`captures/navigator-2.0-webwatch-20.24-1574-2026-11-05-1113.jsonl`). Three of these
 answered `NoAnswer`, all at 12:08, while the level was renewed
-(`captures/navigator-2.0-level-2026-11-05-1113.log`).
+(`captures/navigator-2.0-level-20.24-1574-2026-11-05-1113.log`).
 
 ## The run
 

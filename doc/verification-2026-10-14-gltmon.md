@@ -13,10 +13,10 @@ address.
 
 | | |
 |---|---|
-| The page | `captures/navigator-2.0-webapi-2026-10-01-1158.json`, the `detail` of setting 12763, Fachmann |
-| Widths | `captures/navigator-2.0-widths-2026-10-14-1208.json`, the 24 addresses |
-| | `captures/navigator-2.0-widths-2026-10-14-1214.json`, circuits B and E to G |
-| Values | `captures/navigator-2.0-scan-2026-10-14-1211.json`, the table with the page's rows in it |
+| The page | `captures/navigator-2.0-webapi-20.24-1574-2026-10-01-1158.json`, the `detail` of setting 12763, Fachmann |
+| Widths | `captures/navigator-2.0-widths-20.24-1574-2026-10-14-1208.json`, the 24 addresses |
+| | `captures/navigator-2.0-widths-20.24-1574-2026-10-14-1214.json`, circuits B and E to G |
+| Values | `captures/navigator-2.0-scan-20.24-1574-2026-10-14-1211.json`, the table with the page's rows in it |
 
 Everything was read; nothing was set, on the controller or over Modbus. The
 user level was not touched, which is why no web capture is as recent as the
@@ -77,7 +77,7 @@ it is not a source, so the table reads it as 65535.
 
 That leaves 19 rows, which the table carries with the source `gltmon`. All 19
 answered in the scan of 12:11, and none of the manual's rows changed status
-against `captures/navigator-2.0-scan-2026-09-29-1324.json`.
+against `captures/navigator-2.0-scan-20.24-1574-2026-09-29-1324.json`.
 
 ## The maximum flow temperature
 

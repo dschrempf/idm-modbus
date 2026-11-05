@@ -9,14 +9,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal test                         # prints one line per check
     cabal run idm-dump -- HOST         # read the registers a reference machine answered for
     cabal run idm-dump -- HOST --all   # sweep the whole parameter list
-    cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-YYYY-MM-DD-HHMM.json
-    cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
-    cabal run idm-dump -- HOST --widths 1534 1074 > captures/navigator-2.0-widths-YYYY-MM-DD-HHMM.json
+    cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-SOFTWARE-YYYY-MM-DD-HHMM.json
+    cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
+    cabal run idm-dump -- HOST --widths 1534 1074 > captures/navigator-2.0-widths-SOFTWARE-YYYY-MM-DD-HHMM.json
     tools/transcribe.py manual/812170-rev12.txt --scan SCAN [--webapi WEBAPI --widths WIDTHS]
-    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
     IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
     IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
-    IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-2.0-webwatch-YYYY-MM-DD-HHMM.jsonl
+    IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-2.0-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
     IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann   # and --leave-fachmann
     cabal run idm-write -- HOST 74 3.0               # a target; --eeprom where it costs a cycle
     ormolu -i $(git ls-files '*.hs')   # formatting
@@ -72,6 +72,17 @@ cannot leave it saying something else. A defect in a register name, unit or
 range is therefore a defect in the transcription script, not in the Haskell
 parser.
 
+The table describes one software of the controller, the one its captures
+were read on, and `data/navigator-2.0-software.tsv` states it by hand:
+series, major, minor and patch, `unknown` where a part was never read. The
+script reads it and refuses a capture recorded on another software. A write
+goes ahead only on it, a read on any. Every session reads the software when
+it opens, and again when a connection is made anew: over Modbus major, minor
+and patch at 522, 524 and 526, over the web series, major and minor from
+`N2_SYSTEM_INFO`, setting 4754. Each channel compares what it reads. Every
+capture records the software of the session it was read on, and its name
+carries the software, as `captures/README.md` says.
+
 `data/navigator-2.0-web-*.tsv` is a different kind of file and is written by
 hand: what the controller's own web pages showed, at the minute they were read.
 It carries no addresses, so the mapping it tests is stated only in the register
@@ -121,8 +132,12 @@ The modules stack, each refusing to know the next one's business:
   footnote is a constructor, so a caller cannot silently ignore it.
 - `IDM.Navigator.Table` — parses the TSVs at compile time, so a row that does
   not parse fails the build; exposes `navigator20`, `readable`, `present`,
-  `enumLabel`.
-- `IDM.Navigator.Client` — pacing, and pairing a read with its enum label.
+  `enumLabel`, and `navigator20Software`, the software the table describes.
+- `IDM.Navigator.Software` — a version as the table states it and as each
+  channel reads it, and whether the two agree.
+- `IDM.Navigator.Client` — sessions, pacing, and pairing a read with its enum
+  label. A `Session` reads the software when it opens; `writable` gives the
+  `Writable` that `write` needs only on the software the table describes.
 - `IDM.Navigator.Target` — generated: `Target (c :: Cost)`, a constructor per
   target, and `targetRegister`, total.
 - `IDM.Navigator.Write` — `write`, whose `Outcome c` carries the cost. An
@@ -142,7 +157,9 @@ The web backend has a stack of its own beside it, joined to the first only by
   hand back an answer they do not recognize rather than read it as empty.
 - `IDM.Navigator.Web.Connection` — the websocket; sends any JSON, so the
   package does not expose it.
-- `IDM.Navigator.Web.Session` — sends a `Query` and nothing else.
+- `IDM.Navigator.Web.Session` — sends a `Query` and nothing else. Reads the
+  software when it opens, and gives the `Writable` the two writes of the
+  level need.
 - `IDM.Navigator.Web.Level` — the two writes: entering the Fachmann level
   (`setting`/`save` of item 12503, a code spelled from the controller's clock,
   as a number, from Kunde only) and leaving it (acknowledging the `N2_USERLEVELACTIVE` notice).

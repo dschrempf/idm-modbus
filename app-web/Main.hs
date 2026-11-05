@@ -16,6 +16,8 @@ import qualified Data.Text.Encoding as TE
 import Data.Time (ZonedTime, defaultTimeLocale, formatTime, getZonedTime)
 import GHC.Clock (getMonotonicTime)
 import IDM.Modbus.TCP (Host (..))
+import IDM.Navigator.Software (Mismatch, WebVersion (..), mismatchText)
+import IDM.Navigator.Table (navigator20Software)
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Level
 import IDM.Navigator.Web.Session
@@ -91,6 +93,10 @@ usage = do
   putStrLn "  Kunde only; --leave-fachmann acknowledges the notice that level"
   putStrLn "  raises. The level holds, for the display as well, until it is left"
   putStrLn "  or for sixty minutes from the entry."
+  putStrLn "  Each session first reads the controller's software, which every"
+  putStrLn "  mode prints and every line of a watch records. Where it is not the"
+  putStrLn "  software the table describes, a read warns on stderr and the level"
+  putStrLn "  is left as it is."
   exitFailure
 
 run :: Host -> Pin -> Mode -> IO ()
@@ -98,17 +104,34 @@ run host pin mode = case mode of
   Watch period ids -> watch host pin period ids
   _ -> withSession defaultPace host pin (session mode) >>= either (die . show) pure
   where
-    session m s = case m of
-      Report -> do
-        st <- askStatus s >>= orDie
-        printf "user level  %s\nclock       %s\nprotocol    %d\n" (levelText (statusUserLevel st)) (show (statusClock st)) (statusProtocol st)
-        standing <- askNotifications s >>= orDie
-        mapM_ (\n -> printf "notice      %s %s\n" (codeText (notificationCode n)) (notificationText n)) standing
-      Show ids -> mapM_ (\i -> askSetting s i >>= orDie >>= putStr . renderSetting) ids
-      Enter -> enterFachmann s >>= orDie >>= reportEntry
-      Leave -> leaveFachmann s >>= orDie >>= reportExit
-      Watch _ _ -> pure ()
+    session m s = do
+      printf "software    %s\n" (softwareLine (sessionSoftware s))
+      case m of
+        Report -> do
+          warn s
+          st <- askStatus s >>= orDie
+          printf "user level  %s\nclock       %s\nprotocol    %d\n" (levelText (statusUserLevel st)) (show (statusClock st)) (statusProtocol st)
+          standing <- askNotifications s >>= orDie
+          mapM_ (\n -> printf "notice      %s %s\n" (codeText (notificationCode n)) (notificationText n)) standing
+        Show ids -> warn s >> mapM_ (\i -> askSetting s i >>= orDie >>= putStr . renderSetting) ids
+        Enter -> writableOrDie s >>= enterFachmann >>= orDie >>= reportEntry
+        Leave -> writableOrDie s >>= leaveFachmann >>= orDie >>= reportExit
+        Watch _ _ -> pure ()
     codeText (NotificationCode c) = c
+
+softwareLine :: Either Unread WebVersion -> String
+softwareLine = either (\u -> "not read: " <> show u) (T.unpack . webVersionText)
+
+mismatch :: Mismatch Unread WebVersion -> String
+mismatch = T.unpack . mismatchText (T.pack . show) webVersionText navigator20Software
+
+-- | On the terminal, both versions, where the session read another software
+-- than the table describes.
+warn :: Session -> IO ()
+warn s = either (hPutStrLn stderr . ("warning: " <>) . mismatch) (const (pure ())) (writable s)
+
+writableOrDie :: Session -> IO Writable
+writableOrDie = either (die . ("refused, nothing sent: " <>) . mismatch) pure . writable
 
 reportEntry :: Entry -> IO ()
 reportEntry e = case e of
@@ -164,7 +187,9 @@ levelText l = case l of
 -- interrupted.
 --
 -- A session that ends is opened again for the next request. Each request it
--- cost is still a line, with an @error@, so the gap is in the capture.
+-- cost is still a line, with an @error@, so the gap is in the capture. Every
+-- line carries the software of the session it was asked on, which a new
+-- session reads anew.
 watch :: Host -> Pin -> Period -> [SettingId] -> IO ()
 watch host pin (Period seconds) ids = do
   hSetBuffering stdout LineBuffering
@@ -173,7 +198,7 @@ watch host pin (Period seconds) ids = do
   case first of
     Left e@(NotAuthorized _) -> die (show e)
     Left e -> complain (show e) >> getMonotonicTime >>= go Nothing
-    Right s -> getMonotonicTime >>= go (Just s)
+    Right s -> warn s >> getMonotonicTime >>= go (Just s)
   where
     go s due = do
       now <- getMonotonicTime
@@ -181,29 +206,36 @@ watch host pin (Period seconds) ids = do
       s' <- sweep ids s
       -- a round that overran starts the next at once, without catching up
       getMonotonicTime >>= go s' . max (due + fromIntegral seconds)
-    reopen = open defaultPace host pin >>= either (\e -> Nothing <$ complain (show e)) (pure . Just)
+    reopen = open defaultPace host pin >>= either (\e -> Nothing <$ complain (show e)) (\s -> Just s <$ warn s)
     sweep [] s = pure s
     sweep (i : is) s =
       maybe reopen (pure . Just) s >>= \case
-        Nothing -> getZonedTime >>= \t -> line t i (Left "not connected") >> sweep is Nothing
+        Nothing -> getZonedTime >>= \t -> line t Nothing i (Left "not connected") >> sweep is Nothing
         Just s' -> do
           t <- getZonedTime
           r <- ask s' (SettingDetail i)
-          either (\e -> complain (show e) >> line t i (Left (show e))) (line t i . Right) r
+          either (\e -> complain (show e) >> line t (Just s') i (Left (show e))) (line t (Just s') i . Right) r
           ended s' >>= maybe (sweep is (Just s')) (const (close s' >> sweep is Nothing))
-    line t i r = BL.putStrLn (encode (watchLine t i r))
+    line t s i r = BL.putStrLn (encode (watchLine t s i r))
     complain = hPutStrLn stderr
 
 -- | A line of a watch: an entry of a @webapi@ capture, with the time to the
--- millisecond, and what went wrong if nothing came back.
-watchLine :: ZonedTime -> SettingId -> Either String [Value] -> Value
-watchLine t i r =
+-- millisecond, the software of the session, and what went wrong if nothing
+-- came back.
+watchLine :: ZonedTime -> Maybe Session -> SettingId -> Either String [Value] -> Value
+watchLine t s i r =
   object
     [ "request" .= queryJSON (SettingDetail i),
       "captured" .= formatTime defaultTimeLocale "%Y-%m-%dT%H:%M:%S%3Q%Ez" t,
+      "software" .= fmap (softwareJSON . sessionSoftware) s,
       "responses" .= either (const []) id r,
       "error" .= either Just (const Nothing) r
     ]
+
+-- | The version a session read, as a capture records it: the page's string,
+-- or why it was not read.
+softwareJSON :: Either Unread WebVersion -> Value
+softwareJSON = either (\u -> object ["error" .= show u]) (String . webVersionText)
 
 orDie :: Either Failure a -> IO a
 orDie = either (die . show) pure
