@@ -104,6 +104,30 @@
 
 ### Changed
 
+- The table is transcribed from revision 12 of 812170, for software 20.23-515,
+  rather than revision 10: 694 addresses rather than 663. New are the Smart
+  Grid status at 90, which moves there from 1006, the groundwater
+  temperatures at 1086 and 1088, faults at 1680 to 1683, and two boosters at
+  4001 to 4052. 1006 is the `Variabler Eingang` now, and 4126 and 4128 are
+  gone until their width is measured, though the controller serves them. 88,
+  1068, 1070, 1074, 4108, 4112 and 4124, rows of `N2_GLTMON` so far, are the
+  manual's, with persistence, range and default. 1072 stays the
+  page's `FLOAT`, since revision 12 prints a `UCHAR` where two registers
+  answer. The bivalence points run from -40 rather than -90, the pump signals
+  from 0 with a default of -1, and the cascade block has no parameter
+  identifiers. The new addresses are `untested` until the next scan.
+- A `WORD` is two's complement also where the parameter list documents a
+  negative default for a read-only register: revision 12 moves the pump
+  signals' -1 there. The battery level at 86, which the building management
+  system supplies, keeps its -1 as the sentinel. 1074 reads as a `Drive`.
+- `tools/transcribe.py` takes the PDF rather than its text, and reads the
+  type's height with `pdftotext -bbox`: a remark revision 12 prints directly
+  below a name is set smaller, and nothing else tells them apart. Where the
+  manual and `N2_GLTMON` name the same address, the manual's row stands unless
+  the width measured contradicts its datatype; the rows carried over used to
+  replace the manual's. A default printed nearer the unit's heading is read
+  as the default, and an enumeration may have a negative code.
+- `Unit` gained `EuroPerMegawattHour`, the electricity price's at 1048.
 - `readOne`, `readMany` and `probe` take a `Session`, which holds its `Poll`,
   rather than a `Connection` and a `Poll`; `idm-dump` opens one per connection.
   A scan and a widths capture are an object rather than a list, and a webapi
@@ -172,15 +196,14 @@
   two of them carry enumerations of their own. Sixteen addresses became 45.
 - Zone modules 2 to 10 had no labels: the manual prints them beside zone module
   1, and a zone module's number is inside the name, not at its end. The family
-  rule now reads that number as an index too, and 45 labeled addresses became
-  207.
+  rule now reads that number as an index too, and 45 labeled addresses became 207.
 - `tools/transcribe.py` read the parameter list by the order of its cells,
   which the list does not keep. It now reads each cell by the column it is
   printed in. Sixty-six names were wrong — 59 cut short of their sensor
   designator, `Außentemperatur (B32)` down to `Außentemperatur (B3`, because a
   footnote marker is printed the same way, and 13 broken across two lines, so
   that addresses 1206, 1208 and 1210 all read `Kaskade / Gemittelte
-  Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
+Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
   number where the controller's parameter identifier belongs; nine more lost
   their unit.
 - Info rows kept HTML entities: `Taupunktwächter&nbsp;Heizkreis A`. A cell now

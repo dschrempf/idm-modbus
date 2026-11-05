@@ -25,7 +25,8 @@ re-checks on the machine, which need the first four.
   ahead only on the expected version, a read on any, and says which. Every
   capture records it. Done: built, tried on the machine, the consumers told.
 - `manual-rev-12.md`: transcribe 812170 rev. 12 instead of rev. 10, on its
-  own, before the rebuild.
+  own, before the rebuild. Done; 4126 and 4128, which rev. 12 drops, come
+  back with the rebuild.
 - `table-rebuild.md`: regenerate the table from the captures of 2026-11-05,
   and bring code, tests and docs to 20.24-2608.
 - `tool-fixes.md`: `idm-web --show` misreports a refusal, the myiDM ID

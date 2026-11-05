@@ -32,7 +32,7 @@ import IDM.Navigator.Software (Software)
 import IDM.Navigator.Table.Parse (parseEnums, parseRegisters, parseSoftware, parsedFile)
 
 -- | Every register of the Navigator 2.0 parameter list, document 812170
--- revision 10, and of @N2_GLTMON@, in address order.
+-- revision 12, and of @N2_GLTMON@, in address order.
 navigator20 :: [Register]
 navigator20 = $$(parsedFile parseRegisters "data/navigator-2.0-registers.tsv")
 

@@ -382,4 +382,5 @@ unitText u = case u of
   LiterPerHour -> "l/h"
   LiterPerMinute -> "l/min"
   Minute -> "min"
+  EuroPerMegawattHour -> "€/MWh"
   UnknownUnit t -> T.unpack t

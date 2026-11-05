@@ -5,13 +5,14 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 82	FLOAT	RW/RO	volatile	Hausverbrauch				0	kW	manual	present
 84	FLOAT	RW/RO	volatile	Batterieentladung				0	kW	manual	present
 86	WORD	RW/RO	volatile	Batteriefüllstand				-1	%	manual	present
-88	FLOAT	RW	unknown	PV-Zielwert						gltmon	present
+88	FLOAT	RW/RO	volatile	PV-Zielwert (Smartfox und Solar-Log)				0	kW	manual	present
+90	UCHAR	RO	volatile	Smart Grid Status		0	4	1		manual	untested
 504	one-register	RO	unknown	Trennwärmetauscher						gltmon	present
 1000	FLOAT	RO	volatile	Außentemperatur (B32)					°C	manual	present
 1002	FLOAT	RO	volatile	Gemittelte Außentemperatur					°C	manual	present
 1004	UCHAR	RO	volatile	Interne Meldung						manual	present
 1005	UCHAR	RW	eeprom	Betriebsart System	SYSMODE	0	5	1		manual	present
-1006	UCHAR	RO	volatile	Smart Grid Status		0	4			manual	present
+1006	UCHAR	RO	volatile	Variabler Eingang		0	3	0		manual	present
 1008	FLOAT	RO	volatile	Wärmespeichertemperatur (B38)					°C	manual	present
 1010	FLOAT	RO	volatile	Kältespeichertemperatur (B40)					°C	manual	present
 1012	FLOAT	RO	volatile	Trinkwassererwärmertemp. unten (B41)					°C	manual	present
@@ -20,7 +21,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 1032	UCHAR	RW	eeprom	Warmwasser-Solltemperatur	FW030	35	95	46	°C	manual	present
 1033	UCHAR	RW	eeprom	Warmwasserladung Einschalttemperatur	FW027	30	50	46	°C	manual	present
 1034	UCHAR	RW	eeprom	Warmwasserladung Ausschalttemperatur	FW028	46	53	50	°C	manual	present
-1048	FLOAT	RO	volatile	Aktueller Strompreis						manual	present
+1048	FLOAT	RO	volatile	Aktueller Strompreis					€/MWh	manual	present
 1050	FLOAT	RO	volatile	Wärmepumpen Vorlauftemperatur (B33)					°C	manual	present
 1052	FLOAT	RO	volatile	Wärmepumpen Rücklauftemperatur (B34)					°C	manual	present
 1054	FLOAT	RO	volatile	HGL Vorlauftemperatur (B35)					°C	manual	present
@@ -30,38 +31,40 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 1062	FLOAT	RO	volatile	Luftwärmetauschertemperatur (B72)					°C	manual	present
 1064	FLOAT	RO	volatile	Luftansaugtemperatur 2 (B46)					°C	manual	present
 1066	FLOAT	RO	volatile	Ladefühler (B45)					°C	manual	present
-1068	FLOAT	RO	unknown	Rücklauftemperatur Wärmesenke					°C	gltmon	present
-1070	FLOAT	RO	unknown	Vorlauftemperatur Wärmesenke					°C	gltmon	present
+1068	FLOAT	RO	volatile	Rücklauftemperatur Wärmesenke (B124)					°C	manual	present
+1070	FLOAT	RO	volatile	Vorlauftemperatur Wärmesenke (B125)					°C	manual	present
 1072	FLOAT	RO	unknown	Durchfluss Wärmesenke					l/min	gltmon	present
-1074	one-register	RO	unknown	Ladepumpe Wärmesenke Steuersignal					% 0-10V/PWM	gltmon	present
+1074	WORD	RO	volatile	Ladepumpe Wärmesenke Steuersignal (M73)		0	100	-1	%	manual	present
+1086	FLOAT	RO	volatile	Grundwassereintrittstemperatur (B119)					°C	manual	untested
+1088	FLOAT	RO	volatile	Grundwassereintrittstemperatur (B120)					°C	manual	untested
 1090	UCHAR	RO	volatile	Betriebsart Wärmepumpe		0	8			manual	present
-1091	UCHAR	RO	volatile	Heizanforderung		0	1			manual	present
-1092	UCHAR	RO	volatile	Kühlanforderung		0	1			manual	present
-1093	UCHAR	RO	volatile	Warmwasseranforderung		0	1			manual	present
-1098	UCHAR	RO	volatile	EVU - Sperrkontakt		0	1			manual	present
+1091	UCHAR	RO	volatile	Heizanforderung Wärmepumpe		0	1	0		manual	present
+1092	UCHAR	RO	volatile	Kühlanforderung Wärmepumpe		0	1	0		manual	present
+1093	UCHAR	RO	volatile	Warmwasseranforderung Wärmepumpe		0	1	0		manual	present
+1098	UCHAR	RO	volatile	EVU - Sperrkontakt		0	1	1		manual	present
 1099	UCHAR	RO	volatile	Summenstörung Wärmepumpe		0	1			manual	present
 1100	UCHAR	RO	volatile	Status Verdichter 1		0	1			manual	present
 1101	UCHAR	RO	volatile	Status Verdichter 2		0	1			manual	present
 1102	UCHAR	RO	volatile	Status Verdichter 3		0	1			manual	present
 1103	UCHAR	RO	volatile	Status Verdichter 4		0	1			manual	present
-1104	WORD	RO	volatile	Status Ladepumpe (M73)		-1	100		%	manual	present
-1105	WORD	RO	volatile	Status Sole/Zwischenkreispumpe (M16)		-1	100		%	manual	present
-1106	WORD	RO	volatile	Status Wärmequellen/Grundwasserpumpe (M15)		-1	100		%	manual	present
-1108	WORD	RO	volatile	Status ISC Kältespeicherpumpe (M84)		-1	100		%	manual	present
-1109	WORD	RO	volatile	Status ISC Rückkühlpumpe (M17)		-1	100		%	manual	present
+1104	WORD	RO	volatile	Status Ladepumpe (M73)		0	100	-1	%	manual	present
+1105	WORD	RO	volatile	Status Sole/Zwischenkreispumpe (M16)		0	100	-1	%	manual	present
+1106	WORD	RO	volatile	Status Wärmequellen-/Grundwasserpumpe (M15)		0	100	-1	%	manual	present
+1108	WORD	RO	volatile	Status ISC Kältespeicherpumpe (M84)		0	100	-1	%	manual	present
+1109	WORD	RO	volatile	Status ISC Rückkühlpumpe (M17)		0	100	-1	%	manual	present
 1110	WORD	RO	volatile	Umschaltventil Heizkreis Heizen/Kühlen (M61)		0	1			manual	present
 1111	WORD	RO	volatile	Umschaltventil Speicher Heizen/Kühlen (M62)		0	1			manual	present
 1112	WORD	RO	volatile	Umschaltventil Heizen/Warmwasser (M63)		0	1			manual	present
-1113	WORD	RO	volatile	Umschaltventil Wärmequelle Heizen/Kühlen (M74)		0	1			manual	present
-1114	WORD	RO	volatile	Umschaltventil Solar Heizen/Warmwasser (M78)		0	1			manual	present
-1115	WORD	RO	volatile	Umschaltventil Solar Speicher/Wärmequelle (M79)		0	1			manual	present
-1116	WORD	RO	volatile	Umschaltventil ISC Wärmequelle /Kältespeicher (M89)		0	1			manual	present
+1113	WORD	RO	volatile	Umschaltv. Wärmequelle Heizen/Kühlen (M74)		0	1			manual	present
+1114	WORD	RO	volatile	Umschaltventil Solar Heizen/Warmwasser(M78)		0	1			manual	present
+1115	WORD	RO	volatile	Umschaltv. Solar Speicher/Wärmequelle (M79)		0	1			manual	present
+1116	WORD	RO	volatile	Umschaltventil ISC Wärmequelle/Kältespeicher (M89)		0	1			manual	present
 1117	WORD	RO	volatile	Umschaltventil ISC Speicher / Bypass (M99)		0	1			manual	present
 1118	WORD	RO	volatile	Zirkulationspumpe (M64)		0	1			manual	present
-1120	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 1	BV002	-90	40		°C	manual	present
-1121	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 2	BV003	-90	40		°C	manual	present
-1122	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 1	BV102	-90	40		°C	manual	present
-1123	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 2	BV103	-90	40		°C	manual	present
+1120	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 1	BV002	-40	40	-5	°C	manual	present
+1121	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 2	BV003	-40	40	-20	°C	manual	present
+1122	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 1	BV102	-40	40	-5	°C	manual	present
+1123	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 2	BV103	-40	40	-20	°C	manual	present
 1124	UCHAR	RO	volatile	Bivalenz Betriebszustand		0	3			manual	present
 1147	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Heizen		0	20			manual	present
 1148	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Kühlen		0	20			manual	present
@@ -75,18 +78,18 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 1206	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Heizen					°C	manual	present
 1208	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Kühlen					°C	manual	present
 1210	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Warmwasser					°C	manual	present
-1220	UCHAR	RW	volatile	Kaskade / Minimale Leistung Heizen	SYSCAMLHM	0	100		%	manual	present
-1221	UCHAR	RW	volatile	Kaskade / Maximale Leistung Heizen	SYSCAMLH	0	100		%	manual	present
-1222	UCHAR	RW	volatile	Kaskade / Minimale Leistung Kühlen	SYSCAMLCM	0	100		%	manual	present
-1223	UCHAR	RW	volatile	Kaskade / Maximale Leistung Kühlen	SYSCAMLC	0	100		%	manual	present
-1224	UCHAR	RW	volatile	Kaskade / Minimale Leistung Warmwasser	SYSCAMLPM	0	100		%	manual	present
-1225	UCHAR	RW	volatile	Kaskade / Maximale Leistung Warmwasser	SYSCAMLP	0	100		%	manual	present
-1226	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Parallel	SYSCAPVTHP	-90	40		°C	manual	present
-1227	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Alternativ	SYSCAPVTHA	-90	40		°C	manual	present
-1228	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Parallel	SYSCAPVTCP	-90	40		°C	manual	present
-1229	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Alternativ	SYSCAPVTCA	-90	40		°C	manual	present
-1230	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmwasser	SYSCAPVTPP	-90	40		°C	manual	present
-1231	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmwasser	SYSCAPVTPA	-90	40		°C	manual	present
+1220	UCHAR	RW	volatile	Kaskade / Minimale Leistung Heizen		0	100		%	manual	present
+1221	UCHAR	RW	volatile	Kaskade / Maximale Leistung Heizen		0	100		%	manual	present
+1222	UCHAR	RW	volatile	Kaskade / Minimale Leistung Kühlen		0	100		%	manual	present
+1223	UCHAR	RW	volatile	Kaskade / Maximale Leistung Kühlen		0	100		%	manual	present
+1224	UCHAR	RW	volatile	Kaskade / Minimale Leistung Warmwasser		0	100		%	manual	present
+1225	UCHAR	RW	volatile	Kaskade / Maximale Leistung Warmwasser		0	100		%	manual	present
+1226	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Parallel		-40	40		°C	manual	present
+1227	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Alternativ		-40	40		°C	manual	present
+1228	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Parallel		-40	40		°C	manual	present
+1229	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Alternativ		-40	40		°C	manual	present
+1230	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmw. Parallel		-40	40		°C	manual	present
+1231	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmw. Alternativ		-40	40		°C	manual	present
 1350	FLOAT	RO	volatile	Heizkreis A Vorlauftemperatur (B51)					°C	manual	present
 1352	FLOAT	RO	volatile	Heizkreis B Vorlauftemperatur (B52)					°C	manual	present
 1354	FLOAT	RO	volatile	Heizkreis C Vorlauftemperatur (B53)					°C	manual	present
@@ -206,6 +209,10 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 1658	FLOAT	W	volatile	Externe Raumtemperatur HK E		15	30		°C	manual	present
 1660	FLOAT	W	volatile	Externe Raumtemperatur HK F		15	30		°C	manual	present
 1662	FLOAT	W	volatile	Externe Raumtemperatur HK G		15	30		°C	manual	present
+1680	UCHAR	RO	volatile	Störung Wärmequellenkreis		0	1			manual	untested
+1681	UCHAR	RO	volatile	Störung Druckschalter Wärmequellenkreis (iPump T und TERRA SWM)		0	1			manual	untested
+1682	UCHAR	RO	volatile	Störung Ladepumpe 1 Zwischenkreis (M125)		0	1			manual	untested
+1683	UCHAR	RO	volatile	Störung Ladepumpe 2 Zwischenkreis (M118)		0	1			manual	untested
 1690	FLOAT	W	volatile	Externe Außentemperatur					°C	manual	present
 1692	FLOAT	W	volatile	Externe Feuchte		0	100		%rF	manual	present
 1694	UCHAR	RW	eeprom	Externe Anforderungstemperatur Heizen	PH003	20	65	40	°C	manual	present
@@ -216,12 +223,12 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 1711	BOOL	RW	volatile	Anforderung Kühlen		0	1	0		manual	present
 1712	BOOL	RW	volatile	Anforderung Warmwasserladung		0	1	0		manual	present
 1713	BOOL	RW	volatile	Ext. Ansteuerung „Einmalige WW-Ladung“		0	1	0		manual	present
-1714	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW/SWM/SW Twin) und Sole-/Zwischenkreispumpe M16 (bei SW/SWM/SW Twin/SW Max)						manual	present
-1715	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW Max)						manual	present
-1716	FLOAT	W	volatile	GLT Wärmespeichertemperatur				-1	°C	manual	present
-1718	FLOAT	W	volatile	GLT Kältespeichertemperatur				-1	°C	manual	present
-1720	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. unten				-1	°C	manual	present
-1722	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. oben				-1	°C	manual	present
+1714	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW/SWM/SW Twin) und Sole-/Zwischenkreispumpe M16 (bei SW/SWM/SW Twin/SW Max)		0	100	-1	%	manual	present
+1715	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW Max)		0	100	-1	%	manual	present
+1716	FLOAT	W	volatile	GLT Wärmespeichertemperatur					°C	manual	present
+1718	FLOAT	W	volatile	GLT Kältespeichertemperatur					°C	manual	present
+1720	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. unten					°C	manual	present
+1722	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. oben					°C	manual	present
 1746	FLOAT	RO	unknown	Elektrische Leistungsaufnahme (gesamt)					kWh	gltmon	present
 1748	FLOAT	RO	volatile	Wärmemenge Heizen					kWh	manual	present
 1750	FLOAT	RO	volatile	Wärmemenge Gesamt					kWh	manual	present
@@ -231,7 +238,7 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 1758	FLOAT	RO	volatile	Wärmemenge Passive Kühlung					kWh	manual	present
 1760	FLOAT	RO	volatile	Wärmemenge Solar					kWh	manual	present
 1762	FLOAT	RO	volatile	Wärmemenge Elektroheizeinsatz					kWh	manual	present
-1790	FLOAT	RO	volatile	Momentanleistung					kW	manual	present
+1790	FLOAT	RO	volatile	Thermische Momentanleistung					kW	manual	present
 1792	FLOAT	RO	volatile	Momentanleistung Solar					kW	manual	present
 1850	FLOAT	RO	volatile	Solar Kollektortemperatur (B73)					°C	manual	present
 1852	FLOAT	RO	volatile	Solar Kollektorrücklauftemperatur (B75)					°C	manual	present
@@ -672,12 +679,28 @@ address	datatype	access	persistence	name	parameter	min	max	default	unit	source	o
 2641	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 8		0	4			manual	absent
 2642	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 8		0	1			manual	absent
 2649	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 9 (A9)		0	1			manual	absent
-4108	FLOAT	RW	unknown	Leistungsbegrenzung Wärmepumpe						gltmon	present
-4112	FLOAT	RW	unknown	Leistungsbegrenzung Kaskade						gltmon	present
-4122	FLOAT	RO	volatile	Aktuelle Leistungsaufnahme Wärmepumpe					kW	manual	present
-4124	FLOAT	RO	unknown	elektrische Gesamtleistung (falls kein Wert vom Inverter vorhanden ist, wird jener vom Polynom verwendet)					kW	gltmon	present
-4126	FLOAT	RO	volatile	thermische Leistung (Durchflusssensor)				0	kW	manual	present
-4128	FLOAT	RO	volatile	Wärmemenge gesamt				0	kWh	manual	present
+4001	UCHAR	RO	volatile	Booster Störungen		0	3			manual	untested
+4002	UCHAR	RO	volatile	Booster Verriegelung		0	3			manual	untested
+4010	FLOAT	RO	volatile	Booster A Wärmequelleneintrittstemperatur					°C	manual	untested
+4012	FLOAT	RO	volatile	Booster A Wärmequellenaustrittstemperatur					°C	manual	untested
+4014	FLOAT	RO	volatile	Booster A Wärmespeichertemperatur (B104)					°C	manual	untested
+4016	FLOAT	RO	volatile	Booster A Vorlauftemperatur					°C	manual	untested
+4018	FLOAT	RO	volatile	Booster A Rücklauftemperatur					°C	manual	untested
+4020	WORD	RO	volatile	Booster A Wärmequellenpumpe		0	100	-1	%	manual	untested
+4021	WORD	RO	volatile	Booster A Ladepumpe		0	100	-1	%	manual	untested
+4022	UCHAR	RO	volatile	Booster A Verdichter		0	1			manual	untested
+4040	FLOAT	RO	volatile	Booster B Wärmequelleneintrittstemperatur					°C	manual	untested
+4042	FLOAT	RO	volatile	Booster B Wärmequellenaustrittstemperatur					°C	manual	untested
+4044	FLOAT	RO	volatile	Booster B Wärmespeichertemperatur (B104)					°C	manual	untested
+4046	FLOAT	RO	volatile	Booster B Vorlauftemperatur					°C	manual	untested
+4048	FLOAT	RO	volatile	Booster B Rücklauftemperatur					°C	manual	untested
+4050	WORD	RO	volatile	Booster B Wärmequellenpumpe		0	100	-1	%	manual	untested
+4051	WORD	RO	volatile	Booster B Ladepumpe		0	100	-1	%	manual	untested
+4052	UCHAR	RO	volatile	Booster B Verdichter		0	1			manual	untested
+4108	FLOAT	RW	volatile	Leistungsbegrenzung Wärmepumpe				-1	kW	manual	present
+4112	FLOAT	RW	volatile	Leistungsbegrenzung Kaskade				-1	kW	manual	present
+4122	FLOAT	RO	volatile	Elektrische Gesamtleistung Wärmepumpe					kW	manual	present
+4124	FLOAT	RO	volatile	Elektr. Gesamtleist. Wärmepumpe (Smartfox)					kW	manual	present
 4132	FLOAT	RW	unknown	Kaskadenleistung Heizen					%	gltmon	present
 4136	FLOAT	RW	unknown	Kaskadenleistung Kühlen					%	gltmon	present
 4140	FLOAT	RW	unknown	Kaskadenleistung Vorrangladung					%	gltmon	present

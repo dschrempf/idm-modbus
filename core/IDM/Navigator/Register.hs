@@ -53,16 +53,16 @@ import Language.Haskell.TH.Syntax (Lift)
 -- | Datatype as printed in the parameter list, or as far as a read measured it
 -- where the list does not name the address.
 --
--- The names are the manufacturer's. 'DWord' does not occur in revision 10 of
--- the Navigator 2.0 list but is kept so that a later revision can be
--- transcribed without changing this type.
+-- The names are the manufacturer's. 'DWord' occurs in neither revision 10
+-- nor revision 12 of the Navigator 2.0 list but is kept so that a later
+-- revision can be transcribed without changing this type.
 data Datatype
   = -- | IEEE 754 single precision across two registers, low word first
     Float32
   | -- | one register, a byte by the manual's name, signed by the controller's
     -- reading
     UChar
-  | -- | one register; signed where the documented minimum is negative
+  | -- | one register; signed as 'signedWord' says
     Word
   | -- | one register, 0 or 1
     Boolean
@@ -145,6 +145,8 @@ data Unit
   | LiterPerHour
   | LiterPerMinute
   | Minute
+  | -- | the electricity price at 1048
+    EuroPerMegawattHour
   | -- | a unit string the transcription does not know yet
     UnknownUnit Text
   deriving (Show, Eq, Ord, Lift)
@@ -375,14 +377,21 @@ encode reg v = case (registerAccess reg, registerDatatype reg, v) of
     word16 :: Integer -> Registers
     word16 i = One (fromIntegral (i .&. 0xFFFF))
 
--- | Whether a @WORD@ is two's complement. The manual's own minimum decides
--- the sign, and with it which words are reachable. A bivalence point is
--- documented down to -90 and a pump's control signal down to -1, so both are
--- two's complement and 65535 is a value they may legitimately hold, not a
--- sentinel. Every other @WORD@ is documented from 0 up, leaving 65535 out of
+-- | Whether a @WORD@ is two's complement. The manual's own minimum and
+-- default decide the sign, and with it which words are reachable. A
+-- bivalence point is documented down to -40, so it is two's complement and
+-- 65535 is a value it may legitimately hold, not a sentinel. A pump's control
+-- signal is documented from 0 with a default of -1, which a read-only
+-- register holds as a state of the machine, so it is two's complement too. A
+-- default of a register the building management system supplies is what it
+-- holds before anything is supplied: the -1 of the battery level at 86 is
+-- absence. Every other @WORD@ is documented from 0 up, leaving 65535 out of
 -- range and free to mean absence.
 signedWord :: Register -> Bool
-signedWord = maybe False ((< 0) . rangeMinimum) . registerRange
+signedWord reg = negativeMinimum || (registerAccess reg == ReadOnly && negativeDefault)
+  where
+    negativeMinimum = maybe False ((< 0) . rangeMinimum) (registerRange reg)
+    negativeDefault = maybe False (< 0) (registerDefault reg)
 
 -- | Registers as bytes in wire order, as a read returns them.
 wire :: Registers -> B.ByteString

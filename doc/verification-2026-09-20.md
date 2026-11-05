@@ -234,7 +234,7 @@ enumerated. The configuration has to come from somewhere else.
 ### A documented minimum the machine does not respect
 
 1034 holds 44 °C. The parameter list documents it from 46 to 53
-(`manual/812170-rev12.txt:486`; the transcription is faithful). The display shows the
+(812170 rev. 12, page 13; the transcription is faithful). The display shows the
 same 44, so this is the controller's value and not a decoding error. A range
 check built from the table would reject a setting the machine itself holds,
 which matters for the write path that does not exist yet.

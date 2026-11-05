@@ -1,22 +1,30 @@
 address	code	label
+90	0	Red
+90	1	Yellow
+90	2	Green
+90	4	Supergreen
 1005	0	Standby
 1005	1	Automatik
 1005	2	Abwesend
 1005	4	Nur Warmwasser
 1005	5	Nur Heizung/Kühlung
-1006	0	EVU-Sperre u. kein günstiger Strom
-1006	1	EVU-Bezug u. kein günstiger Strom
-1006	2	Kein EVU-Bezug u. günstiger Strom
-1006	4	EVU-Sperre u. günstiger Strom
-1090	0	Aus
+1006	0	nicht konfiguriert
+1006	1	externe WW-Ladung
+1006	2	PV / Digitaleingang
+1006	3	ext. Umsch. Heizen/Kühlen
+1090	0	Standby
 1090	1	Heizbetrieb
 1090	2	Kühlbetrieb
 1090	4	Warmwasser
 1090	8	Abtauung
+1091	0	Keine Anforderung
+1091	1	Anforderung
+1093	0	Beenden der WW-Ladung
+1093	1	Start der WW-Ladung
 1098	0	gesperrt
 1098	1	nicht gesperrt
-1099	0	Keine Störung
-1099	1	Störung
+1099	0	Keine Summenstörung
+1099	1	Summenstörung
 1100	0	Aus
 1100	1	Ein
 1101	0	Aus
@@ -25,6 +33,11 @@ address	code	label
 1102	1	Ein
 1103	0	Aus
 1103	1	Ein
+1104	-1	Aus
+1104	0	Min. Drehzahl
+1104	100	Max. Drehzahl
+1110	0	Heizen
+1110	1	Kühlen
 1124	0	Aus
 1124	1	Bivalenz 1 aktiv
 1124	2	Bivalenz 2 aktiv
@@ -92,6 +105,8 @@ address	code	label
 1504	0	Aus
 1504	1	Heizen
 1504	2	Kühlen
+1680	0	Störung
+1680	1	Keine Störung
 1712	0	Aus
 1712	1	Ein
 1856	0	Automatik
@@ -703,3 +718,7 @@ address	code	label
 2641	4	Komfort
 2642	0	Aus
 2642	1	Ein
+4001	0	Keine Störung
+4001	1	Störung Booster A
+4001	2	Störung Booster B
+4001	3	Störung Booster A und B

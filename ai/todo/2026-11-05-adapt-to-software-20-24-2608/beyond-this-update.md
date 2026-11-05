@@ -9,7 +9,10 @@ Recording the version in every capture is now part of `version-guard.md`.
   notes so far. On 2026-11-05 its notes gained three things: it reads the
   version through the guard, a refusal is an outcome it handles, and it
   records the version with its inputs. Once the guard lands, check those
-  notes against it.
+  notes against it. Rev. 12 moves `Smart Grid Status` from 1006, now
+  `Variabler Eingang`, to 90, with the codes 0 Red, 1 Yellow, 2 Green and 4
+  Supergreen; its notes still read 1006 (`inputs.md`, `outputs.md`), and
+  plan the COP on 4126, which the rebuild keeps (`table-rebuild.md`).
 - **A newer parameter list.** 812170 revision 12 is public: 40 pages, built
   2025-09-09. It documents software 20.23-515, between revision 10's
   20.21-101 and this machine's 20.24 builds. A LoxWiki comment of 2026-10-09

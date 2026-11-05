@@ -170,6 +170,7 @@ parseUnit t = case t of
   "l/h" -> LiterPerHour
   "l/min" -> LiterPerMinute
   "min" -> Minute
+  "€/MWh" -> EuroPerMegawattHour
   other -> UnknownUnit other
 
 nonEmpty :: Text -> Maybe Text

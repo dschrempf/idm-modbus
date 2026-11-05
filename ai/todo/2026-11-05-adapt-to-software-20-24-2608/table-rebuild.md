@@ -2,7 +2,7 @@
 
 ## The table
 
-- Run `tools/transcribe.py manual/812170-rev12.txt --scan
+- Run `tools/transcribe.py manual/812170-rev12.pdf --scan
   captures/navigator-2.0-scan-20.24-2608-2026-11-05-1617.json --webapi
   captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1636.json --widths
   captures/navigator-2.0-widths-20.24-2608-2026-11-05-1639.json`. The webapi capture of
@@ -10,6 +10,14 @@
 - Expected: the 18 new `gltmon` addresses (500, 506, 508, 520 to 528, 1174,
   1950 to 1958, 4110, 4111, 4113, 4114); 4112 one register wide, no longer
   `Leistungsbegrenzung Kaskade`; 4108 renamed; 1999 `present`.
+- 4126 and 4128, which rev. 12 drops, come back as page rows: the scan of
+  1617 read both, and the page of 1636 lists them as `thermische Leistung
+  (basierend auf Durchflusssensor)` and `Wärmemenge gesamt`. No widths
+  capture covers them, and without one the script leaves them out. Run
+  `cabal run idm-dump -- HOST --widths 4126 4128` into a widths capture of
+  2608 and pass it with the one of 1639; `--widths` takes one file, so either
+  read all the addresses again in one capture or let the script take several.
+  `idm-manager` plans the COP on 4126.
 - 4111 and 4112 have no name on the page. Check how the script treats an
   empty name; 68, 70, 72 and 80 are a precedent.
 - `data/navigator-2.0-gltmon-parameters.tsv` must still join; the script
@@ -23,6 +31,13 @@
   are git-ignored, and having it on the laptop is fine. Its value stays out
   of every tracked file (`tool-fixes.md`).
 
+- The scan must ask the 25 addresses rev. 12 added (90, 1086, 1088, 1680
+  to 1683, 4001 to 4052), now `untested`; then the check in `test/Main.hs`
+  that lists them goes back to none `untested`.
+- 1714 and 1715 are `UCHAR`s documented 0 to 100 % with a default of -1
+  since rev. 12; `decode` still takes any negative byte as no value
+  (`uchar-254-at-1714-and-1715-may-be-minus-two`).
+
 ## Code and tests
 
 - `test/Main.hs`: checks naming 4112 or a `gltmon` count.
@@ -34,9 +49,8 @@
 ## Documents
 
 - `CLAUDE.md`, `Readme.md` and `doc/research.md`: register counts (663 and
-  682), and anything that states 1574 as now. `doc/research.md` also gets
-  the sources: the Loxone mirror gone, rev. 12 on LoxWiki, rev. 7 on the
-  forums.
+  682), and anything that states 1574 as now. The sources in
+  `doc/research.md` moved with the transcription.
 - `doc/software-versions.md`: the restarts in the log since 2026-09-19,
   which show that no update went unseen between readings (`README.md`).
 - The dated `verification-*.md` documents stay as they are: they say what

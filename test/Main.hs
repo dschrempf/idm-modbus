@@ -57,7 +57,7 @@ checks =
         ]
     ),
     ( "the controller's register page adds to the manual, and states only what it states",
-      length gltmon == 19
+      length gltmon == 12
         && all
           ( \r ->
               registerPersistence r == UnknownPersistence
@@ -79,8 +79,13 @@ checks =
           (map T.pack ["HSA05", "HSC05", "HSD05", "HSA04", "HSC04", "HSD04"])
     ),
     ( "a register of unstated encoding is read as it came, never as absence",
-      decodeRaw 1074 (B.pack [0xff, 0xff]) == Just (Measured (Count 65535))
+      decodeRaw 504 (B.pack [0xff, 0xff]) == Just (Measured (Count 65535))
         && registerWidth (registerDatatype (register 504)) == singleRegister
+    ),
+    ( "the page's row stands where the manual's datatype contradicts the width read",
+      -- revision 12 prints the flow at 1072 as a UCHAR; it reads two registers
+      registerSource (register 1072) == GltMonitor
+        && registerDatatype (register 1072) == Float32
     ),
     ( "addresses are unique",
       all ((== 1) . length) (group (sort (map registerAddress Table.navigator20)))
@@ -96,6 +101,9 @@ checks =
     ),
     ( "write-only registers are not offered for reading",
       all ((/= WriteOnly) . registerAccess) Table.readable
+    ),
+    ( "every unit the table states is known",
+      null [u | r <- Table.navigator20, Just (UnknownUnit u) <- [registerUnit r]]
     ),
     ( "enumerations resolve",
       Table.enumLabel (Address 1005) 4 == Just (T.pack "Nur Warmwasser")
@@ -130,7 +138,7 @@ checks =
       decodeRaw 1120 (B.pack [0xff, 0xfb]) == Just (Measured (Count (-5)))
     ),
     ( "a bivalence point may be set to minus one",
-      -- documented down to -90, so all ones is in range and cannot be absence
+      -- documented down to -40, so all ones is in range and cannot be absence
       decodeRaw 1120 (B.pack [0xff, 0xff]) == Just (Measured (Count (-1)))
     ),
     ( "a capture records the number, not the reading",
@@ -138,8 +146,10 @@ checks =
         && asWritten (register 1000) (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just (Real (-1))
     ),
     ( "a pump that is not driven is not a pump that is missing",
-      -- the list documents the control signal from -1, so all ones is -1
+      -- the list documents the control signal with a default of -1, so all
+      -- ones is -1, at the charge pump's status and at its signal alike
       decodeRaw 1104 (B.pack [0xff, 0xff]) == Just (Measured (DriveSignal NotDriven))
+        && decodeRaw 1074 (B.pack [0xff, 0xff]) == Just (Measured (DriveSignal NotDriven))
     ),
     ( "a pump at its minimum speed is not a pump at rest",
       decodeRaw 1104 (B.pack [0x00, 0x00]) == Just (Measured (DriveSignal (Driven 0)))
@@ -164,8 +174,17 @@ checks =
     ( "widths match the datatypes",
       registerWidth Float32 == registerPair && registerWidth UChar == singleRegister
     ),
-    ( "presence was recorded for every register",
-      all ((/= Untested) . registerPresence) Table.navigator20
+    ( "presence was recorded for every register but those revision 12 added",
+      -- the scan of the rebuild for 20.24-2608 asks these too
+      [registerAddress r | r <- Table.navigator20, registerPresence r == Untested]
+        == map
+          Address
+          ( [90, 1086, 1088, 1680, 1681, 1682, 1683, 4001, 4002]
+              ++ [4010, 4012 .. 4018]
+              ++ [4020, 4021, 4022]
+              ++ [4040, 4042 .. 4048]
+              ++ [4050, 4051, 4052]
+          )
     ),
     ( "a setting is asked for by its id as a string",
       queryJSON (SettingDetail (SettingId (T.pack "4768")))

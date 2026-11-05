@@ -50,6 +50,7 @@
               hpkgs.cabal-install
               hpkgs.haskell-language-server
               ormolu
+              poppler-utils
             ];
           };
         };

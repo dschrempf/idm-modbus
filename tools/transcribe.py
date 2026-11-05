@@ -4,11 +4,14 @@
 The manufacturer's manual is a PDF and is not redistributed here. Obtain it
 (iDM document 812170 revision 12 for Navigator 2.0; support sends it on
 request, and doc/research.md says where else it is), put it in manual/, which
-git ignores, extract its text preserving the column layout, and feed that in:
+git ignores, and feed it in:
 
-    pdftotext -layout manual/812170-rev12.pdf manual/812170-rev12.txt
-    tools/transcribe.py manual/812170-rev12.txt [--scan SCAN]
+    tools/transcribe.py manual/812170-rev12.pdf [--scan SCAN]
         [--webapi WEBAPI --widths WIDTHS]
+
+The script reads the PDF with pdftotext, which the development shell
+provides: its text with the column layout preserved, and the height of each
+word, which is what tells a remark from a name.
 
 The observed column says whether the reference machine answered for an
 address. It comes from the scan, captures/navigator-2.0-scan-DATE.json, when
@@ -19,7 +22,9 @@ The controller lists the addresses it serves on a page of its own web
 interface, N2_GLTMON, and lists some the manual does not. Given a webapi
 capture holding that page and a widths capture of those addresses, the table
 gains them, marked as coming from that page rather than from the manual.
-Without the two, they are carried over like the observed column.
+Without the two, they are carried over like the observed column. Where the
+manual prints an address too, its row stands, unless the width measured
+contradicts its datatype; then the page's row does, and the script says so.
 
 The page names no parameter identifier, and the settings tree, which does,
 names no address. Which identifier a row of the page carries was settled by
@@ -55,6 +60,7 @@ import csv
 import html
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -76,15 +82,67 @@ FIELDS = ("name", "parameter", "min", "max", "default", "unit")
 CELL = re.compile(r"\S+(?: \S+)*")
 UNIT = re.compile(r"^[\[(]?(?P<unit>.*?)[\])}]?$")
 # enumerations are printed beside the row they belong to, as "4 ... Nur Warmwasser"
-ENUM = re.compile(r"(?<![\d.])(?P<code>\d{1,3})\s*\.\.\.\s*(?P<label>\S.*?)\s*$")
+ENUM = re.compile(r"(?<![\d.-])(?P<code>-?\d{1,3})\s*\.\.\.\s*(?P<label>\S.*?)\s*$")
 # a footnote marker, printed alone in a cell or attached to the end of a name
 FOOTNOTE_CELL = re.compile(r"^[*\d]\)$")
 FOOTNOTE = re.compile(r"\s*\d\)$")
 NUMBER = re.compile(r"-?\d+(?:[.,]\d+)?")
 # how far a cell may sit from its heading and still belong to that column
 SLACK = 4
+# how much smaller, in points, a remark is set than the name it follows; the
+# two revisions set names at 8.3 and 9.7 points and remarks at 7.3
+FONT_SLACK = 0.5
 
 HERE = Path(__file__).resolve().parent.parent
+
+
+def pdftotext(pdf, mode):
+    return subprocess.run(
+        ["pdftotext", mode, str(pdf), "-"],
+        check=True, capture_output=True, text=True, encoding="utf-8",
+    ).stdout
+
+
+# a word of pdftotext -bbox: its box and its text
+BBOX_WORD = re.compile(
+    r'<word xMin="[^"]*" yMin="(?P<top>[^"]*)" xMax="[^"]*" '
+    r'yMax="(?P<bottom>[^"]*)">(?P<text>[^<]*)</word>'
+)
+
+
+def font_heights(text, bbox):
+    """The height of the type a cell of the layout text is set in.
+
+    The layout text and pdftotext's word boxes are two views of one PDF, page
+    by page. A cell is found on its page as the run of words it consists of,
+    and its height is that of its first word. A cell found nowhere, or at two
+    heights, is refused: the layout text would then be read against the wrong
+    type.
+    """
+    pages = [
+        [
+            (html.unescape(w["text"]), float(w["bottom"]) - float(w["top"]))
+            for w in BBOX_WORD.finditer(page)
+        ]
+        for page in bbox.split("<page ")[1:]
+    ]
+    # the line numbers of str.splitlines, which ends a line at a form feed too
+    page_of, n = [], 0
+    for line in text.splitlines(keepends=True):
+        page_of.append(n)
+        n += line.endswith("\f")
+
+    def height(line, cell):
+        words, found = cell.split(), set()
+        page = pages[page_of[line]]
+        for k in range(len(page) - len(words) + 1):
+            if all(page[k + m][0] == w for m, w in enumerate(words)):
+                found.add(round(page[k][1], 1))
+        if len(found) != 1:
+            sys.exit(f"{cell!r} on page {page_of[line] + 1}: at heights {sorted(found)}")
+        return found.pop()
+
+    return height
 
 
 def columns(head):
@@ -100,6 +158,11 @@ def cells(line, start=0):
 def field_of(cols, at):
     """The column a cell belongs to: the nearest heading."""
     return min(cols, key=lambda f: abs(cols[f] - at))
+
+
+def numeric_field_of(cols, at):
+    """The column a number belongs to: the nearest numeric heading."""
+    return field_of({f: cols[f] for f in ("min", "max", "default")}, at)
 
 
 def is_number(cell):
@@ -129,7 +192,7 @@ def join_name(name, more):
     return f"{name} {more}" if name else more
 
 
-def parse_rows(text):
+def parse_rows(text, height):
     """Every register the parameter list describes, in order of appearance.
 
     Which column a cell belongs to is decided by where it is printed rather
@@ -152,13 +215,16 @@ def parse_rows(text):
             continue
         row = {f: [] for f in FIELDS}
         for cell, at in cells(line, m.start("tail")):
-            if not FOOTNOTE_CELL.match(cell):
-                row[field_of(cols, at)].append(cell)
-        for cell, at in continuation(lines, i, cols):
-            if field_of(cols, at) == "unit":
-                row["unit"].append(cell)
-            else:
-                row["name"] = [join_name(one(row["name"]), cell)]
+            if FOOTNOTE_CELL.match(cell):
+                continue
+            f = field_of(cols, at)
+            # no unit is a number: a default printed nearer the unit's heading
+            if f == "unit" and is_number(cell):
+                f = numeric_field_of(cols, at)
+            row[f].append(cell)
+        name, more_unit = continuation(lines, i, cols, one(row["name"]), height)
+        row["name"] = [name]
+        row["unit"] += more_unit
         # a cell printed under a numeric heading but holding no number is the
         # parameter identifier, wherever the list chose to put it
         for f in ("min", "max", "default"):
@@ -179,15 +245,18 @@ def parse_rows(text):
     return out
 
 
-def continuation(lines, i, cols):
-    """The cells of the lines that continue the row on line i.
+def continuation(lines, i, cols, name, height):
+    """The name of the row on line i, with the lines that continue it, and
+    the unit cells they hold.
 
     A name too long for its column, and occasionally its unit, run on into the
-    next line. Prose and enumerations are set off by a blank line, which is
-    what separates them from a continuation here.
+    next line. A remark is printed in the same column, after a blank line or,
+    from revision 12 on, directly below, and only its smaller type tells it
+    from the name: the first line set smaller than the name ends the row.
     """
-    out = []
-    for line in lines[i + 1 :]:
+    unit, size = [], None
+    for j in range(i + 1, len(lines)):
+        line = lines[j]
         if not line.strip() or ROW.match(line) or PAGE_HEAD.search(line):
             break
         taken = [
@@ -198,8 +267,15 @@ def continuation(lines, i, cols):
         ]
         if not taken:  # the footnote legend at the foot of the page
             break
-        out += taken
-    return out
+        more = [c for c, at in taken if field_of(cols, at) != "unit"]
+        if more:
+            size = size or height(i, name)
+            if height(j, more[0]) < size - FONT_SLACK:
+                break
+        unit += [c for c, at in taken if field_of(cols, at) == "unit"]
+        for cell in more:
+            name = join_name(name, cell)
+    return name, unit
 
 
 def partition(p, xs):
@@ -449,8 +525,33 @@ def width(reads, a):
     return None
 
 
+# how many registers a datatype spans
+WIDTH = {"FLOAT": 2, "DWORD": 2}
+
+
+def prefer_manual(a, measured, manual):
+    """Whether the manual's row stands where the page lists the address too.
+
+    The manual states what the page does not, persistence, range, default and
+    enumerations, so its row stands, unless the width the reads measured
+    contradicts its datatype.
+    """
+    if a not in manual:
+        return False
+    printed = WIDTH.get(manual[a]["datatype"], 1)
+    if measured is None or measured == printed:
+        return True
+    print(
+        f"kept {a} from N2_GLTMON: the manual prints a {manual[a]['datatype']}, "
+        f"the reads measured {measured} registers",
+        file=sys.stderr,
+    )
+    return False
+
+
 def gltmon_rows(page, reads, manual):
-    """The registers the page lists and the manual does not.
+    """The registers the page lists and the manual does not, or not as the
+    reads measured them.
 
     The page states an address, a name with its unit, and an access right; the
     datatype comes from the measured width, and nothing states persistence,
@@ -460,7 +561,7 @@ def gltmon_rows(page, reads, manual):
     out = {}
     for addr, name, access, value, _ in GLT_ROW.findall(page):
         a = int(addr)
-        if a in manual:
+        if prefer_manual(a, width(reads, a), manual):
             continue
         m = GLT_NAME.match(html.unescape(name).strip())
         value = html.unescape(value).strip()
@@ -621,7 +722,8 @@ def main():
     if (args.webapi is None) != (args.widths is None):
         sys.exit("--webapi and --widths go together")
 
-    text = args.manual.read_text(encoding="utf-8")
+    text = pdftotext(args.manual, "-layout")
+    height = font_heights(text, pdftotext(args.manual, "-bbox"))
     data = HERE / "data"
     table = data / "navigator-2.0-registers.tsv"
     with table.open(newline="") as fh:
@@ -636,7 +738,7 @@ def main():
     else:
         observed = {a: r["observed"] for a, r in previous.items()}
 
-    registers = parse_rows(text)
+    registers = parse_rows(text, height)
     enums = share_within_families(parse_enums(text, registers), registers)
     for r in registers.values():
         r["source"] = "manual"
@@ -657,6 +759,7 @@ def main():
             a: {**r, "address": a, "parameter": ""}
             for a, r in previous.items()
             if r.get("source") == "gltmon"
+            and not prefer_manual(a, WIDTH.get(r["datatype"], 1), registers)
         }
     join_parameters(joins, registers)
     if args.webapi:

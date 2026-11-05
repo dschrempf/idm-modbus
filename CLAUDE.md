@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-    nix develop                        # toolchain: cabal, HLS, ormolu, cabal-fmt
+    nix develop                        # toolchain: cabal, HLS, ormolu, cabal-fmt, pdftotext
     cabal build
     cabal test                         # prints one line per check
     cabal run idm-dump -- HOST         # read the registers a reference machine answered for
@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-SOFTWARE-YYYY-MM-DD-HHMM.json
     cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
     cabal run idm-dump -- HOST --widths 1534 1074 > captures/navigator-2.0-widths-SOFTWARE-YYYY-MM-DD-HHMM.json
-    tools/transcribe.py manual/812170-rev12.txt --scan SCAN [--webapi WEBAPI --widths WIDTHS]
+    tools/transcribe.py manual/812170-rev12.pdf --scan SCAN [--webapi WEBAPI --widths WIDTHS]
     IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
     IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
     IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
@@ -34,7 +34,7 @@ and month of the current date). Port 502, unit id 1.
 
 The register table is data, not code, and it flows one way:
 
-    manual/812170-rev12.pdf → pdftotext -layout → tools/transcribe.py
+    manual/812170-rev12.pdf → pdftotext -layout and -bbox → tools/transcribe.py
       → data/navigator-2.0-{registers,enums}.tsv → splice → IDM.Navigator.Table
       → src/IDM/Navigator/Target.hs (with data/navigator-2.0-targets.tsv)
 
@@ -60,7 +60,9 @@ does not have the scan. The rows of the `source` `gltmon` come the same way:
 the controller's web page `N2_GLTMON` lists addresses the manual does not,
 and given a webapi capture holding that page and a widths capture of those
 addresses, the script adds them, with the width measured and everything the
-page does not state left unstated; without the two it carries them over. Their
+page does not state left unstated; without the two it carries them over.
+Where the manual prints an address the page lists too, the manual's row
+stands, unless the width measured contradicts its datatype, as at 1072. Their
 parameter identifier is the one input written by hand,
 `data/navigator-2.0-gltmon-parameters.tsv`: the page names no identifier and
 the settings tree no address, so only moving a setting and watching which
@@ -118,7 +120,9 @@ repository is public; `captures/README.md` names the files. A document in
 from the house documents to re-run the transcription. The list is printed
 inconsistently — the same column appears in a different order on different
 pages — so cells are read by the column they are printed in, taken from the
-page heading, not by the order they appear in.
+page heading, not by the order they appear in. From revision 12 on a remark
+may follow a name on the next line, and only its smaller type tells it from
+a name that wraps, so the script reads the type's height off the PDF too.
 
 The modules stack, each refusing to know the next one's business:
 

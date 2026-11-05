@@ -22,16 +22,22 @@ the machine rather than by reasoning about the string: see
 
 ## The authoritative source
 
-**iDM document 812170, revision 10, "Modbus TCP – Navigatorregelung 2.0",
-36 pages, dated 20 April 2022.**
+**iDM document 812170, revision 12, "Modbus TCP – Navigatorregelung 2.0",
+40 pages, its parameter list dated 18 June 2025 and written for software
+20.23-515.**
 
 iDM does not publish it on their own site. Forum users report that support
-sends it on request. It is nevertheless downloadable, most reliably from the
-Loxone library, which mirrors it for customers integrating iDM with Loxone:
+sends it on request. A LoxWiki comment of 2026-10-09 attaches it as
+`Montageanleitung_Modbus_TCP_Navigator_2_0.2025.pdf` (md5
+`21ac38ed0982d565f96550c249d6a3fa`), on the page "IDM-IPump mit
+Loxone-Modbus-TCP (Navigator 2.0)". The table was transcribed from revision
+10, 36 pages, dated 20 April 2022, for software 20.21-101, until 2026-11-05;
+the Loxone library mirrored that one for customers integrating iDM with
+Loxone:
 
     https://api.library.loxone.com/downloader/file/647/Modbus%20TCP_Navigator%202.0_DE.pdf
 
-An older revision 0 circulates on loxforum. The corresponding manual for the
+Older revisions circulate on loxforum, LoxWiki and photovoltaikforum. The corresponding manual for the
 previous controller generation is 812049, "Navigator 1.0 und 1.7", and its
 addresses are _different_; several community projects mix the two up.
 
@@ -108,12 +114,17 @@ ours to redistribute.
 At Fachmann level the web backend serves an info page, 12763 `N2_GLTMON`,
 that lists the addresses the controller serves over Modbus, each with a name
 and unit, `RO` or `RW`, and its current value. On this machine it lists 115,
-and 24 of them are not in 812170: the minimum and maximum flow temperature per
-circuit at 1520 to 1540, the heat sink's return, flow and flow rate at 1068 to
-1074, the total electrical energy at 1746, a `PV-Zielwert` at 88, power limits
-and cascade powers from 4108 to 4140. It states no datatype, persistence,
-range or identifier, so the table takes its rows with the width measured and
-the rest left unstated, and marks them `gltmon`. See
+and 24 of them are not in revision 10 of 812170: the minimum and maximum flow
+temperature per circuit at 1520 to 1540, the heat sink's return, flow and flow
+rate at 1068 to 1074, the total electrical energy at 1746, a `PV-Zielwert` at
+88, power limits and cascade powers from 4108 to 4140. Revision 12 prints eight
+of them: 88, 1068 to 1074, 4108, 4112 and 4124. It drops 4126 and 4128, which
+the page lists. The page states no datatype, persistence, range or identifier,
+so the table takes its rows with the width measured and the rest left
+unstated, and marks them `gltmon`. Where the manual prints an address too, its
+row stands, unless the width measured contradicts its datatype: revision 12
+prints the flow rate at 1072 as a `UCHAR`, and it reads two registers and
+fractional litres per minute, so the page's row stays. See
 [verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md). The
 heat sink rows were since read beside the display, and the flow temperature
 rows joined to their identifiers by moving the settings:
@@ -159,7 +170,7 @@ The **Home Assistant community thread** "IDM heatpump integration via modbus
 integration. It confirms the word order problem (`swap: word`), recommends
 scan intervals of 5 seconds for power and 30 for temperatures, and leaves the
 encoding of address 86 unresolved. It is `Batteriefüllstand`, a `WORD` in
-percent, and it is in the parameter list of revision 10 — under the access
+percent, and it is in the parameter lists of revisions 10 and 12 — under the access
 right `RW/RO`, which chapter 4.1 does not define. A machine without a battery
 answers the `WORD` sentinel rather than 0; see
 [verification-2026-09-19.md](verification-2026-09-19.md).
@@ -171,7 +182,7 @@ default rather than treating that as tuning.
 
 ## What the manual does not say, and this project establishes
 
-Reading all 663 documented addresses off a machine whose configuration is known
+Reading all 663 addresses revision 10 documents off a machine whose configuration is known
 answered three questions the documentation leaves open. The measurements are in
 [verification-2026-09-19.md](verification-2026-09-19.md); the conclusions:
 
@@ -187,16 +198,21 @@ answered three questions the documentation leaves open. The measurements are in
    so -1.0 is absence only where a documented range excludes it. This is the
    "unavailable status indicator" kodebach could not pin down.
 
-2. **A `WORD` documented from a negative minimum is two's complement.** The
+2. **A `WORD` documented with a negative value is two's complement.** The
    bivalence points read 65531 and 65516, which are the documented -5 and -20
-   degrees, and the pump control signals 1104 to 1109, documented from -1,
-   read 65535 for a pump that is fitted but not being driven. The manual calls
-   the type `WORD` and says nothing about sign; its minimum decides it, and
-   where the minimum is negative 65535 is a value the register may hold, not
-   the sentinel. See
+   degrees, and the pump control signals 1104 to 1109 read 65535 for a pump
+   that is fitted but not being driven. Revision 10 documents those signals
+   from -1; revision 12 from 0, with a default of -1 and, at 1104, "-1 ...
+   Aus". The manual calls the type `WORD` and says nothing about sign; a
+   negative minimum decides it, or a negative default of a read-only register.
+   There 65535 is a value the register may hold, not the sentinel. The
+   battery level at 86, supplied by the building management system, also
+   defaults to -1, and there the -1 is what it holds until something is
+   supplied, so it stays the sentinel. See
    [verification-2026-09-20.md](verification-2026-09-20.md). On this machine
    1104 reads 65535 while its pump is driven too: the charge pump's signal is
-   at 1074, which the manual does not list
+   at 1074, which revision 10 does not list and revision 12 does, as the
+   `WORD` `Ladepumpe Wärmesenke Steuersignal (M73)`
    ([verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md)).
 
 3. **Function codes 3 and 4 serve the same address space.** The manual and the
@@ -229,7 +245,7 @@ every mode. See
 
 ## Open questions
 
-- **The `RW/RO` access right.** 166 of the 663 registers carry it — the
+- **The `RW/RO` access right.** 167 of the 694 registers of revision 12 carry it — the
   energy management block at 74 to 86 and every zone module room value — and
   chapter 4.1 defines only `RO`, `RW` and `W`. Read as "the building
   management system may supply this, and may read it back", which is what the
@@ -237,15 +253,22 @@ every mode. See
   without the matching menu parameter set to "Ja" is untested; writing exists,
   but has not been tried on the machine. For the PV block there is at least a named gate — PV008, see
   above — and it is not itself addressable.
-- **Revision drift.** Revision 10 documents software 20.21-101; this machine
-  runs 20.24. No address in the manual is missing from the machine, so nothing
-  was removed, but the manual cannot say what was _added_. The controller's own
-  list says some of it, 24 addresses, above; whether those came with a later
-  software or were left out of the manual it cannot say. Worth asking iDM
-  support whether a later revision exists — revision numbers run per document,
-  so 812184 reaching revision 13 says nothing about 812170, and the Loxone
-  mirror still serves revision 10 byte for byte
-  (md5 `5cff6722aee3655431b2d4166a6b3d5a`).
+- **Revision drift.** Revision 12 documents software 20.23-515; this machine
+  ran 20.24-1574 and since 2026-11-05 runs 20.24-2608. No address of revision
+  10 was missing from the machine on 20.24-1574. Revision 12 adds the Smart
+  Grid status at 90, the groundwater temperatures at 1086 and 1088, faults at
+  1680 to 1683, and two boosters at 4001 to 4052, along with eight addresses
+  the controller's own list had shown, above. It drops 4126 and 4128, moves
+  `Smart Grid Status` from 1006 to 90, and reuses 1006 for the
+  `Variabler Eingang`. It narrows the bivalence points from -90 to -40 and
+  moves the -1 of the pump signals from the minimum into the default, and the
+  cascade block loses its parameter identifiers. Neither revision says what
+  20.24 added; the controller's list still names 16 addresses revision 12
+  lacks. Worth asking iDM support for a revision covering 20.24-2608 —
+  revision numbers run per document, so 812184 reaching revision 13 says
+  nothing about 812170. The Loxone mirror served revision 10 byte for byte
+  (md5 `5cff6722aee3655431b2d4166a6b3d5a`) and did not resolve on
+  2026-11-05.
 
   Two later reprints constrain the drift for one block. 812184 rev. 13
   (November 2024) and the Navigator 10 excerpt (January 2026) both print
@@ -313,6 +336,8 @@ every mode. See
 
 ## Sources
 
+- 812170 rev. 12, Modbus TCP Navigatorregelung 2.0, attached on the LoxWiki
+  page "IDM-IPump mit Loxone-Modbus-TCP (Navigator 2.0)"
 - [812170 rev. 10, Modbus TCP Navigatorregelung 2.0](https://api.library.loxone.com/downloader/file/647/Modbus%20TCP_Navigator%202.0_DE.pdf)
 - [812184 rev. 13, myiDM+energy Navigator 2.0](https://www.idm-energie.at/wp-content/uploads/2021/04/tu_de_812184_myiDMenergy_PV_Variable-Stromtarife_Navigator-2.0-2.pdf)
   — the 26-page file under `uploads/2023/10/` is an excerpt of an earlier
