@@ -5,22 +5,23 @@
 -- License     :  BSD-3-Clause
 module Main (main) where
 
+import Control.Monad.Trans.State.Strict (State, modify, runState, state)
 import qualified Data.Aeson as A
 import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy.Char8 as BL
 import Data.List (group, sort)
-import Data.List.NonEmpty (NonEmpty (..))
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import GHC.Float (double2Float, float2Double)
-import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse)
+import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
 import IDM.Navigator.Register
 import qualified IDM.Navigator.Table as Table
 import IDM.Navigator.Target
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Level (fachmannCode)
+import IDM.Navigator.Write.Core
 import System.Exit (exitFailure)
 
 main :: IO ()
@@ -77,7 +78,7 @@ checks =
     ),
     ( "a register of unstated encoding is read as it came, never as absence",
       decodeRaw 1074 (B.pack [0xff, 0xff]) == Just (Measured (Count 65535))
-        && registerWidth (registerDatatype (register 504)) == Quantity 1
+        && registerWidth (registerDatatype (register 504)) == singleRegister
     ),
     ( "addresses are unique",
       all ((== 1) . length) (group (sort (map registerAddress Table.navigator20)))
@@ -159,7 +160,7 @@ checks =
         && decodeRaw 1714 (B.pack [0xff, 0xfe]) == Just NoValue
     ),
     ( "widths match the datatypes",
-      registerWidth Float32 == Quantity 2 && registerWidth UChar == Quantity 1
+      registerWidth Float32 == registerPair && registerWidth UChar == singleRegister
     ),
     ( "presence was recorded for every register",
       all ((/= Untested) . registerPresence) Table.navigator20
@@ -248,7 +249,7 @@ checks =
            ]
     ),
     ( "a write of one register is acknowledged by its echo, and only by it",
-      let w = WriteSingle (Address 1710) 1
+      let w = Write (Address 1710) (One 1)
        in parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 6, 0x06, 0xAE, 0, 1]) == Right ()
             && parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 6, 0x06, 0xAE, 0, 0])
               == Left (UnexpectedEcho (B.pack [0x06, 0xAE, 0, 0]))
@@ -256,13 +257,13 @@ checks =
               == Left (DeviceException IllegalDataAddress)
     ),
     ( "a write of several registers is acknowledged by its address and quantity",
-      let w = WriteMultiple (Address 74) (0 :| [0x4040])
+      let w = Write (Address 74) (Two 0 0x4040)
        in parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 16, 0, 74, 0, 2]) == Right ()
             && parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 16, 0, 74, 0, 1])
               == Left (UnexpectedEcho (B.pack [0, 74, 0, 1]))
     ),
     ( "a FLOAT is written low word first",
-      encode (register 74) (Real 3.0) == Right (0 :| [0x4040])
+      encode (register 74) (Real 3.0) == Right (Two 0 0x4040)
     ),
     ( "every writable register reads back what encode writes",
       all roundTrips (filter ((/= ReadOnly) . registerAccess) Table.navigator20)
@@ -283,8 +284,91 @@ checks =
                   && sameCost (targetCost t) (costOf (registerPersistence r))
         )
         targets
+    ),
+    ( "a read asks for 1 to 125 registers, as Modbus allows",
+      quantity 0 == Nothing
+        && fmap quantityCount (quantity 1) == Just 1
+        && fmap quantityCount (quantity 125) == Just 125
+        && quantity 126 == Nothing
+    ),
+    ( "an EEPROM write sends nothing to a register that holds the value already",
+      writeAgainst [Right (B.pack [0, 46])] [] SEepromCycle (register 1032) (Count 46)
+        == (Unchanged, [ReadOf (Address 1032) singleRegister])
+    ),
+    ( "an EEPROM write that changes the value reads, writes and reads back, pausing between",
+      writeAgainst [Right (B.pack [0, 45]), Right (B.pack [0, 46])] [Right ()] SEepromCycle (register 1032) (Count 46)
+        == ( Sent Confirmed,
+             [ ReadOf (Address 1032) singleRegister,
+               Pause,
+               WriteOf (Write (Address 1032) (One 46)),
+               Pause,
+               ReadOf (Address 1032) singleRegister
+             ]
+           )
+    ),
+    ( "an EEPROM write whose check fails sends nothing",
+      writeAgainst [Left (DeviceException ServerDeviceFailure)] [] SEepromCycle (register 1032) (Count 46)
+        == (CheckFailed (DeviceException ServerDeviceFailure), [ReadOf (Address 1032) singleRegister])
+    ),
+    ( "a volatile write is sent without a check, and read back",
+      writeAgainst [Right (B.pack [0, 0, 0x40, 0x40])] [Right ()] SFree (register 74) (Real 3.0)
+        == ( Sent Confirmed,
+             [WriteOf (Write (Address 74) (Two 0 0x4040)), Pause, ReadOf (Address 74) registerPair]
+           )
+    ),
+    ( "a read-back tells another value from a failure",
+      fst (writeAgainst [Right (B.pack [0, 0, 0x40, 0])] [Right ()] SFree (register 74) (Real 3.0))
+        == Sent (DidNotStick (B.pack [0, 0, 0x40, 0]))
+        && fst (writeAgainst [Left (Ended NoAnswer)] [Right ()] SFree (register 74) (Real 3.0))
+          == Sent (ReadBackFailed (Ended NoAnswer))
+    ),
+    ( "a write that fails is not read back",
+      writeAgainst [] [Left (Ended NoAnswer)] SFree (register 74) (Real 3.0)
+        == (Failed (Ended NoAnswer), [WriteOf (Write (Address 74) (Two 0 0x4040))])
+    ),
+    ( "a write-only register is not read back",
+      writeAgainst [] [Right ()] SFree (register 1650) (Real 21.5)
+        == (Sent Unconfirmed, [WriteOf (Write (Address 1650) (Two 0 0x41AC))])
+    ),
+    ( "a value the register cannot hold sends nothing, not even a check",
+      writeAgainst [] [] SEepromCycle (register 1032) (Count 20)
+        == (Refused (OutOfRange (Range 35 95) 20), [])
     )
   ]
+
+-- | A request a write made of the fake controller.
+data Request
+  = ReadOf Address Quantity
+  | WriteOf Write
+  | Pause
+  deriving (Show, Eq)
+
+-- | A controller that answers each read and each write with the next of its
+-- answers, and does not answer once they run out.
+data Fake = Fake
+  { fakeReads :: [Either Failure B.ByteString],
+    fakeWrites :: [Either Failure ()],
+    -- | latest first
+    fakeLog :: [Request]
+  }
+
+-- | What a write came to against the fake, and the requests it made.
+writeAgainst :: [Either Failure B.ByteString] -> [Either Failure ()] -> SCost c -> Register -> Value -> (Outcome c, [Request])
+writeAgainst reads writes cost reg v =
+  reverse . fakeLog <$> runState (writeWith fake cost reg v) (Fake reads writes [])
+  where
+    fake :: Requests (State Fake)
+    fake =
+      Requests
+        { requestRead = \a q -> logged (ReadOf a q) >> state (next fakeReads (\rs f -> f {fakeReads = rs})),
+          requestWrite = \w -> logged (WriteOf w) >> state (next fakeWrites (\ws f -> f {fakeWrites = ws})),
+          requestPause = logged Pause
+        }
+    logged r = modify (\f -> f {fakeLog = r : fakeLog f})
+    next :: (Fake -> [Either Failure a]) -> ([Either Failure a] -> Fake -> Fake) -> Fake -> (Either Failure a, Fake)
+    next answers rest f = case answers f of
+      a : as -> (a, rest as f)
+      [] -> (Left (Ended NoAnswer), f)
 
 -- | 'encode' then 'decode' gives the value back, for a value the register's
 -- range allows: its maximum, or a value of the datatype where none is

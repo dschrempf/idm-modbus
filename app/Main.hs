@@ -191,15 +191,15 @@ widths :: Connection -> Address -> IO [WidthRead]
 widths conn a@(Address n) =
   mapM
     (\(at, q) -> WidthRead at q <$> readRegisters conn ReadHoldingRegisters at q <* pause)
-    [(a, Quantity 1), (a, Quantity 2), (Address (n + 1), Quantity 1)]
+    [(a, singleRegister), (a, registerPair), (Address (n + 1), singleRegister)]
   where
     pause = threadDelay (pollIntervalMicroseconds defaultPoll)
 
 -- | Bytes and nothing else: no datatype is known to spell them as a number.
 widthEntry :: WidthRead -> [(String, String)]
-widthEntry (WidthRead (Address a) (Quantity q) r) =
+widthEntry (WidthRead (Address a) q r) =
   [ ("address", show a),
-    ("quantity", show q),
+    ("quantity", show (quantityCount q)),
     ("status", quote (statusText o)),
     ("exception", maybe "null" show (refusal o)),
     ("raw", either (const "null") (quote . hex) r)

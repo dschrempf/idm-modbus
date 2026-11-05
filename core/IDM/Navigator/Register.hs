@@ -44,11 +44,10 @@ where
 import Data.Bits (shiftL, shiftR, (.&.), (.|.))
 import qualified Data.ByteString as B
 import Data.Int (Int16)
-import Data.List.NonEmpty (NonEmpty (..))
 import Data.Text (Text)
 import Data.Word (Word16, Word32)
 import GHC.Float (castFloatToWord32, castWord32ToFloat, double2Float, float2Double)
-import IDM.Modbus.TCP (Address, Quantity (..))
+import IDM.Modbus.TCP (Address, Quantity, Registers (..), registerPair, singleRegister)
 import Language.Haskell.TH.Syntax (Lift)
 
 -- | Datatype as printed in the parameter list, or as far as a read measured it
@@ -75,12 +74,12 @@ data Datatype
 
 -- | How many 16-bit registers the datatype occupies.
 registerWidth :: Datatype -> Quantity
-registerWidth Float32 = Quantity 2
-registerWidth DWord = Quantity 2
-registerWidth UChar = Quantity 1
-registerWidth Word = Quantity 1
-registerWidth Boolean = Quantity 1
-registerWidth OneRegister = Quantity 1
+registerWidth Float32 = registerPair
+registerWidth DWord = registerPair
+registerWidth UChar = singleRegister
+registerWidth Word = singleRegister
+registerWidth Boolean = singleRegister
+registerWidth OneRegister = singleRegister
 
 -- | Access right. Write-only registers exist and reading them is not an error
 -- worth reporting to a user, it is a mistake in the caller.
@@ -339,7 +338,7 @@ data Refusal
 -- @WORD@ in two's complement. A @BOOL@ is written from a 'Flag', and a
 -- pump's control signal from a 'DriveSignal'. A -1 is an ordinary value
 -- here: what writing a sentinel means is not documented.
-encode :: Register -> Value -> Either Refusal (NonEmpty Word16)
+encode :: Register -> Value -> Either Refusal Registers
 encode reg v = case (registerAccess reg, registerDatatype reg, v) of
   (ReadOnly, _, _) -> Left (NotWritable ReadOnly)
   (_, Float32, Real x)
@@ -347,12 +346,12 @@ encode reg v = case (registerAccess reg, registerDatatype reg, v) of
     | otherwise -> do
         let w = castFloatToWord32 f
         inRange (float2Double f)
-        Right (fromIntegral w :| [fromIntegral (w `shiftR` 16)])
+        Right (Two (fromIntegral w) (fromIntegral (w `shiftR` 16)))
     where
       f = double2Float x
   (_, DWord, Count n) -> do
     w <- whole 0 0xFFFFFFFF n
-    Right (fromIntegral w :| [fromIntegral (w `shiftR` 16)])
+    Right (Two (fromIntegral w) (fromIntegral (w `shiftR` 16)))
   (_, UChar, Count n) -> word16 <$> whole (-32768) 32767 n
   (_, Word, Count n)
     | signedWord reg -> word16 <$> whole (-32768) 32767 n
@@ -373,8 +372,8 @@ encode reg v = case (registerAccess reg, registerDatatype reg, v) of
       | otherwise = i <$ inRange (fromIntegral n)
       where
         i = toInteger n
-    word16 :: Integer -> NonEmpty Word16
-    word16 i = fromIntegral (i .&. 0xFFFF) :| []
+    word16 :: Integer -> Registers
+    word16 i = One (fromIntegral (i .&. 0xFFFF))
 
 -- | Whether a @WORD@ is two's complement. The manual's own minimum decides
 -- the sign, and with it which words are reachable. A bivalence point is
@@ -386,8 +385,10 @@ signedWord :: Register -> Bool
 signedWord = maybe False ((< 0) . rangeMinimum) . registerRange
 
 -- | Registers as bytes in wire order, as a read returns them.
-wire :: NonEmpty Word16 -> B.ByteString
-wire = B.pack . concatMap (\w -> [fromIntegral (w `shiftR` 8), fromIntegral (w .&. 0xFF)])
+wire :: Registers -> B.ByteString
+wire rs = B.pack (concatMap bytes (case rs of One v -> [v]; Two v w -> [v, w]))
+  where
+    bytes w = [fromIntegral (w `shiftR` 8), fromIntegral (w .&. 0xFF)]
 
 toWords :: B.ByteString -> [Word16]
 toWords bs

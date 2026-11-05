@@ -25,3 +25,18 @@ suite, so it is not chosen here:
    returned" to "send this" or "stop with this outcome", plus the IO around
    it, and check the pure step. The smallest change to the suite; it still
    exports the plan, and leaves the IO glue unchecked.
+
+## Outcome
+
+None of the three options alone could reach the EEPROM branch: the only
+target, `PvSurplus`, is `'Free`, and a test cannot build a `Target`. So the
+core takes the cost and the register instead of a target. It is
+`writeWith :: Monad m => Requests m -> SCost c -> Register -> Value -> m (Outcome c)`,
+in `IDM.Navigator.Write.Core`, and `Requests` holds the read, the write and the
+pause. That module, `IDM.Modbus.TCP` and `IDM.Navigator.Register` moved to
+`core/`, the private sublibrary `core`. The library re-exports the other two,
+so a consumer still writes only a target. The test suite runs `writeWith` in
+`State` against canned answers and checks the outcome and the requests made.
+That adds eight checks, one per branch, and `checks` stays
+`[(String, Bool)]`. The glue in `write`, which hands the core a connection's
+requests, is the only part left unchecked.

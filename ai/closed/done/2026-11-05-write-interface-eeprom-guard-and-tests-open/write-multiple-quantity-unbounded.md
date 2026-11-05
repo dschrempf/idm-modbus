@@ -23,3 +23,13 @@ one or two, so nothing in the package reaches the limit. A consumer building a
    return, unsent, for a count out of bounds. The exports stay the same,
    but the check moves to run time.
 3. Leave it, documented.
+
+## Outcome
+
+Neither option 1 nor 2. `Write` is now `Write {writeAddress, writeValues}`, and
+`writeValues` is `One Word16`, function code 6, or `Two Word16 Word16`,
+function code 16. That is as wide as any Navigator datatype goes, and `encode`
+returns that shape, so no count is left to check. `Quantity` is abstract:
+`quantity` makes one from 1 to 125, and `singleRegister` and `registerPair`
+are the two the package uses. A read wider than a register stays possible
+for a consumer.

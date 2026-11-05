@@ -48,12 +48,31 @@ common exec
     -Wall -Wunused-packages -Wredundant-constraints -threaded -rtsopts
     -with-rtsopts=-N
 
-library
+-- What the test suite needs and a consumer must not reach: the core of a
+-- write takes any register, not only a target.
+library core
   import:          lib
   exposed-modules:
     IDM.Modbus.TCP
-    IDM.Navigator.Client
     IDM.Navigator.Register
+    IDM.Navigator.Write.Core
+
+  hs-source-dirs:  core
+  build-depends:
+    , base              >=4.7 && <5
+    , bytestring
+    , network
+    , template-haskell
+    , text
+
+library
+  import:             lib
+  reexported-modules:
+    IDM.Modbus.TCP,
+    IDM.Navigator.Register
+
+  exposed-modules:
+    IDM.Navigator.Client
     IDM.Navigator.Table
     IDM.Navigator.Target
     IDM.Navigator.Web
@@ -66,12 +85,13 @@ library
     IDM.Navigator.Target.Splice
     IDM.Navigator.Web.Connection
 
-  hs-source-dirs:  src
+  hs-source-dirs:     src
   build-depends:
     , aeson
     , base              >=4.7 && <5
     , bytestring
     , containers
+    , idm-modbus:core
     , network
     , stm
     , template-haskell
@@ -120,8 +140,10 @@ test-suite idm-modbus-test
   hs-source-dirs: test
   build-depends:
     , aeson
-    , base        >=4.7 && <5
+    , base             >=4.7 && <5
     , bytestring
     , containers
     , idm-modbus
+    , idm-modbus:core
     , text
+    , transformers

@@ -6,14 +6,15 @@ working tree. They are the overflow to +Inf in `encode`, `costAt` checking a
 target's type against the table, the refusal of a write-only EEPROM target,
 and the stale help text and comments.
 
-Nothing here blocks 74, which is volatile. `eeprom-guard-needs-exact-round-trip`
-must be settled before the first EEPROM target enters
-`data/navigator-2.0-targets.tsv`. The others are code, and need no machine.
+## Outcome
 
-- `eeprom-guard-needs-exact-round-trip.md`: `Unchanged` compares bytes, so
-  the guard holds only if the controller reads back what was written; measure,
-  or compare decoded values.
+Closed on 2026-11-05. The two code items are done, each with its outcome in
+its file. The measurement has its own todo,
+`eeprom-guard-needs-exact-round-trip`. It stays the gate for the first
+EEPROM target, 4108 in session 6b of `run-the-open-todos-in-six-sessions`.
+
 - `write-decision-logic-untested.md`: the branch of `write` that guards the
-  EEPROM has no check; how to give it one.
+  EEPROM had no check; now a pure core, checked against a fake controller.
 - `write-multiple-quantity-unbounded.md`: `WriteMultiple` and `Quantity`
-  admit counts Modbus forbids.
+  admitted counts Modbus forbids; now one register or two, and a smart
+  constructor.

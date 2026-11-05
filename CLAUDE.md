@@ -127,7 +127,12 @@ The modules stack, each refusing to know the next one's business:
   target, and `targetRegister`, total.
 - `IDM.Navigator.Write` — `write`, whose `Outcome c` carries the cost. An
   EEPROM write reads first and sends nothing when the value is held already;
-  a volatile one always sends. Both read back.
+  a volatile one always sends. Both read back. The decision is `writeWith`
+  in `IDM.Navigator.Write.Core`, over any register and any monad, so the
+  test suite runs it against a fake controller in `State`. It lives with
+  `IDM.Modbus.TCP` and `IDM.Navigator.Register` in `core/`, the private
+  sublibrary `core`, which the library re-exports but for that module: a
+  consumer reaches a register only through a target.
 
 The web backend has a stack of its own beside it, joined to the first only by
 `Host` and by the parameter identifier:

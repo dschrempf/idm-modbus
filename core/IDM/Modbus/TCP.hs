@@ -22,7 +22,11 @@ module IDM.Modbus.TCP
     disconnect,
     FunctionCode (..),
     Address (..),
-    Quantity (..),
+    Quantity,
+    quantity,
+    quantityCount,
+    singleRegister,
+    registerPair,
     ExceptionCode (..),
     exceptionByte,
     Failure (..),
@@ -30,6 +34,7 @@ module IDM.Modbus.TCP
     TransactionId (..),
     readRegisters,
     parseResponse,
+    Registers (..),
     Write (..),
     writeRegisters,
     parseWriteResponse,
@@ -40,8 +45,6 @@ import Control.Exception (Exception, IOException, bracket, bracketOnError, try)
 import Data.Bits (testBit, (.&.))
 import qualified Data.ByteString as B
 import Data.IORef (IORef, atomicModifyIORef', newIORef, readIORef, writeIORef)
-import Data.List.NonEmpty (NonEmpty)
-import qualified Data.List.NonEmpty as NE
 import Data.Word (Word16, Word8)
 import Language.Haskell.TH.Syntax (Lift)
 import qualified Network.Socket as N
@@ -71,8 +74,20 @@ newtype Address = Address Word16
   deriving (Show, Eq, Ord, Lift)
 
 -- | Number of 16-bit registers to read.
-newtype Quantity = Quantity Word16
+newtype Quantity = Quantity {quantityCount :: Word16}
   deriving (Show, Eq)
+
+-- | A quantity Modbus allows a read to ask for, 1 to 125.
+quantity :: Word16 -> Maybe Quantity
+quantity n
+  | n >= 1 && n <= 125 = Just (Quantity n)
+  | otherwise = Nothing
+
+singleRegister :: Quantity
+singleRegister = Quantity 1
+
+registerPair :: Quantity
+registerPair = Quantity 2
 
 -- | The two read function codes. The Navigator serves the same address space
 -- under both, so the choice is ours; 'ReadHoldingRegisters' is the default,
@@ -197,18 +212,24 @@ readRegisters ::
   Address ->
   Quantity ->
   IO (Either Failure B.ByteString)
-readRegisters conn fc (Address addr) (Quantity quantity) =
+readRegisters conn fc (Address addr) (Quantity n) =
   transact conn pdu (\tid -> parseResponse tid fc)
   where
-    pdu = B.pack [functionCodeByte fc] <> word16BE addr <> word16BE quantity
+    pdu = B.pack [functionCodeByte fc] <> word16BE addr <> word16BE n
 
--- | A write, as the Navigator's own examples send it.
-data Write
-  = -- | one register, function code 6; a @UCHAR@, @WORD@ or @BOOL@
-    WriteSingle Address Word16
-  | -- | consecutive registers, function code 16; a @FLOAT@. Modbus allows
-    -- at most 123, and nothing here checks it.
-    WriteMultiple Address (NonEmpty Word16)
+-- | What a write sends, as the Navigator's own examples send it: one
+-- register or two, which is as wide as its datatypes go.
+data Registers
+  = -- | function code 6
+    One Word16
+  | -- | function code 16; the register at the address, then the one after it
+    Two Word16 Word16
+  deriving (Show, Eq)
+
+data Write = Write
+  { writeAddress :: Address,
+    writeValues :: Registers
+  }
   deriving (Show, Eq)
 
 -- | Send a write and wait for the device to acknowledge it.
@@ -219,13 +240,9 @@ writeRegisters :: Connection -> Write -> IO (Either Failure ())
 writeRegisters conn w = transact conn (writePdu w) (`parseWriteResponse` w)
 
 writePdu :: Write -> B.ByteString
-writePdu (WriteSingle (Address addr) v) = B.pack [6] <> word16BE addr <> word16BE v
-writePdu (WriteMultiple (Address addr) vs) =
-  B.pack [16]
-    <> word16BE addr
-    <> word16BE (fromIntegral (length vs))
-    <> B.pack [fromIntegral (2 * length vs)]
-    <> foldMap word16BE vs
+writePdu (Write (Address addr) rs) = case rs of
+  One v -> B.pack [6] <> word16BE addr <> word16BE v
+  Two v w -> B.pack [16] <> word16BE addr <> word16BE 2 <> B.pack [4] <> word16BE v <> word16BE w
 
 -- | Read a frame as the acknowledgement of this write: the device echoes the
 -- address and the value, or the address and the quantity.
@@ -234,9 +251,10 @@ parseWriteResponse expected w frame = do
   body <- frameBody expected fc frame
   if body == echo then Right () else Left (UnexpectedEcho body)
   where
-    (fc, echo) = case w of
-      WriteSingle (Address addr) v -> (6, word16BE addr <> word16BE v)
-      WriteMultiple (Address addr) vs -> (16, word16BE addr <> word16BE (fromIntegral (NE.length vs)))
+    Address addr = writeAddress w
+    (fc, echo) = case writeValues w of
+      One v -> (6, word16BE addr <> word16BE v)
+      Two _ _ -> (16, word16BE addr <> word16BE 2)
 
 -- | Send a PDU and parse its answer. A failure that leaves the stream out of
 -- step ends the connection.

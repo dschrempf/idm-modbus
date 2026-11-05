@@ -1,9 +1,3 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE GADTs #-}
-{-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE StandaloneDeriving #-}
-
 -- |
 -- Module      :  IDM.Navigator.Write
 -- Description :  Writing a register of a Navigator 2.0, at a cost the type states
@@ -30,73 +24,19 @@ module IDM.Navigator.Write
 where
 
 import Control.Concurrent (threadDelay)
-import qualified Data.ByteString as B
-import Data.List.NonEmpty (NonEmpty (..))
-import Data.Word (Word16)
 import IDM.Modbus.TCP
 import IDM.Navigator.Client (Poll (..))
-import IDM.Navigator.Register
+import IDM.Navigator.Register (Value)
 import IDM.Navigator.Target
-
--- | What 'write' came to, by what the write costs.
-data Outcome (c :: Cost) where
-  -- | the register held the value already; nothing was sent
-  Unchanged :: Outcome 'EepromCycle
-  -- | the write was acknowledged; at 'EepromCycle, one cycle was spent
-  Sent :: Confirmation -> Outcome c
-  -- | the value does not encode; nothing was sent
-  Refused :: Refusal -> Outcome c
-  -- | the read before an EEPROM write failed; nothing was sent
-  CheckFailed :: Failure -> Outcome 'EepromCycle
-  -- | the write failed. Unless the failure is 'Unsent', the request went
-  -- out, and may have taken effect.
-  Failed :: Failure -> Outcome c
-
-deriving instance Show (Outcome c)
-
-deriving instance Eq (Outcome c)
-
--- | What the register read after an acknowledged write.
-data Confirmation
-  = -- | the value written
-    Confirmed
-  | -- | another value, its bytes in wire order
-    DidNotStick B.ByteString
-  | -- | a write-only register, not read back
-    Unconfirmed
-  | ReadBackFailed Failure
-  deriving (Show, Eq)
+import IDM.Navigator.Write.Core
 
 -- | Write a value to a target, pausing between requests as a sweep does.
-write :: forall c. Connection -> Poll -> Target c -> Value -> IO (Outcome c)
-write conn poll target v = case encode reg v of
-  Left r -> pure (Refused r)
-  Right ws -> case targetCost target of
-    SFree -> send ws
-    SEepromCycle ->
-      readBack >>= \held -> case held of
-        Left f -> pure (CheckFailed f)
-        Right old
-          | old == wire ws -> pure Unchanged
-          | otherwise -> pause >> send ws
+write :: Connection -> Poll -> Target c -> Value -> IO (Outcome c)
+write conn poll target = writeWith requests (targetCost target) (targetRegister target)
   where
-    reg = targetRegister target
-    addr = registerAddress reg
-    readBack = readRegisters conn (pollFunctionCode poll) addr (registerWidth (registerDatatype reg))
-    pause = threadDelay (pollIntervalMicroseconds poll)
-    send :: NonEmpty Word16 -> IO (Outcome c)
-    send ws =
-      writeRegisters conn (request ws) >>= \sent -> case sent of
-        Left f -> pure (Failed f)
-        Right ()
-          | isReadable (registerAccess reg) -> do
-              pause
-              Sent . confirm (wire ws) <$> readBack
-          | otherwise -> pure (Sent Unconfirmed)
-    request (w :| []) = WriteSingle addr w
-    request ws = WriteMultiple addr ws
-    confirm bytes held = case held of
-      Left f -> ReadBackFailed f
-      Right now
-        | now == bytes -> Confirmed
-        | otherwise -> DidNotStick now
+    requests =
+      Requests
+        { requestRead = readRegisters conn (pollFunctionCode poll),
+          requestWrite = writeRegisters conn,
+          requestPause = threadDelay (pollIntervalMicroseconds poll)
+        }
