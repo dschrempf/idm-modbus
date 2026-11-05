@@ -7,8 +7,7 @@ the grouping and the order.
 
 ## Order
 
-1 and 2 are done. 4 and 5 can start now, 6 comes after 5, and 3 runs in the
-background.
+1, 2 and 5 are done. 4 and 6 can start now, and 3 runs in the background.
 
 ## 1. Desk: no heating, no writes
 
@@ -99,6 +98,10 @@ inverter's figure on this machine (`doc/verification-2026-10-16-draw.md`).
 
 - `write-interface-with-eeprom-cost-visible`: no machine, independent of 1–4.
 
+Done on 2026-11-05: built, with 74 the one target; see the note, now closed.
+Each later write experiment activates its register in
+`data/navigator-2.0-targets.tsv` as it begins.
+
 ## 6. Write experiments
 
 - **6a, register 74:** `unit-of-pv-surplus-74-unsettled`, and
@@ -111,5 +114,9 @@ inverter's figure on this machine (`doc/verification-2026-10-16-draw.md`).
 The other registers of the "values stop" note follow, a few per later write
 session.
 
-Open: whether 6a waits for session 5 or Dominik allows a one-off write
-outside the library, which would let it run first.
+6a also sets the PV menu for a store charge, the house's use of the surplus;
+see `unit-of-pv-surplus-74-unsettled`.
+
+Untested, and for these sessions to watch: writing while a second Modbus
+client polls. Session 3's watch is the second client, and the stall it is kept
+apart from session 2 for may hit a write too.

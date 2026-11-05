@@ -8,15 +8,15 @@ own parameter list, and that every claim in it has been checked against a
 running machine. Existing projects in this space are frank about guessing;
 `doc/research.md` says which parts and why.
 
-Reading only, for now. Writing some registers wears out an EEPROM — a
-register's `Persistence`, in `IDM.Navigator.Register`, says whether and how
-fast — and that deserves an interface that makes the cost visible rather than a
-boolean argument.
+Writing some registers wears out an EEPROM — a register's `Persistence`, in
+`IDM.Navigator.Register`, says whether — so a write goes to a `Target` whose
+type states its cost, and only to the few targets listed in
+`data/navigator-2.0-targets.tsv`.
 
 ## Status
 
-Early. The table is complete and verified, the read path works, writing is not
-implemented.
+Early. The table is complete and verified, the read path works. Writing exists
+for one target, the PV surplus at 74, not yet tried on a machine.
 
 ## Use
 
@@ -45,6 +45,10 @@ round and writes a line per request, verbatim but for what names the machine.
 `--enter-fachmann` opens the Fachmann level with the code of the controller's
 clock, and `--leave-fachmann` closes it again.
 
+`idm-write HOST ADDRESS VALUE` writes a target and reads it back. A target
+stored in the EEPROM is read first and left alone if it holds the value
+already; otherwise it is written only with `--eeprom`.
+
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The
 service code is the day and month of the current date. Port 502, unit id 1.
@@ -56,12 +60,15 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `data/navigator-2.0-registers.tsv` | the parameter list, transcribed; the single source of truth |
 | `data/navigator-2.0-enums.tsv` | enumerated values, as literally printed in the manual |
 | `data/navigator-2.0-gltmon-parameters.tsv` | the parameter identifier of a register the manual does not list, where a moved setting showed it; written by hand |
+| `data/navigator-2.0-targets.tsv` | the registers a write may go to, with an English name each; written by hand |
 | `captures/` | what a real machine answered, and nothing the list already says; kept out of git |
-| `tools/transcribe.py` | rebuilds both TSVs from the manual's extracted text |
+| `tools/transcribe.py` | rebuilds both TSVs from the manual's extracted text, and the targets module |
 | `src/IDM/Modbus/TCP.hs` | framing |
 | `src/IDM/Navigator/Register.hs` | what a register is, and how to decode one |
 | `src/IDM/Navigator/Table.hs` | the table, parsed at compile time |
 | `src/IDM/Navigator/Client.hs` | reading, paced |
+| `src/IDM/Navigator/Target.hs` | the targets of a write, generated |
+| `src/IDM/Navigator/Write.hs` | writing, at a cost the type states |
 | `src/IDM/Navigator/Web.hs`, `Web/` | the web backend: its vocabulary, a read-only session, and the user level |
 | `doc/research.md` | sources, community projects, open questions |
 | `doc/verification-2026-09-19.md` | the measurements the decoding rests on |

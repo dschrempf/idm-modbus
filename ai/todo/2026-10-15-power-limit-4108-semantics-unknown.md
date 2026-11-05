@@ -41,7 +41,7 @@ a setting; step 1 is done, and only writing can go further.
 1. Read 4108 and 4112 beside their web settings, if the settings tree has a
    matching one; a matching identifier gives the persistence through the
    parameter list's family.
-2. Once writing exists and the persistence is known: during a long run,
+2. Once the persistence is known, activated as a target: during a long run,
    write a limit below the present draw and watch 4122, the modulation
    (setting 6245, `N2_MODULATION_OVERVIEW`) and 1090. Remove the limit.
 3. Record the outcome in a dated `doc/`.

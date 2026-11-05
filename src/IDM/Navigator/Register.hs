@@ -1,5 +1,9 @@
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveFunctor #-}
 {-# LANGUAGE DeriveLift #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE KindSignatures #-}
+{-# LANGUAGE StandaloneDeriving #-}
 
 -- |
 -- Module      :  IDM.Navigator.Register
@@ -17,6 +21,9 @@ module IDM.Navigator.Register
     Access (..),
     isReadable,
     Persistence (..),
+    Cost (..),
+    costOf,
+    SCost (..),
     Unit (..),
     Source (..),
     Range (..),
@@ -28,15 +35,19 @@ module IDM.Navigator.Register
     Value (..),
     asWritten,
     decode,
+    Refusal (..),
+    encode,
+    wire,
   )
 where
 
-import Data.Bits (shiftL, (.|.))
+import Data.Bits (shiftL, shiftR, (.&.), (.|.))
 import qualified Data.ByteString as B
 import Data.Int (Int16)
+import Data.List.NonEmpty (NonEmpty (..))
 import Data.Text (Text)
 import Data.Word (Word16, Word32)
-import GHC.Float (castWord32ToFloat)
+import GHC.Float (castFloatToWord32, castWord32ToFloat)
 import IDM.Modbus.TCP (Address, Quantity (..))
 import Language.Haskell.TH.Syntax (Lift)
 
@@ -100,6 +111,28 @@ data Persistence
     -- writer must assume the EEPROM
     UnknownPersistence
   deriving (Show, Eq, Ord, Lift)
+
+-- | What a write costs, as a kind: a target of a write carries it in its
+-- type, so that code writing an EEPROM register says so in its signature.
+data Cost
+  = Free
+  | -- | one of the EEPROM's 300000 cycles, where the value changes
+    EepromCycle
+  deriving (Show, Eq, Ord, Lift)
+
+-- | The cost of writing a register of this persistence. Unknown is
+-- 'EepromCycle' until measured.
+costOf :: Persistence -> Cost
+costOf Volatile = Free
+costOf Eeprom = EepromCycle
+costOf UnknownPersistence = EepromCycle
+
+-- | The cost, as a value, for code that only learns it at run time.
+data SCost (c :: Cost) where
+  SFree :: SCost 'Free
+  SEepromCycle :: SCost 'EepromCycle
+
+deriving instance Show (SCost c)
 
 data Unit
   = DegreeCelsius
@@ -272,7 +305,7 @@ navigator reg v = case (registerDatatype reg, v) of
   (UChar, Count n) -> sentinel (n < 0) v
   (Boolean, Count n) -> sentinel (n >= 254) (Flag (n /= 0))
   (Word, Count n)
-    | signedWord -> Measured (meaning (n - if n > 0x7FFF then 65536 else 0))
+    | signedWord reg -> Measured (meaning (n - if n > 0x7FFF then 65536 else 0))
     | otherwise -> sentinel (n == 0xFFFF) v
   -- 'OneRegister' claims no sentinel; 'asWritten' pairs each other datatype
   -- with one constructor, so nothing else arises
@@ -281,18 +314,79 @@ navigator reg v = case (registerDatatype reg, v) of
     sentinel isSentinel w = if isSentinel then NoValue else Measured w
     outOfRange x =
       maybe False (\r -> x < rangeMinimum r || x > rangeMaximum r) (registerRange reg)
-    -- The manual's own minimum decides the sign, and with it which words are
-    -- reachable. A bivalence point is documented down to -90 and a pump's
-    -- control signal down to -1, so both are two's complement and 65535 is a
-    -- value they may legitimately hold, not a sentinel. Every other @WORD@ is
-    -- documented from 0 up, leaving 65535 out of range and free to mean
-    -- absence.
-    signedWord = maybe False ((< 0) . rangeMinimum) (registerRange reg)
     -- A signed percentage is a pump's control signal, and -1 is a state of it.
     meaning n
       | registerUnit reg == Just Percent =
           DriveSignal (if n < 0 then NotDriven else Driven n)
       | otherwise = Count n
+
+-- | Why 'encode' refused a value. Nothing is sent for it.
+data Refusal
+  = -- | a value of another kind than the datatype holds
+    Mismatch Datatype Value
+  | -- | outside the documented range, as the register would hold it
+    OutOfRange Range Double
+  | -- | a whole number the datatype cannot hold
+    Unrepresentable Datatype Integer
+  | -- | not a number, or infinite
+    NotFinite Double
+  | -- | a register nothing may write
+    NotWritable Access
+  deriving (Show, Eq)
+
+-- | The registers that write a value, as 'wire' sends them: the inverse of
+-- 'asWritten', so a @FLOAT@ goes low word first and a @UCHAR@ or a signed
+-- @WORD@ in two's complement. A @BOOL@ is written from a 'Flag', and a
+-- pump's control signal from a 'DriveSignal'. A -1 is an ordinary value
+-- here: what writing a sentinel means is not documented.
+encode :: Register -> Value -> Either Refusal (NonEmpty Word16)
+encode reg v = case (registerAccess reg, registerDatatype reg, v) of
+  (ReadOnly, _, _) -> Left (NotWritable ReadOnly)
+  (_, Float32, Real x)
+    | isNaN x || isInfinite x -> Left (NotFinite x)
+    | otherwise -> do
+        let f = realToFrac x :: Float
+            w = castFloatToWord32 f
+        inRange (realToFrac f)
+        Right (fromIntegral w :| [fromIntegral (w `shiftR` 16)])
+  (_, DWord, Count n) -> do
+    w <- whole 0 0xFFFFFFFF n
+    Right (fromIntegral w :| [fromIntegral (w `shiftR` 16)])
+  (_, UChar, Count n) -> word16 <$> whole (-32768) 32767 n
+  (_, Word, Count n)
+    | signedWord reg -> word16 <$> whole (-32768) 32767 n
+    | otherwise -> word16 <$> whole 0 65535 n
+  (_, Word, DriveSignal d)
+    | signedWord reg && registerUnit reg == Just Percent ->
+        word16 <$> whole (-32768) 32767 (case d of NotDriven -> -1; Driven n -> n)
+  (_, Boolean, Flag b) -> Right (word16 (if b then 1 else 0))
+  (_, OneRegister, Count n) -> word16 <$> whole 0 65535 n
+  (_, d, _) -> Left (Mismatch d v)
+  where
+    inRange x = case registerRange reg of
+      Just r | x < rangeMinimum r || x > rangeMaximum r -> Left (OutOfRange r x)
+      _ -> Right ()
+    whole :: Integer -> Integer -> Int -> Either Refusal Integer
+    whole lo hi n
+      | i < lo || i > hi = Left (Unrepresentable (registerDatatype reg) i)
+      | otherwise = i <$ inRange (fromIntegral n)
+      where
+        i = toInteger n
+    word16 :: Integer -> NonEmpty Word16
+    word16 i = fromIntegral (i .&. 0xFFFF) :| []
+
+-- | Whether a @WORD@ is two's complement. The manual's own minimum decides
+-- the sign, and with it which words are reachable. A bivalence point is
+-- documented down to -90 and a pump's control signal down to -1, so both are
+-- two's complement and 65535 is a value they may legitimately hold, not a
+-- sentinel. Every other @WORD@ is documented from 0 up, leaving 65535 out of
+-- range and free to mean absence.
+signedWord :: Register -> Bool
+signedWord = maybe False ((< 0) . rangeMinimum) . registerRange
+
+-- | Registers as bytes in wire order, as a read returns them.
+wire :: NonEmpty Word16 -> B.ByteString
+wire = B.pack . concatMap (\w -> [fromIntegral (w `shiftR` 8), fromIntegral (w .&. 0xFF)])
 
 toWords :: B.ByteString -> [Word16]
 toWords bs

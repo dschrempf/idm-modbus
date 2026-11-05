@@ -55,12 +55,15 @@ library
     IDM.Navigator.Client
     IDM.Navigator.Register
     IDM.Navigator.Table
+    IDM.Navigator.Target
     IDM.Navigator.Web
     IDM.Navigator.Web.Level
     IDM.Navigator.Web.Session
+    IDM.Navigator.Write
 
   other-modules:
     IDM.Navigator.Table.Parse
+    IDM.Navigator.Target.Splice
     IDM.Navigator.Web.Connection
 
   hs-source-dirs:  src
@@ -100,6 +103,16 @@ executable idm-web
     , text
     , time
 
+executable idm-write
+  import:         exec
+  main-is:        Main.hs
+  hs-source-dirs: app-write
+  build-depends:
+    , base        >=4.7 && <5
+    , bytestring
+    , idm-modbus
+    , text
+
 test-suite idm-modbus-test
   import:         test
   type:           exitcode-stdio-1.0
@@ -109,5 +122,6 @@ test-suite idm-modbus-test
     , aeson
     , base        >=4.7 && <5
     , bytestring
+    , containers
     , idm-modbus
     , text

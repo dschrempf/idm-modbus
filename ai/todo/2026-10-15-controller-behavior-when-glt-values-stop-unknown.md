@@ -22,7 +22,7 @@ consumer can stop the heating.
 
 ## How we might solve it
 
-Per register, once writing exists (`write-interface-with-eeprom-cost-visible`):
+Per register, activated as a target together with this test:
 
 1. Note the gate it needs, and whether setting the gate costs an EEPROM
    cycle; leave a sensor-replacing one ungated where possible.

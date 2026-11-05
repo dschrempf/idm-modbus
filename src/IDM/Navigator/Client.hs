@@ -4,9 +4,8 @@
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 --
--- Read support only. Writing is a separate problem: writing some registers
--- wears out an EEPROM ('registerPersistence'), and that deserves its own
--- interface rather than an extra argument here. See the changelog.
+-- Reading only. Writing some registers wears out an EEPROM
+-- ('registerPersistence'), and has its interface in "IDM.Navigator.Write".
 module IDM.Navigator.Client
   ( Poll (..),
     defaultPoll,

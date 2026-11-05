@@ -7,9 +7,9 @@
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 --
--- A Navigator answers read requests and nothing else that matters here, so this
--- module implements the request/response framing for the two read function
--- codes and leaves the rest of the specification alone.
+-- The request/response framing for the two read function codes and the two
+-- write function codes a Navigator answers, and nothing else of the
+-- specification.
 module IDM.Modbus.TCP
   ( Connection,
     Host (..),
@@ -30,6 +30,9 @@ module IDM.Modbus.TCP
     TransactionId (..),
     readRegisters,
     parseResponse,
+    Write (..),
+    writeRegisters,
+    parseWriteResponse,
   )
 where
 
@@ -37,6 +40,8 @@ import Control.Exception (Exception, IOException, bracket, bracketOnError, try)
 import Data.Bits (testBit, (.&.))
 import qualified Data.ByteString as B
 import Data.IORef (IORef, atomicModifyIORef', newIORef, readIORef, writeIORef)
+import Data.List.NonEmpty (NonEmpty)
+import qualified Data.List.NonEmpty as NE
 import Data.Word (Word16, Word8)
 import Language.Haskell.TH.Syntax (Lift)
 import qualified Network.Socket as N
@@ -70,8 +75,8 @@ newtype Quantity = Quantity Word16
   deriving (Show, Eq)
 
 -- | The two read function codes. The Navigator serves the same address space
--- under both, so the choice is ours; 'ReadHoldingRegisters' is the default
--- because write support will need it.
+-- under both, so the choice is ours; 'ReadHoldingRegisters' is the default,
+-- the registers writes go to.
 data FunctionCode
   = ReadHoldingRegisters
   | ReadInputRegisters
@@ -106,13 +111,16 @@ exceptionByte IllegalDataValue = 3
 exceptionByte ServerDeviceFailure = 4
 exceptionByte (OtherException n) = n
 
--- | Why a read did not produce registers. 'DeviceException' is the ordinary
--- case on a Navigator: an address belonging to hardware that is not fitted
--- answers 'IllegalDataAddress'.
+-- | Why a read did not produce registers, or a write was not acknowledged.
+-- 'DeviceException' is the ordinary case on a Navigator: an address belonging
+-- to hardware that is not fitted answers 'IllegalDataAddress'.
 data Failure
   = DeviceException ExceptionCode
   | ShortResponse Int
   | UnexpectedFunctionCode Word8
+  | -- | a write acknowledged with another address, value or quantity than
+    -- was sent, as received
+    UnexpectedEcho B.ByteString
   | -- | sent; this read ended the connection
     Ended Ending
   | -- | not sent: the connection had ended
@@ -190,22 +198,66 @@ readRegisters ::
   Quantity ->
   IO (Either Failure B.ByteString)
 readRegisters conn fc (Address addr) (Quantity quantity) =
+  transact conn pdu (\tid -> parseResponse tid fc)
+  where
+    pdu = B.pack [functionCodeByte fc] <> word16BE addr <> word16BE quantity
+
+-- | A write, as the Navigator's own examples send it.
+data Write
+  = -- | one register, function code 6; a @UCHAR@, @WORD@ or @BOOL@
+    WriteSingle Address Word16
+  | -- | consecutive registers, function code 16, at most 123 of them; a
+    -- @FLOAT@
+    WriteMultiple Address (NonEmpty Word16)
+  deriving (Show, Eq)
+
+-- | Send a write and wait for the device to acknowledge it.
+--
+-- A write that ends the connection may have reached the device, and taken
+-- effect, before the answer was lost.
+writeRegisters :: Connection -> Write -> IO (Either Failure ())
+writeRegisters conn w = transact conn (writePdu w) (`parseWriteResponse` w)
+
+writePdu :: Write -> B.ByteString
+writePdu (WriteSingle (Address addr) v) = B.pack [6] <> word16BE addr <> word16BE v
+writePdu (WriteMultiple (Address addr) vs) =
+  B.pack [16]
+    <> word16BE addr
+    <> word16BE (fromIntegral (length vs))
+    <> B.pack [fromIntegral (2 * length vs)]
+    <> foldMap word16BE vs
+
+-- | Read a frame as the acknowledgement of this write: the device echoes the
+-- address and the value, or the address and the quantity.
+parseWriteResponse :: TransactionId -> Write -> B.ByteString -> Either Failure ()
+parseWriteResponse expected w frame = do
+  body <- frameBody expected fc frame
+  if body == echo then Right () else Left (UnexpectedEcho body)
+  where
+    (fc, echo) = case w of
+      WriteSingle (Address addr) v -> (6, word16BE addr <> word16BE v)
+      WriteMultiple (Address addr) vs -> (16, word16BE addr <> word16BE (fromIntegral (NE.length vs)))
+
+-- | Send a PDU and parse its answer. A failure that leaves the stream out of
+-- step ends the connection.
+transact ::
+  Connection ->
+  B.ByteString ->
+  (TransactionId -> B.ByteString -> Either Failure a) ->
+  IO (Either Failure a)
+transact conn pdu parse =
   readIORef (connectionEnded conn) >>= \case
     Just e -> pure (Left (Unsent e))
     Nothing -> do
       tid <- nextTransaction conn
-      let pdu =
-            B.pack [functionCodeByte fc]
-              <> word16BE addr
-              <> word16BE quantity
-          adu =
+      let adu =
             word16BE tid
               <> word16BE 0 -- protocol identifier
               <> word16BE (fromIntegral (B.length pdu + 1))
               <> B.pack [unUnitId (connectionUnitId conn)]
               <> pdu
       received <- exchange conn adu
-      let result = either (Left . Ended) (parseResponse (TransactionId tid) fc) received
+      let result = either (Left . Ended) (parse (TransactionId tid)) received
       case result of
         Left (Ended e) -> do
           writeIORef (connectionEnded conn) (Just e)
@@ -237,7 +289,16 @@ exchange conn adu = do
 -- | Read a frame, header and body, as the answer to the request with this
 -- transaction id and function code.
 parseResponse :: TransactionId -> FunctionCode -> B.ByteString -> Either Failure B.ByteString
-parseResponse expected fc frame
+parseResponse expected fc frame =
+  frameBody expected (functionCodeByte fc) frame >>= \body -> case B.uncons body of
+    -- first byte is the byte count, which we can rebuild
+    Just (_, payload) -> Right payload
+    Nothing -> Left (ShortResponse 0)
+
+-- | The PDU after the function code of a frame answering the request with
+-- this transaction id and function code.
+frameBody :: TransactionId -> Word8 -> B.ByteString -> Either Failure B.ByteString
+frameBody expected fc frame
   | B.length frame < headerLength
       || B.length frame /= headerLength - 2 + lengthField frame
       || lengthField frame > maxLength =
@@ -246,11 +307,8 @@ parseResponse expected fc frame
   | testBit returned 7 = case B.uncons body of
       Just (c, _) -> Left (DeviceException (exceptionCode c))
       Nothing -> Left (ShortResponse 0)
-  | returned /= functionCodeByte fc = Left (UnexpectedFunctionCode returned)
-  | otherwise = case B.uncons body of
-      -- first byte is the byte count, which we can rebuild
-      Just (_, payload) -> Right payload
-      Nothing -> Left (ShortResponse 0)
+  | returned /= fc = Left (UnexpectedFunctionCode returned)
+  | otherwise = Right body
   where
     answered = TransactionId (beWord16 (B.take 2 frame))
     returned = B.index frame 7

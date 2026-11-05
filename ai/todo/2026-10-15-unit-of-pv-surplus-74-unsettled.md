@@ -20,17 +20,27 @@ number shows only that it is stored, not how it is scaled.
 
 ## How we might solve it
 
-This needs two writes, so it waits until writing exists or until you decide
-on a one-off write outside the library:
+74 is the one target of the write interface, `PvSurplus`, and this is the
+test its activation goes with:
 
 1. Set `N2_PV_SIGNAL` to `N2_GLTSF` (key 5), the building management option.
    This is an EEPROM setting, so it costs one cycle. A consumer that feeds
    the surplus needs it set anyway.
-2. Write 74 = 3.0. Read as kW, that is more than the machine draws, and the
-   PV function should engage: watch the PV status and setpoint raises on the
-   web backend. Read as W, it is nothing, and the PV function stays idle.
-   74 is volatile, so the write costs no EEPROM cycle.
-3. Write 74 = 0 again, and record the outcome in a dated `doc/`.
+2. Set the PV menu (812184, "Parameter Photovoltaik") for what the house
+   wants, a store charge rather than hot water: `PV001` Wärmespeicher laden
+   "Ja", `PV006` Wärmespeicher Maximaltemperatur 35 °C if its range allows,
+   `PV002` Trinkwarmwasserbereitung "Nein", `PV013` Heizgrenze überspringen
+   as wanted outside the heating season. The menu is not in the 2026-10-01
+   capture, probably hidden while `PV008` is `N2_NONE`; capture it once
+   shown.
+3. `idm-write HOST 74 3.0`, repeated every minute or so. Read as kW, that is
+   more than the machine draws (0.67 kW at the floor,
+   `doc/verification-2026-11-05-floor.md`), and the store charge should
+   start once `PV011`'s average (2 min) exceeds the forecast at 4122: watch
+   1090, B38 at 1008 and the web backend's PV status. Read as W, it is
+   nothing, and the PV function stays idle. 74 is volatile, so no EEPROM
+   cycle is spent.
+4. `idm-write HOST 74 0`, and record the outcome in a dated `doc/`.
 
-Once settled, the outcome belongs to the write interface's documentation of
-74 as well as to `doc/research.md`.
+Once settled, the outcome belongs to the Haddock of `PvSurplus` (via the
+targets file and `tools/transcribe.py`) as well as to `doc/research.md`.

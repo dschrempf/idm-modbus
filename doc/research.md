@@ -232,8 +232,8 @@ every mode. See
   chapter 4.1 defines only `RO`, `RW` and `W`. Read as "the building
   management system may supply this, and may read it back", which is what the
   worked examples in chapter 4.3 do with them. Whether writing takes effect
-  without the matching menu parameter set to "Ja" is untested; writing is not
-  implemented. For the PV block there is at least a named gate — PV008, see
+  without the matching menu parameter set to "Ja" is untested; writing exists,
+  but has not been tried on the machine. For the PV block there is at least a named gate — PV008, see
   above — and it is not itself addressable.
 - **Revision drift.** Revision 10 documents software 20.21-101; this machine
   runs 20.24. No address in the manual is missing from the machine, so nothing
@@ -265,8 +265,8 @@ every mode. See
   setup asks for the pump's rated power in watts too, but that is a field in
   the energy manager, not the register. The capture cannot decide it: 74, 78
   and 4122 all read exactly 0.0 on this machine, which has no PV system. It
-  matters only once writing exists, and it should be settled by writing a known
-  value and reading the controller's own display back, not by argument.
+  should be settled by writing a known value and reading the controller's own
+  display back, not by argument; `idm-write` can write it.
 - **The least draw while heating, away from one point.** The floor's draw,
   above, was measured once, at 8.3 °C outdoors and 27.8 °C flow; colder air
   or a warmer flow draws more at the same speed. The hot water floor,

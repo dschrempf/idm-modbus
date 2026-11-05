@@ -11,10 +11,13 @@ import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy.Char8 as BL
 import Data.List (group, sort)
+import Data.List.NonEmpty (NonEmpty (..))
+import qualified Data.Map.Strict as M
 import qualified Data.Text as T
-import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity (..), TransactionId (..), parseResponse)
+import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse)
 import IDM.Navigator.Register
 import qualified IDM.Navigator.Table as Table
+import IDM.Navigator.Target
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Level (fachmannCode)
 import System.Exit (exitFailure)
@@ -242,8 +245,70 @@ checks =
              InfoCells [T.pack "Laufzeit Stufe 1", T.pack "39.9h"],
              InfoCells [T.pack "a & b AB &copy; &"]
            ]
+    ),
+    ( "a write of one register is acknowledged by its echo, and only by it",
+      let w = WriteSingle (Address 1710) 1
+       in parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 6, 0x06, 0xAE, 0, 1]) == Right ()
+            && parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 6, 0x06, 0xAE, 0, 0])
+              == Left (UnexpectedEcho (B.pack [0x06, 0xAE, 0, 0]))
+            && parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 3, 1, 0x86, 2])
+              == Left (DeviceException IllegalDataAddress)
+    ),
+    ( "a write of several registers is acknowledged by its address and quantity",
+      let w = WriteMultiple (Address 74) (0 :| [0x4040])
+       in parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 16, 0, 74, 0, 2]) == Right ()
+            && parseWriteResponse (TransactionId 7) w (B.pack [0, 7, 0, 0, 0, 6, 1, 16, 0, 74, 0, 1])
+              == Left (UnexpectedEcho (B.pack [0, 74, 0, 1]))
+    ),
+    ( "a FLOAT is written low word first",
+      encode (register 74) (Real 3.0) == Right (0 :| [0x4040])
+    ),
+    ( "every writable register reads back what encode writes",
+      all roundTrips (filter ((/= ReadOnly) . registerAccess) Table.navigator20)
+    ),
+    ( "a write the register cannot hold is refused before anything is sent",
+      encode (register 1694) (Count 70) == Left (OutOfRange (Range 20 65) 70)
+        && encode (register 1694) (Real 40) == Left (Mismatch UChar (Real 40))
+        && either isNotFinite (const False) (encode (register 74) (Real (0 / 0)))
+        && encode (register 1000) (Real 1) == Left (NotWritable ReadOnly)
+        && encode (register 1710) (Count 1) == Left (Mismatch Boolean (Count 1))
+    ),
+    ( "a target is the table's register, at the cost its persistence implies",
+      all
+        ( \(SomeTarget t) ->
+            let r = targetRegister t
+             in M.lookup (registerAddress r) Table.byAddress == Just r
+                  && sameCost (targetCost t) (costOf (registerPersistence r))
+        )
+        targets
     )
   ]
+
+-- | 'encode' then 'decode' gives the value back, for a value the register's
+-- range allows: its maximum, or a value of the datatype where none is
+-- documented.
+roundTrips :: Register -> Bool
+roundTrips r = case registerDatatype r of
+  Float32 ->
+    let x = maybe 21.5 rangeMaximum (registerRange r)
+     in back (Real x) == Right (Just (Measured (Real (realToFrac (realToFrac x :: Float)))))
+  Boolean -> back (Flag True) == Right (Just (Measured (Flag True)))
+  _ ->
+    let n = maybe 1 (round . rangeMaximum) (registerRange r)
+        v
+          | registerUnit r == Just Percent && maybe False ((< 0) . rangeMinimum) (registerRange r) = DriveSignal (Driven n)
+          | otherwise = Count n
+     in back v == Right (Just (Measured v))
+  where
+    back v = decode r . wire <$> encode r v
+
+isNotFinite :: Refusal -> Bool
+isNotFinite (NotFinite _) = True
+isNotFinite _ = False
+
+sameCost :: SCost c -> Cost -> Bool
+sameCost SFree c = c == Free
+sameCost SEepromCycle c = c == EepromCycle
 
 json :: String -> A.Value
 json s = case A.decode (BL.pack s) of

@@ -31,8 +31,9 @@ writing 1712 = 1 leaves the request standing.
 
 ## How we might solve it
 
-Once writing exists (`write-interface-with-eeprom-cost-visible`); all three
-are volatile, so no EEPROM cycle is spent:
+Activate each in `data/navigator-2.0-targets.tsv` as its test begins; the
+activation goes with the test. All three are volatile, so no EEPROM cycle is
+spent:
 
 1. With the tank below its setpoint, write 1713 = 1 and watch 1090, 1093,
    B48/B41 and the web backend until the charge ends; then write 0.
@@ -41,5 +42,5 @@ are volatile, so no EEPROM cycle is spent:
    withdraw.
 3. With the circuits idle above the heating limit, write 1710 = 1 and watch
    1090, 1091, B38 and the store's target.
-4. Record each in a dated `doc/`, and the answers in the documentation of
-   the write interface.
+4. Record each in a dated `doc/`, and the answers in the Haddock of the
+   targets.
