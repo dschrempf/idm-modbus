@@ -80,7 +80,7 @@
   with `--eeprom`.
 - A guard against an unannounced update of the controller's software. The
   software the table describes is stated by hand in
-  `data/navigator-2.0-software.tsv`, now 20.24-1574 with its patch unknown,
+  `data/navigator-2.0-software.tsv`, now 20.24-2608, patch 0,
   and `tools/transcribe.py` refuses a capture read on another. A session reads
   the software when it opens: `IDM.Navigator.Client.open` over Modbus, major,
   minor and patch at 522, 524 and 526; `IDM.Navigator.Web.Session.open` over
@@ -108,14 +108,28 @@
   rather than revision 10: 694 addresses rather than 663. New are the Smart
   Grid status at 90, which moves there from 1006, the groundwater
   temperatures at 1086 and 1088, faults at 1680 to 1683, and two boosters at
-  4001 to 4052. 1006 is the `Variabler Eingang` now, and 4126 and 4128 are
-  gone until their width is measured, though the controller serves them. 88,
-  1068, 1070, 1074, 4108, 4112 and 4124, rows of `N2_GLTMON` so far, are the
-  manual's, with persistence, range and default. 1072 stays the
-  page's `FLOAT`, since revision 12 prints a `UCHAR` where two registers
-  answer. The bivalence points run from -40 rather than -90, the pump signals
-  from 0 with a default of -1, and the cascade block has no parameter
-  identifiers. The new addresses are `untested` until the next scan.
+  4001 to 4052. 1006 is the `Variabler Eingang` now. 88, 1068, 1070, 1074,
+  4108 and 4124, rows of `N2_GLTMON` so far, are the manual's, with
+  persistence, range and default. 1072 stays the page's `FLOAT`, since
+  revision 12 prints a `UCHAR` where two registers answer. The bivalence
+  points run from -40 rather than -90, the pump signals from 0 with a default
+  of -1, and the cascade block has no parameter identifiers.
+- The table describes software 20.24-2608 and has 722 registers, 30 of them
+  from `N2_GLTMON`. New from the page: the myiDM identifier at 500, the heat
+  source and heat pump type at 506 and 508, the software at 520 to 526, an
+  interlock at 1174, five alarm codes at 1950 to 1958, locks at 4110, 4113
+  and 4114, and 4126 and 4128, which revision 12 drops and the controller
+  serves. 4112 is gone: revision 12 prints the `FLOAT`
+  `Leistungsbegrenzung Kaskade`, 4113 now answers on its own, and the page
+  names nothing there. Every address the table holds was read on the
+  machine.
+- `tools/transcribe.py` takes a value one register wide where the address
+  after it answers on its own, drops a manual row the width measured
+  contradicts even where the page names nothing in its place, and drops a
+  manual row two registers wide whose second register is a row of the page,
+  so the rows carried over drop it again. A page value `true` or `false`
+  counts as a value, and a name the page prints without a unit keeps its
+  parentheses: `Softwaretype (bitcodiert)`.
 - A `WORD` is two's complement also where the parameter list documents a
   negative default for a read-only register: revision 12 moves the pump
   signals' -1 there. The battery level at 86, which the building management

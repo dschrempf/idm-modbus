@@ -22,7 +22,8 @@ logs the versions and what the reads of 16:17 to 16:41 found changed.
 Each item names the note or document it re-checks. Run them after the guard
 and the table are in place, so each run is recorded against 2608.
 
-- The Fachmann level fell back after 9 min 48 s and after 7.5 to 8 min.
+- The Fachmann level fell back after 9 min 48 s and after 7.5 to 8 min, and
+  held for the walk of 18:59 to 19:10, eleven minutes, left by hand after it.
   Find what ends it: a fixed time from entry, idleness at the display, or
   something else. A remote session that afternoon would also explain the
   drops (`beyond-this-update.md`). Measure on several days with a level log

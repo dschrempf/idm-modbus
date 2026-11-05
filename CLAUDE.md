@@ -62,7 +62,8 @@ and given a webapi capture holding that page and a widths capture of those
 addresses, the script adds them, with the width measured and everything the
 page does not state left unstated; without the two it carries them over.
 Where the manual prints an address the page lists too, the manual's row
-stands, unless the width measured contradicts its datatype, as at 1072. Their
+stands, unless the width measured contradicts its datatype, as at 1072; then
+it goes even where the page names nothing to put in its place, as at 4112. Their
 parameter identifier is the one input written by hand,
 `data/navigator-2.0-gltmon-parameters.tsv`: the page names no identifier and
 the settings tree no address, so only moving a setting and watching which

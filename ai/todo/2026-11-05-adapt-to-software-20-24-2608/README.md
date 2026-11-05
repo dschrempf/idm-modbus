@@ -27,8 +27,9 @@ re-checks on the machine, which need the first four.
 - `manual-rev-12.md`: transcribe 812170 rev. 12 instead of rev. 10, on its
   own, before the rebuild. Done; 4126 and 4128, which rev. 12 drops, come
   back with the rebuild.
-- `table-rebuild.md`: regenerate the table from the captures of 2026-11-05,
-  and bring code, tests and docs to 20.24-2608.
+- `table-rebuild.md`: regenerate the table from captures of 2026-11-05,
+  and bring code, tests and docs to 20.24-2608. Done: 722 registers, every
+  one read on 2608, and the table states 2608, patch 0.
 - `tool-fixes.md`: `idm-web --show` misreports a refusal, the myiDM ID
   escapes redaction, and the sixty-minute level claim is wrong.
 - `rechecks.md`: what was re-checked on 2026-11-05, and what needs the machine

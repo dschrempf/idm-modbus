@@ -14,7 +14,7 @@ provides: its text with the column layout preserved, and the height of each
 word, which is what tells a remark from a name.
 
 The observed column says whether the reference machine answered for an
-address. It comes from the scan, captures/navigator-2.0-scan-DATE.json, when
+address. It comes from the scan, captures/navigator-2.0-scan-SOFTWARE-DATE.json, when
 one is given, and is otherwise carried over from the table being replaced: the
 captures are not in the repository.
 
@@ -24,7 +24,10 @@ capture holding that page and a widths capture of those addresses, the table
 gains them, marked as coming from that page rather than from the manual.
 Without the two, they are carried over like the observed column. Where the
 manual prints an address too, its row stands, unless the width measured
-contradicts its datatype; then the page's row does, and the script says so.
+contradicts its datatype; then the manual's row goes, the page's row takes
+its place if the page names it, and the script says so. A manual row two
+registers wide whose second register is a row of the page goes too, so the
+carried-over rows drop it again.
 
 The page names no parameter identifier, and the settings tree, which does,
 names no address. Which identifier a row of the page carries was settled by
@@ -354,7 +357,8 @@ GLT_ROW = re.compile(
     r"<tr><td>(\d+)</td><td>(.*?)</td><td>(\w+)</td>"
     r"<td[^>]*>(.*?)</td><td[^>]*>(.*?)</td></tr>"
 )
-# the page appends the unit to the name, in parentheses
+# the page prints the name, a space, and the unit in parentheses or nothing:
+# a name with no unit ends in that space, which keeps its own parentheses
 GLT_NAME = re.compile(r"^(?P<name>.*?)\s*(?:\((?P<unit>[^()]*)\))?$")
 
 
@@ -512,15 +516,18 @@ def width(reads, a):
 
     Two registers answer when asked for two, and the address inside them
     refuses on its own. One register refuses to be read as two, unless another
-    follows it; then the reads cannot tell, and neither does this.
+    follows it; that one then answers on its own.
     """
     def ok(at, q):
         r = reads.get((at, q))
         return r is not None and r["status"] == "ok"
 
-    if ok(a, 2) and (a + 1, 1) in reads and not ok(a + 1, 1):
+    def refused(at, q):
+        return (at, q) in reads and not ok(at, q)
+
+    if ok(a, 2) and refused(a + 1, 1):
         return 2
-    if ok(a, 1) and (a, 2) in reads and not ok(a, 2):
+    if ok(a, 1) and (refused(a, 2) or ok(a + 1, 1)):
         return 1
     return None
 
@@ -542,11 +549,28 @@ def prefer_manual(a, measured, manual):
     if measured is None or measured == printed:
         return True
     print(
-        f"kept {a} from N2_GLTMON: the manual prints a {manual[a]['datatype']}, "
+        f"dropped {a} of the manual: it prints a {manual[a]['datatype']}, "
         f"the reads measured {measured} registers",
         file=sys.stderr,
     )
     return False
+
+
+def drop_overlapped(registers):
+    """Drop a manual row two registers wide whose second register is a row
+    of the page, which the reads measured as a value of its own."""
+    for a in sorted(registers):
+        r, next_ = registers.get(a), registers.get(a + 1)
+        if (
+            r and r["source"] == "manual" and WIDTH.get(r["datatype"]) == 2
+            and next_ and next_["source"] == "gltmon"
+        ):
+            print(
+                f"dropped {a} of the manual: its {r['datatype']} overlaps "
+                f"{a + 1} of N2_GLTMON",
+                file=sys.stderr,
+            )
+            del registers[a]
 
 
 def gltmon_rows(page, reads, manual):
@@ -555,19 +579,22 @@ def gltmon_rows(page, reads, manual):
 
     The page states an address, a name with its unit, and an access right; the
     datatype comes from the measured width, and nothing states persistence,
-    range or default. A row without a name, with a value that is not a number,
-    or with no decisive width stays out.
+    range or default. A row without a name, with a value that is neither a
+    number nor true or false, or with no decisive width stays out; where the
+    width contradicts the manual, the manual's row goes out with it.
     """
     out = {}
     for addr, name, access, value, _ in GLT_ROW.findall(page):
         a = int(addr)
         if prefer_manual(a, width(reads, a), manual):
             continue
-        m = GLT_NAME.match(html.unescape(name).strip())
+        manual.pop(a, None)
+        m = GLT_NAME.match(html.unescape(name))
         value = html.unescape(value).strip()
         why = (
             "no name" if not m.group("name")
-            else "its value is not a number" if value and not is_number(value)
+            else "its value is not a number"
+            if value and not is_number(value) and value not in ("true", "false")
             else None
         )
         w = None if why else width(reads, a)
@@ -761,6 +788,7 @@ def main():
             if r.get("source") == "gltmon"
             and not prefer_manual(a, WIDTH.get(r["datatype"], 1), registers)
         }
+    drop_overlapped(registers)
     join_parameters(joins, registers)
     if args.webapi:
         check_joins(joins, page, capture)

@@ -14,8 +14,8 @@
   `CLAUDE.md`, not `captures/README.md`, says a webapi capture is verbatim
   but for the code and the strings that name the machine. Decided: keep
   that promise. Fix `redact`, and redact
-  `captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1624.json` and `…-1636.json` in
-  place. Scans and widths stay raw: they record bytes as measured, and
+  `captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1624.json`, `…-1636.json`
+  and `…-1859.json` in place. Scans and widths stay raw: they record bytes as measured, and
   redacting them would lose the measurement.
 - **The level does not hold sixty minutes.** On 20.24-2608 it fell back to
   Kunde 9 min 48 s and 7.5 to 8 min after entry

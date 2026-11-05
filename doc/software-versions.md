@@ -11,9 +11,10 @@ leaves a measurement standing only as far as it is measured again.
 - The web page `N2_SYSTEM_INFO`, setting 4754, at Kunde level: the software
   version only.
 - Since 20.24-2608, over Modbus: 522 major, 524 minor and 526 patch, each one
-  register, read 24, 2608 and 0. The page names 528 `Software Version (Build
-Info)` and prints `g0c686ed`, but the register reads 0, as 4116 does for the
-  whole version string. These addresses are not in the table yet.
+  register, read 24, 2608 and 0, and rows of the table. The page names 528
+  `Software Version (Build Info)` and prints `g0c686ed`, but the register
+  reads 0, as 4116 does for the whole version string; the table leaves both
+  out.
 
 Every session of `idm-dump`, `idm-write`, `idm-web` and `tools/webprobe.py`
 reads the version when it opens, over Modbus from 522 to 526 or over the web
@@ -35,6 +36,12 @@ and a write goes ahead only on it.
 | uPC SW-Version          | `V3.5 \| Prot: 24`                      | unchanged                       |
 | uPC OS-/Boot-Version    | `5.1.6` / `5.1.6`                       | unchanged                       |
 | uPC BoardSize, CoreType | `medium`, `4`                           | unchanged                       |
+
+No update went unseen between the readings of the version, on 2026-09-19,
+09-24, 09-29, 10-01 and 11-05, provided every update restarts the controller
+and the log keeps every restart: since 2026-09-19 `N2_LOG_HISTORY` shows two
+restarts, on 2026-09-23 at 08:40 after a user shutdown, between two readings
+of 1574, and on 2026-11-05 at 16:09.
 
 The first column was read in `captures/navigator-2.0-webapi-20.24-1574-2026-09-24-1544.json`,
 `…-20.24-1574-2026-09-29-1333.json` and `…-20.24-1574-2026-10-01-1158.json`, all alike, and the
@@ -102,6 +109,13 @@ completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01
   `N2_PING` no longer show, against `…-webapi-20.24-1574-2026-09-20-2218.json`. At
   Fachmann level they do. A setting changed since may hide them, as well as
   the update.
+- **The table** was rebuilt on 2608 from the scan
+  `captures/navigator-2.0-scan-20.24-2608-2026-11-05-1912.json`, the widths
+  of every address the page lists, `…-widths-20.24-2608-2026-11-05-1850.json`,
+  and the walk `…-webapi-20.24-2608-2026-11-05-1859.json`. Every address
+  the scan of 16:17 read answered as it did then, and every address new to
+  the table answers: the 25 revision 12 added, and the 16 new page rows and
+  4126 and 4128 the table takes from the page.
 - **The Fachmann level** is still entered with the code spelled from the
   clock (`captures/navigator-2.0-level-20.24-2608-2026-11-05-1624.log`). It fell back to
   Kunde during the walk, between 16:34:02 and 16:34:04, ten minutes after it
@@ -109,5 +123,7 @@ completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01
   and read every 30 s (`…-level-20.24-2608-2026-11-05-1636.log`), it held at 16:43:56
   and was Kunde at 16:44:27, after seven and a half to eight minutes. Two
   durations that differ by two minutes are no fixed timeout, and neither is
-  the sixty minutes measured on 20.24-1574. What ends the level now is not
+  the sixty minutes measured on 20.24-1574. Entered again for the walk that
+  began at 18:59:41 and ended at 19:10:32, it was still Fachmann when left
+  after it. What ends the level now is not
   known.

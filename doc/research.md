@@ -113,18 +113,25 @@ ours to redistribute.
 
 At Fachmann level the web backend serves an info page, 12763 `N2_GLTMON`,
 that lists the addresses the controller serves over Modbus, each with a name
-and unit, `RO` or `RW`, and its current value. On this machine it lists 115,
+and unit, `RO` or `RW`, and its current value. On 20.24-1574 it listed 115,
 and 24 of them are not in revision 10 of 812170: the minimum and maximum flow
 temperature per circuit at 1520 to 1540, the heat sink's return, flow and flow
 rate at 1068 to 1074, the total electrical energy at 1746, a `PV-Zielwert` at
 88, power limits and cascade powers from 4108 to 4140. Revision 12 prints eight
 of them: 88, 1068 to 1074, 4108, 4112 and 4124. It drops 4126 and 4128, which
-the page lists. The page states no datatype, persistence, range or identifier,
-so the table takes its rows with the width measured and the rest left
-unstated, and marks them `gltmon`. Where the manual prints an address too, its
-row stands, unless the width measured contradicts its datatype: revision 12
+the page lists. On 20.24-2608 the page lists 133, and 36 of them are not in
+revision 12; the 18 new ones are in
+[software-versions.md](software-versions.md). The page states no datatype,
+persistence, range or identifier, so the table takes its rows with the width
+measured and the rest left unstated, and marks them `gltmon`: 30 rows. A row
+the page prints without a name (68, 70, 72, 80, 4111, 4112) or with text for
+a value (528, 4116) stays out. Where the manual prints an address too, its
+row stands, unless the width measured contradicts its datatype. Revision 12
 prints the flow rate at 1072 as a `UCHAR`, and it reads two registers and
-fractional litres per minute, so the page's row stays. See
+fractional litres per minute, so the page's row stays. It prints 4112 as the
+`FLOAT` `Leistungsbegrenzung Kaskade`, and on 20.24-2608 4112 and 4113 each
+answer alone, so the manual's row goes, and the page, which names nothing at
+4112, puts none in its place. See
 [verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md). The
 heat sink rows were since read beside the display, and the flow temperature
 rows joined to their identifiers by moving the settings:
@@ -263,8 +270,8 @@ every mode. See
   `Variabler Eingang`. It narrows the bivalence points from -90 to -40 and
   moves the -1 of the pump signals from the minimum into the default, and the
   cascade block loses its parameter identifiers. Neither revision says what
-  20.24 added; the controller's list still names 16 addresses revision 12
-  lacks. Worth asking iDM support for a revision covering 20.24-2608 —
+  20.24 added; the controller's list names 16 addresses revision 12 lacks
+  on 20.24-1574, and 36 on 20.24-2608. Worth asking iDM support for a revision covering 20.24-2608 —
   revision numbers run per document, so 812184 reaching revision 13 says
   nothing about 812170. The Loxone mirror served revision 10 byte for byte
   (md5 `5cff6722aee3655431b2d4166a6b3d5a`) and did not resolve on

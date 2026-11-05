@@ -57,7 +57,7 @@ checks =
         ]
     ),
     ( "the controller's register page adds to the manual, and states only what it states",
-      length gltmon == 12
+      length gltmon == 30
         && all
           ( \r ->
               registerPersistence r == UnknownPersistence
@@ -86,6 +86,18 @@ checks =
       -- revision 12 prints the flow at 1072 as a UCHAR; it reads two registers
       registerSource (register 1072) == GltMonitor
         && registerDatatype (register 1072) == Float32
+    ),
+    ( "a manual row the width read contradicts goes, even where the page names nothing",
+      -- revision 12 prints 4112 as a FLOAT; on 20.24-2608 4112 and 4113 each
+      -- answer alone, and the page lists 4112 without a name
+      M.notMember (Address 4112) Table.byAddress
+        && registerSource (register 4113) == GltMonitor
+        && registerWidth (registerDatatype (register 4113)) == singleRegister
+    ),
+    ( "a name the page prints without a unit keeps its parentheses",
+      registerName (register 520) == T.pack "Softwaretype (bitcodiert)"
+        && registerUnit (register 520) == Nothing
+        && registerUnit (register 4126) == Just Kilowatt
     ),
     ( "addresses are unique",
       all ((== 1) . length) (group (sort (map registerAddress Table.navigator20)))
@@ -174,17 +186,8 @@ checks =
     ( "widths match the datatypes",
       registerWidth Float32 == registerPair && registerWidth UChar == singleRegister
     ),
-    ( "presence was recorded for every register but those revision 12 added",
-      -- the scan of the rebuild for 20.24-2608 asks these too
-      [registerAddress r | r <- Table.navigator20, registerPresence r == Untested]
-        == map
-          Address
-          ( [90, 1086, 1088, 1680, 1681, 1682, 1683, 4001, 4002]
-              ++ [4010, 4012 .. 4018]
-              ++ [4020, 4021, 4022]
-              ++ [4040, 4042 .. 4048]
-              ++ [4050, 4051, 4052]
-          )
+    ( "presence was recorded for every register",
+      null [r | r <- Table.navigator20, registerPresence r == Untested]
     ),
     ( "a setting is asked for by its id as a string",
       queryJSON (SettingDetail (SettingId (T.pack "4768")))

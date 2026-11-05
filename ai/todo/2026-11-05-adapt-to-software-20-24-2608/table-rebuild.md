@@ -1,59 +1,58 @@
 # Rebuild the table for 20.24-2608
 
-## The table
+Done on 2026-11-05. `data/navigator-2.0-software.tsv` states 20.24-2608,
+patch 0, so a write goes ahead on the machine as it runs now. The table has
+722 registers, 30 of them from `N2_GLTMON`, all `present` or `absent`, none
+`untested`.
 
-- Run `tools/transcribe.py manual/812170-rev12.pdf --scan
-  captures/navigator-2.0-scan-20.24-2608-2026-11-05-1617.json --webapi
-  captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1636.json --widths
-  captures/navigator-2.0-widths-20.24-2608-2026-11-05-1639.json`. The webapi capture of
-  1636 holds `N2_GLTMON`; that of 1624 lost the level before reaching it.
-- Expected: the 18 new `gltmon` addresses (500, 506, 508, 520 to 528, 1174,
-  1950 to 1958, 4110, 4111, 4113, 4114); 4112 one register wide, no longer
-  `Leistungsbegrenzung Kaskade`; 4108 renamed; 1999 `present`.
-- 4126 and 4128, which rev. 12 drops, come back as page rows: the scan of
-  1617 read both, and the page of 1636 lists them as `thermische Leistung
-  (basierend auf Durchflusssensor)` and `Wärmemenge gesamt`. No widths
-  capture covers them, and without one the script leaves them out. Run
-  `cabal run idm-dump -- HOST --widths 4126 4128` into a widths capture of
-  2608 and pass it with the one of 1639; `--widths` takes one file, so either
-  read all the addresses again in one capture or let the script take several.
-  `idm-manager` plans the COP on 4126.
-- 4111 and 4112 have no name on the page. Check how the script treats an
-  empty name; 68, 70, 72 and 80 are a precedent.
-- `data/navigator-2.0-gltmon-parameters.tsv` must still join; the script
-  refuses a join the new capture contradicts.
-- Record the software the table describes, written by the script (see
-  `version-guard.md`, choice 1). That needs the version in a capture the
-  script reads. `N2_SERVICE_INFO` is in the webapi capture of 1624, not
-  1636, so either the script takes it from there or a new capture holds both.
-- 500, the myiDM ID, becomes a row like the others. The table records no
-  value: `observed` is `present` or `absent`. The scans that hold the value
-  are git-ignored, and having it on the laptop is fine. Its value stays out
-  of every tracked file (`tool-fixes.md`).
+## The captures
 
-- The scan must ask the 25 addresses rev. 12 added (90, 1086, 1088, 1680
-  to 1683, 4001 to 4052), now `untested`; then the check in `test/Main.hs`
-  that lists them goes back to none `untested`.
+All read on 2608 and recording it:
+
+- `captures/navigator-2.0-widths-20.24-2608-2026-11-05-1850.json`: every
+  address the page lists, 133. The widths of 1574 were not reused.
+- `captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1859.json`: a full
+  walk at Fachmann level, holding both `N2_GLTMON` and the settings tree, which
+  the join check needs. No earlier capture of 2608 held both. It holds the
+  myiDM ID unredacted (`tool-fixes.md`).
+- `captures/navigator-2.0-scan-20.24-2608-2026-11-05-1912.json`: `idm-dump
+  --json` on the rebuilt table, 722 addresses. The old rows read as at 16:17;
+  every new one answers.
+
+## Decided on 2026-11-05, and built
+
+- **Width rule.** An address is one register wide where the next one answers
+  on its own; before, only a refused read of two decided that, which a
+  register followed by another never gives. This decides 4110 to 4114.
+- **A contradicted manual row goes** even where the page names nothing in its
+  place: 4112, the manual's `FLOAT` `Leistungsbegrenzung Kaskade`, is out of
+  the table. So that the rows carried over drop it too, a manual row two
+  registers wide whose second register is a page row goes as well. Without
+  captures, the script writes the same table byte for byte.
+- **Nameless rows stay out**: 68, 70, 72, 80, 4111, 4112.
+- **`true` and `false` count as values**: 4113 and 4114 are rows. 528 and
+  4116, whose values are text, stay out.
+- **A name without a unit keeps its parentheses.** The page prints the name, a
+  space, and `(unit)` or nothing, so `Softwaretype (bitcodiert) ` has no unit.
+- **The alarm codes** at 1950 to 1958 are plain one-register rows; a type of
+  their own is `alarm-codes-1950-to-1958-as-a-type`.
+- 4108 keeps the manual's name, `Leistungsbegrenzung Wärmepumpe`, though the
+  page now prints `Leistungsbegrenzung`: the manual's row stands where the
+  width agrees.
+
+## What changed with it
+
+- `test/Main.hs`: 30 page rows, none `untested`, 4112 gone with 4113 one
+  register wide, the unit split at 520 and 4126.
+- `CLAUDE.md`, `doc/research.md`, `doc/software-versions.md` (the restarts in
+  the log, the rebuild's captures), `Changelog.md`, the docstring of
+  `tools/transcribe.py`.
+- `Target.hs` regenerates unchanged; 74 is still the one target.
+
+## Left to others
+
 - 1714 and 1715 are `UCHAR`s documented 0 to 100 % with a default of -1
   since rev. 12; `decode` still takes any negative byte as no value
   (`uchar-254-at-1714-and-1715-may-be-minus-two`).
-
-## Code and tests
-
-- `test/Main.hs`: checks naming 4112 or a `gltmon` count.
-- The target 74 is unchanged, but `$(costAt …)` and `$$(registerOf …)`
-  rebuild with the table.
-- Decide whether 1950 to 1958 get a type of their own, alarm codes joined
-  to the notice names `N2_…`.
-
-## Documents
-
-- `CLAUDE.md`, `Readme.md` and `doc/research.md`: register counts (663 and
-  682), and anything that states 1574 as now. The sources in
-  `doc/research.md` moved with the transcription.
-- `doc/software-versions.md`: the restarts in the log since 2026-09-19,
-  which show that no update went unseen between readings (`README.md`).
-- The dated `verification-*.md` documents stay as they are: they say what
-  held on 1574. A new dated document takes what the re-checks find, and
-  `doc/software-versions.md` points to it.
-- `Changelog.md`: the table change, and the guard.
+- A new dated document takes what the re-checks find, and
+  `doc/software-versions.md` points to it (`rechecks.md`).
