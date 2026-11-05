@@ -16,20 +16,30 @@ A consumer writes either the grid's export as it is or the export plus the
 pump's draw, depending on the answer. Faking a surplus to run the pump on
 demand works either way; how hard it then runs depends on it.
 
+## What the graph adds
+
+Put into a graph by hand after the run, the controller's history of
+2026-11-05 showed "akt. PV Überschuss" at 3.0 kW throughout: the channel is
+74 as written, not 74 plus the draw. "Mom./prog. Aufnahme" followed the
+draw while the pump ran, up to about 3.8 kW and down to 3.4, then 0. So
+while the pump runs the threshold is its own draw, and from about 21:21 on
+it exceeded the surplus. `WP010` `N2_MIN_RUNTIME_COMPRESSOR` reads 10 min,
+so under 812184's rule for a store charge, without adding anything back,
+the run should have stopped about 21:26:20. It ran to 21:35:40 and stopped
+at `PV006`. That favors reading 1, or a store charge that does not follow
+the rule; it does not settle it. Seen on the web interface by eye, not
+captured yet: the next webapi capture holds the graph, which reaches back
+about a week.
+
 ## How we might solve it
 
-1. With B38 well below `PV006`, write 74 = 1.5, above the page's threshold
-   (0.7–0.8 kW) and below the draw seen, every minute. Watch 1090, 1100,
-   4122 and B38 as on 2026-11-05. Under 1 the run holds and may ramp past
-   1.5 kW; under 2, 812184 has a heating or store run stop once the
-   surplus falls below the requested power and the compressor's minimum
-   runtime has passed.
-2. The web interface offers four PV channels for a graph: "akt. PV
-   Überschuss", "Mom./prog. Aufnahme", "akt. PV Produktion" and "akt.
-   Hausverbrauch"; `T25xPV_AVAILPOWER`, channel 183, is likely the first.
-   Put the first two into a graph by hand (a `save`, so not from here)
-   before the run: if "akt. PV Überschuss" reads 74 plus 4122 while the
-   pump runs, that is reading 1. The next webapi capture holds the graph,
-   perhaps back to 2026-11-05 if the controller logs channels no graph
-   shows.
-3. Record it in a dated `doc/`, and in `doc/research.md`'s open question.
+1. Start a store charge with 74 = 3.0 as on 2026-11-05, with B38 well below
+   `PV006`. Once the compressor has run past `WP010`'s 10 min, write
+   74 = 0 every minute: under reading 1 the run holds, as a meter reading 0
+   means the pump uses exactly the PV output; otherwise it stops within
+   `PV011`'s 2 min. If it holds, write -0.5 (74 documents no range): under
+   reading 1 it then stops. Watch 1090, 1100, 4122, B38 and the graph's two
+   channels.
+2. Record it in a dated `doc/`, and in `doc/research.md`'s open question.
+   Under reading 1, a consumer writes the meter's export as it is, negative
+   for import.
