@@ -46,3 +46,19 @@ test its activation goes with:
 
 Once settled, the outcome belongs to the Haddock of `PvSurplus` (via the
 targets file and `tools/transcribe.py`) as well as to `doc/research.md`.
+
+## Done on 2026-11-05
+
+kW. Steps 1, 2 and 4 as planned, with `PV013` at "Immer"; step 3 wrote 3.0
+every minute from 21:14:16. The PV page showed `Überschuss` 3.0 kW at once,
+1090 went to `Heizbetrieb` at 21:15:30 and the compressor started at
+21:16:20, against a threshold the page printed as 0.7 kW. The charge ran
+until B38 reached `PV006`'s 35 °C at 21:35, with 74 still at 3.0
+(`doc/verification-2026-11-05-pv-surplus.md`, and `doc/research.md`). The
+settings stay: the house uses them.
+
+The draw rose to 4.05 kW against the 3.0 written, which left
+`pv-surplus-74-may-include-the-pumps-own-draw`. The Haddock of `PvSurplus`
+already says kW, from the table, and stays as generated: the measurement
+lives in `doc/`, as for every other register, rather than in a column of
+the targets file.

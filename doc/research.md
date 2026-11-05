@@ -170,7 +170,8 @@ generations differ; useless for this controller.
 idm-waermepumpen
 ([evcc-io/evcc#19002](https://github.com/evcc-io/evcc/issues/19002)), are the
 best source for the PV surplus path in practice: address 74 to tell the pump
-the current surplus in watts, 1710 to request heating, 4122 to read power draw.
+the current surplus in watts (it is kW on this machine, below), 1710 to
+request heating, 4122 to read power draw.
 
 The **Home Assistant community thread** "IDM heatpump integration via modbus
 (pure HA)" documents the plain-YAML approach with the stock `modbus:`
@@ -250,6 +251,15 @@ every mode. See
 [verification-2026-10-16-draw.md](verification-2026-10-16-draw.md) and
 [verification-2026-11-05-floor.md](verification-2026-11-05-floor.md).
 
+A sixth is what a consumer that feeds the surplus needs: **74 is in kW.**
+With `PV008` at building management and the PV menu set to charge the
+heating store, 3.0 written to 74 started the pump within two minutes on a
+machine with no request of its own, and the charge ran until the store
+reached `PV006`, its maximum, with 74 still at 3.0. The evcc discussions'
+watts would have been far below the 0.7 kW threshold the controller's PV
+page printed. See
+[verification-2026-11-05-pv-surplus.md](verification-2026-11-05-pv-surplus.md).
+
 ## Open questions
 
 - **The `RW/RO` access right.** 167 of the 694 registers of revision 12 carry it — the
@@ -257,9 +267,10 @@ every mode. See
   chapter 4.1 defines only `RO`, `RW` and `W`. Read as "the building
   management system may supply this, and may read it back", which is what the
   worked examples in chapter 4.3 do with them. Whether writing takes effect
-  without the matching menu parameter set to "Ja" is untested; writing exists,
-  but has not been tried on the machine. For the PV block there is at least a named gate — PV008, see
-  above — and it is not itself addressable.
+  without the matching menu parameter set to "Ja" is untested. For the PV
+  block there is a named gate, PV008, see above, and it is not itself
+  addressable; with it set, a write to 74 takes effect
+  ([verification-2026-11-05-pv-surplus.md](verification-2026-11-05-pv-surplus.md)).
 - **Revision drift.** Revision 12 documents software 20.23-515; this machine
   ran 20.24-1574 and since 2026-11-05 runs 20.24-2608. No address of revision
   10 was missing from the machine on 20.24-1574. Revision 12 adds the Smart
@@ -292,13 +303,6 @@ every mode. See
   the eight rooms of zone module 1, or in the number of the zone module, which
   stands inside the name, `Zonenmodul 2 Betriebsart Raum 1`, and reaches
   modules 2 to 10.
-- **The unit of address 74.** Both manuals print `[kW]`, and that is what
-  `data/` records. The evcc discussions describe writing watts. The Smartfox
-  setup asks for the pump's rated power in watts too, but that is a field in
-  the energy manager, not the register. The capture cannot decide it: 74, 78
-  and 4122 all read exactly 0.0 on this machine, which has no PV system. It
-  should be settled by writing a known value and reading the controller's own
-  display back, not by argument; `idm-write` can write it.
 - **The least draw while heating, away from one point.** The floor's draw,
   above, was measured once, at 8.3 °C outdoors and 27.8 °C flow; colder air
   or a warmer flow draws more at the same speed. The hot water floor,
@@ -306,9 +310,17 @@ every mode. See
   (`doc/verification-2026-10-01-charge.md`). The heating cap, `IV002`, is
   untested: capped at 50 %, 60 rps on the scale, the run of 2026-11-05 never
   asked for more than its start program's 50.4. The forecast the surplus is
-  compared against should be readable as 4122 at standstill once `PV008` is
-  set; until then 4122 reads 0.0 at standstill. That one is a model's figure;
-  a meter on the supply would say what the pump draws besides the inverter.
+  compared against is not at 4122, which reads 0.0 at standstill with
+  `PV008` set too; the PV page prints it, 0.7 kW on 2026-11-05. 4122 is the
+  inverter's figure; a meter on the supply would say what the pump draws
+  besides it.
+- **Whether 74 includes the pump's own draw.** Given 3.0 kW at 74, the pump
+  drew up to 4.05 kW and kept running. Either the controller adds its own
+  draw back to 74, as `PV010` "Überschuss" does for the 0–10 V and S0
+  signals, or it does not size a run to the surplus at all; 812184 says
+  neither for building management. A write between the page's threshold and
+  the draw tells them apart
+  ([verification-2026-11-05-pv-surplus.md](verification-2026-11-05-pv-surplus.md)).
 - **-2 at 1714 and 1715.** The two external pump requests answer `fffe`,
   where every other unfitted `UCHAR` answers `ffff`, and the controller's own
   register page prints them as -2. The library treats -1 and -2 alike as

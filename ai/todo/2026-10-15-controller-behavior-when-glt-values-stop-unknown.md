@@ -44,3 +44,10 @@ Per register, activated as a target together with this test:
 
 Start with 74, which a consumer will write first and which
 `unit-of-pv-surplus-74-unsettled` already writes.
+
+For 74, steps 1 and 2 are done (2026-11-05,
+`doc/verification-2026-11-05-pv-surplus.md`): the gate is `PV008` at
+`N2_GLTSF`, one EEPROM cycle, and the PV page showed the value written at
+once. Step 3 is not: that run ended with 0 written by hand. With the store
+below `PV006`, write 3.0 for a few minutes, stop, and watch the page's
+`Überschuss`, 1090 and 1100 for longer than the five hours of `SSYSPV030`.

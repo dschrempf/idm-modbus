@@ -42,3 +42,7 @@ the same day: 4108 is volatile. Which write settles it is open again.
 
 Option 2 without step 1 would guess a resolution. Step 1 alone is enough if
 the bytes match.
+
+On 2026-11-05 each write of 3.0 to 74 read back `00004040`, and 0.0
+`00000000` (`doc/verification-2026-11-05-pv-surplus.md`): the controller
+takes a `FLOAT` as sent. Rounding on storage stays open.

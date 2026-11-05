@@ -15,6 +15,7 @@ The kind of capture is in the name:
     navigator-2.0-webui-SOFTWARE-YYYY-MM-DD-HHMM/          curl, below
     navigator-2.0-level-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-web HOST --leave-fachmann, --enter-fachmann
     navigator-2.0-show-SOFTWARE-YYYY-MM-DD-HHMM.txt        idm-web HOST --show SETTING...
+    navigator-2.0-write-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-write HOST ADDRESS VALUE
 
 The time is the local minute the capture started. `SOFTWARE` is the
 controller's software as `doc/software-versions.md` spells it, `20.24-2608`.
@@ -63,6 +64,9 @@ a `webwatch` capture was asked at which level.
 A `show` capture is what `idm-web --show` printed, after the laptop's
 time: the settings as they stood before, during and after an experiment that
 changed them.
+
+A `write` log is what `idm-write` printed, a line per write, each after the
+laptop's time.
 
 A `webui` capture is a directory of the web interface's own files, as the
 controller serves them over HTTP on port 80, each at its path on the server

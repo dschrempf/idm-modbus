@@ -126,6 +126,12 @@ of `write-interface-eeprom-guard-and-tests-open` were done on 2026-11-05.
 6a also sets the PV menu for a store charge, the house's use of the surplus;
 see `unit-of-pv-surplus-74-unsettled`.
 
+6a ran on 2026-11-05, 21:04 to 21:42: 74 is in kW, the charge stops at
+`PV006`, and a write beside a polling watch stalled nothing
+(`doc/verification-2026-11-05-pv-surplus.md`). Left of it: what 74 does when
+the writes stop, step 3 of `controller-behavior-when-glt-values-stop-unknown`,
+and `pv-surplus-74-may-include-the-pumps-own-draw`.
+
 Untested, and for these sessions to watch: writing while a second Modbus
 client polls. Session 3's watch is the second client, and the stall it is kept
 apart from session 2 for may hit a write too.
