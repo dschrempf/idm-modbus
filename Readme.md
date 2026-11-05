@@ -72,6 +72,7 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `core/IDM/Navigator/Write/Core.hs` | what a write sends and comes to, for any register; private to the package |
 | `src/IDM/Navigator/Web.hs`, `Web/` | the web backend: its vocabulary, a read-only session, and the user level |
 | `doc/research.md` | sources, community projects, open questions |
+| `doc/software-versions.md` | the controller's software by date, and what an update changed |
 | `doc/verification-2026-09-19.md` | the measurements the decoding rests on |
 | `doc/verification-2026-09-20.md` | the table against the controller's own display |
 | `doc/verification-2026-09-20-webapi.md` | the settings against the web backend, joined on the parameter identifier |

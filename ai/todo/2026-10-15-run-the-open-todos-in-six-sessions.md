@@ -104,6 +104,10 @@ Each later write experiment activates its register in
 
 ## 6. Write experiments
 
+First `adapt-to-software-20-24-2608`: the controller was updated on
+2026-11-05, and every write waits for the version guard and the rebuilt
+table.
+
 - **6a, register 74:** `unit-of-pv-surplus-74-unsettled`, and
   `controller-behavior-when-glt-values-stop-unknown` for 74. Both need
   `N2_PV_SIGNAL` at `N2_GLTSF`, one EEPROM cycle.

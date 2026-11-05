@@ -8,7 +8,9 @@ which questions are still open.
 
 An iDM AERO ALM 2-8, an air-to-water monobloc with an indoor hydraulic module,
 installed 2026. Controller: Navigator 2.0. Firmware reports itself as
-`T_NAV10_20.24-1574-g183d9b17a`.
+`T_NAV10_20.24-1574-g183d9b17a`, and since 2026-11-05 as
+`T_NAV10_20.24-2608-g0c686ed41`; see
+[software-versions.md](software-versions.md).
 
 That string is a trap. `NAV10` reads like "Navigator 10", which iDM does sell
 and which some projects treat as a separate protocol family. It is not what
