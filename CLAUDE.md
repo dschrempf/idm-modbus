@@ -200,8 +200,9 @@ write of the surplus register 74 is interface; computing the surplus is not.
   series. A `FLOAT` whose documented range does not rule -1 out — most
   document none — decodes it to `NoValueOr`, since -1 °C is a temperature;
   the caller decides. A `WORD` is two's complement where the parameter list documents a
-  negative minimum for it, and there 65535 is a value rather than a sentinel:
-  the pump control signals at 1104 to 1109 read it as "not being driven".
+  negative minimum for it, or a negative default for a read-only one, and
+  there 65535 is a value rather than a sentinel: the pump control signals at
+  1074 and 1104 to 1109 read it as "not being driven".
 - A `UCHAR` arrives as a whole register, `ffff` and not `00ff`, and the
   controller reads it as a signed word: it prints the `fffe` of 1714 and 1715
   as -2.
