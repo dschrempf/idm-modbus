@@ -19,6 +19,7 @@ import IDM.Navigator.Client
 import IDM.Navigator.Register
 import IDM.Navigator.Software (ModbusVersion (..), mismatchText, modbusVersionText)
 import qualified IDM.Navigator.Table as Table
+import IDM.Navigator.Web (redacted)
 import System.Environment (getArgs, getProgName)
 import System.Exit (exitFailure)
 import System.IO (BufferMode (..), hPutStrLn, hSetBuffering, stderr, stdout)
@@ -108,6 +109,8 @@ usage = do
   putStrLn "  --widths reads each address as one register and as two, and"
   putStrLn "  the address after it as one, whether or not the parameter"
   putStrLn "  list names it, and prints what the machine answered."
+  putStrLn "  The myiDM identifier names the machine, and no output shows it:"
+  putStrLn "  a read that takes in one of its registers prints <redacted>."
   putStrLn "  Each connection first reads the controller's software, which"
   putStrLn "  every capture records. Where it is not the software the table"
   putStrLn "  describes, a warning on stderr names both."
@@ -158,6 +161,7 @@ render s =
     Address addr = registerAddress reg
     value = case sampleResult s of
       Left e -> failureText e
+      Right _ | namesMachine reg -> T.unpack redacted
       Right a -> case answerReading a of
         NoValue -> "--"
         NoValueOr v -> "-- or " <> shown v
@@ -233,7 +237,7 @@ widthEntry (WidthRead (Address a) q r) =
     ("quantity", show (quantityCount q)),
     ("status", quote (statusText o)),
     ("exception", maybe "null" show (refusal o)),
-    ("raw", either (const "null") (quote . hex) r)
+    ("raw", either (const "null") (if Table.readsMyIdm (Address a) q then const redactedJSON else quote . hex) r)
   ]
   where
     o = Returned r
@@ -249,14 +253,23 @@ fields reg o =
   [ ("address", show addr),
     ("status", quote (statusText o)),
     ("exception", maybe "null" show (refusal o)),
-    ("raw", maybe "null" (quote . hex . answerRaw) answer),
-    ("value", maybe "null" (number . answerWritten) answer)
+    ("raw", maybe "null" (hidden . quote . hex . answerRaw) answer),
+    ("value", maybe "null" (hidden . number . answerWritten) answer)
   ]
   where
     Address addr = registerAddress reg
+    hidden = if namesMachine reg then const redactedJSON else id
     answer = case o of
       Returned (Right a) -> Just a
       _ -> Nothing
+
+-- | Whether a read of the register takes in the myiDM identifier.
+namesMachine :: Register -> Bool
+namesMachine reg = Table.readsMyIdm (registerAddress reg) (registerWidth (registerDatatype reg))
+
+-- | The marker that stands for what was read, where it names the machine.
+redactedJSON :: String
+redactedJSON = quote (T.unpack redacted)
 
 field :: (String, String) -> String
 field (key, value) = quote key <> ": " <> value

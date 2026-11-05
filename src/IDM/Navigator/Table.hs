@@ -20,13 +20,15 @@ module IDM.Navigator.Table
     readable,
     present,
     enumLabel,
+    myIdmAddress,
+    readsMyIdm,
   )
 where
 
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as M
 import Data.Text (Text)
-import IDM.Modbus.TCP (Address)
+import IDM.Modbus.TCP (Address (..), Quantity, quantityCount)
 import IDM.Navigator.Register
 import IDM.Navigator.Software (Software)
 import IDM.Navigator.Table.Parse (parseEnums, parseRegisters, parseSoftware, parsedFile)
@@ -66,3 +68,18 @@ present = filter ((== Present) . registerPresence) readable
 
 enumLabel :: Address -> Int -> Maybe Text
 enumLabel addr code = M.lookup (addr, code) navigator20Enums
+
+-- | Where the controller serves its myiDM identifier, which names the machine.
+-- No capture holds it, from either channel.
+myIdmAddress :: Address
+myIdmAddress = Address 500
+
+-- | Whether a read of so many registers from an address takes in a register
+-- of the myiDM identifier, as wide as the table states it.
+readsMyIdm :: Address -> Quantity -> Bool
+readsMyIdm (Address a) q = start < idStart + idWidth && idStart < start + fromIntegral (quantityCount q)
+  where
+    start = fromIntegral a :: Int
+    Address i = myIdmAddress
+    idStart = fromIntegral i
+    idWidth = maybe 1 (fromIntegral . quantityCount . registerWidth . registerDatatype) (M.lookup myIdmAddress byAddress)

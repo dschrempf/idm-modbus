@@ -233,6 +233,10 @@ Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
   where neither rule matched it. Both now redact the value cell of that row,
   and `tools/transcribe.py` takes the marker for a page value, so 500 stays a
   row of the table.
+- With 500 in the table, `idm-dump` read the myIDM identifier and printed it,
+  and wrote its bytes into scans, watches and widths captures. A read that
+  takes in 500 or 501 now shows `<redacted>` for its bytes and its number.
+  `IDM.Navigator.Table.myIdmAddress` states the address for both channels.
 - A setting the user level does not reach was a `NoAnswer`, which ended the
   session after waiting out its patience. The controller refuses it under
   `setting`, for a detail as well, and names the setting only in the text.

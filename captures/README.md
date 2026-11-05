@@ -33,6 +33,11 @@ of the session it was read on, null where there was none. What `idm-web`
 prints, and so a level log or a show, starts with a `software` line. A
 capture from before is a bare list and records none.
 
+No capture holds the myiDM identifier, which names the machine. A read that
+takes in a register of it, 500 or 501, records `"<redacted>"` for its `raw`
+and its `value`, and a webapi capture has the same marker where a page
+prints it.
+
 The entries of a `webapi` capture are requests with the responses they drew.
 It may hold only part of the walk, and it covers only what the user level
 exposed; its first `status` response names that level.

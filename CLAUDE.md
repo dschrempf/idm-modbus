@@ -71,7 +71,8 @@ register follows can join them. The script reads that file in either case
 and, given the webapi capture, refuses a join the capture contradicts. The scan holds no transcribed data of its own —
 `idm-dump --json` writes it, and it records only address, status, exception
 code, raw bytes and the uninterpreted number, so a correction to the table
-cannot leave it saying something else. A defect in a register name, unit or
+cannot leave it saying something else. The bytes and the number of the myiDM
+identifier, `myIdmAddress`, are redacted, as in a webapi capture. A defect in a register name, unit or
 range is therefore a defect in the transcription script, not in the Haskell
 parser.
 
@@ -138,7 +139,8 @@ The modules stack, each refusing to know the next one's business:
   footnote is a constructor, so a caller cannot silently ignore it.
 - `IDM.Navigator.Table` — parses the TSVs at compile time, so a row that does
   not parse fails the build; exposes `navigator20`, `readable`, `present`,
-  `enumLabel`, and `navigator20Software`, the software the table describes.
+  `enumLabel`, `navigator20Software`, the software the table describes, and
+  `myIdmAddress`, the register no capture holds.
 - `IDM.Navigator.Software` — a version as the table states it and as each
   channel reads it, and whether the two agree.
 - `IDM.Navigator.Client` — sessions, pacing, and pairing a read with its enum

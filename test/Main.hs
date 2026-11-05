@@ -287,6 +287,13 @@ checks =
                 <> "</td><td align=\\\"right\\\"></td></tr></table>\"}"
        in redact (page "123456.0" "123456.0") == page "123456.0" "<redacted>"
     ),
+    ( "a read takes in the myiDM identifier where it covers either of its two registers",
+      Table.readsMyIdm (Address 500) singleRegister
+        && Table.readsMyIdm (Address 501) singleRegister
+        && Table.readsMyIdm (Address 499) registerPair
+        && not (Table.readsMyIdm (Address 498) registerPair)
+        && not (Table.readsMyIdm (Address 502) singleRegister)
+    ),
     ( "an info cell decodes the entities the controller writes",
       infoRows (T.pack "<tr><td>B5</td><td>Taupunktwächter&nbsp;Heizkreis A</td><td>1</td><td></td></tr><tr><td>Laufzeit Stufe&nbsp1</td><td>39.9h</td></tr><tr><td>a &amp; b &#x41;&#66; &copy; &</td></tr>")
         == [ InfoReading (Just (T.pack "B5")) (T.pack "Taupunktwächter Heizkreis A") (InfoNumber 1) T.empty,

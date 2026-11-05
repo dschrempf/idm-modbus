@@ -73,6 +73,8 @@ import qualified Data.Text as T
 import qualified Data.Text.Read as TR
 import Data.Time (LocalTime, utc, utcToLocalTime)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime)
+import IDM.Modbus.TCP (Address (..))
+import IDM.Navigator.Table (myIdmAddress)
 import Text.Read (readMaybe)
 
 -- | A node of the settings tree. The protocol sends it as a string of digits,
@@ -443,7 +445,7 @@ redactText = redactGltMonitor . T.concat . go
             else Nothing
 
 -- | @N2_GLTMON@ prints the myIDM identifier as a number, in the value cell of
--- the row of register 500: address, name, access, value.
+-- the row of its register: address, name, access, value.
 redactGltMonitor :: Text -> Text
 redactGltMonitor t
   | T.null found = t
@@ -451,7 +453,8 @@ redactGltMonitor t
       Just (kept, rest) -> before <> row <> kept <> redacted <> redactGltMonitor rest
       Nothing -> before <> row <> redactGltMonitor after
   where
-    row = "<tr><td>500</td><td>"
+    row = "<tr><td>" <> T.pack (show idAddress) <> "</td><td>"
+    Address idAddress = myIdmAddress
     (before, found) = T.breakOn row t
     after = T.drop (T.length row) found
     -- the name, the access and the opening of the value cell, and what
