@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-YYYY-MM-DD-HHMM.json
     cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
     cabal run idm-dump -- HOST --widths 1534 1074 > captures/navigator-2.0-widths-YYYY-MM-DD-HHMM.json
-    tools/transcribe.py manual/812170.txt --scan SCAN [--webapi WEBAPI --widths WIDTHS]
+    tools/transcribe.py manual/812170-rev12.txt --scan SCAN [--webapi WEBAPI --widths WIDTHS]
     IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-YYYY-MM-DD-HHMM.json
     IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
     IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
@@ -34,7 +34,7 @@ and month of the current date). Port 502, unit id 1.
 
 The register table is data, not code, and it flows one way:
 
-    manual/812170.pdf → pdftotext -layout → tools/transcribe.py
+    manual/812170-rev12.pdf → pdftotext -layout → tools/transcribe.py
       → data/navigator-2.0-{registers,enums}.tsv → splice → IDM.Navigator.Table
       → src/IDM/Navigator/Target.hs (with data/navigator-2.0-targets.tsv)
 

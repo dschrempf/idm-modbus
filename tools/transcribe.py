@@ -2,12 +2,12 @@
 """Transcribe the iDM parameter list into the tables under data/.
 
 The manufacturer's manual is a PDF and is not redistributed here. Obtain it
-(iDM document 812170 for Navigator 2.0; support sends it on request, and the
-Loxone library mirrors revision 10), put it in manual/, which git ignores,
-extract its text preserving the column layout, and feed that in:
+(iDM document 812170 revision 12 for Navigator 2.0; support sends it on
+request, and doc/research.md says where else it is), put it in manual/, which
+git ignores, extract its text preserving the column layout, and feed that in:
 
-    pdftotext -layout manual/812170.pdf manual/812170.txt
-    tools/transcribe.py manual/812170.txt [--scan SCAN]
+    pdftotext -layout manual/812170-rev12.pdf manual/812170-rev12.txt
+    tools/transcribe.py manual/812170-rev12.txt [--scan SCAN]
         [--webapi WEBAPI --widths WIDTHS]
 
 The observed column says whether the reference machine answered for an
