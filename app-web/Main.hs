@@ -12,6 +12,7 @@ import Control.Concurrent (threadDelay)
 import Data.Aeson (Value (..), encode, object, (.=))
 import qualified Data.ByteString.Lazy.Char8 as BL
 import qualified Data.Text as T
+import qualified Data.Text.Encoding as TE
 import Data.Time (ZonedTime, defaultTimeLocale, formatTime, getZonedTime)
 import GHC.Clock (getMonotonicTime)
 import IDM.Modbus.TCP (Host (..))
@@ -146,7 +147,7 @@ renderSetting st = header <> body (settingValue st)
       SettingChoice (ChoiceKey k) -> printf "  choice %s\n" k
       SettingInfo rows -> concatMap row rows
       -- the whole detail, so a type can be read before it has a parser
-      SettingOther kind whole -> printf "  (type %s, not read)\n  %s\n" kind (BL.unpack (encode whole))
+      SettingOther kind whole -> printf "  (type %s, not read)\n  %s\n" kind (T.unpack (TE.decodeUtf8 (BL.toStrict (encode whole))))
     row r = case r of
       InfoReading d l x u -> printf "  %-9s %-40s %10s %s\n" (maybe "" T.unpack d) l (infoText x) u
       InfoCells cs -> "  " <> T.unpack (T.intercalate " | " cs) <> "\n"
