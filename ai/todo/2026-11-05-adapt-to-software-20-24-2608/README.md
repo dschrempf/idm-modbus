@@ -30,8 +30,8 @@ re-checks on the machine, which need the first four.
 - `table-rebuild.md`: regenerate the table from captures of 2026-11-05,
   and bring code, tests and docs to 20.24-2608. Done: 722 registers, every
   one read on 2608, and the table states 2608, patch 0.
-- `tool-fixes.md`: `idm-web --show` misreports a refusal, the myiDM ID
-  escapes redaction, and the sixty-minute level claim is wrong.
+- `tool-fixes.md`: the sixty-minute level claim is wrong. Done: the
+  refusal and the redaction of the myiDM ID.
 - `rechecks.md`: what was re-checked on 2026-11-05, and what needs the machine
   running.
 - `beyond-this-update.md`: the consumers, the newer manual found, and why

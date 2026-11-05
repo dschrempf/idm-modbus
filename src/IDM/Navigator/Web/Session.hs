@@ -107,15 +107,15 @@ newtype Writable = Writable {writableSession :: Session}
 writable :: Session -> Either (Mismatch Unread WebVersion) Writable
 writable s = Writable s <$ checked webAgreement navigator20Software (sessionSoftware s)
 
--- | Send a query and return every message that arrived until its answer, the
--- answer last, redacted but otherwise verbatim. This is what a capture keeps.
+-- | Send a query and return every message that arrived until its reply, the
+-- reply last, redacted but otherwise verbatim. This is what a capture keeps.
 ask :: Session -> Query -> IO (Either Failure [Value])
 ask = askOn . sessionLink
 
 askOn :: C.Session -> Query -> IO (Either Failure [Value])
-askOn l q = exchange l (queryJSON q) (isJust . answerIn q)
+askOn l q = exchange l (queryJSON q) (isJust . replyTo q)
 
--- | Send a query and read its answer.
+-- | Send a query and read its answer; a refusal is a 'Refused'.
 askFor :: (Value -> Maybe a) -> Session -> Query -> IO (Either Failure a)
 askFor parse = askForOn parse . sessionLink
 
@@ -124,7 +124,10 @@ askForOn parse l q = andThen (askOn l q) $ \ms -> pure $
   -- the answer is last
   case reverse ms of
     [] -> Left NoAnswer
-    (message : _) -> maybe (Left (Unrecognized message)) Right (answerIn q message >>= parse)
+    (message : _) -> case replyTo q message of
+      Just (Answered a) -> maybe (Left (Unrecognized message)) Right (parse a)
+      Just (Inaccessible i) -> Left (Refused i)
+      Nothing -> Left (Unrecognized message)
 
 askStatus :: Session -> IO (Either Failure Status)
 askStatus s = askFor status s StatusOverview

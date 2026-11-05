@@ -38,7 +38,7 @@ import qualified Data.ByteString as B
 import Data.Maybe (fromMaybe)
 import GHC.Clock (getMonotonicTime)
 import IDM.Modbus.TCP (Host (..))
-import IDM.Navigator.Web (redact)
+import IDM.Navigator.Web (SettingId, redact)
 import qualified Network.Socket as N
 import qualified Network.WebSockets as WS
 import qualified Network.WebSockets.Stream as WS
@@ -85,6 +85,9 @@ data Failure
     Garbled B.ByteString
   | -- | an answer the parsers of "IDM.Navigator.Web" do not read
     Unrecognized Value
+  | -- | the user level does not reach the setting; see
+    -- 'IDM.Navigator.Web.Inaccessible'
+    Refused SettingId
   deriving (Show, Eq)
 
 -- | A thread receives every message as it arrives, so a request that runs out
@@ -231,6 +234,7 @@ ending e = case e of
   Lost reason -> Just reason
   Garbled _ -> Just "a message was not JSON"
   Unrecognized _ -> Nothing
+  Refused _ -> Nothing
 
 -- | A stalled controller does not signal at all.
 guarded :: Pace -> IO (Either Failure a) -> IO (Either Failure a)

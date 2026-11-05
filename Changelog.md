@@ -233,6 +233,12 @@ Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
   where neither rule matched it. Both now redact the value cell of that row,
   and `tools/transcribe.py` takes the marker for a page value, so 500 stays a
   row of the table.
+- A setting the user level does not reach was a `NoAnswer`, which ended the
+  session after waiting out its patience. The controller refuses it under
+  `setting`, for a detail as well, and names the setting only in the text.
+  `replyTo`, formerly `answerIn`, reads that as `Inaccessible`, a request
+  fails with `Refused`, and the session goes on. `idm-web --show` names the
+  user level beside a refused setting and goes on with the next.
 
 ### Not yet
 

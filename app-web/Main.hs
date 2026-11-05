@@ -85,7 +85,8 @@ usage = do
   putStrLn $ "  " <> pinVariable <> " holds the PIN of the web interface."
   putStrLn "  --status prints the user level, the controller's clock and the"
   putStrLn "  notices standing. --show reads settings by the id the settings"
-  putStrLn "  tree gives them, e.g. 4768 for the sensor values."
+  putStrLn "  tree gives them, e.g. 4768 for the sensor values, and names the"
+  putStrLn "  user level where it does not reach one."
   putStrLn "  --watch asks the given settings every SECONDS until interrupted,"
   putStrLn "  and prints a line per request: the request, the local time it was"
   putStrLn "  asked, and the responses, verbatim but for what names the machine."
@@ -113,11 +114,26 @@ run host pin mode = case mode of
           printf "user level  %s\nclock       %s\nprotocol    %d\n" (levelText (statusUserLevel st)) (show (statusClock st)) (statusProtocol st)
           standing <- askNotifications s >>= orDie
           mapM_ (\n -> printf "notice      %s %s\n" (codeText (notificationCode n)) (notificationText n)) standing
-        Show ids -> warn s >> mapM_ (\i -> askSetting s i >>= orDie >>= putStr . renderSetting) ids
+        Show ids -> do
+          warn s
+          refused <- concat <$> traverse (showSetting s) ids
+          if null refused then pure () else exitFailure
         Enter -> writableOrDie s >>= enterFachmann >>= orDie >>= reportEntry
         Leave -> writableOrDie s >>= leaveFachmann >>= orDie >>= reportExit
         Watch _ _ -> pure ()
     codeText (NotificationCode c) = c
+
+-- | Print a setting, or that the user level does not reach it; the
+-- setting, if so.
+showSetting :: Session -> SettingId -> IO [SettingId]
+showSetting s i =
+  askSetting s i >>= \case
+    Left (Refused r) -> do
+      st <- askStatus s >>= orDie
+      let SettingId t = r
+      printf "%s not accessible at user level %s\n" t (levelText (statusUserLevel st))
+      pure [r]
+    r -> [] <$ (orDie r >>= putStr . renderSetting)
 
 softwareLine :: Either Unread WebVersion -> String
 softwareLine = either (\u -> "not read: " <> show u) (T.unpack . webVersionText)

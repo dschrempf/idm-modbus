@@ -29,7 +29,8 @@ module IDM.Navigator.Web
     Query (..),
     queryJSON,
     answerKey,
-    answerIn,
+    Reply (..),
+    replyTo,
 
     -- * Status
     UserLevel (..),
@@ -140,12 +141,33 @@ answerKey q = case q of
   GraphTraverse -> "graphTraverse"
   GraphDetail _ _ -> "graphDetail"
 
--- | The payload of a message, if it is the answer to the query.
-answerIn :: Query -> Value -> Maybe Value
-answerIn q (Object o) = do
-  a <- KM.lookup (answerKey q) o
-  a <$ guard (maybe True ($ a) (naming q))
-answerIn _ _ = Nothing
+-- | What a message says to the query it answers.
+data Reply
+  = -- | the payload under the query's 'answerKey'
+    Answered Value
+  | -- | @setting item [N] is not accessible!@: the user level does not reach
+    -- the setting. It arrives under @setting@, for a detail as well, and only
+    -- its text names the setting.
+    Inaccessible SettingId
+  deriving (Show, Eq)
+
+-- | What the message says to the query, if it is the reply to it.
+replyTo :: Query -> Value -> Maybe Reply
+replyTo q (Object o) = answered <|> refused
+  where
+    answered = do
+      a <- KM.lookup (answerKey q) o
+      Answered a <$ guard (maybe True ($ a) (naming q))
+    refused = do
+      i <- case q of
+        SettingOverview i -> Just i
+        SettingDetail i -> Just i
+        _ -> Nothing
+      let SettingId t = i
+          noted = withObject "setting" $ \x -> x .: "note" >>= withObject "note" (.: "text")
+      text <- KM.lookup "setting" o >>= parseMaybe noted
+      Inaccessible i <$ guard (text == "setting item [" <> t <> "] is not accessible!")
+replyTo _ _ = Nothing
 
 -- | Whether a payload under the query's key answers this very query, for the
 -- queries whose answer says.

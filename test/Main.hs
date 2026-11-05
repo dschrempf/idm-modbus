@@ -195,9 +195,21 @@ checks =
         && queryJSON StatusOverview == json "{\"controller\":\"status\",\"command\":\"overview\"}"
     ),
     ( "an answer is found under its key",
-      answerIn (SettingDetail settingsRoot) (json "{\"settingDetail\":{\"id\":\"-1\"}}") == Just (json "{\"id\":\"-1\"}")
-        && answerIn (SettingDetail settingsRoot) (json "{\"setting\":{\"id\":\"-1\"}}") == Nothing
-        && answerIn StatusOverview (json "{\"status\":{}}") == Just (json "{}")
+      replyTo (SettingDetail settingsRoot) (json "{\"settingDetail\":{\"id\":\"-1\"}}") == Just (Answered (json "{\"id\":\"-1\"}"))
+        && replyTo (SettingDetail settingsRoot) (json "{\"setting\":{\"id\":\"-1\"}}") == Nothing
+        && replyTo StatusOverview (json "{\"status\":{}}") == Just (Answered (json "{}"))
+    ),
+    ( "a refusal replies to the setting it names, a detail or an overview",
+      let refusal n =
+            json $
+              "{\"setting\":{\"note\":{\"text\":\"setting item ["
+                <> n
+                <> "] is not accessible!\",\"type\":\"danger\"},\"redirect\":{\"command\":\"overview\",\"controller\":\"setting\",\"data\":{\"settingId\":\"10508\"}}}}"
+          gltmon = SettingId (T.pack "12763")
+       in replyTo (SettingDetail gltmon) (refusal "12763") == Just (Inaccessible gltmon)
+            && replyTo (SettingOverview gltmon) (refusal "12763") == Just (Inaccessible gltmon)
+            && replyTo (SettingDetail gltmon) (refusal "10564") == Nothing
+            && replyTo StatusOverview (refusal "12763") == Nothing
     ),
     ( "a graph's answer is its own only if it names the graph and the span",
       let detail name from to =
@@ -210,13 +222,13 @@ checks =
                 <> show (to :: Int)
                 <> ",\"step\":0}}}"
           asked = GraphDetail (GraphId 1) (Span 108000 0)
-       in answerIn asked (detail "System" 844063227 844171227) /= Nothing
-            && answerIn asked (detail "WW" 844063227 844171227) == Nothing
-            && answerIn asked (detail "System" 843480027 844171227) == Nothing
+       in replyTo asked (detail "System" 844063227 844171227) /= Nothing
+            && replyTo asked (detail "WW" 844063227 844171227) == Nothing
+            && replyTo asked (detail "System" 843480027 844171227) == Nothing
     ),
     ( "a setting's answer is its own only if it names the setting",
-      answerIn (SettingDetail (SettingId (T.pack "4768"))) (json "{\"settingDetail\":{\"id\":\"5888\"}}") == Nothing
-        && answerIn (SettingOverview settingsRoot) (json "{\"setting\":{}}") == Nothing
+      replyTo (SettingDetail (SettingId (T.pack "4768"))) (json "{\"settingDetail\":{\"id\":\"5888\"}}") == Nothing
+        && replyTo (SettingOverview settingsRoot) (json "{\"setting\":{}}") == Nothing
     ),
     ( "the status carries the level and the controller's clock",
       -- the controller sends its wall clock as if it were UTC
