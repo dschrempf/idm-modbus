@@ -40,9 +40,10 @@ All of these read; none sets the mode.
    modes by name. If it lists them in the web's order, -1, 0, 1, 2, 3, 5, 4,
    the names map onto the numbers. Order alone is weak evidence, though, and
    only a sanity check for 1.
-3. **812184 or a later revision of 812170.** Neither is known to print the
-   list. Asking iDM support for a later 812170 is already an open question
-   (`doc/research.md`, "Revision drift").
+3. **812184 or a later revision of 812170.** Neither prints the list:
+   revision 12 still labels 0, 1, 2, 4 and 5 only. Asking iDM support for a
+   revision covering 20.24-2608 is
+   `ask-idm-support-for-812170-covering-20-24-2608`.
 
 Setting 1005 to 3 and reading the display would also answer it. But 1005 is
 an EEPROM register, writing is not implemented, and a mode with no known
@@ -50,5 +51,5 @@ meaning is a poor thing to switch the machine into.
 
 A label found this way comes from a source other than the manual, so it
 raises a second question: how `tools/transcribe.py` adds an enum code the
-manual does not print. That is the same problem as a `gltmon` row gaining a
-datatype (`2026-10-15-charge-pump-signal-1074-unchecked-at-rest`).
+manual does not print. That is session 4 of
+`run-the-open-todos-in-six-sessions`.

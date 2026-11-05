@@ -32,7 +32,9 @@ test its activation goes with:
    `PV002` Trinkwarmwasserbereitung "Nein", `PV013` Heizgrenze überspringen
    as wanted outside the heating season. The menu is not in the 2026-10-01
    capture, probably hidden while `PV008` is `N2_NONE`; capture it once
-   shown.
+   shown. Since 20.24-2608 it holds `SSYSPV030` and `SSYSPV031`, a
+   stand-in for the house consumption when the meter goes quiet
+   (`controller-behavior-when-glt-values-stop-unknown`).
 3. `idm-write HOST 74 3.0`, repeated every minute or so. Read as kW, that is
    more than the machine draws (0.67 kW at the floor,
    `doc/verification-2026-11-05-floor.md`), and the store charge should

@@ -36,7 +36,8 @@ Steps 1 and 2: `doc/verification-2026-10-15-web-app.md` records the facts,
 `asWritten` reads a `UCHAR` as a signed word, `decode` taking every negative
 one for no value. Of step 3, the web app was searched: it names the
 registers, `N2_ERBP` and `N2_ERGP`, and says nothing of -2; no settings tree
-holds the pumps, at Fachmann level either. Left: asking iDM support.
+holds the pumps, at Fachmann level either. Left: asking iDM support
+(`ask-idm-support-for-812170-covering-20-24-2608`).
 
 ## How we might solve it
 

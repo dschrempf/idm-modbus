@@ -36,3 +36,34 @@ re-checks on the machine, which need the first four.
   running.
 - `beyond-this-update.md`: the consumers, the newer manual found, and why
   updates stay unannounced.
+
+## Closed on 2026-11-05
+
+The update is handled: the guard, the table of revision 12 rebuilt for
+20.24-2608, and the tool fixes. A review of the changes found and fixed
+four things more:
+
+- The myiDM identifier at 500, which the rebuild made a table row, went
+  unredacted into `idm-dump`'s output and into the scan of 19:12 and the
+  widths captures of 16:39 and 18:50. `idm-dump` now redacts any read
+  that takes it in, and the three captures are redacted in place.
+- `CLAUDE.md` still gave the sign of a `WORD` by its minimum alone.
+- The open notes still asked what revision 12 answers. 1074 decodes as a
+  `Drive` now, so `charge-pump-signal-1074-unchecked-at-rest` is closed.
+  4108 is kW and volatile, which took its write away from
+  `eeprom-guard-needs-exact-round-trip`.
+- `idm-manager`'s notes still read the Smart Grid status at 1006, and
+  still said every Modbus write refuses.
+
+What needs the machine over days went to notes of its own:
+
+- the Fachmann level's duration and the sixty-minute claims of
+  `tool-fixes.md`: `fachmann-level-falls-back-before-sixty-minutes`;
+- the behavior re-checks of `rechecks.md`:
+  `recheck-control-behavior-on-20-24-2608`, and each item naming a note to
+  that note (`power-limit-4108-semantics-unknown`,
+  `controller-behavior-when-glt-values-stop-unknown`,
+  `unit-of-pv-surplus-74-unsettled`,
+  `charge-pump-status-1104-reads-not-driven-while-pumping`);
+- the mail to iDM support of `beyond-this-update.md`:
+  `ask-idm-support-for-812170-covering-20-24-2608`.

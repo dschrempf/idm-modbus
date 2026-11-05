@@ -3,14 +3,16 @@
 ## The question
 
 `N2_GLTMON` lists 4108 `Leistungsbegrenzung Wärmepumpe` and 4112
-`Leistungsbegrenzung Kaskade` as `RW` `FLOAT`s; 812170 does not have them.
-The table carries them as `gltmon` rows with the width measured and nothing
-else (`doc/verification-2026-10-14-gltmon.md`). Unknown:
+`Leistungsbegrenzung Kaskade` as `RW` `FLOAT`s; revision 10 of 812170 does
+not have them. Unknown were:
 
 - the unit: kW or percent of the rated power;
 - the persistence: volatile or EEPROM;
 - whether it caps the inverter's draw, and in which modes;
 - what reading it at rest returns, and whether that means "no limit".
+
+Revision 12 answers the first two for 4108 (below, 2026-11-05); the last two
+stand.
 
 A consumer matching the draw to a PV surplus, or obeying a grid operator's
 dimming, would use it — it is the only lever that says "run, but at most
@@ -35,6 +37,20 @@ Step 1's second half: 4108 and 4112 read -1.0 at every read of a heating run,
 a hot water charge and a defrost, and `N2_GLTMON` printed -1.0, `GLT Value`
 -1, throughout (`doc/verification-2026-10-16-draw.md`). Nothing joins them to
 a setting; step 1 is done, and only writing can go further.
+
+## Found on 2026-11-05
+
+Revision 12 of 812170 prints 4108 `Leistungsbegrenzung Wärmepumpe` and 4112
+`Leistungsbegrenzung Kaskade`, both `FLOAT`, `RW`, in kW, with a default of
+-1 and no EEPROM mark, so the table has 4108 from the manual, volatile. -1
+at rest is the default, which suggests "no limit" without saying it.
+
+On 20.24-2608 4112 is no longer a `FLOAT`: 4112 and 4113 each answer alone,
+and the table drops it (`adapt-to-software-20-24-2608`, `table-rebuild.md`).
+The page now prints 4108 as `Leistungsbegrenzung  (kW)`, 4112 without a
+name at 0.0, and beside it 4110 `Sperre`, 4113 and 4114 `Sperre Booster 1`
+and `2`, all `RW`, all 0. What the locks do is as unknown as the limit. Only
+4108 is left to this note, and step 2 costs no EEPROM cycle.
 
 ## How we might solve it
 

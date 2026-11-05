@@ -29,8 +29,11 @@ decision below, session 4 of `2026-10-15-run-the-open-todos-in-six-sessions`.
 
 1. **1104 does not follow M73 on this machine.** It could be a register that
    software 20.24 or this configuration no longer updates, and 1074 carries
-   the signal instead. The manual documents software 20.21-101 (`doc/research.md`,
-   "Revision drift").
+   the signal instead. Revision 12 of the manual documents software
+   20.23-515 and still names 1104 `Status Ladepumpe (M73)`, with the codes
+   -1 "Aus", 0 "Min. Drehzahl" and 100 "Max. Drehzahl" (`doc/research.md`,
+   "Revision drift"). On 20.24-2608 it still reads `ffff` at rest; whether
+   it follows M73 there is untested.
 2. **1074 is not the signal the `Analogausgänge` page prints as M73.** In
    that case 1104 and the page agree, both at -1 while the pump runs on its
    digital output alone, which is what 2026-09-20 showed. Then 1074 is

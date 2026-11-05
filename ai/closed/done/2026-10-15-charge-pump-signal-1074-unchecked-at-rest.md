@@ -88,3 +88,14 @@ identifier, `data/navigator-2.0-gltmon-parameters.tsv`. Options:
    consumer decodes 65535 itself.
 
 Either way the run, and its outcome, go in a document in `doc/`.
+
+## Closed on 2026-11-05
+
+Settled by revision 12 of 812170, not by a source of our own: it prints 1074
+as `Ladepumpe Wärmesenke Steuersignal (M73)`, a read-only `WORD` from 0 to
+100 % with a default of -1. A `WORD` is now two's complement also where a
+read-only register's default is negative (`adapt-to-software-20-24-2608`,
+`manual-rev-12.md`), so 1074 is a manual row and decodes `ffff` as
+`DriveSignal NotDriven`, which `test/Main.hs` checks. Neither option above
+was needed; how a measured fact enters the table stays open for 1104 and
+1005 (`run-the-open-todos-in-six-sessions`, session 4).

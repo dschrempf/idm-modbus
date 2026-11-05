@@ -72,10 +72,10 @@ against the stall.
 
 ## 4. Design: how a measured fact enters the table
 
-Three notes end at the same question, what of a source other than the manual
-`tools/transcribe.py` takes in:
+Two notes end at the same question, what of a source other than the manual
+`tools/transcribe.py` takes in. A third, 1074, was settled by revision 12 of
+the manual on 2026-11-05 (`charge-pump-signal-1074-unchecked-at-rest`).
 
-- 1074, option 1: a measured datatype, range and unit for a `gltmon` row.
 - 1104, option 1: a `Presence` constructor, and how a watch enters the table.
 - 1005: two enum codes the manual does not print, -1 "Aus" and 3 "Urlaub",
   measured over Modbus in session 1. "Aus" arrives as `ffff`, so -1 is a
@@ -104,21 +104,21 @@ Each later write experiment activates its register in
 
 ## 6. Write experiments
 
-First `adapt-to-software-20-24-2608`: the controller was updated on
-2026-11-05, and every write waits for the version guard and the rebuilt
-table.
+`adapt-to-software-20-24-2608` came first: the controller was updated on
+2026-11-05, and every write waited for the version guard and the rebuilt
+table. Both are done; a write goes ahead on 20.24-2608.
 
 - **6a, register 74:** `unit-of-pv-surplus-74-unsettled`, and
   `controller-behavior-when-glt-values-stop-unknown` for 74. Both need
   `N2_PV_SIGNAL` at `N2_GLTSF`, one EEPROM cycle.
 - **6b, the requests:** `what-glt-requests-1710-1712-1713-do-unsettled`,
   then the 4108 limit write of `power-limit-4108-semantics-unknown` during a
-  run, once its persistence is known.
+  run. Revision 12 prints 4108 volatile, so it costs no EEPROM cycle.
 
 The other registers of the "values stop" note follow, a few per later write
 session.
 
-Before the first EEPROM target is listed, as the 4108 limit may be:
+Before the first EEPROM target is listed:
 `eeprom-guard-needs-exact-round-trip`, whose round trip that write measures.
 6a's write of 74 adds what a volatile `FLOAT` says about it. The code items
 of `write-interface-eeprom-guard-and-tests-open` were done on 2026-11-05.

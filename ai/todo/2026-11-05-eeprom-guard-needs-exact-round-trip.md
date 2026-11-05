@@ -18,14 +18,17 @@ bytes rules out rounding on receipt, though not rounding on storage.
 Only a `FLOAT` raises the question. An integer datatype has no finer value to
 round away. Every starred `FLOAT` of the manual belongs to a heating circuit
 or zone module family, which `tools/transcribe.py` does not generate yet.
-The only `FLOAT` target it would admit at an EEPROM cost is 4108, whose
-persistence is unknown, in session 6b.
+4108 was the candidate, but revision 12 prints it volatile (2026-11-05). The
+`FLOAT` targets the script would still admit at an EEPROM cost are the
+cascade powers 4132, 4136 and 4140 of `N2_GLTMON`, whose persistence is
+unknown and which this machine, without a cascade, may ignore.
 
 ## How we might settle it
 
 Decided on 2026-11-05: settle it with the first EEPROM write, 4108 in
 session 6b of `run-the-open-todos-in-six-sessions`, rather than with a
-register listed for the measurement alone.
+register listed for the measurement alone. Revision 12 took that write away
+the same day: 4108 is volatile. Which write settles it is open again.
 
 1. On the machine, with the first EEPROM target listed: write a value the
    display can show, read it back with `idm-dump`, and compare the bytes.

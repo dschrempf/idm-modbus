@@ -20,6 +20,16 @@ A consumer that writes any of them must know what its own failure does to
 the house. If the controller holds the last outdoor temperature, a crashed
 consumer can stop the heating.
 
+## Found on 2026-11-05
+
+Software 20.24-2608 adds two settings to the PV menu. `SSYSPV031`
+`N2_PVStaticHousepwrActive`, No/Yes, reads No; its help text says that
+while it is No, `SSYSPV030` `N2_PVOffGridHousePower`, 0 to 10 kW, now 1.0,
+stands in for the house consumption once the smart meter has sent nothing
+for more than five hours (`doc/software-versions.md`). That is the first
+stated fallback, for 82 at most. Whether a value written over Modbus counts
+as the smart meter is for 74's test below to find out.
+
 ## How we might solve it
 
 Per register, activated as a target together with this test:
