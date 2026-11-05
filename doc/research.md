@@ -31,7 +31,7 @@ Loxone library, which mirrors it for customers integrating iDM with Loxone:
 
 An older revision 0 circulates on loxforum. The corresponding manual for the
 previous controller generation is 812049, "Navigator 1.0 und 1.7", and its
-addresses are *different*; several community projects mix the two up.
+addresses are _different_; several community projects mix the two up.
 
 The document gives, for each address: datatype, access right, the matching
 parameter identifier in the controller's own menu (`FW030` and so on), minimum,
@@ -214,6 +214,17 @@ E to G do. Auto-detection can find the circuits that have sensors on them; it
 cannot find the circuits. See
 [verification-2026-09-20.md](verification-2026-09-20.md).
 
+A fifth matters for anyone weighing a surplus against the pump: **the
+heating floor is 24 rps, and there the compressor draws about 0.7 kW.** The
+controller's modulation settings are percent of a speed, 1.2 rps per
+percent: the defrost's 65 % ran at 78.0 rps, and the heating floor, `IV003`
+at 20 %, held 24.0 rps. At 8.3 °C outdoors and 27.8 °C flow it drew 0.61 to
+0.72 kW by 4122 and gave 2.8 kW of heat. 4122 is the inverter's figure on
+this machine, following the motor power the controller's page prints in
+every mode. See
+[verification-2026-10-16-draw.md](verification-2026-10-16-draw.md) and
+[verification-2026-11-05-floor.md](verification-2026-11-05-floor.md).
+
 ## Open questions
 
 - **The `RW/RO` access right.** 166 of the 663 registers carry it — the
@@ -226,7 +237,7 @@ cannot find the circuits. See
   above — and it is not itself addressable.
 - **Revision drift.** Revision 10 documents software 20.21-101; this machine
   runs 20.24. No address in the manual is missing from the machine, so nothing
-  was removed, but the manual cannot say what was *added*. The controller's own
+  was removed, but the manual cannot say what was _added_. The controller's own
   list says some of it, 24 addresses, above; whether those came with a later
   software or were left out of the manual it cannot say. Worth asking iDM
   support whether a later revision exists — revision numbers run per document,
@@ -238,8 +249,9 @@ cannot find the circuits. See
   (November 2024) and the Navigator 10 excerpt (January 2026) both print
   addresses 74 to 86 and 4122 with unchanged datatypes and defaults — across
   two years and a controller generation. The same two revisions show that
-  printed enumerations *do* drift: PV013 went from "Ja/Nein" to
+  printed enumerations _do_ drift: PV013 went from "Ja/Nein" to
   "Nein/Automatik/Immer", and PV008 gained four inverter manufacturers.
+
 - **Enumerations are printed once per family.** The manual gives the operating
   mode codes beside heating circuit A (address 1393) and leaves B to G
   implicit, and likewise for zone modules. `tools/transcribe.py` shares an
@@ -255,22 +267,16 @@ cannot find the circuits. See
   and 4122 all read exactly 0.0 on this machine, which has no PV system. It
   matters only once writing exists, and it should be settled by writing a known
   value and reading the controller's own display back, not by argument.
-- **The least draw while heating.** The modulation floor is a setting per
-  mode, and this machine has both at the least they accept
-  (`captures/navigator-2.0-webapi-2026-10-01-1158.json`): `IV023` for hot
-  water at 40 %, where the charge of 2026-10-01 drew 1.5–1.7 kW by 4122
-  (`doc/verification-2026-10-01-charge.md`), and `IV003` for heating at 20 %.
-  The machine heated in one capture, drawing 2.7–3.1 kW by 4122
-  (`doc/verification-2026-10-15-heat-sink.md`), and in a second, watched
-  beside the inverter's speed, it never slowed below 101 rps or 2.48 kW after
-  a start at a fixed 50.4 rps that hot water uses too
-  (`doc/verification-2026-10-16-draw.md`). What 20 % draws is still unknown.
-  4122 itself is the inverter's figure on this machine: it follows the motor
-  power the controller's page prints to that page's rounding, in every mode.
-  The forecast it is compared against should be readable as 4122 at
-  standstill once `PV008` is set; until then 4122 reads 0.0 at standstill.
-  That one is a model's figure; a meter on the supply would say what the
-  pump draws besides the inverter.
+- **The least draw while heating, away from one point.** The floor's draw,
+  above, was measured once, at 8.3 °C outdoors and 27.8 °C flow; colder air
+  or a warmer flow draws more at the same speed. The hot water floor,
+  `IV023` at 40 %, drew 1.5–1.7 kW in the charge of 2026-10-01
+  (`doc/verification-2026-10-01-charge.md`). The heating cap, `IV002`, is
+  untested: capped at 50 %, 60 rps on the scale, the run of 2026-11-05 never
+  asked for more than its start program's 50.4. The forecast the surplus is
+  compared against should be readable as 4122 at standstill once `PV008` is
+  set; until then 4122 reads 0.0 at standstill. That one is a model's figure;
+  a meter on the supply would say what the pump draws besides the inverter.
 - **-2 at 1714 and 1715.** The two external pump requests answer `fffe`,
   where every other unfitted `UCHAR` answers `ffff`, and the controller's own
   register page prints them as -2. The library treats -1 and -2 alike as

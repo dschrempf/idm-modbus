@@ -34,7 +34,9 @@ has to wait and try again itself, and only a shell loop did that on
 After a run, with the machine at rest: leave, then enter after a pause of 1,
 5, 10, 30 and 60 s, a few times each, and note which entries take. The 09:40
 renewal of 2026-10-16 waited 20 s and took at the first attempt: left at
-09:40:00, Fachmann again at 09:40:23.
+09:40:00, Fachmann again at 09:40:23. The renewal of 2026-11-05 waited 30 s and took at
+the first attempt too: left at 12:08:07, Fachmann again at 12:08:40
+(`captures/navigator-2.0-level-2026-11-05-1113.log`).
 
 Also untested: whether sending the code at Fachmann restarts the sixty
 minutes. `enterFachmann` sends nothing at Fachmann, `AlreadyFachmann`. If it

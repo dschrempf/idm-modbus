@@ -14,6 +14,7 @@ The kind of capture is in the name:
     navigator-2.0-webwatch-YYYY-MM-DD-HHMM.jsonl  idm-web HOST --watch SECONDS SETTING...
     navigator-2.0-webui-YYYY-MM-DD-HHMM/          curl, below
     navigator-2.0-level-YYYY-MM-DD-HHMM.log       idm-web HOST --leave-fachmann, --enter-fachmann
+    navigator-2.0-show-YYYY-MM-DD-HHMM.txt        idm-web HOST --show SETTING...
 
 The time is the local minute the capture started. A `webapi` capture is a list
 of requests with the responses they drew. It may hold only part of the walk,
@@ -37,6 +38,10 @@ millisecond and an `error`, null unless nothing came back.
 A `level` log is what `idm-web` printed when it changed the user level
 during a watch, each change after the laptop's time. It says which stretch of
 a `webwatch` capture was asked at which level.
+
+A `show` capture is what `idm-web --show` printed, after the laptop's
+time: the settings as they stood before, during and after an experiment that
+changed them.
 
 A `webui` capture is a directory of the web interface's own files, as the
 controller serves them over HTTP on port 80, each at its path on the server

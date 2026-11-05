@@ -7,8 +7,8 @@ the grouping and the order.
 
 ## Order
 
-1 and 5 can start now. 2 waits for a long heating run. 4 comes after 1 and 2,
-6 after 5, and 3 runs in the background.
+1 and 2 are done. 4 and 5 can start now, 6 comes after 5, and 3 runs in the
+background.
 
 ## 1. Desk: no heating, no writes
 
@@ -57,6 +57,10 @@ lowers the heating curve, as `least-draw-at-heating-modulation-floor-unknown`
 says; it is the one item of this session left, and its watch is the second Modbus client
 session 3 waits for. Renewing the level found
 `fachmann-entry-right-after-leaving-is-ignored`.
+
+Done on 2026-11-05, 11:13 to 12:33: capped at 50 % with circuit C's curve
+lowered, the run held the floor, 24.0 rps at 0.67 kW
+(`doc/verification-2026-11-05-floor.md`). Session 2 is closed.
 
 ## 3. Passive capture over days
 

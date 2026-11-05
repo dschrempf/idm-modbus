@@ -70,3 +70,15 @@ machine draws besides it.
 
 Record the outcome in a dated `doc/`, and close the open question in
 `doc/research.md`.
+
+## Done on 2026-11-05
+
+The run, with `IV002` at 50 and circuit C's curve at 0.30, came out of its
+start program and slowed by itself to 24.0 rps, where it held for seven
+minutes with its flow still 1.7 K below target: the floor. It drew 0.61 to
+0.72 kW by 4122, 0.67 on average, and gave 2.8 kW of heat, at 8.3 °C outdoors
+and 27.8 °C flow (`doc/verification-2026-11-05-floor.md`). 24.0 rps is
+`IV003`'s 20 % on the defrost's scale of 1.2 rps per percent. The cap never
+bound, so its 60 rps stays a prediction, and the floor's draw at other
+temperatures is left to `doc/research.md`'s open questions; neither blocks a
+consumer, which can now take about 0.7 kW as the least draw on a mild day.
