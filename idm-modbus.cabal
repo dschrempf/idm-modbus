@@ -50,11 +50,13 @@ common exec
     -with-rtsopts=-N
 
 -- What the test suite needs and a consumer must not reach: the core of a
--- write takes any register, not only a target.
+-- write takes any register, not only a target, and the socket connects and
+-- writes without a session.
 library core
   import:          lib
   exposed-modules:
     IDM.Modbus.TCP
+    IDM.Modbus.TCP.Internal
     IDM.Navigator.Register
     IDM.Navigator.Write.Core
 

@@ -28,7 +28,7 @@ module IDM.Navigator.Write
 where
 
 import Control.Concurrent (threadDelay)
-import IDM.Modbus.TCP
+import IDM.Modbus.TCP.Internal
 import IDM.Navigator.Client (Poll (..), Writable, sessionConnection, sessionPoll, writableSession)
 import IDM.Navigator.Register (Value)
 import IDM.Navigator.Target

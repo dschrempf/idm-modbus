@@ -22,7 +22,7 @@ module IDM.Navigator.Write.Core
 where
 
 import qualified Data.ByteString as B
-import IDM.Modbus.TCP
+import IDM.Modbus.TCP.Internal
 import IDM.Navigator.Register
 
 -- | What a write came to, by what it costs.

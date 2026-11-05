@@ -36,7 +36,7 @@ import Control.Concurrent (threadDelay)
 import Control.Exception (bracket)
 import qualified Data.ByteString as B
 import Data.Text (Text)
-import IDM.Modbus.TCP
+import IDM.Modbus.TCP.Internal
 import IDM.Navigator.Register
 import IDM.Navigator.Software (Mismatch, ModbusVersion (..), checked, modbusAgreement)
 import IDM.Navigator.Table (enumLabel, navigator20Software)

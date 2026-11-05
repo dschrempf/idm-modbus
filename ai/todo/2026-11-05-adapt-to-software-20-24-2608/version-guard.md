@@ -74,15 +74,28 @@ The existing captures are renamed `navigator-2.0-KIND-SOFTWARE-DATE-TIME`,
 and the citations in `doc/` and in `todo` with them; `closed` keeps the old
 names.
 
-## Open
+## Done on 2026-11-05
 
-- Try it on the machine: a read should warn (2608 against 1574), and
-  `idm-write HOST 74 …` refuse before it sends anything.
-- `IDM.Modbus.TCP`, which the library re-exports, still exports `connect`
-  and `writeRegisters`, so a consumer can write any address without a
-  target or the guard. `CLAUDE.md` says a consumer reaches a register only
-  through a target, which that export contradicts.
-- Tell the consumers: a refused write, and a read on another software, are
-  new outcomes for `idm-manager`, and its notes on reading the version
-  (`beyond-this-update.md`) are to be checked against the API above.
-  `~/nix/config` runs nothing against the pump yet.
+- **The bypass is closed.** `IDM.Modbus.TCP` keeps the framing, the types
+  and `readRegisters`; `connect`, `withConnection`, `disconnect`, `Write`,
+  `writeRegisters` and `parseWriteResponse` moved to
+  `IDM.Modbus.TCP.Internal`, which `core` exposes and the library does not
+  re-export. A consumer's only `Connection` is a session's.
+- **The consumers are told.** `idm-manager`'s `things-to-know.md` and
+  `record-every-input-before-controlling` said the version is attached to
+  every read and read again on a reconnect. Corrected: the session states it
+  (`sessionSoftware`), the library does not reconnect, `writable` gives a
+  `Writable` or a `Mismatch`, and every Modbus write refuses as
+  `Unconfirmable` until the table states a patch.
+- **On the machine, a read warns and a write refuses.** Both name the
+  software read and the software the table describes:
+
+  ```
+  $ idm-dump HOST
+  warning: the controller runs major 24, minor 2608, patch 0; the table describes 20.24-1574, patch unknown
+  $ idm-write HOST 74 0.0
+  refused, nothing written: the controller runs major 24, minor 2608, patch 0; the table describes 20.24-1574, patch unknown
+  ```
+
+Nothing of the guard is open. The rebuild (`table-rebuild.md`) sets the
+software to 20.24-2608, patch 0, after which a write goes ahead.

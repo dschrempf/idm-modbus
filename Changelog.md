@@ -24,8 +24,8 @@
   round after round and writes a line per read, the capture format plus the
   local time the read was asked, so a charge can be followed at a finer step
   than the controller's own graph keeps. A stalled or lost connection is opened
-  again at the next round, and the reads it cost are recorded as errors.
-  `IDM.Modbus.TCP` exports `connect` and `disconnect` for it.
+  again at the next round, as a new session, and the reads it cost are
+  recorded as errors.
 - `Drive`, what a pump's control signal says: `NotDriven`, or `Driven` so many
   per cent. The controller's scale runs from -1, and `Driven 0` — a pump at its
   minimum speed — is not a pump at rest.
@@ -90,6 +90,12 @@
   otherwise: not read, another software, or one the table cannot confirm.
   `idm-write` and `idm-web --enter-fachmann`/`--leave-fachmann` refuse with
   both versions; a read goes ahead and warns with both.
+- `IDM.Modbus.TCP`, which the library re-exports, no longer exports
+  `connect`, `withConnection`, `disconnect`, `Write`, `writeRegisters` and
+  `parseWriteResponse`; they moved to `IDM.Modbus.TCP.Internal`, private to
+  the package. A consumer can no longer write an address past the targets
+  and the guard, and its only `Connection` is a session's, whose software is
+  read.
 - Every capture records the software its session read: a scan, a widths
   and a webapi capture as `software` beside `entries`, each line of a watch
   as a field `software`, the output of `idm-web` as a first line. A capture's

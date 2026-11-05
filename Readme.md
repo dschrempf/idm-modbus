@@ -69,7 +69,7 @@ service code is the day and month of the current date. Port 502, unit id 1.
 | `data/navigator-2.0-software.tsv` | the controller software the table describes, the only one a write goes to; written by hand |
 | `captures/` | what a real machine answered, and nothing the list already says; kept out of git |
 | `tools/transcribe.py` | rebuilds both TSVs from the manual's extracted text, and the targets module |
-| `core/IDM/Modbus/TCP.hs` | framing |
+| `core/IDM/Modbus/TCP/Internal.hs` | framing; `core/IDM/Modbus/TCP.hs` is the part a consumer may reach, neither connecting nor writing |
 | `core/IDM/Navigator/Register.hs` | what a register is, and how to decode one |
 | `src/IDM/Navigator/Table.hs` | the table, parsed at compile time |
 | `src/IDM/Navigator/Software.hs` | the controller's software, as the table states it and as a session reads it |

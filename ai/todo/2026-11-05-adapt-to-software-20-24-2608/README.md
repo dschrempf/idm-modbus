@@ -23,7 +23,7 @@ re-checks on the machine, which need the first four.
 
 - `version-guard.md`: every session reads the software once; a write goes
   ahead only on the expected version, a read on any, and says which. Every
-  capture records it. Built; a try on the machine and the consumers open.
+  capture records it. Done: built, tried on the machine, the consumers told.
 - `manual-rev-12.md`: transcribe 812170 rev. 12 instead of rev. 10, on its
   own, before the rebuild.
 - `table-rebuild.md`: regenerate the table from the captures of 2026-11-05,

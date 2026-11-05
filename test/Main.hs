@@ -15,7 +15,7 @@ import Data.List (group, sort)
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import GHC.Float (double2Float, float2Double)
-import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
+import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
 import IDM.Navigator.Register
 import IDM.Navigator.Software
 import qualified IDM.Navigator.Table as Table

@@ -122,11 +122,12 @@ page heading, not by the order they appear in.
 
 The modules stack, each refusing to know the next one's business:
 
-- `IDM.Modbus.TCP` — framing and sockets for the two read function codes and
-  the two write ones, 6 and 16. Returns raw bytes in wire order and a
-  `Failure` for anything else. A request that leaves the stream out of step —
-  no answer in time, an answer to another request — ends the connection, and
-  later requests fail unsent.
+- `IDM.Modbus.TCP.Internal` — framing and sockets for the two read function
+  codes and the two write ones, 6 and 16. Returns raw bytes in wire order and
+  a `Failure` for anything else. A request that leaves the stream out of
+  step — no answer in time, an answer to another request — ends the
+  connection, and later requests fail unsent. `IDM.Modbus.TCP` is what a
+  consumer may reach of it: neither connecting nor writing.
 - `IDM.Navigator.Register` — the manual's vocabulary as types, plus `decode`
   and its inverse `encode`. Every distinction the manual draws in prose or a
   footnote is a constructor, so a caller cannot silently ignore it.
@@ -145,9 +146,10 @@ The modules stack, each refusing to know the next one's business:
   a volatile one always sends. Both read back. The decision is `writeWith`
   in `IDM.Navigator.Write.Core`, over any register and any monad, so the
   test suite runs it against a fake controller in `State`. It lives with
-  `IDM.Modbus.TCP` and `IDM.Navigator.Register` in `core/`, the private
-  sublibrary `core`, which the library re-exports but for that module: a
-  consumer reaches a register only through a target.
+  the framing and `IDM.Navigator.Register` in `core/`, the private
+  sublibrary `core`, which the library re-exports but for that module and
+  `IDM.Modbus.TCP.Internal`: a consumer reaches a register only through a
+  target, and a connection only through a session.
 
 The web backend has a stack of its own beside it, joined to the first only by
 `Host` and by the parameter identifier:
