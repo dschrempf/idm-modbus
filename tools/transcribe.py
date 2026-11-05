@@ -408,10 +408,11 @@ HADDOCK_SPECIAL = re.compile(r"([\\/'`\"@<>*_$#])")
 def read_targets(path, registers):
     """The hand-written names of the registers a write may go to.
 
-    Refused: an address the table lacks or nothing may write, a name that is
-    no constructor or names two registers, and a member of a family, which
-    would need a circuit or a zone module as an argument and is not written
-    yet.
+    Refused: an address the table lacks or nothing may write, a write-only
+    register whose write costs an EEPROM cycle, which a write saves only by
+    reading first, a name that is no constructor or names two registers, and
+    a member of a family, which would need a circuit or a zone module as an
+    argument and is not written yet.
     """
     with path.open(newline="") as fh:
         rows = [(int(r["address"]), r["name"]) for r in csv.DictReader(fh, delimiter="\t")]
@@ -422,6 +423,8 @@ def read_targets(path, registers):
             sys.exit(f"target {n} at {a}: the table has no register there")
         if r["access"] == "RO":
             sys.exit(f"target {n} at {a}: the register is read-only")
+        if r["access"] == "W" and r["persistence"] != "volatile":
+            sys.exit(f"target {n} at {a}: write-only, and a write costs an EEPROM cycle")
         if not CONSTRUCTOR.fullmatch(n) or names.count(n) > 1:
             sys.exit(f"target {n} at {a}: not a constructor name, or not unique")
         if FAMILY_MEMBER.search(r["name"]):
@@ -477,7 +480,7 @@ def target_module(targets, registers):
         "",
         "import IDM.Modbus.TCP (Address (..))",
         "import IDM.Navigator.Register",
-        "import IDM.Navigator.Target.Splice (registerOf)",
+        "import IDM.Navigator.Target.Splice (costAt, registerOf)",
         "",
         "-- | A register a write may go to, by what a write to it costs.",
         "data Target (c :: Cost) where",
@@ -498,13 +501,15 @@ def target_module(targets, registers):
         "targetRegister :: Target c -> Register",
         "targetRegister t = case t of",
     ]
-    out += [f"  {n} -> $$(registerOf {cost(a)} (Address {a}))" for a, n in targets]
+    out += [f"  {n} -> $$(registerOf (Address {a}))" for a, n in targets]
     out += [
         "",
+        "-- | What a write costs, from the table; the build fails where a",
+        "-- constructor's type says otherwise.",
         "targetCost :: Target c -> SCost c",
         "targetCost t = case t of",
     ]
-    out += [f"  {n} -> S{cost(a)}" for a, n in targets]
+    out += [f"  {n} -> $(costAt (Address {a}))" for a, n in targets]
     out += [
         "",
         "-- | Every target, in address order.",

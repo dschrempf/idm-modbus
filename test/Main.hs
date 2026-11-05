@@ -14,6 +14,7 @@ import Data.List (group, sort)
 import Data.List.NonEmpty (NonEmpty (..))
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
+import GHC.Float (double2Float, float2Double)
 import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse)
 import IDM.Navigator.Register
 import qualified IDM.Navigator.Table as Table
@@ -270,6 +271,7 @@ checks =
       encode (register 1694) (Count 70) == Left (OutOfRange (Range 20 65) 70)
         && encode (register 1694) (Real 40) == Left (Mismatch UChar (Real 40))
         && either isNotFinite (const False) (encode (register 74) (Real (0 / 0)))
+        && encode (register 74) (Real 1e39) == Left (NotFinite 1e39)
         && encode (register 1000) (Real 1) == Left (NotWritable ReadOnly)
         && encode (register 1710) (Count 1) == Left (Mismatch Boolean (Count 1))
     ),
@@ -291,7 +293,7 @@ roundTrips :: Register -> Bool
 roundTrips r = case registerDatatype r of
   Float32 ->
     let x = maybe 21.5 rangeMaximum (registerRange r)
-     in back (Real x) == Right (Just (Measured (Real (realToFrac (realToFrac x :: Float)))))
+     in back (Real x) == Right (Just (Measured (Real (float2Double (double2Float x)))))
   Boolean -> back (Flag True) == Right (Just (Measured (Flag True)))
   _ ->
     let n = maybe 1 (round . rangeMaximum) (registerRange r)

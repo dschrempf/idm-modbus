@@ -114,6 +114,10 @@ Each later write experiment activates its register in
 The other registers of the "values stop" note follow, a few per later write
 session.
 
+Before the first EEPROM target is listed, as the 4108 limit may be:
+`write-interface-eeprom-guard-and-tests-open`, whose round trip that write
+measures.
+
 6a also sets the PV menu for a store charge, the house's use of the surplus;
 see `unit-of-pv-surplus-74-unsettled`.
 

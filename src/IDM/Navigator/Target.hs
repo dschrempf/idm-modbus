@@ -28,7 +28,7 @@ where
 
 import IDM.Modbus.TCP (Address (..))
 import IDM.Navigator.Register
-import IDM.Navigator.Target.Splice (registerOf)
+import IDM.Navigator.Target.Splice (costAt, registerOf)
 
 -- | A register a write may go to, by what a write to it costs.
 data Target (c :: Cost) where
@@ -46,11 +46,13 @@ data SomeTarget where
 -- | The register, as the table has it.
 targetRegister :: Target c -> Register
 targetRegister t = case t of
-  PvSurplus -> $$(registerOf Free (Address 74))
+  PvSurplus -> $$(registerOf (Address 74))
 
+-- | What a write costs, from the table; the build fails where a
+-- constructor's type says otherwise.
 targetCost :: Target c -> SCost c
 targetCost t = case t of
-  PvSurplus -> SFree
+  PvSurplus -> $(costAt (Address 74))
 
 -- | Every target, in address order.
 targets :: [SomeTarget]

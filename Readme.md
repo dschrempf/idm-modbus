@@ -46,8 +46,8 @@ round and writes a line per request, verbatim but for what names the machine.
 clock, and `--leave-fachmann` closes it again.
 
 `idm-write HOST ADDRESS VALUE` writes a target and reads it back. A target
-stored in the EEPROM is read first and left alone if it holds the value
-already; otherwise it is written only with `--eeprom`.
+stored in the EEPROM is not touched without `--eeprom`, not even read; with
+it, it is read first and left alone if it holds the value already.
 
 Before anything will answer, Modbus TCP has to be switched on in the
 controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The

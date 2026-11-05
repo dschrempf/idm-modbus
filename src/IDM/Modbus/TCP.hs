@@ -59,7 +59,7 @@ newtype Port = Port Int
 newtype UnitId = UnitId Word8
   deriving (Show, Eq)
 
--- | How long connecting, or one read, may take. A stalled Navigator does not
+-- | How long connecting, or one request, may take. A stalled Navigator does not
 -- signal at all, and the socket has no timeout of its own.
 newtype Patience = Patience {patienceMicroseconds :: Int}
   deriving (Show, Eq)
@@ -121,7 +121,7 @@ data Failure
   | -- | a write acknowledged with another address, value or quantity than
     -- was sent, as received
     UnexpectedEcho B.ByteString
-  | -- | sent; this read ended the connection
+  | -- | sent; this request ended the connection
     Ended Ending
   | -- | not sent: the connection had ended
     Unsent Ending
@@ -189,8 +189,8 @@ disconnect = N.close . connectionSocket
 -- | Read @quantity@ consecutive registers, returning their raw bytes in wire
 -- order. Interpreting them is not this module's business.
 --
--- A read that ends the connection closes its socket, and every later read on
--- it fails unsent; 'disconnect' may still be called.
+-- A request that ends the connection closes its socket, and every later
+-- request on it fails unsent; 'disconnect' may still be called.
 readRegisters ::
   Connection ->
   FunctionCode ->
@@ -206,8 +206,8 @@ readRegisters conn fc (Address addr) (Quantity quantity) =
 data Write
   = -- | one register, function code 6; a @UCHAR@, @WORD@ or @BOOL@
     WriteSingle Address Word16
-  | -- | consecutive registers, function code 16, at most 123 of them; a
-    -- @FLOAT@
+  | -- | consecutive registers, function code 16; a @FLOAT@. Modbus allows
+    -- at most 123, and nothing here checks it.
     WriteMultiple Address (NonEmpty Word16)
   deriving (Show, Eq)
 

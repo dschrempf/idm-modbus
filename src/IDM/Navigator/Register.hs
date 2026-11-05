@@ -47,7 +47,7 @@ import Data.Int (Int16)
 import Data.List.NonEmpty (NonEmpty (..))
 import Data.Text (Text)
 import Data.Word (Word16, Word32)
-import GHC.Float (castFloatToWord32, castWord32ToFloat)
+import GHC.Float (castFloatToWord32, castWord32ToFloat, double2Float, float2Double)
 import IDM.Modbus.TCP (Address, Quantity (..))
 import Language.Haskell.TH.Syntax (Lift)
 
@@ -261,7 +261,7 @@ data Value
 asWritten :: Register -> B.ByteString -> Maybe Value
 asWritten reg bytes = case registerDatatype reg of
   Float32 -> withWords 2 $ \ws -> case ws of
-    [lo, hi] -> Just (Real (realToFrac (castWord32ToFloat (wide lo hi))))
+    [lo, hi] -> Just (Real (float2Double (castWord32ToFloat (wide lo hi))))
     _ -> Nothing
   DWord -> withWords 2 $ \ws -> case ws of
     [lo, hi] -> Just (Count (fromIntegral (wide lo hi)))
@@ -328,7 +328,7 @@ data Refusal
     OutOfRange Range Double
   | -- | a whole number the datatype cannot hold
     Unrepresentable Datatype Integer
-  | -- | not a number, or infinite
+  | -- | not a number, or infinite as a @FLOAT@: 1e39 is
     NotFinite Double
   | -- | a register nothing may write
     NotWritable Access
@@ -343,12 +343,13 @@ encode :: Register -> Value -> Either Refusal (NonEmpty Word16)
 encode reg v = case (registerAccess reg, registerDatatype reg, v) of
   (ReadOnly, _, _) -> Left (NotWritable ReadOnly)
   (_, Float32, Real x)
-    | isNaN x || isInfinite x -> Left (NotFinite x)
+    | isNaN f || isInfinite f -> Left (NotFinite x)
     | otherwise -> do
-        let f = realToFrac x :: Float
-            w = castFloatToWord32 f
-        inRange (realToFrac f)
+        let w = castFloatToWord32 f
+        inRange (float2Double f)
         Right (fromIntegral w :| [fromIntegral (w `shiftR` 16)])
+    where
+      f = double2Float x
   (_, DWord, Count n) -> do
     w <- whole 0 0xFFFFFFFF n
     Right (fromIntegral w :| [fromIntegral (w `shiftR` 16)])
