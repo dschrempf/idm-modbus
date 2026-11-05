@@ -24,7 +24,9 @@ and the table are in place, so each run is recorded against 2608.
 
 - The Fachmann level fell back after 9 min 48 s and after 7.5 to 8 min.
   Find what ends it: a fixed time from entry, idleness at the display, or
-  something else. Then `tool-fixes.md` corrects the sixty minutes. Then
+  something else. A remote session that afternoon would also explain the
+  drops (`beyond-this-update.md`). Measure on several days with a level log
+  before taking eight to ten minutes as the rule. Then `tool-fixes.md` corrects the sixty minutes. Then
   `fachmann-entry-right-after-leaving-is-ignored` again.
 - `power-limit-4108-semantics-unknown`: the page now calls 4108
   `Leistungsbegrenzung  (kW)`. 4112 became a register of its own at 0.0, with
