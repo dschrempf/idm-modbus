@@ -31,15 +31,31 @@ the rule; it does not settle it. Seen on the web interface by eye, not
 captured yet: the next webapi capture holds the graph, which reaches back
 about a week.
 
+## Why it comes first
+
+Under reading 1, 0 is not "no surplus": it reads as a meter showing that
+the pump uses exactly the PV output. A consumer that leaves the controller
+to its own business by writing 0 would then keep a running pump running, and
+must write a negative value instead. And 74 has stood at 0, with `PV008` at
+`N2_GLTSF`, `PV001` Yes and `PV013` Always, since 21:37 on 2026-11-05. If the
+controller weighs 0 plus its draw against its draw, a run it starts on its
+own may count as covered by PV and go on as a PV store charge until B38
+reaches `PV006`. Until this is settled, a run the controller started that
+ends at B38 = `PV006` rather than at its own store target points to that;
+setting `PV008` back to `N2_NONE` rules it out, at one EEPROM cycle each
+way.
+
 ## How we might solve it
 
-1. Start a store charge with 74 = 3.0 as on 2026-11-05, with B38 well below
-   `PV006`. Once the compressor has run past `WP010`'s 10 min, write
-   74 = 0 every minute: under reading 1 the run holds, as a meter reading 0
-   means the pump uses exactly the PV output; otherwise it stops within
-   `PV011`'s 2 min. If it holds, write -0.5 (74 documents no range): under
-   reading 1 it then stops. Watch 1090, 1100, 4122, B38 and the graph's two
-   channels.
+1. Start a store charge with 74 = 1.0, the first phase of
+   `does-a-low-surplus-at-74-cap-the-speed`, with B38 as far below `PV006`
+   as it gets: on 2026-11-05 the charge went from 27.5 to 35 °C in 20 min at
+   full speed, and this step needs the compressor's 10 min of `WP010`, plus
+   `PV011`'s 2 min, plus a margin, before `PV006` ends the run. Once the
+   compressor has run past `WP010`, write 74 = 0 every minute: under
+   reading 1 the run holds; otherwise it stops within `PV011`'s 2 min. If it
+   holds, write -0.5 (74 documents no range): under reading 1 it then
+   stops. Watch 1090, 1100, 4122, B38 and the graph's two channels.
 2. Record it in a dated `doc/`, and in `doc/research.md`'s open question.
    Under reading 1, a consumer writes the meter's export as it is, negative
    for import.

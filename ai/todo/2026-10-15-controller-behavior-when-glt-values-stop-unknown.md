@@ -51,3 +51,10 @@ For 74, steps 1 and 2 are done (2026-11-05,
 once. Step 3 is not: that run ended with 0 written by hand. With the store
 below `PV006`, write 3.0 for a few minutes, stop, and watch the page's
 `Überschuss`, 1090 and 1100 for longer than the five hours of `SSYSPV030`.
+
+Planned for the night of 2026-11-06, after the run of
+`pv-surplus-74-may-include-the-pumps-own-draw`: write 1.0 once and stop,
+and watch 74 over Modbus, the page's `Überschuss`, 1090, 1100 and B38
+overnight. B38 will stand near `PV006` then; a run that starts once it has
+cooled shows the value held. `what-a-power-cycle-does-to-74-and-the-controller`
+ends the watch.

@@ -132,6 +132,22 @@ see `unit-of-pv-surplus-74-unsettled`.
 the writes stop, step 3 of `controller-behavior-when-glt-values-stop-unknown`,
 and `pv-surplus-74-may-include-the-pumps-own-draw`.
 
+6a continues on the evening of 2026-11-06, one store charge and the night
+after it, in this order:
+
+1. `does-a-low-surplus-at-74-cap-the-speed`, step 1: start at 1.0.
+2. `pv-surplus-74-may-include-the-pumps-own-draw` on the same run: 0, then
+   -0.5. It decides what "no surplus" is, so it goes first if B38 leaves
+   room for only one.
+3. `does-a-low-surplus-at-74-cap-the-speed`, step 2, if 2 finds the draw
+   added back and B38 leaves room.
+4. `controller-behavior-when-glt-values-stop-unknown` for 74, overnight.
+5. `what-a-power-cycle-does-to-74-and-the-controller`, ending the watch.
+
+The consumer manages the pump through 74 only once these are done.
+`pv-hot-water-charge-on-74-untested` comes later. If 74 cannot hold a run
+near the floor, `power-limit-4108-semantics-unknown` joins them.
+
 Untested, and for these sessions to watch: writing while a second Modbus
 client polls. Session 3's watch is the second client, and the stall it is kept
 apart from session 2 for may hit a write too.
