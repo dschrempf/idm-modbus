@@ -63,3 +63,12 @@ Not run on 2026-11-06: the session ended after the own-draw test, and the
 overnight watch waits for the next one. The last write of that day was
 -0.5 at 11:37:15. A read of 74 after more than five hours says whether it
 held the value or reset it, though not what the PV logic does with it.
+
+On 2026-11-06 at 19:47, 74 read -0.5, 8 h 10 min after the last write: the
+register keeps the value past `SSYSPV030`'s five hours. What the control
+does with it is still open; an evcc user reports that the controller kept
+acting overnight on the last value written
+(`doc/pv-control.md`). Decided on 2026-11-06 to run the overnight test on a
+later night, as a consumer that dies after writing a surplus must not leave
+the pump charging. Write a value that starts a charge, as 1.0 did not: 1.7
+or above.

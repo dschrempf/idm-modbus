@@ -159,3 +159,10 @@ near the floor, `power-limit-4108-semantics-unknown` joins them.
 Untested, and for these sessions to watch: writing while a second Modbus
 client polls. Session 3's watch is the second client, and the stall it is kept
 apart from session 2 for may hit a write too.
+
+Step 3 ran on the evening of 2026-11-06, 19:54 to 20:26: a meter-style
+value did not hold the run, and a second start failed unexplained
+(`doc/verification-2026-11-06-pv-surplus-loop.md`). The tests stop here
+until the controller's PV logic is observed rather than guessed at;
+`doc/pv-control.md` collects the sources and the observations. Steps 4 and 5
+stay, for a later night.

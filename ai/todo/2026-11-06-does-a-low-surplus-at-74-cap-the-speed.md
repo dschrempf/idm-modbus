@@ -53,3 +53,19 @@ Step 2 is left, postponed by choice. It needs a start at 1.7 or more, the
 start threshold lying between 1.0 and 1.7, and then 1.0 minus 4122 every
 minute once the start program has ended. With `PV006` at 40 °C, B38 must
 start well below it: the run of 2026-11-06 rose 7 K in 15 min.
+
+## Step 2 on the evening of 2026-11-06
+
+Run, with 1.0 minus 4122 every 20 s from 3.5 min after the compressor
+started: no. The speed climbed to 117 rps while the values written were
+already negative, fell to the floor, and the run stopped after 8 min 10 s,
+before the minimum runtime. The speed followed the sign of the two-minute
+mean of 74, not the value written last
+(`doc/verification-2026-11-06-pv-surplus-loop.md`). A second start on 1.7,
+for the hold-and-step test, never came.
+
+Writing the meter's export does not hold a run near a target. The
+candidates left are the target at 88, which the controller may regulate the
+mean of 74 toward, `IV002` and 4108. `doc/pv-control.md` lists what to
+watch before the next write: 12763's internal value of 74 and 88, and the
+reason for a request in `heatpump.info`.

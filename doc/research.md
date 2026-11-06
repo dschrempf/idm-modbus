@@ -325,12 +325,16 @@ above the 0.8 kW the PV page printed as the forecast. See
   `PV008` set too; the PV page prints it, 0.7 kW on 2026-11-05. 4122 is the
   inverter's figure; a meter on the supply would say what the pump draws
   besides it.
-- **What starts a PV store charge, and whether a run holds a surplus.** 1.0
-  at 74 did not start one and 1.7 did, at 7.3 °C outdoors; the PV page's
-  `mom./prog. Leistung Vorrang`, 1.6 kW, lies between, and so may its
-  `Heizen` 0.8 kW plus `PV015`'s shift, which no user level shows. Whether
-  writing the target minus the draw holds a run near the target is untested
+- **What starts, steers, stops and holds off a PV run.** 1.0 at 74 did not
+  start a store charge against a forecast of 0.8 kW and a mean of about 1.0
+  did against 0.7 kW; `PV015`, 10396 at Fachmann level, reads 0
   ([verification-2026-11-06-pv-surplus-own-draw.md](verification-2026-11-06-pv-surplus-own-draw.md)).
+  Writing 1.0 minus the draw did not hold a run near 1.0 kW: the speed
+  followed the sign of the two-minute mean of 74, the run stopped before the
+  minimum runtime, and a second start did not come
+  ([verification-2026-11-06-pv-surplus-loop.md](verification-2026-11-06-pv-surplus-loop.md)).
+  The sources on this logic, among them a target at 88 and the controller's
+  own reason for a request, are in [pv-control.md](pv-control.md).
 - **-2 at 1714 and 1715.** The two external pump requests answer `fffe`,
   where every other unfitted `UCHAR` answers `ffff`, and the controller's own
   register page prints them as -2. The library treats -1 and -2 alike as
