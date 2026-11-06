@@ -58,3 +58,8 @@ and watch 74 over Modbus, the page's `Überschuss`, 1090, 1100 and B38
 overnight. B38 will stand near `PV006` then; a run that starts once it has
 cooled shows the value held. `what-a-power-cycle-does-to-74-and-the-controller`
 ends the watch.
+
+Not run on 2026-11-06: the session ended after the own-draw test, and the
+overnight watch waits for the next one. The last write of that day was
+-0.5 at 11:37:15. A read of 74 after more than five hours says whether it
+held the value or reset it, though not what the PV logic does with it.

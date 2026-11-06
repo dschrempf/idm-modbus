@@ -26,3 +26,16 @@ plans that renewal around the hour.
 2. Correct the three claims to what step 1 finds, and record it in a dated
    `doc/`.
 3. Re-check `fachmann-entry-right-after-leaving-is-ignored` against it.
+
+## 2026-11-06: held 73 min, left by hand
+
+Entered by `idm-web` at 11:04:38 and still Fachmann at 12:17:36, when it
+was left by hand at 12:18:08
+(`captures/navigator-2.0-level-20.24-2608-2026-11-06-1104.log`). Meanwhile
+a web watch asked 6245 every 10 s to 11:48 and answered at Fachmann level
+throughout, `tools/webprobe.py` walked from 11:48 to 11:59, and from 12:00
+`--status` read the level every 30 s. At the display, `PV006` was changed
+three times, the last after 11:37, with no code entered: `PV006` is a Kunde
+setting (`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-2138.json`).
+So the level outlasted both sixty minutes from the one entry and the ten of
+2026-11-05. Activity at the display or the web interface may extend it.

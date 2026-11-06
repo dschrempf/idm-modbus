@@ -144,6 +144,14 @@ after it, in this order:
 4. `controller-behavior-when-glt-values-stop-unknown` for 74, overnight.
 5. `what-a-power-cycle-does-to-74-and-the-controller`, ending the watch.
 
+Run on the morning of 2026-11-06 instead, 11:02 to 11:37, with `PV006`
+raised for room and back at 40 °C after: step 1 found no cap, step 2 that
+the controller adds its draw back, so a consumer writes the meter's export
+and a negative value for import
+(`doc/verification-2026-11-06-pv-surplus-own-draw.md`). Step 3 was
+postponed by choice, and so with it 4 and 5. 74 stands at -0.5 since
+11:37:15.
+
 The consumer manages the pump through 74 only once these are done.
 `pv-hot-water-charge-on-74-untested` comes later. If 74 cannot hold a run
 near the floor, `power-limit-4108-semantics-unknown` joins them.

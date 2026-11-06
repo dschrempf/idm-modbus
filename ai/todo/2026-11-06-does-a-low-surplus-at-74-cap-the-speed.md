@@ -39,3 +39,17 @@ Write 1.0, not 0.8: the PV page weighed a surplus against 0.7 kW at rest and
 Step 1 is the first phase of the session in
 `run-the-open-todos-in-six-sessions`; the own-draw test follows on the same
 run.
+
+## Step 1 on 2026-11-06
+
+Run at 1.7, since 1.0 did not start the charge in 12.5 min. The run went
+from its start program to 120 rps and 3.9 kW: a constant value caps
+nothing. `pv-surplus-74-may-include-the-pumps-own-draw` found that the
+controller adds its draw back, so the first case above holds, and on -0.5
+the speed fell from 120 to 81 rps before the stop: the controller acts on
+74 while it runs (`doc/verification-2026-11-06-pv-surplus-own-draw.md`).
+
+Step 2 is left, postponed by choice. It needs a start at 1.7 or more, the
+start threshold lying between 1.0 and 1.7, and then 1.0 minus 4122 every
+minute once the start program has ended. With `PV006` at 40 °C, B38 must
+start well below it: the run of 2026-11-06 rose 7 K in 15 min.

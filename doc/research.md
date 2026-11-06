@@ -260,6 +260,17 @@ watts would have been far below the 0.7 kW threshold the controller's PV
 page printed. See
 [verification-2026-11-05-pv-surplus.md](verification-2026-11-05-pv-surplus.md).
 
+A seventh is what the consumer writes there: **the controller adds its own
+draw back to 74**, as a surplus measured at the grid needs. A running store
+charge held past the compressor's minimum runtime with 1.7 and with 0
+written against a draw of 3.9 kW, and stopped within 72 s of -0.5. So 74 is
+the meter's export as it is, negative for import; 0 keeps a running charge
+running, and a value below 0 ends it. A constant surplus does not cap the
+speed: 74 plus the draw always exceeds the draw, and the run climbs to full
+speed. From standstill 1.0 did not start a charge in 12 minutes and 1.7 did,
+above the 0.8 kW the PV page printed as the forecast. See
+[verification-2026-11-06-pv-surplus-own-draw.md](verification-2026-11-06-pv-surplus-own-draw.md).
+
 ## Open questions
 
 - **The `RW/RO` access right.** 167 of the 694 registers of revision 12 carry it — the
@@ -314,13 +325,12 @@ page printed. See
   `PV008` set too; the PV page prints it, 0.7 kW on 2026-11-05. 4122 is the
   inverter's figure; a meter on the supply would say what the pump draws
   besides it.
-- **Whether 74 includes the pump's own draw.** Given 3.0 kW at 74, the pump
-  drew up to 4.05 kW and kept running. Either the controller adds its own
-  draw back to 74, as `PV010` "Überschuss" does for the 0–10 V and S0
-  signals, or it does not size a run to the surplus at all; 812184 says
-  neither for building management. A write between the page's threshold and
-  the draw tells them apart
-  ([verification-2026-11-05-pv-surplus.md](verification-2026-11-05-pv-surplus.md)).
+- **What starts a PV store charge, and whether a run holds a surplus.** 1.0
+  at 74 did not start one and 1.7 did, at 7.3 °C outdoors; the PV page's
+  `mom./prog. Leistung Vorrang`, 1.6 kW, lies between, and so may its
+  `Heizen` 0.8 kW plus `PV015`'s shift, which no user level shows. Whether
+  writing the target minus the draw holds a run near the target is untested
+  ([verification-2026-11-06-pv-surplus-own-draw.md](verification-2026-11-06-pv-surplus-own-draw.md)).
 - **-2 at 1714 and 1715.** The two external pump requests answer `fffe`,
   where every other unfitted `UCHAR` answers `ffff`, and the controller's own
   register page prints them as -2. The library treats -1 and -2 alike as

@@ -42,3 +42,5 @@ Once, by hand at the machine's mains switch, with the compressor off.
 Planned as the end of the overnight watch of
 `controller-behavior-when-glt-values-stop-unknown`, on the morning of
 2026-11-07.
+
+Postponed with that watch, which was not run on 2026-11-06.

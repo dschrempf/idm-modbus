@@ -59,3 +59,20 @@ way.
 2. Record it in a dated `doc/`, and in `doc/research.md`'s open question.
    Under reading 1, a consumer writes the meter's export as it is, negative
    for import.
+
+## Done on 2026-11-06
+
+Reading 1: the controller adds its own draw back. Run on the morning, not
+the evening, with `PV006` raised to 40 and then 45 °C for room. 1.0 did not
+start a charge in 12.5 min; 1.7 did. The run held at full speed, 3.9 kW,
+past `WP010` at 1.7 and for 3 min at 0, and stopped 72 s after -0.5, after
+ramping down from 120 to 81 rps
+(`doc/verification-2026-11-06-pv-surplus-own-draw.md`, and
+`doc/research.md`). A consumer writes the meter's export as it is, negative
+for import; 0 keeps a running charge running.
+
+The worry under "Why it comes first" did not bear out on the morning's hot
+water charge: it ended at its own target with 74 at 0 and left the pump in
+standby, by eye at the display. `PV008` stays at `N2_GLTSF`.
+
+`PV006` is back at 40 °C, where the house may leave it.
