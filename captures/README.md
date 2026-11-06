@@ -15,7 +15,7 @@ The kind of capture is in the name:
     navigator-2.0-webui-SOFTWARE-YYYY-MM-DD-HHMM/          curl, below
     navigator-2.0-level-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-web HOST --leave-fachmann, --enter-fachmann
     navigator-2.0-show-SOFTWARE-YYYY-MM-DD-HHMM.txt        idm-web HOST --show SETTING...
-    navigator-2.0-write-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-write HOST ADDRESS VALUE
+    navigator-2.0-write-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-write HOST ADDRESS VALUE, or tools/drive74.py
 
 The time is the local minute the capture started. `SOFTWARE` is the
 controller's software as `doc/software-versions.md` spells it, `20.24-2608`.

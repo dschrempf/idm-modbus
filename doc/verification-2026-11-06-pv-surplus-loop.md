@@ -121,6 +121,10 @@ With the PV menu as above, at Kunde level for Modbus:
     cabal run idm-dump -- HOST --watch 10 74 1008 1090 1091 1100 1074 4122 1004 1098 > watch.jsonl
     IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann
     IDM_PIN=... cabal run idm-web -- HOST --watch 10 6245 10263 > webwatch.jsonl
-    cabal run idm-write -- HOST 74 1.7     # every minute, until 3.5 min after 1100 reads Ein
-    cabal run idm-write -- HOST 74 V       # every 20 s, V = 1.0 minus the last 4122
-    cabal run idm-write -- HOST 74 -0.5    # once the run has stopped
+    tools/drive74.py HOST watch.jsonl --final -0.5 1.7/60/ein+210 1.0-4122/20/ein+2910 -0.5/60/aus > write.log
+    tools/runtable.py watch.jsonl --web webwatch.jsonl --writes write.log
+
+The run used two scratch scripts that `tools/drive74.py` replaced; the
+schedule above is theirs. The table's mean of 74 was taken at the times of
+6245's samples; `tools/runtable.py` takes it at the rounds of the Modbus
+watch, so its figures differ from the table's by up to one round.

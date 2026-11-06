@@ -19,6 +19,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-2.0-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
     IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann   # and --leave-fachmann
     cabal run idm-write -- HOST 74 3.0               # a target; --eeprom where it costs a cycle
+    tools/drive74.py HOST WATCH --final -0.5 1.7/60/ein 0/20/ein+720 > captures/navigator-2.0-write-SOFTWARE-YYYY-MM-DD-HHMM.log
+    tools/runtable.py WATCH --web WEBWATCH --writes WRITELOG   # a run lined up by time; --last for a status line
     ormolu -i $(git ls-files '*.hs')   # formatting
     cabal-fmt -i idm-modbus.cabal
 
@@ -190,6 +192,9 @@ sets the user level, and it writes. Deciding what the heat pump should
 do — from a PV surplus, a meter, a tariff, the household's appliances — belongs
 to its consumers, and no such strategy goes in here, not even as an example. A
 write of the surplus register 74 is interface; computing the surplus is not.
+A schedule fixed before a run, written to see how the controller responds,
+is a measurement and not a strategy: `tools/drive74.py` writes one, and
+`tools/runtable.py` lines up what it wrote with what the controller did.
 
 ## Things the wire does that surprise people
 
