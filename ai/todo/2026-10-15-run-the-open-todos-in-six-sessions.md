@@ -173,3 +173,6 @@ stepped, 12763 watched beside it, on a day the pump stands idle and the
 store is cool; a second run with `PV011` at 0.5 min follows. 88 is a target
 and `tools/drivepv.py` writes it. Steps 4 and 5 above wait for it, and the
 overnight test takes in 88 if it matters.
+
+From 2026-11-07 the PV todos of 6a are one entry, `pv-control-of-74-and-88`,
+whose README orders them.
