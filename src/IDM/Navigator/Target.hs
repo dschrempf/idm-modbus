@@ -36,6 +36,8 @@ data Target (c :: Cost) where
   PvSurplus :: Target 'Free
   -- | 88 @PV-Zielwert (Smartfox und Solar-Log)@, kW
   PvTarget :: Target 'Free
+  -- | 4108 @Leistungsbegrenzung Wärmepumpe@, kW
+  HeatPumpPowerLimit :: Target 'Free
 
 deriving instance Show (Target c)
 
@@ -50,6 +52,7 @@ targetRegister :: Target c -> Register
 targetRegister t = case t of
   PvSurplus -> $$(registerOf (Address 74))
   PvTarget -> $$(registerOf (Address 88))
+  HeatPumpPowerLimit -> $$(registerOf (Address 4108))
 
 -- | What a write costs, from the table; the build fails where a
 -- constructor's type says otherwise.
@@ -57,10 +60,12 @@ targetCost :: Target c -> SCost c
 targetCost t = case t of
   PvSurplus -> $(costAt (Address 74))
   PvTarget -> $(costAt (Address 88))
+  HeatPumpPowerLimit -> $(costAt (Address 4108))
 
 -- | Every target, in address order.
 targets :: [SomeTarget]
 targets =
   [ SomeTarget PvSurplus
   , SomeTarget PvTarget
+  , SomeTarget HeatPumpPowerLimit
   ]

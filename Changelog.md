@@ -103,6 +103,8 @@
   the controller's log.
 - A second target, `PvTarget`, 88 `PV-Zielwert (Smartfox und Solar-Log)`,
   the candidate for the target the controller's PV loop holds 74 at.
+- A third target, `HeatPumpPowerLimit`, 4108 `Leistungsbegrenzung
+Wärmepumpe`, the candidate for a cap under a PV run.
 
 ### Changed
 
