@@ -278,7 +278,8 @@ runtime:
   settles.
 
 The levers outside the PV loop: 4108 `Leistungsbegrenzung Wärmepumpe`, a
-volatile `FLOAT` in kW, -1 by default, whose effect no run has tested, and
+`FLOAT` in kW, -1 by default, volatile as a restart showed
+(`doc/verification-2026-11-07-restart.md`), whose effect no run has tested, and
 `IV002` `N2_MOD_MAX_POWER_HEATING`, a Fachmann setting in percent that would
 cap every heating run, not only a PV one, and did not bind in the one run
 that lowered it (`doc/verification-2026-11-05-floor.md`). That run also

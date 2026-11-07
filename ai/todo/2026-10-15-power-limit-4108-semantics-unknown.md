@@ -78,3 +78,14 @@ end. What answers it: 4122 and 6245's speed against the limit, and whether
 the run goes on to `PV006` or ends at the minimum runtime. The schedule
 driver writes only 74 and 88, so it needs a third value, or the limit is
 written by hand with `idm-write`.
+
+## 2026-11-07: volatile, measured
+
+Listed as the target `HeatPumpPowerLimit`. 3.0 written at rest read back,
+`N2_GLTMON` listed it with a `GLT Value` of 3.0, and it held for six minutes
+unrenewed; after `System Neustart` it read -1.0, so the EEPROM does not hold
+it (`doc/verification-2026-11-07-restart.md`). The walk at Fachmann level
+holds no setting for it either. Persistence and unit are settled; whether
+it caps the draw, and in which modes, is step 2, now the PV run of
+`pv-control-of-74-and-88`. Since 4108 costs no EEPROM cycle, the run may
+renew it beside 74.

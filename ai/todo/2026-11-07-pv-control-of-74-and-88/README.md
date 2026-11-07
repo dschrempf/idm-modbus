@@ -28,6 +28,8 @@ Settled on the machine, 2026-11-05 to 2026-11-07:
 - 88 at -1.0 and at +1.0, each for 3 minutes past the start program, moved
   nothing.
 - A PV start waits 30 minutes after a PV stop.
+- 4108 is a target, `HeatPumpPowerLimit`, and volatile: `System Neustart`
+  returned it to -1, and 74 to 0 (evening of 2026-11-07).
 
 So nothing written to 74 or 88 so far holds a run low past the minimum
 runtime. Open: whether 4108 can, what decides at the minimum runtime,
@@ -39,13 +41,15 @@ the controller does with a value no one renews.
 1. 4108, `Leistungsbegrenzung Wärmepumpe`, as a cap under a PV run: a
    constant surplus at 74, which alone drives the speed to the top, and a
    limit near the floor at 4108. If the draw holds at the limit and the run
-   goes on to `PV006`, that is the low run. Needs 4108 listed as a target
-   first; `power-limit-4108-semantics-unknown`.
+   goes on to `PV006`, that is the low run. `tools/drivepv.py` writes only
+   74 and 88, so it needs 4108 as a third value, renewed beside 74;
+   `power-limit-4108-semantics-unknown`.
 2. The meter-style run with `PV011` at 0.5 min, with the PV the meter
    simulates near the floor's draw: whether the loop settles there, and
    whether a settled loop, its mean near 0, ends at the minimum runtime as
    74 at 0 did.
-3. The overnight test of 74, then the power cycle that ends its watch.
+3. The overnight test of 74. A restart from the display is measured; a
+   power cycle at the mains switch is not, and is not needed for it.
 4. A PV hot water charge.
 
 ## Files
@@ -56,7 +60,8 @@ the controller does with a value no one renews.
 - `does-a-low-surplus-at-74-cap-the-speed.md`: the question that led here;
   answered no for a constant 74, the rest carried into the 88 run.
 - `what-a-power-cycle-does-to-74-and-the-controller.md`: what a restart
-  leaves behind, 74 among it; ends the overnight watch.
+  leaves behind, 74 among it; answered for `System Neustart`, open for a
+  power cycle and an update.
 - `pv-hot-water-charge-on-74-untested.md`: hot water rather than the store,
   once the store charge is settled.
 
