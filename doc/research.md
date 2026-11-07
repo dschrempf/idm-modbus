@@ -418,7 +418,25 @@ suffix.
 
 Two things this does not reach. The Download Monitor endpoint
 (`/wp-json/download-monitor/v1/downloads`) answers 403, so anything gated
-behind the partner portal stays invisible. And 812170 is not in the library at
-all: a search for `812` returns fifteen files, none of them it, and the obvious
-guesses (`Modbus-TCP.pdf`, `tu_de_812170_*.pdf`, tried across several upload
-folders) all 404. For that document the Loxone mirror remains the only source.
+behind the partner portal stays invisible; its post type,
+`/wp-json/wp/v2/dlm_download`, answers, and lists only brochures and
+newsletters. And 812170 is not in the library at all, nor 812570, its English
+edition. iDM publishes its `tu_` documents there; 812170 is a `ma_` one, an
+installation manual.
+
+Guessing does not find it either. On 2026-11-07 every one of these answered
+404: in each upload folder from `2021/04` to `2026/11`,
+`ma_de_812170_Modbus-TCP_Navigator-2.0.pdf` — what WordPress makes of the
+title the PDF carries — and seven variants of it (`ma-de-…-2-0`, `tu_de_…`,
+`…_Buch`, `…_Navigatorregelung-2.0`, `Modbus-TCP_Navigator-2.0_DE`); the same
+with `-1` to `-3` in `2021/04`; and four `ma_en_812570_…` and `tu_en_…`
+variants in `2021/04` and from `2025/01`. Paths are case-sensitive, so another
+capitalization stays untried.
+
+Nor is anything newer than revision 12 elsewhere, as of 2026-11-07. The
+LoxWiki page holds revision 12 only. A copy on Scribd named
+`ma-de-812170-Modbus-TCP-Navigator-2-0` has 36 pages, as revision 10 has. The
+Loxone template "iDM Heating & Cooling" (1470) ships revision 7 of 812170
+(software 20.15-0), revision 10 of 812570 (from 20.21-101), and Loxone Modbus
+templates whose 661 addresses all appear in revision 12. What remains is iDM
+support, which by an ioBroker forum report sends the document on request.
