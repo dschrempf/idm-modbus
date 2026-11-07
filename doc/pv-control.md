@@ -56,6 +56,42 @@ here is the source's until a dated `doc/` measures it.
     `N2_ELECTRIC_POWER_WITH_PVOFFSET`, "total electrical power + PV-Offset
     (if there is no value from the inverter, that from the polynomial is
     used)".
+  - iDM's other controllers name their I a reset time: `N2_PID_HEAT_TN`
+    "PID Heat Tn(I)", `N2_HC_MIXER_I` "Mischer Nachstellzeit", and
+    `N2D_EVR_SUBCOOLING_I`, "Reset time … Increasing this parameter makes
+    the subcooling control slower". The cascade's staging gives one reading
+    each: `N2D_COMPRESSOR_STAGES` has a faster start from "increasing the P
+    component … and decreasing the I component (I=2.0)", a reset time;
+    `N2D_CASCADE_STAGE_CONNECTION_P` has P doubled and I "reduced by one
+    third" against overshoot, a gain.
+- **The PV menu at Fachmann level**, 10256 `N2_PV`
+  (`captures/navigator-2.0-webapi-20.24-2608-2026-11-06-1148.json`, in no
+  Kunde capture): after `PV011` and `PV015`, three settings of type `float`
+  with no unit, range 0 to 1000, each at its default:
+
+  | Setting | Name                     | German              | Identifier | Value | Step |
+  | ------- | ------------------------ | ------------------- | ---------- | ----- | ---- |
+  | 10403   | `N2_MOD_POWER_CONTROL_P` | Leistungsregelung P | `IV017`    | 5.0   | 0.1  |
+  | 10410   | `N2_MOD_POWER_CONTROL_I` | Leistungsregelung I | `IV018`    | 10.0  | 1.0  |
+  | 10417   | `N2_MOD_POWER_CONTROL_D` | Leistungsregelung D | `IV019`    | 0.0   | 0.1  |
+
+  Their help texts are the untranslated keys, and neither 812170 nor 812184
+  names them. The identifier files them with the modulation, `IV002` and
+  `IV003`. The menu holds one set of gains for the three outputs `Y`.
+
+- **The PID vocabulary**, from
+  [Wikipedia, "PID controller"](https://en.wikipedia.org/wiki/PID_controller).
+  The output u follows the error e, the setpoint less the measurement, as
+  u = Kp·e + Ki·∫e dt + Kd·de/dt, or in the standard form
+  u = Kp·(e + (1/Ti)·∫e dt + Td·de/dt), so Ki = Kp/Ti and Kd = Kp·Td. Ti,
+  German Tn or "Nachstellzeit", is a reset time: the larger it is, the weaker
+  the integral. The proportional term alone leaves an offset; the integral
+  term removes it, keeps moving the output while the error keeps its sign,
+  and holds the output where it is once the error is zero. Raising Kp or Ki
+  speeds the response and raises overshoot; Kd damps overshoot and amplifies
+  noise, and is "seldom used in practice". An integral that keeps
+  accumulating while the output is at its limit winds up and holds the
+  output there after the error turns; clamping it is one remedy.
 - **The web interface's JavaScript**, `main-7UP7UE6I.js` of the same
   capture: a function that reads `heatpump.info` of the `system` overview
   with the operating mode and names the reason for a request. In heating
@@ -100,13 +136,92 @@ Not settled whether the margin is a setting.
 ### What sets the speed
 
 The help texts name a PID controller per mode and a target consumption;
-812170 prints a target at 88, 0 by default. Measured on the evening of
-2026-11-06: the speed climbed while the mean of 74 was positive and fell
-while it was negative. With 88 at 0 that is a controller driving the mean of
-74, an export, toward 88. If so, 88 is the lever a consumer lacks: a target
-for the export, so that writing the meter's export with 88 at -1.0 would ask
-the controller to draw 1.0 kW from the grid beyond the PV, and 88 at +0.5 to
-leave 0.5 kW unused. Untested; 88 has read 0.0 in every scan.
+812170 prints a target at 88, 0 by default. The PV menu holds the gains,
+`IV017` to `IV019`: P 5.0, I 10.0, D 0.0. With D at 0 the controller is a
+PI controller. Whether `IV018` is a Ki or a Ti, and the units of either, no
+source states; iDM names an I a reset time elsewhere, but not consistently.
+
+The two runs of 2026-11-06 read as such a controller, with the error the
+mean of 74 over `PV011` less a target of 0:
+
+- **The integral term dominates.** At 11:28, 0 written held the run at
+  120 rps for 3 minutes; a proportional term alone has nothing to hold it
+  with at an error of 0. In the evening the speed climbed while the mean
+  fell from 1.70 to 0 and peaked 10 s after it crossed zero: an output
+  following the error's integral, not the error.
+- **The integral does not wind up.** In the morning the speed stood at the
+  top, 120 rps, for over seven minutes with the mean positive, and fell
+  20 s after -0.5 was written, the mean then about -0.08. An integral wound
+  up past the limit would have held the top for minutes.
+- **The output is bounded** by the heating floor `IV003`, 20 % or 24 rps,
+  and `IV002`, 100 %, 120 rps; the evening run reached the floor.
+- **The overshoot of the evening is the integral against a lag.** The
+  controller sees 74 only through `PV011`'s two-minute mean, and a consumer
+  writing the meter's export closes a second loop through it: a change of
+  speed reaches the error up to two minutes later, and the integral keeps
+  climbing meanwhile. The controller's own levers are a shorter `PV011`, a
+  weaker I and a D above 0, each a Fachmann setting at the display or a web
+  `save`, which this package does not send.
+- **Part of that overshoot was the test's.** The meter-style writes began
+  at 20:00:22, with the two-minute window still full of the 1.7 written
+  for the start; the mean read 1.70 while the values written were already
+  negative, and the integral climbed on it for 90 s. A meter would have
+  read 1.7 less the start program's 1.2 kW from the compressor's start.
+
+Not settled: the form and units of `IV017` and `IV018`, whether the target
+is 88, `N2_PV_POWERTARGET` or both, and whether one set of gains serves all
+three outputs.
+
+### What 88 would add
+
+The hypothesis: 88 is the target of that controller, the export it holds
+the mean of 74 at. The speed then moves with
+
+    error = mean of 74 over PV011  −  88
+
+up while the error is positive, down while it is negative, and holds where
+the error is zero. Said as a draw, the controller aims at its draw plus the
+error, which may be what the help texts call "Target Consumption",
+`N2_PV_POWERTARGET`; 812184 shows a "Aktueller Aufnahme Zielwert" for
+Solar-Log only.
+
+For it: 812170 prints 88 as `PV-Zielwert (Smartfox und Solar-Log)`, a
+volatile `FLOAT` in kW, default 0, beside 74, and `PV008` is at
+`N2_GLTSF`, "Gebäudeleittechnik/Smartfox". The Smartfox, the device this
+path was built for, has a setting "Zielwert standardmäßig „0"" for an iDM
+pump (812184), so it presumably writes 88 as it writes 74. Both runs of
+2026-11-06 fit a target of 0, 88's value in every scan.
+
+With it, a consumer writes the meter's export to 74 as it is and its
+intent to 88:
+
+| 88   | The run holds the export at | Use                                 |
+| ---- | --------------------------- | ----------------------------------- |
+| 0    | 0: all of the surplus       | the default                         |
+| +0.5 | 0.5 kW left over            | room for another load, a battery    |
+| -1.0 | 1.0 kW drawn from the grid  | a cheap tariff, a charge without PV |
+
+The last row is the consumer's first use, a store charge at low power,
+asked for without inventing a surplus at 74.
+
+What 88 would not change:
+
+- **The loop's dynamics.** 88 moves where the loop settles, not how it gets
+  there. The overshoot comes from the gains and `PV011`.
+- **That 74 must answer the draw.** With 74 fixed, the error never closes
+  and the integral runs to a limit, whatever 88 is. Only a value that falls
+  as the pump draws more, a meter's export or a simulated one, settles.
+- **The speed, if the error is the difference.** Writing 74 less a target,
+  with 88 at 0, then gives the same error as writing 74 and 88 at that
+  target. 88 adds something only where the two differ: in what starts and
+  stops a run, in the PV page and the graph, which print 74 as written, and
+  in timing, if 88 is weighed at once rather than through `PV011`'s mean. A
+  step of 88 would then show the proportional share of the response as an
+  immediate jump of the speed, apart from the integral's ramp.
+
+Untested; 88 has read 0.0 in every scan, and a controller that ignores it
+reads the same. `does-88-set-the-export-the-pv-controller-holds` plans the
+run.
 
 ### What stops it
 
@@ -143,7 +258,21 @@ Each is a read that the tests so far did not take:
    the `system` overview in a watch, a change to `idm-web`.
 3. **The PV graph at a finer step**: whether graph 101 serves points closer
    than 304 s for a short `fromSecs`.
-4. **The setting behind each PID name**, if any: a webapi capture at
-   Fachmann level during a run, searched for `CA20PV` and `POWERTARGET`.
-5. **88 written**: a test of its own, once 1 and 2 show what 74 does inside
-   the controller.
+4. **The outputs `Y` and the target consumption**: the gains are at 10403
+   to 10417, but no capture holds `CA20PV` or `POWERTARGET`. A webapi
+   capture at Fachmann level during a run, searched for both, would show
+   whether a page lists them.
+5. **A simulated meter from the first write**: 74 written as a meter would
+   read it with a fixed PV and the pump the only load, from before the
+   start rather than after it, so no stale mean drives the integral. It
+   shows whether the loop settles at all with these gains, and if not, its
+   period and amplitude.
+6. **88 written in steps** during such a run, 1 watched beside it: whether
+   the draw follows 88, and, if 88 is weighed at once, the proportional
+   and the integral share apart. A step at 74 cannot show them apart, as
+   `PV011`'s mean turns it into a two-minute ramp.
+
+5 and 6 are one run, planned in
+`does-88-set-the-export-the-pv-controller-holds`, with `PV011` at its 2.0
+min. The same run again with `PV011` at 0.5 min separates the mean's share
+of the overshoot from the gains'.

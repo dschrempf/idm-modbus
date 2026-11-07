@@ -166,3 +166,10 @@ value did not hold the run, and a second start failed unexplained
 until the controller's PV logic is observed rather than guessed at;
 `doc/pv-control.md` collects the sources and the observations. Steps 4 and 5
 stay, for a later night.
+
+Next in 6a, from 2026-11-07: `does-88-set-the-export-the-pv-controller-holds`,
+one store charge with 74 a simulated meter from the first write and 88
+stepped, 12763 watched beside it, on a day the pump stands idle and the
+store is cool; a second run with `PV011` at 0.5 min follows. 88 is a target
+and `tools/drivepv.py` writes it. Steps 4 and 5 above wait for it, and the
+overnight test takes in 88 if it matters.

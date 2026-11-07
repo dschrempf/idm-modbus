@@ -333,8 +333,10 @@ above the 0.8 kW the PV page printed as the forecast. See
   followed the sign of the two-minute mean of 74, the run stopped before the
   minimum runtime, and a second start did not come
   ([verification-2026-11-06-pv-surplus-loop.md](verification-2026-11-06-pv-surplus-loop.md)).
-  The sources on this logic, among them a target at 88 and the controller's
-  own reason for a request, are in [pv-control.md](pv-control.md).
+  The speed is set by a PI controller whose gains, `IV017` to `IV019`, sit
+  in the PV menu at Fachmann level. The sources on this logic, among them a
+  target at 88 and the controller's own reason for a request, are in
+  [pv-control.md](pv-control.md).
 - **-2 at 1714 and 1715.** The two external pump requests answer `fffe`,
   where every other unfitted `UCHAR` answers `ffff`, and the controller's own
   register page prints them as -2. The library treats -1 and -2 alike as

@@ -69,3 +69,13 @@ candidates left are the target at 88, which the controller may regulate the
 mean of 74 toward, `IV002` and 4108. `doc/pv-control.md` lists what to
 watch before the next write: 12763's internal value of 74 and 88, and the
 reason for a request in `heatpump.info`.
+
+## Next, from 2026-11-07
+
+The speed is a PI controller's, on the mean of 74 less a target, 0 so far
+(`doc/pv-control.md`). A constant 74 never closes that error, so it caps
+nothing; a meter-style 74 can, and the evening's overshoot came partly from
+a mean still full of the start's 1.7. The low-power charge this note asks
+for is, under that reading, 88 at a negative target with 74 the meter's
+export. `does-88-set-the-export-the-pv-controller-holds` runs both: the
+meter from the first write, then steps of 88.
