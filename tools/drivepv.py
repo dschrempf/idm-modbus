@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write a schedule of values to 74, the PV surplus, and 88, its target, to see what the controller does.
+"""Write a schedule of values to 74, the PV surplus, 88, its target, and 4108, the power limit, to see what the controller does.
 
 A test driver, not a strategy: the schedule is fixed before the run, and the
 only thing read from the machine is when the compressor starts and stops and
@@ -8,17 +8,19 @@ through `idm-write`, so every guard of the library holds, and reads 1100 and
 4122 from the file of a running `idm-dump --watch`, so the controller has no
 third client:
 
-    cabal run idm-dump -- HOST --watch 10 74 88 1008 1090 1091 1100 1074 4122 1004 1098 > WATCH
+    cabal run idm-dump -- HOST --watch 10 74 88 4108 1008 1090 1091 1100 1074 4122 1004 1098 > WATCH
     tools/drivepv.py HOST WATCH --final -0.5 \
       2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 2.0-4122/20/ein+1620/0 \
       > captures/navigator-2.0-write-SOFTWARE-YYYY-MM-DD-HHMM.log
 
-A phase is VALUE/PERIOD/UNTIL[/TARGET]. VALUE, written to 74, is a number in
+A phase is VALUE/PERIOD/UNTIL[/TARGET[/LIMIT]]. VALUE, written to 74, is a number in
 kW, or T-4122, the number T minus the last 4122 of the watch, which is what
 a grid meter reads with T kW of PV and the pump the only load. PERIOD is the
 seconds between writes of 74; a phase writes when it begins. TARGET, in kW,
 is written to 88 once, as the phase begins and before its first 74; a phase
-without it leaves 88 as it stands. UNTIL ends the phase:
+without it, or with it empty, leaves 88 as it stands. LIMIT, in kW, is
+written to 4108 just before every write of 74 in the phase, so the phase
+renews it; a phase without it does not write 4108. UNTIL ends the phase:
 
     ein          once 1100 reads Ein
     ein+SECONDS  that long after 1100 first read Ein
@@ -28,10 +30,12 @@ without it leaves 88 as it stands. UNTIL ends the phase:
 Once 1100 has read Ein, 1100 reading Aus ends the schedule, whatever phase
 runs: a run that stops is over. The schedule also ends when its last phase
 does, on SIGTERM and on SIGINT. In every case the --final-target value,
-0 unless given, is written to 88 and then the --final value to 74, once
-each before exit, so the driver never leaves behind a value it was writing.
-88 goes first: a negative target left standing beside the final 74 could
-keep the pump drawing from the grid.
+0 unless given, is written to 88, the --final-limit value, -1 unless
+given, to 4108, and then the --final value to 74, once each before exit,
+so the driver never leaves behind a value it was writing. 88 goes first: a
+negative target left standing beside the final 74 could keep the pump
+drawing from the grid. 4108 goes before 74: a limit left standing caps
+every run until the controller restarts, and -1 is its default.
 The first line of the log names the driver's pid, the one to send SIGTERM:
 a pid taken from `$!` may be a shell's.
 """
@@ -80,20 +84,26 @@ def parse_until(text):
     raise ValueError(text)
 
 
+def parse_optional(fields, i):
+    """The number in fields[i], None if it is absent or empty."""
+    return float(fields[i]) if len(fields) > i and fields[i] else None
+
+
 def parse_phase(text):
     try:
-        value, period, until, *target = text.split("/")
-        if len(target) > 1:
+        value, period, until, *rest = text.split("/")
+        if len(rest) > 2:
             raise ValueError
         return {
             "text": text,
             "value": parse_value(value),
             "period": int(period),
             "until": parse_until(until),
-            "target": float(target[0]) if target else None,
+            "target": parse_optional(rest, 0),
+            "limit": parse_optional(rest, 1),
         }
     except ValueError:
-        sys.exit(f"{text}: not a phase VALUE/PERIOD/UNTIL[/TARGET]; see the docstring")
+        sys.exit(f"{text}: not a phase VALUE/PERIOD/UNTIL[/TARGET[/LIMIT]]; see the docstring")
 
 
 class Watch:
@@ -129,6 +139,7 @@ class Watch:
 
 SURPLUS = 74
 TARGET = 88
+LIMIT = 4108
 
 
 def write(writer, host, address, value):
@@ -169,15 +180,20 @@ def run(host, watch, writer, phases):
                 break
             if last is None or time.time() - last >= phase["period"]:
                 kind, x = phase["value"]
+                surplus = None
                 if kind == "fixed":
-                    write(writer, host, SURPLUS, x)
+                    surplus = x
                 else:
                     draw = watch.draw()
                     if draw is None:
                         log("4122 is not fresh; no write")
                     else:
                         log(f"4122 {draw:.2f}")
-                        write(writer, host, SURPLUS, round(x - draw, 2))
+                        surplus = round(x - draw, 2)
+                if surplus is not None:
+                    if phase["limit"] is not None:
+                        write(writer, host, LIMIT, phase["limit"])
+                    write(writer, host, SURPLUS, surplus)
                 last = time.time()
             time.sleep(POLL_SECONDS)
 
@@ -188,14 +204,15 @@ def main(argv):
         if flag != "--final":
             raise ValueError
         final = float(final)
-        final_target = 0.0
-        if phase_args[:1] == ["--final-target"]:
-            final_target = float(phase_args[1])
+        finals = {"--final-target": 0.0, "--final-limit": -1.0}
+        while phase_args[:1] and phase_args[0] in finals:
+            finals[phase_args[0]] = float(phase_args[1])
             phase_args = phase_args[2:]
+        final_target, final_limit = finals["--final-target"], finals["--final-limit"]
         if not phase_args:
             raise ValueError
     except (ValueError, IndexError):
-        sys.exit(f"usage: {argv[0]} HOST WATCH --final VALUE [--final-target VALUE] PHASE...")
+        sys.exit(f"usage: {argv[0]} HOST WATCH --final VALUE [--final-target VALUE] [--final-limit VALUE] PHASE...")
     phases = [parse_phase(p) for p in phase_args]
     writer = ""
     if shutil.which("cabal"):
@@ -208,7 +225,7 @@ def main(argv):
 
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
-    log(f"pid {os.getpid()}; final {final}, final target {final_target}")
+    log(f"pid {os.getpid()}; final {final}, final target {final_target}, final limit {final_limit}")
     try:
         run(host, Watch(watch_path), writer, phases)
     except Stop as e:
@@ -218,6 +235,7 @@ def main(argv):
         signal.signal(signal.SIGINT, signal.SIG_IGN)
         log("final")
         write(writer, host, TARGET, final_target)
+        write(writer, host, LIMIT, final_limit)
         write(writer, host, SURPLUS, final)
         log("done")
 
