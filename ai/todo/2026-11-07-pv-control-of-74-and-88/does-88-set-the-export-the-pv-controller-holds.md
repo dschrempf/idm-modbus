@@ -4,24 +4,29 @@
 
 A PI controller sets the speed of a PV run: gains `IV017` to `IV019`, P 5.0,
 I 10.0, D 0.0. Both runs of 2026-11-06 fit an error of the mean of 74 over
-`PV011` less a target of 0. 88, `PV-Zielwert (Smartfox und Solar-Log)`, is
-the candidate for that target. If it is, a consumer writes the meter's
-export to 74 as it is and its intent to 88: +0.5 leaves 0.5 kW unused, and
--1.0 draws 1.0 kW from the grid, a store charge at low power without
-inventing a surplus. `doc/pv-control.md`, "What 88 would add", has the
-argument and what 88 would not change.
+`PV011` less a target of 0. 88, `PV-Zielwert (Smartfox und Solar-Log)`, was
+the candidate for that target. If it were, a consumer would write the
+meter's export to 74 as it is and its intent to 88. `doc/pv-control.md`,
+"What 88 would add", has the argument.
 
-## Where it stands
+## Answered: not for the speed
 
-Two runs on 2026-11-07, `doc/verification-2026-11-07-pv-target.md`:
+Three runs on 2026-11-07, `doc/verification-2026-11-07-pv-target.md` and
+`doc/verification-2026-11-07-pv-target-ignored.md`:
 
-- The planned run, 74 as a meter of 2.0 kW from the first write, stopped
-  after 8 minutes, before its first step of 88: the loop does not settle
-  with `PV011` at 2.0 min.
-- With 74 held at 0 and the speed steady at 50.4 rps, 88 at -1.0 moved
-  nothing in 3 minutes. 88 at +1.0, written 9 minutes after the start, was
-  followed by a fall and a stop at the end of the minimum runtime, so it
-  does not settle whether 88 acts.
+- The planned meter-style run, 74 as a meter of 2.0 kW from the first write,
+  stopped after 8 minutes, before its first step of 88: the loop does not
+  settle with `PV011` at 2.0 min.
+- With 74 held at 0 and the speed steady at 50.4 rps, 88 at -1.0 for 3
+  minutes moved nothing, 6 to 9 minutes after the start, and neither did
+  +1.0 for 3 minutes, 5 to 8 minutes after it, in the evening.
+- 88 at +1.0, written 9 minutes after the start at noon, was followed by a
+  fall to the floor and a stop at the end of the minimum runtime. In the
+  evening the stop came at the same time with 88 at 0, without the fall.
+
+Not settled: whether 88 weighs in a start or a stop, and what the fall at
+noon was. Neither is worth a run of its own now; a run that tests 88 at the
+start costs a cycle that holds nothing low.
 
 Both settings stayed: `PV006` 40 °C, `PV011` 2.0 min.
 
@@ -36,49 +41,30 @@ Both settings stayed: `PV006` 40 °C, `PV011` 2.0 min.
 The watches and the end as on 2026-11-07: the driver writes 0 to 88 and
 -0.5 to 74 when its schedule ends, the run stops or it is signalled. Check
 in the watch that 88 reads 0.0, stop the watches, and leave the Fachmann
-level. Never end with 88 away from 0.
+level. Never end with 88 away from 0. End a schedule on `aus` rather than a
+time, so the driver's -0.5 does not end a run the controller would hold.
 
-## Next: +1.0 apart from the minimum runtime
+## Next: a shorter `PV011`
 
-74 at 0 from the compressor's start, 88 at +1.0 from 5 minutes, past the
-start program of about 4, until 8, then 0 past the 10 minutes of the
-minimum runtime:
-
-    tools/drivepv.py HOST watch.jsonl --final -0.5 --final-target 0 \
-      2.0/20/ein/0 0/20/ein+300 0/20/ein+480/1.0 0/20/ein+780/0 > write.log
-
-- A fall under +1.0, before the minimum runtime, says 88 acts on the
-  speed; a stop then, on the stop condition. A ramp rather than a jump says
-  it goes through `PV011`'s mean like 74.
-- Nothing under +1.0, and a stop near 10 minutes under 0: 88 is ignored,
-  and 74 at 0 ends a run once the minimum runtime is over, against the
-  morning of 2026-11-06, when 0 held 120 rps past it.
-- Nothing under either, and the run holds to 13 minutes: 88 is ignored, and
-  2026-11-07's stop was the minimum runtime's.
-
-## Then: a shorter `PV011`
-
-On another idle, cool day, the first schedule of 2026-11-07 with `PV011`,
-setting 10389, 0.1 to 360 min, at 0.5 min instead of 2.0: one EEPROM cycle
-at the display, and one more to set it back, unless the run argues for
-keeping it. Write 74 every 10 s rather than 20, so the mean holds three
-writes, and pass `--mean 30` to `tools/runtable.py`:
+On an idle, cool day, a meter-style run with `PV011`, setting 10389, 0.1 to
+360 min, at 0.5 min instead of 2.0: one EEPROM cycle at the display, and one
+more to set it back, unless the run argues for keeping it. Write 74 every
+10 s rather than 20, so the mean holds three writes, and pass `--mean 30` to
+`tools/runtable.py`. The PV the meter simulates is near the floor's draw,
+0.8 kW, so a loop that settles settles low; 2.0 for the start, which 0.8
+would not give:
 
     tools/drivepv.py HOST watch.jsonl --final -0.5 --final-target 0 \
-      2.0-4122/10/ein+720/0 2.0-4122/10/ein+1140/1.0 \
-      2.0-4122/10/ein+1560/-1.0 2.0-4122/10/ein+1620/0 > write.log
+      2.0/10/ein/0 0.8-4122/10/aus > write.log
 
 It shows what the two-minute mean adds to the overshoot: with the lag
-shorter, the draw should settle faster and overshoot less. If it settles,
-the steps of 88 come on a settled loop. A shorter mean also weighs the
-start on a shorter surplus, so the start may come sooner.
+shorter, the draw should settle faster and overshoot less. Whether a loop
+settled at a mean near 0 runs past the minimum runtime is the other half:
+74 at 0 did not. A shorter mean also weighs the start on a shorter surplus,
+so the start may come sooner.
 
-## Afterward, if 88 acts
+## 88 left behind
 
-- **A start on 88 alone.** At rest, 74 as a meter with no PV, 0-4122, and
-  88 at -1.7. A start would mean the start condition weighs 74 less 88 too,
-  and a consumer can ask for a grid-powered charge at a chosen draw. -1.0
-  did not move a running charge, so a negative target may be clamped at 0;
-  this tests the same for the start.
-- **88 left behind.** What a dead consumer leaves at 88 matters more than
-  at 74: add 88 to `controller-behavior-when-glt-values-stop-unknown`.
+What a dead consumer leaves at 88 matters only if 88 acts on something;
+it does not belong in `controller-behavior-when-glt-values-stop-unknown`
+unless a run shows that.

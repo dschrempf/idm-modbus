@@ -3,7 +3,8 @@
 The runs on 74 so far (`doc/verification-2026-11-05-pv-surplus.md`,
 `doc/verification-2026-11-06-pv-surplus-own-draw.md`,
 `doc/verification-2026-11-06-pv-surplus-loop.md`,
-`doc/verification-2026-11-07-pv-target.md`) each answered a question
+`doc/verification-2026-11-07-pv-target.md`,
+`doc/verification-2026-11-07-pv-target-ignored.md`) each answered a question
 and raised one the tests could not see into: what starts a PV run, what sets
 its speed, what stops it, and what holds off the next start. This document
 collects what the sources say about that logic and which observations would
@@ -233,9 +234,14 @@ Measured on 2026-11-07 (`doc/verification-2026-11-07-pv-target.md`), with
 74 held at 0 and the speed steady at 50.4 rps: 88 at -1.0 moved nothing in
 3 minutes, so the last row does not hold, not then at least. 88 at +1.0 was
 followed 40 to 50 s later by a fall to the floor and a stop, but at the end
-of the minimum runtime, so that step does not settle whether 88 acts. If it
-does, it acts on one side only, as a target clamped at 0 would. The PV page
-prints nothing that follows 88; 12763 lists it as written.
+of the minimum runtime, so that step does not settle whether 88 acts. The
+PV page prints nothing that follows 88; 12763 lists it as written.
+
+Measured on the evening of 2026-11-07
+(`doc/verification-2026-11-07-pv-target-ignored.md`), the same way but
+5 to 8 minutes after the start: 88 at +1.0 moved nothing in 3 minutes
+either. Neither sign of 88 moves the speed; whether it weighs in the start
+or the stop is open.
 
 ### What stops it
 
@@ -244,8 +250,41 @@ Measured: a stop 72 s into a negative mean at 81 rps (morning), and one at
 the floor after 8 minutes 10 seconds, before the 10 minutes of 5412
 (evening). On 2026-11-07 one after 8 minutes 0 seconds at 60 rps, falling,
 with the mean at -1.23, and one at the floor after 10 minutes 21 seconds,
-with the mean at 0 and 88 at +1.0. Not settled what "requested" is, or why
-the minimum runtime did not hold.
+with the mean at 0 and 88 at +1.0. On the evening of 2026-11-07 one after
+10 minutes 10 seconds at 50.4 rps, not falling, with 74 and 88 at 0 and the
+store 9 K below `PV006`: 0 at 74 ends a run at the minimum runtime, as it
+did not at 120 rps on the morning of 2026-11-06. Not settled what
+"requested" is, why the minimum runtime did not hold, or why 0 held the one
+run and ended the other.
+
+### What holds a run at low power
+
+The draw spans 0.6 to 0.74 kW at the heating floor, 24 rps, to about 4 kW
+at the top, 120 rps; the start program holds 50.4 rps and 1.2 kW for about 4
+minutes. Measured on 74 so far, none holds a run low past the minimum
+runtime:
+
+- **A constant above 0** drives the integral, and the speed, to the top
+  (2026-11-06).
+- **A mean of 0** holds the speed where it is, the start program's once
+  that is over, and the run ends at the minimum runtime (both runs of
+  2026-11-07 with 74 at 0).
+- **A meter's export**, which falls as the pump draws more and so could
+  settle the loop, overshot to the top and stopped before the minimum
+  runtime with `PV011` at 2.0 min (2026-11-06 evening, 2026-11-07 noon).
+  Where it settles, the mean is 0 again, which ended the evening run of
+  2026-11-07.
+- **88** moves neither the speed nor, by the runs so far, where the loop
+  settles.
+
+The levers outside the PV loop: 4108 `Leistungsbegrenzung Wärmepumpe`, a
+volatile `FLOAT` in kW, -1 by default, whose effect no run has tested, and
+`IV002` `N2_MOD_MAX_POWER_HEATING`, a Fachmann setting in percent that would
+cap every heating run, not only a PV one, and did not bind in the one run
+that lowered it (`doc/verification-2026-11-05-floor.md`). That run also
+shows a heating run held low without the PV loop: on a circuit's demand
+with its flow near target, the speed came down to the floor and held it for
+seven minutes.
 
 ### What holds off the next start
 
@@ -292,7 +331,7 @@ Each is a read that the tests so far did not take:
 
 5 and 6 were one run on 2026-11-07; it stopped before 88 was stepped, and
 did not settle. 6 alone, with 74 held at 0, did in part: -1.0 moved
-nothing. `does-88-set-the-export-the-pv-controller-holds` plans what is
-left: a run that separates +1.0 from the minimum runtime, and 5 again with
+nothing, and +1.0 apart from the minimum runtime nothing either.
+`does-88-set-the-export-the-pv-controller-holds` plans 5 again with
 `PV011` at 0.5 min, which separates the mean's share of the overshoot from
 the gains'.

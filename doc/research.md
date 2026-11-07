@@ -337,6 +337,11 @@ above the 0.8 kW the PV page printed as the forecast. See
   stop at the end of the minimum runtime, and a PV start came 30 minutes
   after a PV stop
   ([verification-2026-11-07-pv-target.md](verification-2026-11-07-pv-target.md)).
+  88 at +1.0 apart from the minimum runtime did not move one either, and 74
+  at 0 ended a run at the minimum runtime, far below `PV006`
+  ([verification-2026-11-07-pv-target-ignored.md](verification-2026-11-07-pv-target-ignored.md)).
+  None of the values written to 74 so far holds a run at low power past the
+  minimum runtime.
   The speed is set by a PI controller whose gains, `IV017` to `IV019`, sit
   in the PV menu at Fachmann level. The sources on this logic, among them a
   target at 88 and the controller's own reason for a request, are in

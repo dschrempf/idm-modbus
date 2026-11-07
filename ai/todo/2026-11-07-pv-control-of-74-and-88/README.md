@@ -5,37 +5,54 @@ the surplus, and 88, the target, and what the controller does with them.
 The sources and the reading of the controller are in `doc/pv-control.md`;
 this folder holds the runs left to do.
 
+The aim the runs now serve: a PV run held at low power, near the heating
+floor of 24 rps and 0.6 to 0.74 kW, for as long as the store takes, rather
+than a short run at up to 4 kW. A start and a stop every 10 minutes wears
+the compressor, and a run at the top draws more than a small surplus
+covers.
+
 ## Where it stands
 
 Settled on the machine, 2026-11-05 to 2026-11-07:
 
-- 74 is in kW, and the controller adds its own draw back: 0 keeps a running
-  charge going, only a negative value ends it.
-- A constant 74 caps nothing. A PI controller, gains `IV017` to `IV019`,
-  sets the speed on the mean of 74 over `PV011` less a target of 0.
+- 74 is in kW, and the controller adds its own draw back.
+- A PI controller, gains `IV017` to `IV019`, sets the speed on the mean of
+  74 over `PV011` less a target of 0. A constant 74 above 0 drives it to the
+  top; a mean of 0 holds the speed where it is, the start program's 50.4
+  rps and 1.2 kW once that is over.
+- 74 at 0 ended a run at the minimum runtime, 10 minutes, far below
+  `PV006` (evening of 2026-11-07); it held one at 120 rps past it on
+  2026-11-06. A negative value ends a run.
 - 74 written as a meter's export did not hold a run, also from the first
   write: with `PV011` at 2.0 min the run overshoots and stops early.
-- 88 at -1.0 does not move a running charge. 88 at +1.0 was followed by a
-  stop, but at the end of the minimum runtime.
+- 88 at -1.0 and at +1.0, each for 3 minutes past the start program, moved
+  nothing.
 - A PV start waits 30 minutes after a PV stop.
 
-Open: whether 88 acts at all, what starts and stops a run, what sets the
-30 minutes, and what the controller does with a value no one renews.
+So nothing written to 74 or 88 so far holds a run low past the minimum
+runtime. Open: whether 4108 can, what decides at the minimum runtime,
+whether 88 weighs in a start or a stop, what sets the 30 minutes, and what
+the controller does with a value no one renews.
 
 ## Next, in order
 
-1. 88 at +1.0 apart from the minimum runtime, on a day the pump stands
-   idle and the store is cool.
-2. The meter-style run with `PV011` at 0.5 min.
-3. If 88 acts: a start on 88 alone, and 88 in the overnight test.
-4. The overnight test of 74, then the power cycle that ends its watch.
-5. A PV hot water charge.
+1. 4108, `Leistungsbegrenzung Wärmepumpe`, as a cap under a PV run: a
+   constant surplus at 74, which alone drives the speed to the top, and a
+   limit near the floor at 4108. If the draw holds at the limit and the run
+   goes on to `PV006`, that is the low run. Needs 4108 listed as a target
+   first; `power-limit-4108-semantics-unknown`.
+2. The meter-style run with `PV011` at 0.5 min, with the PV the meter
+   simulates near the floor's draw: whether the loop settles there, and
+   whether a settled loop, its mean near 0, ends at the minimum runtime as
+   74 at 0 did.
+3. The overnight test of 74, then the power cycle that ends its watch.
+4. A PV hot water charge.
 
 ## Files
 
-- `does-88-set-the-export-the-pv-controller-holds.md`: what the runs of
-  2026-11-07 left open, and steps 1 to 3 with the schedules and what each
-  outcome means.
+- `does-88-set-the-export-the-pv-controller-holds.md`: the runs of
+  2026-11-07 on 88, answered no for the speed, and step 2 with its
+  schedule.
 - `does-a-low-surplus-at-74-cap-the-speed.md`: the question that led here;
   answered no for a constant 74, the rest carried into the 88 run.
 - `what-a-power-cycle-does-to-74-and-the-controller.md`: what a restart
@@ -45,9 +62,8 @@ Open: whether 88 acts at all, what starts and stops a run, what sets the
 
 ## Outside this folder
 
+- `power-limit-4108-semantics-unknown`: a cap in kW; step 1.
 - `controller-behavior-when-glt-values-stop-unknown`: every register a
-  building management system writes; its test of 74 overnight is step 4.
-- `power-limit-4108-semantics-unknown`: a cap in kW, the lever left if 74
-  and 88 cannot hold a run low.
+  building management system writes; its test of 74 overnight is step 3.
 - `run-the-open-todos-in-six-sessions`: the schedule of the 2026-10-15
   todos; its session 6a is this folder's work.
