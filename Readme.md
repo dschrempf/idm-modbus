@@ -16,7 +16,8 @@ type states its cost, and only to the few targets listed in
 ## Status
 
 Early. The table is complete and verified, the read path works. Writing exists
-for one target, the PV surplus at 74, not yet tried on a machine.
+for two targets: the PV surplus at 74, tried on a machine, and the PV target at
+88, not yet.
 
 ## Use
 

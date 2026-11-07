@@ -34,6 +34,8 @@ import IDM.Navigator.Target.Splice (costAt, registerOf)
 data Target (c :: Cost) where
   -- | 74 @Aktueller PV-Überschuss@, kW
   PvSurplus :: Target 'Free
+  -- | 88 @PV-Zielwert (Smartfox und Solar-Log)@, kW
+  PvTarget :: Target 'Free
 
 deriving instance Show (Target c)
 
@@ -47,15 +49,18 @@ data SomeTarget where
 targetRegister :: Target c -> Register
 targetRegister t = case t of
   PvSurplus -> $$(registerOf (Address 74))
+  PvTarget -> $$(registerOf (Address 88))
 
 -- | What a write costs, from the table; the build fails where a
 -- constructor's type says otherwise.
 targetCost :: Target c -> SCost c
 targetCost t = case t of
   PvSurplus -> $(costAt (Address 74))
+  PvTarget -> $(costAt (Address 88))
 
 -- | Every target, in address order.
 targets :: [SomeTarget]
 targets =
   [ SomeTarget PvSurplus
+  , SomeTarget PvTarget
   ]
