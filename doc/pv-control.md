@@ -4,7 +4,8 @@ The runs on 74 so far (`doc/verification-2026-11-05-pv-surplus.md`,
 `doc/verification-2026-11-06-pv-surplus-own-draw.md`,
 `doc/verification-2026-11-06-pv-surplus-loop.md`,
 `doc/verification-2026-11-07-pv-target.md`,
-`doc/verification-2026-11-07-pv-target-ignored.md`) each answered a question
+`doc/verification-2026-11-07-pv-target-ignored.md`,
+`doc/verification-2026-11-07-power-limit.md`) each answered a question
 and raised one the tests could not see into: what starts a PV run, what sets
 its speed, what stops it, and what holds off the next start. This document
 collects what the sources say about that logic and which observations would
@@ -253,7 +254,10 @@ with the mean at -1.23, and one at the floor after 10 minutes 21 seconds,
 with the mean at 0 and 88 at +1.0. On the evening of 2026-11-07 one after
 10 minutes 10 seconds at 50.4 rps, not falling, with 74 and 88 at 0 and the
 store 9 K below `PV006`: 0 at 74 ends a run at the minimum runtime, as it
-did not at 120 rps on the morning of 2026-11-06. Not settled what
+did not at 120 rps on the morning of 2026-11-06. Late that evening one
+after 5 minutes 10 seconds at 112.5 rps, 9 s after 0.8 kW was written to
+4108, with 74 at 2.0 throughout: a limit below the draw ends a run before
+the minimum runtime. Not settled what
 "requested" is, why the minimum runtime did not hold, or why 0 held the one
 run and ended the other.
 
@@ -279,7 +283,10 @@ runtime:
 
 The levers outside the PV loop: 4108 `Leistungsbegrenzung Wärmepumpe`, a
 `FLOAT` in kW, -1 by default, volatile as a restart showed
-(`doc/verification-2026-11-07-restart.md`), whose effect no run has tested, and
+(`doc/verification-2026-11-07-restart.md`), which, written 0.8 under a
+draw of 3.1 kW, ended the run within 9 s rather than capping it
+(`doc/verification-2026-11-07-power-limit.md`); whether a limit above the
+start program's draw caps is untested. And
 `IV002` `N2_MOD_MAX_POWER_HEATING`, a Fachmann setting in percent that would
 cap every heating run, not only a PV one, and did not bind in the one run
 that lowered it (`doc/verification-2026-11-05-floor.md`). That run also

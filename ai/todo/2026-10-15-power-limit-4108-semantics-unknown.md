@@ -89,3 +89,20 @@ holds no setting for it either. Persistence and unit are settled; whether
 it caps the draw, and in which modes, is step 2, now the PV run of
 `pv-control-of-74-and-88`. Since 4108 costs no EEPROM cycle, the run may
 renew it beside 74.
+
+## 2026-11-07: below the draw, it ends a run
+
+A PV run on 74 at a constant 2.0, with 0.8 written to 4108 at 112.5 rps
+and 3.1 kW, five minutes after the start: the compressor stopped within
+9 s, the request with it, before the minimum runtime, and 1004 reported
+nothing (`doc/verification-2026-11-07-power-limit.md`). Not a cap at that
+distance. Open: whether a limit above the start program's 1.2 kW, written
+before the start, caps the draw as it climbs or ends the run when the draw
+reaches it, and whether a limit below the forecast holds off a start. Next:
+4108 at 1.5 from the first phase,
+
+    tools/drivepv.py HOST watch.jsonl --final -0.5 --final-target 0 --final-limit -1 \
+      2.0/20/ein/0/1.5 2.0/20/aus//1.5 > write.log
+
+A speed that climbs past the start program and holds near 1.5 kW is a cap;
+then lower the limit in steps toward the floor.
