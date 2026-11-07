@@ -7,59 +7,25 @@ the grouping and the order.
 
 ## Order
 
-1, 2 and 5 are done. 4 and 6 can start now, and 3 runs in the background.
+1, 2 and 5 are done, and 6a has an entry of its own. 4 and 6b can start
+now; 3 has not started.
 
 ## 1. Desk: no heating, no writes
 
-- `operating-mode-3-and-minus-1-at-1005-unlabeled`: the web JavaScript and
-  its translations, for `systemMode` 3 and -1.
-- `uchar-254-at-1714-and-1715-may-be-minus-two`: the same files, for -2;
-  then its steps 1 and 2 (dated doc, `research.md`, the decision on decoding
-  a `UCHAR` from the whole word).
-- `power-limit-4108-semantics-unknown`, step 1, first half: search the
-  existing webapi captures for a setting matching 4108 or 4112.
-
-Only needs the machine reachable.
-
 Done on 2026-10-15: 1005 answered and measured, -2 left to iDM support, no
-setting for 4108; see each note, and session 4 below.
+setting for 4108; see `operating-mode-3-and-minus-1-at-1005-unlabeled`,
+`uchar-254-at-1714-and-1715-may-be-minus-two`,
+`power-limit-4108-semantics-unknown`, and session 4 below.
 
 ## 2. One long heating run, read-only, Fachmann level
 
-- `charge-pump-signal-1074-unchecked-at-rest` and
-  `charge-pump-status-1104-reads-not-driven-while-pumping`: one run, as the
-  notes say.
-- `least-draw-at-heating-modulation-floor-unknown`: also a long heating run
-  at Fachmann level.
-- `power-limit-4108-semantics-unknown`, step 1, second half: 12763 is
-  watched anyway and lists 4108 and 4112.
-
-The run should be long, for the floor, and cross a start or stop, for 1074.
-Merged:
-
-    IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann     # again every 60 min
-    IDM_PIN=... cabal run idm-web -- HOST --watch 10 4782 12763 6245 > captures/navigator-2.0-webwatch-YYYY-MM-DD-HHMM.jsonl
-    cabal run idm-dump -- HOST --watch 10 1072 1074 1090 1100 1104 4108 4112 4122 4126 > captures/navigator-2.0-watch-YYYY-MM-DD-HHMM.jsonl
-    IDM_PIN=... cabal run idm-web -- HOST --leave-fachmann
-
-The least-draw note asks for 30 s; whether the Navigator keeps up with nine
-registers every 10 s is untested.
-
-Run on 2026-10-16, 07:45 to 10:30, at 10 s; a round of nine registers takes
-about 1.5 s, and no read failed. It caught a heating run from 08:10 to 08:55,
-then a hot water charge with a defrost. Settled: 1074 and 1104
-(`doc/verification-2026-10-16-charge-pump.md`), 4122 is the inverter's
+Done on 2026-10-16 and 2026-11-05. 1074 and 1104 settled
+(`doc/verification-2026-10-16-charge-pump.md`); 4122 is the inverter's
 figure, and 4108 and 4112 stay at -1.0 in every mode
-(`doc/verification-2026-10-16-draw.md`). Not settled: the heating floor, as
-the run never slowed below 101 rps. The next run caps heating at 50 % and
-lowers the heating curve, as `least-draw-at-heating-modulation-floor-unknown`
-says; it is the one item of this session left, and its watch is the second Modbus client
-session 3 waits for. Renewing the level found
+(`doc/verification-2026-10-16-draw.md`); the floor is 24.0 rps at 0.67 kW
+(`doc/verification-2026-11-05-floor.md`). A round of nine registers took
+about 1.5 s at 10 s, and no read failed. Renewing the level found
 `fachmann-entry-right-after-leaving-is-ignored`.
-
-Done on 2026-11-05, 11:13 to 12:33: capped at 50 % with circuit C's curve
-lowered, the run held the floor, 24.0 rps at 0.67 kW
-(`doc/verification-2026-11-05-floor.md`). Session 2 is closed.
 
 ## 3. Passive capture over days
 
@@ -96,11 +62,10 @@ inverter's figure on this machine (`doc/verification-2026-10-16-draw.md`).
 
 ## 5. Code: the write interface
 
-- `write-interface-with-eeprom-cost-visible`: no machine, independent of 1–4.
-
-Done on 2026-11-05: built, with 74 the one target; see the note, now closed.
-Each later write experiment activates its register in
-`data/navigator-2.0-targets.tsv` as it begins.
+Done on 2026-11-05: built, with 74 the one target; see
+`write-interface-with-eeprom-cost-visible`, now closed. Each later write
+experiment activates its register in `data/navigator-2.0-targets.tsv` as it
+begins.
 
 ## 6. Write experiments
 
@@ -108,9 +73,9 @@ Each later write experiment activates its register in
 2026-11-05, and every write waited for the version guard and the rebuilt
 table. Both are done; a write goes ahead on 20.24-2608.
 
-- **6a, register 74:** `unit-of-pv-surplus-74-unsettled`, and
-  `controller-behavior-when-glt-values-stop-unknown` for 74. Both need
-  `N2_PV_SIGNAL` at `N2_GLTSF`, one EEPROM cycle.
+- **6a, registers 74 and 88:** from 2026-11-07 an entry of its own,
+  `pv-control-of-74-and-88`, whose README orders the runs. It takes in the
+  test of 74 of `controller-behavior-when-glt-values-stop-unknown`.
 - **6b, the requests:** `what-glt-requests-1710-1712-1713-do-unsettled`,
   then the 4108 limit write of `power-limit-4108-semantics-unknown` during a
   run. Revision 12 prints 4108 volatile, so it costs no EEPROM cycle.
@@ -120,59 +85,10 @@ session.
 
 Before the first EEPROM target is listed:
 `eeprom-guard-needs-exact-round-trip`, whose round trip that write measures.
-6a's write of 74 adds what a volatile `FLOAT` says about it. The code items
-of `write-interface-eeprom-guard-and-tests-open` were done on 2026-11-05.
+The code items of `write-interface-eeprom-guard-and-tests-open` were done on
+2026-11-05.
 
-6a also sets the PV menu for a store charge, the house's use of the surplus;
-see `unit-of-pv-surplus-74-unsettled`.
-
-6a ran on 2026-11-05, 21:04 to 21:42: 74 is in kW, the charge stops at
-`PV006`, and a write beside a polling watch stalled nothing
-(`doc/verification-2026-11-05-pv-surplus.md`). Left of it: what 74 does when
-the writes stop, step 3 of `controller-behavior-when-glt-values-stop-unknown`,
-and `pv-surplus-74-may-include-the-pumps-own-draw`.
-
-6a continues on the evening of 2026-11-06, one store charge and the night
-after it, in this order:
-
-1. `does-a-low-surplus-at-74-cap-the-speed`, step 1: start at 1.0.
-2. `pv-surplus-74-may-include-the-pumps-own-draw` on the same run: 0, then
-   -0.5. It decides what "no surplus" is, so it goes first if B38 leaves
-   room for only one.
-3. `does-a-low-surplus-at-74-cap-the-speed`, step 2, if 2 finds the draw
-   added back and B38 leaves room.
-4. `controller-behavior-when-glt-values-stop-unknown` for 74, overnight.
-5. `what-a-power-cycle-does-to-74-and-the-controller`, ending the watch.
-
-Run on the morning of 2026-11-06 instead, 11:02 to 11:37, with `PV006`
-raised for room and back at 40 °C after: step 1 found no cap, step 2 that
-the controller adds its draw back, so a consumer writes the meter's export
-and a negative value for import
-(`doc/verification-2026-11-06-pv-surplus-own-draw.md`). Step 3 was
-postponed by choice, and so with it 4 and 5. 74 stands at -0.5 since
-11:37:15.
-
-The consumer manages the pump through 74 only once these are done.
-`pv-hot-water-charge-on-74-untested` comes later. If 74 cannot hold a run
-near the floor, `power-limit-4108-semantics-unknown` joins them.
-
-Untested, and for these sessions to watch: writing while a second Modbus
-client polls. Session 3's watch is the second client, and the stall it is kept
-apart from session 2 for may hit a write too.
-
-Step 3 ran on the evening of 2026-11-06, 19:54 to 20:26: a meter-style
-value did not hold the run, and a second start failed unexplained
-(`doc/verification-2026-11-06-pv-surplus-loop.md`). The tests stop here
-until the controller's PV logic is observed rather than guessed at;
-`doc/pv-control.md` collects the sources and the observations. Steps 4 and 5
-stay, for a later night.
-
-Next in 6a, from 2026-11-07: `does-88-set-the-export-the-pv-controller-holds`,
-one store charge with 74 a simulated meter from the first write and 88
-stepped, 12763 watched beside it, on a day the pump stands idle and the
-store is cool; a second run with `PV011` at 0.5 min follows. 88 is a target
-and `tools/drivepv.py` writes it. Steps 4 and 5 above wait for it, and the
-overnight test takes in 88 if it matters.
-
-From 2026-11-07 the PV todos of 6a are one entry, `pv-control-of-74-and-88`,
-whose README orders them.
+On 2026-11-05 a write beside a polling watch stalled nothing
+(`doc/verification-2026-11-05-pv-surplus.md`). Untested, and for these
+sessions to watch: writing while session 3's watch polls too. The stall
+that watch is kept apart from session 2 for may hit a write as well.

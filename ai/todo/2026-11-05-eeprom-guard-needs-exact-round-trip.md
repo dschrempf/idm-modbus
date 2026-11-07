@@ -10,7 +10,7 @@ bytes it was sent. If it stores a setpoint at its own resolution, as a
 exists to stop. A consumer repeating a setpoint every minute would use up
 the EEPROM in about seven months.
 
-No write has gone to the machine yet. 74 is volatile, so its round trip
+No EEPROM write has gone to the machine yet. 74 is volatile, so its round trip
 says nothing about the EEPROM registers. It does show whether the controller
 takes a `FLOAT` as sent: a write of 74 in session 6a that reads back its own
 bytes rules out rounding on receipt, though not rounding on storage.

@@ -46,7 +46,7 @@ All of these read; none sets the mode.
    `ask-idm-support-for-812170-covering-20-24-2608`.
 
 Setting 1005 to 3 and reading the display would also answer it. But 1005 is
-an EEPROM register, writing is not implemented, and a mode with no known
+an EEPROM register, it is not a target, and a mode with no known
 meaning is a poor thing to switch the machine into.
 
 A label found this way comes from a source other than the manual, so it

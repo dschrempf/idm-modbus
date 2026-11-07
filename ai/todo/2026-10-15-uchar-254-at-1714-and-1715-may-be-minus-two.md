@@ -55,5 +55,5 @@ holds the pumps, at Fachmann level either. Left: asking iDM support
      tree has them.
 
    Writing 0 or 1 to the registers would also answer it, but the manual
-   advises against requesting these pumps from outside, and writing is not
-   implemented.
+   advises against requesting these pumps from outside, and neither is a
+   target.
