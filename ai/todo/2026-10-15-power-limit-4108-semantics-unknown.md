@@ -90,6 +90,15 @@ it caps the draw, and in which modes, is step 2, now the PV run of
 `pv-control-of-74-and-88`. Since 4108 costs no EEPROM cycle, the run may
 renew it beside 74.
 
+## 2026-11-07: what others found
+
+In set-max-power-for-14a-enwg (kodebach/hacs-idm-heatpump#173) a user
+reports writing 4108 "in various combinations" with no effect, and iDM
+support's answer: "for internal use and not supposed to be used by heatpump
+users". No setup is given; the run below had an effect. A question to support
+about 4108 should name its use, a cap for a PV run or a grid operator's
+dimming, rather than the register (`doc/research.md`, "Community work").
+
 ## 2026-11-07: below the draw, it ends a run
 
 A PV run on 74 at a constant 2.0, with 0.8 written to 4108 at 112.5 rps

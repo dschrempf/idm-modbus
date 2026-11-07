@@ -21,7 +21,8 @@ mail to iDM support. One mail can ask everything the notes leave to them:
 - the labels of 3 and -1 at 1005
   (`operating-mode-3-and-minus-1-at-1005-unlabeled`);
 - what 4108 does at -1, and what the locks at 4110 to 4114 do
-  (`power-limit-4108-semantics-unknown`).
+  (`power-limit-4108-semantics-unknown`). Support told another user 4108 is
+  "for internal use"; ask by its use, capping a PV run's draw, instead.
 
 An answer is a source for the table only as a document; a mail's prose goes
 into `doc/research.md`.

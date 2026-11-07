@@ -151,7 +151,28 @@ maintained. Its register definitions live in one module inside the component;
 there is no library to reuse. Its README is honest about the weak spot: for
 pump speeds, valve positions and unavailability indicators, "the documentation
 from IDM does not give any information for these sensors … this is a bit of a
-guess."
+guess." Its rows from 4108 to 4128 are copied from `N2_GLTMON` and marked
+TODO. In set-max-power-for-14a-enwg
+([kodebach/hacs-idm-heatpump#173](https://github.com/kodebach/hacs-idm-heatpump/issues/173))
+a user reports that writing 4108 had no effect, and that iDM support answered
+it is "for internal use and not supposed to be used by heatpump users". The
+report gives no setup; here a limit below the draw ends a PV run
+([verification-2026-11-07-power-limit.md](verification-2026-11-07-power-limit.md)).
+
+**AndyNew2/hacs-idm-hpweb.** Python, MIT, a Home Assistant custom component
+started December 2025, reading the web backend instead of Modbus. For the
+Navigator 2.0 it logs in on `/index.php` with the PIN, takes a CSRF token from
+the page, and reads `/data/heatpump.php`, `/data/settings.php`,
+`/data/info.php` and `/data/statistics.php`; for the Navigator 10 it uses the
+websocket on port 61220 that `idm-web` reaches on this Navigator 2.0, asking
+`setting` `detail` of 4768, 4775, 4782, 4789 and 4754 and `statistic`
+`detail`. Whether 20.24-2608 still serves the HTTP endpoints is untested. What
+its README says Modbus lacks — the flow rate, the hot gas temperature, the
+evaporation and condensation pressures — is what
+[verification-2026-09-20.md](verification-2026-09-20.md) lists as shown by the
+web interface alone, read here from 4768 `N2_SENSORS`; the flow rate, B2, has
+since been found at 1072. It also writes, by a POST to `/data/info.php`: the
+operating mode, `FW027`, `FW028`, `FW048`, `FW044` to `FW046`, and the clock.
 
 **Xerolux/idm-heatpump-api** and **idm-heatpump-hass.** Python, MIT, started
 March 2026. Better engineered — the library is separate from the integration,
@@ -389,6 +410,7 @@ above the 0.8 kW the PV page printed as the forecast. See
 - [The same chapter for the Navigator 10, January 2026](https://www.idm-energie.at/wp-content/uploads/2026/01/Gebaeudeleittechnik-Smartfox.pdf)
   — three pages, filed under a name that hides what it is
 - [kodebach/hacs-idm-heatpump](https://github.com/kodebach/hacs-idm-heatpump)
+- [AndyNew2/hacs-idm-hpweb](https://github.com/AndyNew2/hacs-idm-hpweb)
 - [Xerolux/idm-heatpump-api](https://github.com/Xerolux/idm-heatpump-api)
 - [chincherpa/idm_control](https://github.com/chincherpa/idm_control/blob/master/modbus_tcp_navigator.md)
 - [idm-waermepumpe-einbinden (evcc-io/evcc#11905)](https://github.com/evcc-io/evcc/discussions/11905)
