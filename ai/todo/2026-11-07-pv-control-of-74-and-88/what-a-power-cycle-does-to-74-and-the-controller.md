@@ -47,4 +47,8 @@ Postponed with that watch, which was not run on 2026-11-06.
 
 The user restarted the controller on 2026-11-06 at about 20:40, with -0.5
 written to 74 at 20:26:24 and nothing watching; no webapi capture was taken
-before. A read of 74 after it answers the first point for that restart.
+before. A read of 74 after it answers the first point for that restart:
+on 2026-11-07 at 11:56, 74 read 0.0 and 12763 listed it with an empty
+`GLT Value` (`doc/verification-2026-11-07-pv-target.md`, "Before"). The
+restart did not keep the last value; whether a surplus written before one
+still starts a charge after is open.

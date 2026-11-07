@@ -333,6 +333,10 @@ above the 0.8 kW the PV page printed as the forecast. See
   followed the sign of the two-minute mean of 74, the run stopped before the
   minimum runtime, and a second start did not come
   ([verification-2026-11-06-pv-surplus-loop.md](verification-2026-11-06-pv-surplus-loop.md)).
+  88 at -1.0 did not move a running charge, 88 at +1.0 was followed by a
+  stop at the end of the minimum runtime, and a PV start came 30 minutes
+  after a PV stop
+  ([verification-2026-11-07-pv-target.md](verification-2026-11-07-pv-target.md)).
   The speed is set by a PI controller whose gains, `IV017` to `IV019`, sit
   in the PV menu at Fachmann level. The sources on this logic, among them a
   target at 88 and the controller's own reason for a request, are in

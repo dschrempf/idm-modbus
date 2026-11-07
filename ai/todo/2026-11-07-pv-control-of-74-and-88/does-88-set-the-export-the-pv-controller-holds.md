@@ -11,92 +11,74 @@ export to 74 as it is and its intent to 88: +0.5 leaves 0.5 kW unused, and
 inventing a surplus. `doc/pv-control.md`, "What 88 would add", has the
 argument and what 88 would not change.
 
-The run below also answers whether the loop settles at all when 74 is a
-meter's export from the first write. The evening of 2026-11-06 could not
-tell: its two-minute mean still held the 1.7 of the start when the
-meter-style writes began.
+## Where it stands
 
-## Before the run
+Two runs on 2026-11-07, `doc/verification-2026-11-07-pv-target.md`:
 
-Done on 2026-11-07: 88 is the target `PvTarget`, and `tools/drivepv.py`,
-`tools/drive74.py` renamed, writes it at the start of a phase, and 0 to it
-on exit before the final 74. Tried against a stub writer only.
+- The planned run, 74 as a meter of 2.0 kW from the first write, stopped
+  after 8 minutes, before its first step of 88: the loop does not settle
+  with `PV011` at 2.0 min.
+- With 74 held at 0 and the speed steady at 50.4 rps, 88 at -1.0 moved
+  nothing in 3 minutes. 88 at +1.0, written 9 minutes after the start, was
+  followed by a fall and a stop at the end of the minimum runtime, so it
+  does not settle whether 88 acts.
 
-1. Read 88 once: it should read 0.0, as in every scan.
-2. Wait for the pump to stand idle and the store to be cool: the run takes
-   about 30 minutes at about 2 kW, and the morning of 2026-11-06 rose 7 K in
-   15 minutes at 3.9 kW. A start needs B38 below `PV006` less 13300, 36 °C;
-   the run ends at `PV006`, 40 °C. Start at 31 °C or below. `PV006` stays
-   at 40 °C.
-3. `PV011` stays at 2.0 min, so that only 88 differs from the runs of
-   2026-11-06.
+Both settings stayed: `PV006` 40 °C, `PV011` 2.0 min.
 
-## The run
+## Before each run
 
-At Kunde level for Modbus, the web at Fachmann level:
+- The pump idle, B38 at 31 °C or below: a start needs B38 below `PV006`
+  less 13300, 36 °C, and the run ends at `PV006`, 40 °C.
+- At least 30 minutes since the last PV stop: the second start of
+  2026-11-07 came 29 min 59 s after the first run's stop.
+- 88 reads 0.0.
 
-    cabal run idm-dump -- HOST --watch 10 74 88 1008 1090 1091 1100 1074 4122 1004 1098 > watch.jsonl
-    IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann
-    IDM_PIN=... cabal run idm-web -- HOST --watch 10 6245 10263 12763 > webwatch.jsonl
+The watches and the end as on 2026-11-07: the driver writes 0 to 88 and
+-0.5 to 74 when its schedule ends, the run stops or it is signalled. Check
+in the watch that 88 reads 0.0, stop the watches, and leave the Fachmann
+level. Never end with 88 away from 0.
+
+## Next: +1.0 apart from the minimum runtime
+
+74 at 0 from the compressor's start, 88 at +1.0 from 5 minutes, past the
+start program of about 4, until 8, then 0 past the 10 minutes of the
+minimum runtime:
+
     tools/drivepv.py HOST watch.jsonl --final -0.5 --final-target 0 \
-      2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 \
-      2.0-4122/20/ein+1560/-1.0 2.0-4122/20/ein+1620/0 > write.log
-    tools/runtable.py watch.jsonl --web webwatch.jsonl --writes write.log
+      2.0/20/ein/0 0/20/ein+300 0/20/ein+480/1.0 0/20/ein+780/0 > write.log
 
-74 is a meter of 2.0 kW of PV with the pump the only load, from the first
-write to 27 minutes after the compressor starts. At rest it writes 2.0,
-above the 1.7 that started a run.
+- A fall under +1.0, before the minimum runtime, says 88 acts on the
+  speed; a stop then, on the stop condition. A ramp rather than a jump says
+  it goes through `PV011`'s mean like 74.
+- Nothing under +1.0, and a stop near 10 minutes under 0: 88 is ignored,
+  and 74 at 0 ends a run once the minimum runtime is over, against the
+  morning of 2026-11-06, when 0 held 120 rps past it.
+- Nothing under either, and the run holds to 13 minutes: 88 is ignored, and
+  2026-11-07's stop was the minimum runtime's.
 
-| Phase | From the start | 88   | The draw, 4122, if 88 is the target | If 88 is ignored |
-| ----- | -------------- | ---- | ----------------------------------- | ---------------- |
-| a     | 0 to 12 min    | 0    | about 2.0 kW                        | about 2.0 kW     |
-| b     | 12 to 19 min   | +1.0 | about 1.0 kW                        | about 2.0 kW     |
-| c     | 19 to 26 min   | -1.0 | about 3.0 kW                        | about 2.0 kW     |
-| d     | 26 min to end  | 0    | about 2.0 kW                        | about 2.0 kW     |
+## Then: a shorter `PV011`
 
-Phase a runs past the start program, about 3.5 minutes, and past the
-minimum runtime, 10 minutes. 1.0 kW in phase b lies above the floor of
-0.67 kW, 3.0 in phase c below the top of about 3.9.
+On another idle, cool day, the first schedule of 2026-11-07 with `PV011`,
+setting 10389, 0.1 to 360 min, at 0.5 min instead of 2.0: one EEPROM cycle
+at the display, and one more to set it back, unless the run argues for
+keeping it. Write 74 every 10 s rather than 20, so the mean holds three
+writes, and pass `--mean 30` to `tools/runtable.py`:
 
-What to read off:
+    tools/drivepv.py HOST watch.jsonl --final -0.5 --final-target 0 \
+      2.0-4122/10/ein+720/0 2.0-4122/10/ein+1140/1.0 \
+      2.0-4122/10/ein+1560/-1.0 2.0-4122/10/ein+1620/0 > write.log
 
-- **Phase a: does the loop settle?** The draw near 2.0 kW and 74 near 0.
-  If it oscillates instead, its period and amplitude; then compare each
-  phase's mean draw rather than a settled one.
-- **Phases b and c: does the draw follow 88?** If it does, the first 30 s
-  after each step: a jump of the speed at once is the proportional share,
-  in rps per kW of 88; the ramp after it, the integral's. If the speed
-  only ramps, 88 goes through `PV011`'s mean like 74.
-- **12763**: the controller's internal value of 74, the mean or the value
-  written, and of 88 against the value written.
-- **10263**: whether the PV page shows 88, or a target consumption.
-- **Stops.** If the run stops while 74 sits near 0, note when, at which
-  mean and which 88. A loop that settles at the stop condition cannot hold;
-  that is a finding of its own, for "What stops it".
+It shows what the two-minute mean adds to the overshoot: with the lag
+shorter, the draw should settle faster and overshoot less. If it settles,
+the steps of 88 come on a settled loop. A shorter mean also weighs the
+start on a shorter surplus, so the start may come sooner.
 
-End: the driver writes 0 to 88 and -0.5 to 74 when its schedule ends, the
-run stops or it is signalled. Check in the watch that 88 reads 0.0, stop
-the watches, and leave the Fachmann level. Never end with 88 away from 0: a
-negative 88 left behind asks for grid power with no one watching.
-
-Record it in a dated `doc/`, and update `doc/pv-control.md`.
-
-## The second run: a shorter `PV011`
-
-On another idle, cool day, the same schedule with `PV011`, setting 10389,
-0.1 to 360 min, at 0.5 min instead of 2.0: one EEPROM cycle at the display,
-and one more to set it back, unless the run argues for keeping it. Write 74
-every 10 s rather than 20, so the mean holds three writes, and pass
-`--mean 30` to `tools/runtable.py`. It shows what the two-minute mean adds
-to the overshoot: with the lag shorter, the draw should settle faster and
-overshoot less. A shorter mean also weighs the start on a shorter surplus,
-so the start may come sooner.
-
-## Afterward, if 88 is the target
+## Afterward, if 88 acts
 
 - **A start on 88 alone.** At rest, 74 as a meter with no PV, 0-4122, and
   88 at -1.7. A start would mean the start condition weighs 74 less 88 too,
-  and a consumer can ask for a grid-powered charge at a chosen draw. Then 88
-  at -1.0 for the floor.
+  and a consumer can ask for a grid-powered charge at a chosen draw. -1.0
+  did not move a running charge, so a negative target may be clamped at 0;
+  this tests the same for the start.
 - **88 left behind.** What a dead consumer leaves at 88 matters more than
   at 74: add 88 to `controller-behavior-when-glt-values-stop-unknown`.

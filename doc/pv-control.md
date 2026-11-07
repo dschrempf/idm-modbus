@@ -2,7 +2,8 @@
 
 The runs on 74 so far (`doc/verification-2026-11-05-pv-surplus.md`,
 `doc/verification-2026-11-06-pv-surplus-own-draw.md`,
-`doc/verification-2026-11-06-pv-surplus-loop.md`) each answered a question
+`doc/verification-2026-11-06-pv-surplus-loop.md`,
+`doc/verification-2026-11-07-pv-target.md`) each answered a question
 and raised one the tests could not see into: what starts a PV run, what sets
 its speed, what stops it, and what holds off the next start. This document
 collects what the sources say about that logic and which observations would
@@ -128,8 +129,9 @@ here is the source's until a dated `doc/` measures it.
 
 812170 and 812184: a mean surplus above the forecast draw, shifted by
 `PV015`. Measured: 1.0 against a forecast of 0.8 kW started nothing in 12
-minutes; a mean of about 1.0 against 0.7 kW did. A margin of about 0.3 kW
-fits both; the Home Assistant thread says 500 W. `PV015` is not it: 10396
+minutes; a mean of about 1.0 against 0.7 kW did, and on 2026-11-07 one of
+about 1.2 against 0.7 kW did within 71 s. A margin of about 0.3 kW fits
+all three; the Home Assistant thread says 500 W. `PV015` is not it: 10396
 reads 0 (`captures/navigator-2.0-webapi-20.24-2608-2026-11-06-1148.json`).
 Not settled whether the margin is a setting.
 
@@ -149,10 +151,12 @@ mean of 74 over `PV011` less a target of 0:
   with at an error of 0. In the evening the speed climbed while the mean
   fell from 1.70 to 0 and peaked 10 s after it crossed zero: an output
   following the error's integral, not the error.
-- **The integral does not wind up.** In the morning the speed stood at the
-  top, 120 rps, for over seven minutes with the mean positive, and fell
-  20 s after -0.5 was written, the mean then about -0.08. An integral wound
-  up past the limit would have held the top for minutes.
+- **How long the top holds once the mean turns is not explained.** In the
+  morning the speed stood at the top, 120 rps, for over seven minutes with
+  the mean positive, and fell 20 s after -0.5 was written, the mean then
+  about -0.08: no sign of an integral wound up past the limit. On
+  2026-11-07 it held the top for 100 s after the mean crossed zero, down to
+  -1.65, after barely a minute there.
 - **The output is bounded** by the heating floor `IV003`, 20 % or 24 rps,
   and `IV002`, 100 %, 120 rps; the evening run reached the floor.
 - **The overshoot of the evening is the integral against a lag.** The
@@ -167,6 +171,12 @@ mean of 74 over `PV011` less a target of 0:
   for the start; the mean read 1.70 while the values written were already
   negative, and the integral climbed on it for 90 s. A meter would have
   read 1.7 less the start program's 1.2 kW from the compressor's start.
+  The first run of 2026-11-07 wrote 74 as a meter from the first write and
+  overshot all the same: from the start program to the top, and a stop
+  after 8 minutes.
+- **The climb is the controller's, not a warm-up.** The start program holds
+  50.4 rps for about 4 minutes; with the mean at 0 the speed held 50.4 for
+  nearly 6 minutes after it (2026-11-07).
 
 Not settled: the form and units of `IV017` and `IV018`, whether the target
 is 88, `N2_PV_POWERTARGET` or both, and whether one set of gains serves all
@@ -219,23 +229,31 @@ What 88 would not change:
   step of 88 would then show the proportional share of the response as an
   immediate jump of the speed, apart from the integral's ramp.
 
-Untested; 88 has read 0.0 in every scan, and a controller that ignores it
-reads the same. `does-88-set-the-export-the-pv-controller-holds` plans the
-run.
+Measured on 2026-11-07 (`doc/verification-2026-11-07-pv-target.md`), with
+74 held at 0 and the speed steady at 50.4 rps: 88 at -1.0 moved nothing in
+3 minutes, so the last row does not hold, not then at least. 88 at +1.0 was
+followed 40 to 50 s later by a fall to the floor and a stop, but at the end
+of the minimum runtime, so that step does not settle whether 88 acts. If it
+does, it acts on one side only, as a target clamped at 0 would. The PV page
+prints nothing that follows 88; 12763 lists it as written.
 
 ### What stops it
 
 812184: available PV power below the requested, after the minimum runtime.
 Measured: a stop 72 s into a negative mean at 81 rps (morning), and one at
 the floor after 8 minutes 10 seconds, before the 10 minutes of 5412
-(evening). Not settled what "requested" is, or why the minimum runtime did
-not hold.
+(evening). On 2026-11-07 one after 8 minutes 0 seconds at 60 rps, falling,
+with the mean at -1.23, and one at the floor after 10 minutes 21 seconds,
+with the mean at 0 and 88 at +1.0. Not settled what "requested" is, or why
+the minimum runtime did not hold.
 
 ### What holds off the next start
 
 5419, 10 minutes of standstill. Measured: no start in ten minutes on 1.7,
 from nine minutes after a PV stop, with B38 6 K below the hysteresis
-threshold. Not settled. The request reason, `heatpump.info`, would show
+threshold; on 2026-11-07 a request 29 min 59 s after a PV stop, on 2.0
+standing for 24 minutes. So a PV start waits 30 minutes after a PV stop;
+which setting holds them no source names. The request reason, `heatpump.info`, would show
 whether the controller registered a PV request at all.
 
 ### What the controller does with a value no one renews
@@ -252,7 +270,7 @@ Each is a read that the tests so far did not take:
 
 1. **12763 during a run**, at Fachmann level with `idm-web --watch`: the
    internal value of 74, whether it is the mean, the value written or the
-   value plus the draw, and of 88.
+   value plus the draw, and of 88. Read on 2026-11-07: both as written.
 2. **The request reason**: `heatpump.info` of the `system` overview, every
    10 s. `idm-web --watch` reads settings only; this needs the `Query` for
    the `system` overview in a watch, a change to `idm-web`.
@@ -272,7 +290,9 @@ Each is a read that the tests so far did not take:
    and the integral share apart. A step at 74 cannot show them apart, as
    `PV011`'s mean turns it into a two-minute ramp.
 
-5 and 6 are one run, planned in
-`does-88-set-the-export-the-pv-controller-holds`, with `PV011` at its 2.0
-min. The same run again with `PV011` at 0.5 min separates the mean's share
-of the overshoot from the gains'.
+5 and 6 were one run on 2026-11-07; it stopped before 88 was stepped, and
+did not settle. 6 alone, with 74 held at 0, did in part: -1.0 moved
+nothing. `does-88-set-the-export-the-pv-controller-holds` plans what is
+left: a run that separates +1.0 from the minimum runtime, and 5 again with
+`PV011` at 0.5 min, which separates the mean's share of the overshoot from
+the gains'.
