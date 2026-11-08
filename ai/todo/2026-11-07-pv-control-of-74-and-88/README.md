@@ -55,7 +55,9 @@ the controller does with a value no one renews.
 2. The meter-style run with `PV011` at 0.5 min, with the PV the meter
    simulates near the floor's draw: whether the loop settles there, and
    whether a settled loop, its mean near 0, ends at the minimum runtime as
-   74 at 0 did.
+   74 at 0 did. This is the feed evcc's Lambda workaround would give an
+   iDM, but renewed every 60 s and clamped at 0; stock evcc adds the draw
+   (`what-evcc-writes-to-74.md`).
 3. The overnight test of 74. A restart from the display is measured; a
    power cycle at the mains switch is not, and is not needed for it.
 4. A PV hot water charge.
@@ -72,6 +74,9 @@ the controller does with a value no one renews.
   power cycle and an update.
 - `pv-hot-water-charge-on-74-untested.md`: hot water rather than the store,
   once the store charge is settled.
+- `what-evcc-writes-to-74.md`: stock evcc writes the draw plus the surplus,
+  so counts the draw twice here; the Lambda workaround writes the export,
+  clamped at 0. Nothing on 4108.
 
 ## Outside this folder
 

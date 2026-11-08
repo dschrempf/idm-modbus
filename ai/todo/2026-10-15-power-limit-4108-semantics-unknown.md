@@ -134,3 +134,12 @@ limit written before the start and held, lower in steps toward the floor:
 1.2, then 1.0, then 0.8, with the schedule of 2026-11-08 and only LIMIT
 changed. A run that stops in the start program, or never starts, ends the
 steps there.
+
+## 2026-11-08: evcc does not use it
+
+Neither idm-waermepumpen (evcc-io/evcc#19002) nor the Lambda threads it
+points to name 4108 or a cap (`what-evcc-writes-to-74.md` in
+`pv-control-of-74-and-88`). evcc's iDM template has carried the `dim`
+capability since add-dim-curtail-features (evcc-io/evcc#29905) but configures
+no dimmer, so evcc drives an iDM through 74 alone. Nothing to change in the
+steps above.
