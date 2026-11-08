@@ -115,3 +115,22 @@ reaches it, and whether a limit below the forecast holds off a start. Next:
 
 A speed that climbs past the start program and holds near 1.5 kW is a cap;
 then lower the limit in steps toward the floor.
+
+## 2026-11-08: above the start program's draw, it caps
+
+4108 at 1.5 from before the start, renewed beside 74 at a constant 2.0: the
+request came 1 min 24 s after the first write, so a limit above the forecast
+does not hold off a start. Past the start program the speed climbed one step,
+to 58.8 rps, and held the draw at 1.18 to 1.52 kW, 1.39 on average, for 42
+minutes, coming down to 51.6 rps as the store warmed; the run ended at
+`PV006` after 46 min 30 s (`doc/verification-2026-11-08-power-limit-cap.md`).
+A cap, then, where the limit is above the draw it meets; a cut-off where it
+is far below, as at 0.8 under 3.1 kW.
+
+Open: a limit below the start program's 1.2 kW, written before the start;
+lowering the limit under a running run (not to be tested: below the draw it
+risks the stop of 2026-11-07); 4108 outside a PV run. Next, one run each, a
+limit written before the start and held, lower in steps toward the floor:
+1.2, then 1.0, then 0.8, with the schedule of 2026-11-08 and only LIMIT
+changed. A run that stops in the start program, or never starts, ends the
+steps there.

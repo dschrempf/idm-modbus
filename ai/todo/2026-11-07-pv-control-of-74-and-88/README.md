@@ -13,7 +13,7 @@ covers.
 
 ## Where it stands
 
-Settled on the machine, 2026-11-05 to 2026-11-07:
+Settled on the machine, 2026-11-05 to 2026-11-08:
 
 - 74 is in kW, and the controller adds its own draw back.
 - A PI controller, gains `IV017` to `IV019`, sets the speed on the mean of
@@ -33,23 +33,25 @@ Settled on the machine, 2026-11-05 to 2026-11-07:
 - 4108 at 0.8 under a draw of 3.1 kW ended the run within 9 s, before the
   minimum runtime, rather than capping it (late evening of 2026-11-07,
   `doc/verification-2026-11-07-power-limit.md`).
+- 4108 at 1.5 from before the start, beside 74 at 2.0, capped the run: the
+  draw held near 1.4 kW for 42 minutes, past the minimum runtime, until
+  `PV006` ended it (evening of 2026-11-08,
+  `doc/verification-2026-11-08-power-limit-cap.md`).
 
-So nothing written so far holds a run low past the minimum runtime. Open:
-whether 4108 caps where the limit is above the start program's draw, what
-decides at the minimum runtime, whether 88 weighs in a start or a stop,
-what sets the 30 minutes, and what the controller does with a value no one
-renews.
+So 4108 holds a run below full speed past the minimum runtime, at 1.4 kW
+so far rather than the floor's 0.6 to 0.74. Open: whether a limit below the
+start program's 1.2 kW caps too, what decides at the minimum runtime,
+whether 88 weighs in a start or a stop, what sets the 30 minutes, and what
+the controller does with a value no one renews.
 
 ## Next, in order
 
 1. 4108, `Leistungsbegrenzung Wärmepumpe`, as a cap under a PV run: a
    constant surplus at 74, which alone drives the speed to the top, and a
-   limit at 4108. 0.8 written below the draw ended the run; next, 1.5
-   from before the start, above the start program's 1.2 kW, then lower in
-   steps if it caps. If the draw holds at the limit and the run goes on to
-   `PV006`, that is the low run. `tools/drivepv.py` renews 4108 beside 74
-   as a phase's LIMIT and ends on `--final-limit`, -1 unless given; the
-   schedule is in `power-limit-4108-semantics-unknown`.
+   limit at 4108. 1.5 from before the start capped the run to `PV006`;
+   next, the same run with the limit lower, 1.2, 1.0, then 0.8, one run
+   each, never lowered under a running run. The steps are in
+   `power-limit-4108-semantics-unknown`.
 2. The meter-style run with `PV011` at 0.5 min, with the PV the meter
    simulates near the floor's draw: whether the loop settles there, and
    whether a settled loop, its mean near 0, ends at the minimum runtime as

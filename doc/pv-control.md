@@ -5,7 +5,8 @@ The runs on 74 so far (`doc/verification-2026-11-05-pv-surplus.md`,
 `doc/verification-2026-11-06-pv-surplus-loop.md`,
 `doc/verification-2026-11-07-pv-target.md`,
 `doc/verification-2026-11-07-pv-target-ignored.md`,
-`doc/verification-2026-11-07-power-limit.md`) each answered a question
+`doc/verification-2026-11-07-power-limit.md`,
+`doc/verification-2026-11-08-power-limit-cap.md`) each answered a question
 and raised one the tests could not see into: what starts a PV run, what sets
 its speed, what stops it, and what holds off the next start. This document
 collects what the sources say about that logic and which observations would
@@ -257,7 +258,9 @@ store 9 K below `PV006`: 0 at 74 ends a run at the minimum runtime, as it
 did not at 120 rps on the morning of 2026-11-06. Late that evening one
 after 5 minutes 10 seconds at 112.5 rps, 9 s after 0.8 kW was written to
 4108, with 74 at 2.0 throughout: a limit below the draw ends a run before
-the minimum runtime. Not settled what
+the minimum runtime. On 2026-11-08 one at `PV006`, after 46 minutes 30
+seconds at 52 to 59 rps, with 74 at 2.0 and 4108 at 1.5 throughout. Not
+settled what
 "requested" is, why the minimum runtime did not hold, or why 0 held the one
 run and ended the other.
 
@@ -265,7 +268,7 @@ run and ended the other.
 
 The draw spans 0.6 to 0.74 kW at the heating floor, 24 rps, to about 4 kW
 at the top, 120 rps; the start program holds 50.4 rps and 1.2 kW for about 4
-minutes. Measured on 74 so far, none holds a run low past the minimum
+minutes. Measured on 74 alone, none holds a run low past the minimum
 runtime:
 
 - **A constant above 0** drives the integral, and the speed, to the top
@@ -283,10 +286,14 @@ runtime:
 
 The levers outside the PV loop: 4108 `Leistungsbegrenzung Wärmepumpe`, a
 `FLOAT` in kW, -1 by default, volatile as a restart showed
-(`doc/verification-2026-11-07-restart.md`), which, written 0.8 under a
-draw of 3.1 kW, ended the run within 9 s rather than capping it
-(`doc/verification-2026-11-07-power-limit.md`); whether a limit above the
-start program's draw caps is untested. And
+(`doc/verification-2026-11-07-restart.md`). Written 0.8 under a draw of
+3.1 kW, it ended the run within 9 s rather than capping it
+(`doc/verification-2026-11-07-power-limit.md`). Written 1.5 before the
+start, beside a constant 2.0 at 74, it capped the run: the speed climbed one
+step past the start program and held the draw near 1.4 kW for 42
+minutes, until `PV006` ended the run
+(`doc/verification-2026-11-08-power-limit-cap.md`). Whether a limit below
+the start program's draw caps as well is untested. And
 `IV002` `N2_MOD_MAX_POWER_HEATING`, a Fachmann setting in percent that would
 cap every heating run, not only a PV one, and did not bind in the one run
 that lowered it (`doc/verification-2026-11-05-floor.md`). That run also

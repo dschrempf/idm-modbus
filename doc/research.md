@@ -157,7 +157,9 @@ TODO. In set-max-power-for-14a-enwg
 a user reports that writing 4108 had no effect, and that iDM support answered
 it is "for internal use and not supposed to be used by heatpump users". The
 report gives no setup; here a limit below the draw ends a PV run
-([verification-2026-11-07-power-limit.md](verification-2026-11-07-power-limit.md)).
+([verification-2026-11-07-power-limit.md](verification-2026-11-07-power-limit.md)),
+and one above the start program's draw caps it
+([verification-2026-11-08-power-limit-cap.md](verification-2026-11-08-power-limit-cap.md)).
 
 **AndyNew2/hacs-idm-hpweb.** Python, MIT, a Home Assistant custom component
 started December 2025, reading the web backend instead of Modbus. For the
@@ -362,7 +364,12 @@ above the 0.8 kW the PV page printed as the forecast. See
   at 0 ended a run at the minimum runtime, far below `PV006`
   ([verification-2026-11-07-pv-target-ignored.md](verification-2026-11-07-pv-target-ignored.md)).
   None of the values written to 74 so far holds a run at low power past the
-  minimum runtime.
+  minimum runtime. 4108 at 1.5, written beside 74 at 2.0 from before the
+  start, does: it capped the draw near 1.4 kW for 42 minutes, until the run
+  ended at `PV006`
+  ([verification-2026-11-08-power-limit-cap.md](verification-2026-11-08-power-limit-cap.md)).
+  At 0.8, written under a draw of 3.1 kW, it ended the run within 9 s
+  ([verification-2026-11-07-power-limit.md](verification-2026-11-07-power-limit.md)).
   The speed is set by a PI controller whose gains, `IV017` to `IV019`, sit
   in the PV menu at Fachmann level. The sources on this logic, among them a
   target at 88 and the controller's own reason for a request, are in
