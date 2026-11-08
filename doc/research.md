@@ -193,8 +193,8 @@ generations differ; useless for this controller.
 idm-waermepumpen
 ([evcc-io/evcc#19002](https://github.com/evcc-io/evcc/issues/19002)), are the
 best source for the PV surplus path in practice: address 74 to tell the pump
-the current surplus in watts (it is kW on this machine, below), 1710 to
-request heating, 4122 to read power draw.
+the current surplus in kW (scale 0.001 from evcc's watts), 1710 to request
+heating, 4122 to read power draw.
 
 The **Home Assistant community thread** "IDM heatpump integration via modbus
 (pure HA)" documents the plain-YAML approach with the stock `modbus:`
@@ -278,9 +278,9 @@ A sixth is what a consumer that feeds the surplus needs: **74 is in kW.**
 With `PV008` at building management and the PV menu set to charge the
 heating store, 3.0 written to 74 started the pump within two minutes on a
 machine with no request of its own, and the charge ran until the store
-reached `PV006`, its maximum, with 74 still at 3.0. The evcc discussions'
-watts would have been far below the 0.7 kW threshold the controller's PV
-page printed. See
+reached `PV006`, its maximum, with 74 still at 3.0. Read as watts, 3.0
+would have been far below the 0.7 kW threshold the controller's PV page
+printed. See
 [verification-2026-11-05-pv-surplus.md](verification-2026-11-05-pv-surplus.md).
 
 A seventh is what the consumer writes there: **the controller adds its own
