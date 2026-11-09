@@ -35,7 +35,7 @@ here is the source's until a dated `doc/` measures it.
   Smartfox regulates toward a target of its own; what it writes to 74 is not
   documented.
 - **The controller's help texts**, `assets/translations/en.json` and
-  `de.json` of `captures/navigator-2.0-webui-20.24-2608-2026-11-05-1641/`:
+  `de.json` of `captures/navigator-10-webui-20.24-2608-2026-11-05-1641/`:
   the description behind each setting's `N2D_` key. The ones that bear on
   this, in the controller's English:
   - `N2D_PV_HEATING_HYSTERESIS` (13300): "PV control is activated when the
@@ -69,7 +69,7 @@ here is the source's until a dated `doc/` measures it.
     `N2D_CASCADE_STAGE_CONNECTION_P` has P doubled and I "reduced by one
     third" against overshoot, a gain.
 - **The PV menu at Fachmann level**, 10256 `N2_PV`
-  (`captures/navigator-2.0-webapi-20.24-2608-2026-11-06-1148.json`, in no
+  (`captures/navigator-10-webapi-20.24-2608-2026-11-06-1148.json`, in no
   Kunde capture): after `PV011` and `PV015`, three settings of type `float`
   with no unit, range 0 to 1000, each at its default:
 
@@ -105,13 +105,13 @@ here is the source's until a dated `doc/` measures it.
   (16384), `RD_REQ_ION` (32768) and `RD_REQ_HEATING_BOOSTER` (65536); more
   than one bit reads `RD_REQ_MORE_DEMANDS`. Hot water and cooling have
   tables of their own. The webapi capture at rest,
-  `captures/navigator-2.0-webapi-20.24-2608-2026-11-06-1148.json`, has no
+  `captures/navigator-10-webapi-20.24-2608-2026-11-06-1148.json`, has no
   `info` in its `heatpump`.
 - **The GLT monitor**, 12763 `N2_GLTMON`, at Fachmann level: per address a
   `Value`, the controller's internal one, and a `GLT Value`, the last one
   written (812170 §4.4). On 2026-10-16 it listed 74 to 88 with an empty
   `GLT Value`
-  (`captures/navigator-2.0-webwatch-20.24-1574-2026-10-16-0748.jsonl`).
+  (`captures/navigator-10-webwatch-20.24-1574-2026-10-16-0748.jsonl`).
 - **The PV graph**, graph 101, Kunde level: channel 183 `T25xPV_AVAILPOWER`
   "akt. PV-Überschuss" and 184 `T25xHP_REQPOWER` "Mom/prog. Aufnahme", at
   one point per 304 s in the captures so far.
@@ -135,7 +135,7 @@ here is the source's until a dated `doc/` measures it.
 minutes; a mean of about 1.0 against 0.7 kW did, and on 2026-11-07 one of
 about 1.2 against 0.7 kW did within 71 s. A margin of about 0.3 kW fits
 all three; the Home Assistant thread says 500 W. `PV015` is not it: 10396
-reads 0 (`captures/navigator-2.0-webapi-20.24-2608-2026-11-06-1148.json`).
+reads 0 (`captures/navigator-10-webapi-20.24-2608-2026-11-06-1148.json`).
 Not settled whether the margin is a setting.
 
 ### What sets the speed

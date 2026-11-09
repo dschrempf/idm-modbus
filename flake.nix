@@ -1,5 +1,5 @@
 {
-  description = "Modbus TCP for iDM heat pumps with Navigator 2.0 control";
+  description = "Modbus TCP for iDM heat pumps with Navigator 10 control";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 

@@ -43,7 +43,7 @@ import Data.Maybe (isJust)
 import Data.Text (Text)
 import IDM.Modbus.TCP (Host)
 import IDM.Navigator.Software (Mismatch, WebVersion, checked, webAgreement, webVersion)
-import IDM.Navigator.Table (navigator20Software)
+import IDM.Navigator.Table (navigator10Software)
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Connection (Failure (..), Pace (..), Pin (..), andThen, defaultPace, exchange)
 import qualified IDM.Navigator.Web.Connection as C
@@ -105,7 +105,7 @@ newtype Writable = Writable {writableSession :: Session}
 -- | The session, if it read the software the table describes, series, major
 -- and minor; the page states no patch.
 writable :: Session -> Either (Mismatch Unread WebVersion) Writable
-writable s = Writable s <$ checked webAgreement navigator20Software (sessionSoftware s)
+writable s = Writable s <$ checked webAgreement navigator10Software (sessionSoftware s)
 
 -- | Send a query and return every message that arrived until its reply, the
 -- reply last, redacted but otherwise verbatim. This is what a capture keeps.

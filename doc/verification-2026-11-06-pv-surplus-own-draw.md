@@ -27,22 +27,22 @@ ended it:
 | after the run | 45 to 40 °C |
 
 The web interface was at Fachmann level from 11:04:38, entered by `idm-web`
-(`captures/navigator-2.0-level-20.24-2608-2026-11-06-1104.log`), for the
+(`captures/navigator-10-level-20.24-2608-2026-11-06-1104.log`), for the
 speed. Nothing but 74 was written to a register.
 
 ## What was recorded
 
 Every 10 s from 11:02 over Modbus 74, 1008, 1090, 1091, 1100, 1074, 4122,
 1004 and 1098, 3168 reads to 12:00 and none failed
-(`captures/navigator-2.0-watch-20.24-2608-2026-11-06-1102.jsonl`). Every
+(`captures/navigator-10-watch-20.24-2608-2026-11-06-1102.jsonl`). Every
 10 s from 11:04 to 11:48 over the web 6245 `N2_MODULATION_OVERVIEW`, for the
 compressor's speed and motor power, and 10263 `N2_PV_POWER`, the PV page,
 522 requests and none failed
-(`captures/navigator-2.0-webwatch-20.24-2608-2026-11-06-1104.jsonl`). The
+(`captures/navigator-10-webwatch-20.24-2608-2026-11-06-1104.jsonl`). The
 writes, by `idm-write` once a minute and at each change of value, 38 and
-none failed (`captures/navigator-2.0-write-20.24-2608-2026-11-06-1102.log`).
+none failed (`captures/navigator-10-write-20.24-2608-2026-11-06-1102.log`).
 The web backend after the run, at Fachmann level, with `PV006` back at
-40 °C (`captures/navigator-2.0-webapi-20.24-2608-2026-11-06-1148.json`).
+40 °C (`captures/navigator-10-webapi-20.24-2608-2026-11-06-1148.json`).
 
 ## The run
 

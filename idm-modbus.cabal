@@ -1,7 +1,7 @@
 cabal-version:      3.4
 name:               idm-modbus
 version:            0.1.0.0
-synopsis:           Modbus TCP for iDM heat pumps with Navigator 2.0 control
+synopsis:           Modbus TCP for iDM heat pumps with Navigator 10 control
 description:
   A faithful transcription of the manufacturer's Modbus TCP parameter list,
   verified against a running machine, and a client that reads it.
@@ -27,9 +27,9 @@ extra-doc-files:
   Readme.md
 
 extra-source-files:
-  data/navigator-2.0-enums.tsv
-  data/navigator-2.0-registers.tsv
-  data/navigator-2.0-software.tsv
+  data/navigator-10-enums.tsv
+  data/navigator-10-registers.tsv
+  data/navigator-10-software.tsv
 
 source-repository head
   location: https://github.com/dschrempf/idm-modbus

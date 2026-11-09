@@ -65,7 +65,7 @@ checks =
                 && registerDefault r == Nothing
           )
           gltmon
-        && all ((/= UnknownPersistence) . registerPersistence) (filter ((== Manual) . registerSource) Table.navigator20)
+        && all ((/= UnknownPersistence) . registerPersistence) (filter ((== Manual) . registerSource) Table.navigator10)
     ),
     ( "the maximum flow temperature is a float the manual does not list",
       -- 45.0, as circuit A read on 2026-10-14
@@ -100,22 +100,22 @@ checks =
         && registerUnit (register 4126) == Just Kilowatt
     ),
     ( "addresses are unique",
-      all ((== 1) . length) (group (sort (map registerAddress Table.navigator20)))
+      all ((== 1) . length) (group (sort (map registerAddress Table.navigator10)))
     ),
     ( "every register has a name",
-      all (not . T.null . registerName) Table.navigator20
+      all (not . T.null . registerName) Table.navigator10
     ),
     ( "a name carries its sensor designator whole",
-      all (balanced . registerName) Table.navigator20
+      all (balanced . registerName) Table.navigator10
     ),
     ( "a documented range is well ordered",
-      all wellOrdered Table.navigator20
+      all wellOrdered Table.navigator10
     ),
     ( "write-only registers are not offered for reading",
       all ((/= WriteOnly) . registerAccess) Table.readable
     ),
     ( "every unit the table states is known",
-      null [u | r <- Table.navigator20, Just (UnknownUnit u) <- [registerUnit r]]
+      null [u | r <- Table.navigator10, Just (UnknownUnit u) <- [registerUnit r]]
     ),
     ( "enumerations resolve",
       Table.enumLabel (Address 1005) 4 == Just (T.pack "Nur Warmwasser")
@@ -187,7 +187,7 @@ checks =
       registerWidth Float32 == registerPair && registerWidth UChar == singleRegister
     ),
     ( "presence was recorded for every register",
-      null [r | r <- Table.navigator20, registerPresence r == Untested]
+      null [r | r <- Table.navigator10, registerPresence r == Untested]
     ),
     ( "a setting is asked for by its id as a string",
       queryJSON (SettingDetail (SettingId (T.pack "4768")))
@@ -319,7 +319,7 @@ checks =
       encode (register 74) (Real 3.0) == Right (Two 0 0x4040)
     ),
     ( "every writable register reads back what encode writes",
-      all roundTrips (filter ((/= ReadOnly) . registerAccess) Table.navigator20)
+      all roundTrips (filter ((/= ReadOnly) . registerAccess) Table.navigator10)
     ),
     ( "a write the register cannot hold is refused before anything is sent",
       encode (register 1694) (Count 70) == Left (OutOfRange (Range 20 65) 70)
@@ -508,10 +508,10 @@ sensorTable =
     \<tr><td>B86v</td><td>Kondensationstemp. 1</td><td>22.8</td><td>°C</td></tr> <tr><td></td></tr> </table>"
 
 gltmon :: [Register]
-gltmon = filter ((== GltMonitor) . registerSource) Table.navigator20
+gltmon = filter ((== GltMonitor) . registerSource) Table.navigator10
 
 register :: Int -> Register
-register a = case filter ((== Address (fromIntegral a)) . registerAddress) Table.navigator20 of
+register a = case filter ((== Address (fromIntegral a)) . registerAddress) Table.navigator10 of
   (r : _) -> r
   [] -> error ("no register " <> show a)
 

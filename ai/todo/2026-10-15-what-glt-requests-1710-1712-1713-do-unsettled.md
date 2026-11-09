@@ -31,7 +31,7 @@ writing 1712 = 1 leaves the request standing.
 
 ## How we might solve it
 
-Activate each in `data/navigator-2.0-targets.tsv` as its test begins; the
+Activate each in `data/navigator-10-targets.tsv` as its test begins; the
 activation goes with the test. All three are volatile, so no EEPROM cycle is
 spent:
 

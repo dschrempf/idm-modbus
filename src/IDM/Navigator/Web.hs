@@ -6,7 +6,7 @@
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 --
--- The web interface of a Navigator 2.0 is a single-page application; every
+-- The web interface of a Navigator 10 is a single-page application; every
 -- value it shows arrives as JSON over a websocket on port 61220. The protocol is
 -- undocumented. What is known of it comes from the controller's own JavaScript
 -- and from what the controller answered; see

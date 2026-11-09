@@ -53,7 +53,7 @@ the manual on 2026-11-05 (`charge-pump-signal-1074-unchecked-at-rest`).
 
 `facts-from-812184-have-no-home-in-the-table` was dropped for prose on
 2026-09-20, on the premise that nothing in the table is typed by hand.
-`data/navigator-2.0-gltmon-parameters.tsv` has since broken that premise.
+`data/navigator-10-gltmon-parameters.tsv` has since broken that premise.
 Either reopen it with that as what has changed, or choose prose for all three
 again; prose leaves the 1005 defect standing.
 
@@ -64,7 +64,7 @@ inverter's figure on this machine (`doc/verification-2026-10-16-draw.md`).
 
 Done on 2026-11-05: built, with 74 the one target; see
 `write-interface-with-eeprom-cost-visible`, now closed. Each later write
-experiment activates its register in `data/navigator-2.0-targets.tsv` as it
+experiment activates its register in `data/navigator-10-targets.tsv` as it
 begins.
 
 ## 6. Write experiments

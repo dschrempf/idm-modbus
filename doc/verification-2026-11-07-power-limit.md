@@ -22,19 +22,19 @@ As on 2026-11-06 (`doc/verification-2026-11-06-pv-surplus-own-draw.md`):
 are held in EEPROM, so the restart at 21:39
 (`doc/verification-2026-11-07-restart.md`) left them. The web interface was
 at Fachmann level from 22:08 to 22:19
-(`captures/navigator-2.0-level-20.24-2608-2026-11-07-2206.log`). Only 74,
+(`captures/navigator-10-level-20.24-2608-2026-11-07-2206.log`). Only 74,
 88 and 4108 were written.
 
 ## What was recorded
 
 Every 10 s from 22:06:16 to 22:19:07 over Modbus 74, 88, 4108, 1008, 1090,
 1091, 1100, 1074, 4122, 1004 and 1098, 858 reads and none failed
-(`captures/navigator-2.0-watch-20.24-2608-2026-11-07-2206.jsonl`). Every
+(`captures/navigator-10-watch-20.24-2608-2026-11-07-2206.jsonl`). Every
 10 s from 22:08:26 to 22:19:17 over the web 6245 `N2_MODULATION_OVERVIEW`,
 10263 `N2_PV_POWER` and 12763 `N2_GLTMON`, 198 requests and none failed
-(`captures/navigator-2.0-webwatch-20.24-2608-2026-11-07-2206.jsonl`). The
+(`captures/navigator-10-webwatch-20.24-2608-2026-11-07-2206.jsonl`). The
 writes, 36, each read back
-(`captures/navigator-2.0-write-20.24-2608-2026-11-07-2209.log`). Software
+(`captures/navigator-10-write-20.24-2608-2026-11-07-2209.log`). Software
 20.24-2608 on both channels throughout.
 
 ## Before

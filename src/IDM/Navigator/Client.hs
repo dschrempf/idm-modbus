@@ -1,6 +1,6 @@
 -- |
 -- Module      :  IDM.Navigator.Client
--- Description :  Reading registers off a Navigator 2.0
+-- Description :  Reading registers off a Navigator 10
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 --
@@ -39,7 +39,7 @@ import Data.Text (Text)
 import IDM.Modbus.TCP.Internal
 import IDM.Navigator.Register
 import IDM.Navigator.Software (Mismatch, ModbusVersion (..), checked, modbusAgreement)
-import IDM.Navigator.Table (enumLabel, navigator20Software)
+import IDM.Navigator.Table (enumLabel, navigator10Software)
 
 -- | How to pace a sweep.
 --
@@ -111,7 +111,7 @@ newtype Writable = Writable {writableSession :: Session}
 -- | The session, if it read the software the table describes, major, minor
 -- and patch.
 writable :: Session -> Either (Mismatch Failure ModbusVersion) Writable
-writable s = Writable s <$ checked modbusAgreement navigator20Software (sessionSoftware s)
+writable s = Writable s <$ checked modbusAgreement navigator10Software (sessionSoftware s)
 
 -- | A register that answered, at both levels: the number the machine sent, and
 -- that number read the Navigator's way. A capture keeps the first, a reader

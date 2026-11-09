@@ -6,7 +6,7 @@ values, they arrive over a websocket on port 61220 and the local PIN travels in
 the URL. The PIN is read from IDM_PIN, as idm-web reads it, so that it stays
 out of the shell history and the process list:
 
-    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-10-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
 
 Every request this sends is a read: `overview`, `detail` or `traverse`, which is
 the whole read side of the protocol -- the controller's own JavaScript names
@@ -68,7 +68,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent.parent
 # the software the register table describes
-SOFTWARE = HERE / "data" / "navigator-2.0-software.tsv"
+SOFTWARE = HERE / "data" / "navigator-10-software.tsv"
 # N2_SYSTEM_INFO, which Kunde level shows
 SYSTEM_INFO = "4754"
 

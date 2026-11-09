@@ -1,4 +1,4 @@
-# Modbus TCP on an iDM Navigator 2.0: what is known, and from where
+# Modbus TCP on an iDM Navigator 10: what is known, and from where
 
 Written 2026-09-19. This is the background for the library: where the register
 table comes from, what the existing community projects get right and wrong, and
@@ -7,24 +7,37 @@ which questions are still open.
 ## The machine
 
 An iDM AERO ALM 2-8, an air-to-water monobloc with an indoor hydraulic module,
-installed 2026. Controller: Navigator 2.0. Firmware reports itself as
+installed 2026. Controller: Navigator 10. Firmware reports itself as
 `T_NAV10_20.24-1574-g183d9b17a`, and since 2026-11-05 as
 `T_NAV10_20.24-2608-g0c686ed41`; see
 [software-versions.md](software-versions.md).
 
-That string is a trap. `NAV10` reads like "Navigator 10", which iDM does sell
-and which some projects treat as a separate protocol family. It is not what
-this is. The Navigator 2.0 software line numbers itself `20.x` — the manual for
-this controller documents `20.21-101` — and `20.24` is three minor versions
-further along the same line. The question was settled by reading registers off
-the machine rather than by reasoning about the string: see
-[verification-2026-09-19.md](verification-2026-09-19.md).
+`NAV10` names the controller, and the web interface calls itself NAV 10 too.
+iDM's 2025 product catalog lists the AERO ALM 2-8 with Navigator 10 control;
+the installation manual 812199 rev. 1.1 of June 2020 names the Navigator 2.0
+for the same model, which changed controllers under one name. The web backend
+is the websocket on port 61220, which AndyNew2/hacs-idm-hpweb uses for the
+Navigator 10, not the HTTP endpoints it uses for the Navigator 2.0
+([Community work](#community-work)).
+
+Until 2026-11-09 this document took `NAV10` for a misleading name, on two
+grounds that do not tell the generations apart: the software numbers itself
+`20.x`, as 812170 does for the Navigator 2.0 (`20.21-101`, `20.23-515`), and
+the registers answer as 812170 says. What they show is that the Navigator 10
+continues the Navigator 2.0's software line and serves its register map:
+every address the table holds was read on this machine
+([verification-2026-09-19.md](verification-2026-09-19.md) and those after
+it).
 
 ## The authoritative source
 
 **iDM document 812170, revision 12, "Modbus TCP – Navigatorregelung 2.0",
 40 pages, its parameter list dated 18 June 2025 and written for software
 20.23-515.**
+
+It is written for the Navigator 2.0. That the Navigator 10 answers its map is
+measured, not documented: no Modbus manual for the Navigator 10 is at hand,
+only its building management chapter ([Sources](#sources)).
 
 iDM does not publish it on their own site. Forum users report that support
 sends it on request. A LoxWiki comment of 2026-10-09 attaches it as
@@ -38,7 +51,7 @@ Loxone:
     https://api.library.loxone.com/downloader/file/647/Modbus%20TCP_Navigator%202.0_DE.pdf
 
 Older revisions circulate on loxforum, LoxWiki and photovoltaikforum. The corresponding manual for the
-previous controller generation is 812049, "Navigator 1.0 und 1.7", and its
+generation before the Navigator 2.0 is 812049, "Navigator 1.0 und 1.7", and its
 addresses are _different_; several community projects mix the two up.
 
 The document gives, for each address: datatype, access right, the matching
@@ -166,7 +179,7 @@ started December 2025, reading the web backend instead of Modbus. For the
 Navigator 2.0 it logs in on `/index.php` with the PIN, takes a CSRF token from
 the page, and reads `/data/heatpump.php`, `/data/settings.php`,
 `/data/info.php` and `/data/statistics.php`; for the Navigator 10 it uses the
-websocket on port 61220 that `idm-web` reaches on this Navigator 2.0, asking
+websocket on port 61220 that `idm-web` reaches on this Navigator 10, asking
 `setting` `detail` of 4768, 4775, 4782, 4789 and 4754 and `statistic`
 `detail`. Whether 20.24-2608 still serves the HTTP endpoints is untested. What
 its README says Modbus lacks — the flow rate, the hot gas temperature, the
@@ -182,7 +195,8 @@ it is typed, it has tests, and register definitions carry metadata including a
 source reference. It aims much wider (Navigator 2.0, 10 and Pro) and says
 plainly that its Navigator 2.0 coverage is incomplete and awaiting "broader raw
 detection captures". Its register map is derived from the 2025 Navigator 10
-specification plus reverse engineering, not from 812170.
+specification plus reverse engineering, not from 812170: a specification of
+this controller, so where the two disagree it deserves a look.
 
 **chincherpa/idm_control.** A markdown transcription of a parameter list — but
 of 812049, the Navigator 1.0/1.7 manual. Useful as a reminder that the
@@ -316,14 +330,16 @@ above the 0.8 kW the PV page printed as the forecast. See
   moves the -1 of the pump signals from the minimum into the default, and the
   cascade block loses its parameter identifiers. Neither revision says what
   20.24 added; the controller's list names 16 addresses revision 12 lacks
-  on 20.24-1574, and 36 on 20.24-2608. Worth asking iDM support for a revision covering 20.24-2608 —
+  on 20.24-1574, and 36 on 20.24-2608. Worth asking iDM support for the
+  Navigator 10's own Modbus manual, or a revision of 812170 covering 20.24-2608 —
   revision numbers run per document, so 812184 reaching revision 13 says
   nothing about 812170. The Loxone mirror served revision 10 byte for byte
   (md5 `5cff6722aee3655431b2d4166a6b3d5a`) and did not resolve on
   2026-11-05.
 
   Two later reprints constrain the drift for one block. 812184 rev. 13
-  (November 2024) and the Navigator 10 excerpt (January 2026) both print
+  (November 2024) and the Navigator 10 excerpt (January 2026), this
+  controller's, both print
   addresses 74 to 86 and 4122 with unchanged datatypes and defaults — across
   two years and a controller generation. The same two revisions show that
   printed enumerations _do_ drift: PV013 went from "Ja/Nein" to

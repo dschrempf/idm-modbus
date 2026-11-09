@@ -9,17 +9,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal test                         # prints one line per check
     cabal run idm-dump -- HOST         # read the registers a reference machine answered for
     cabal run idm-dump -- HOST --all   # sweep the whole parameter list
-    cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-SOFTWARE-YYYY-MM-DD-HHMM.json
-    cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-2.0-watch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
-    cabal run idm-dump -- HOST --widths 1534 1074 > captures/navigator-2.0-widths-SOFTWARE-YYYY-MM-DD-HHMM.json
+    cabal run idm-dump -- HOST --json > captures/navigator-10-scan-SOFTWARE-YYYY-MM-DD-HHMM.json
+    cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-10-watch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
+    cabal run idm-dump -- HOST --widths 1534 1074 > captures/navigator-10-widths-SOFTWARE-YYYY-MM-DD-HHMM.json
     tools/transcribe.py manual/812170-rev12.pdf --scan SCAN [--webapi WEBAPI --widths WIDTHS]
-    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-10-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
     IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
     IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
-    IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-2.0-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
+    IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-10-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
     IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann   # and --leave-fachmann
     cabal run idm-write -- HOST 74 3.0               # a target; --eeprom where it costs a cycle
-    tools/drivepv.py HOST WATCH --final -0.5 2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 > captures/navigator-2.0-write-SOFTWARE-YYYY-MM-DD-HHMM.log
+    tools/drivepv.py HOST WATCH --final -0.5 2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 > captures/navigator-10-write-SOFTWARE-YYYY-MM-DD-HHMM.log
     tools/runtable.py WATCH --web WEBWATCH --writes WRITELOG   # a run lined up by time; --last for a status line
     ormolu -i $(git ls-files '*.hs')   # formatting
     cabal-fmt -i idm-modbus.cabal
@@ -34,25 +34,29 @@ and month of the current date). Port 502, unit id 1.
 
 ## Architecture
 
+The machine is a Navigator 10. Its Modbus map is that of 812170, the
+Navigator 2.0's manual, as far as measured; no Navigator 10 Modbus manual is
+at hand, and `doc/research.md` says why the controller is the Navigator 10.
+
 The register table is data, not code, and it flows one way:
 
     manual/812170-rev12.pdf → pdftotext -layout and -bbox → tools/transcribe.py
-      → data/navigator-2.0-{registers,enums}.tsv → splice → IDM.Navigator.Table
-      → src/IDM/Navigator/Target.hs (with data/navigator-2.0-targets.tsv)
+      → data/navigator-10-{registers,enums}.tsv → splice → IDM.Navigator.Table
+      → src/IDM/Navigator/Target.hs (with data/navigator-10-targets.tsv)
 
 `tools/transcribe.py` is the only thing that may write those two TSVs and
 `IDM.Navigator.Target` — editing them by hand makes the next revision of the
 manual impossible to apply cleanly. A defect in a register name, unit or
 range is a defect in that script, not in the Haskell parser. The hand-written
-inputs are `data/navigator-2.0-targets.tsv`, the registers a write may go
-to, `data/navigator-2.0-gltmon-parameters.tsv` and
-`data/navigator-2.0-software.tsv`. Listing a target goes with trying on the
+inputs are `data/navigator-10-targets.tsv`, the registers a write may go
+to, `data/navigator-10-gltmon-parameters.tsv` and
+`data/navigator-10-software.tsv`. Listing a target goes with trying on the
 machine that a write to it takes effect. Note `table-transcription`: what the
 script reads, refuses and writes; read it before running or changing it, or
 adding a target.
 
 The table describes one software of the controller,
-`data/navigator-2.0-software.tsv`. A write and a change of the user level go
+`data/navigator-10-software.tsv`. A write and a change of the user level go
 ahead only on it, a read on any. Every session reads the software when it
 opens and when it reconnects, and every capture records it;
 `doc/software-versions.md` says where each channel reads it.
@@ -84,8 +88,8 @@ The modules stack, each refusing to know the next one's business:
   and its inverse `encode`. Every distinction the manual draws in prose or a
   footnote is a constructor, so a caller cannot silently ignore it.
 - `IDM.Navigator.Table` — parses the TSVs at compile time, so a row that does
-  not parse fails the build; exposes `navigator20`, `readable`, `present`,
-  `enumLabel`, `navigator20Software`, the software the table describes, and
+  not parse fails the build; exposes `navigator10`, `readable`, `present`,
+  `enumLabel`, `navigator10Software`, the software the table describes, and
   `myIdmAddress`, the register no capture holds.
 - `IDM.Navigator.Software` — a version as the table states it and as each
   channel reads it, and whether the two agree.

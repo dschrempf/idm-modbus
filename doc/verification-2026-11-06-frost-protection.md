@@ -22,9 +22,9 @@ pump M34 and set its target to 0.00 °C, while A and C kept running at
 
 `CF085`'s 2 is `N2_YES_WITHSEPERATIONHEATEXCHANGER_KIT`. Before, the webapi
 capture at Fachmann level, 11:50 to 11:56
-(`captures/navigator-2.0-webapi-20.24-2608-2026-11-06-1148.json`); after,
+(`captures/navigator-10-webapi-20.24-2608-2026-11-06-1148.json`); after,
 read by `idm-web --show` at 21:23
-(`captures/navigator-2.0-show-20.24-2608-2026-11-06-2120.txt`). `HSD40` was
+(`captures/navigator-10-show-20.24-2608-2026-11-06-2120.txt`). `HSD40` was
 changed by hand at the display between 21:07 and 21:17, at one EEPROM cycle,
 with the Fachmann level entered by `idm-web`. The circuits' modes stayed as
 they were: A and C `Zeitprogramm`, D `Aus` (1393, 1395, 1396; `HKA01`,
@@ -34,15 +34,15 @@ they were: A and C `Zeitprogramm`, D `Aus` (1393, 1395, 1396; `HKA01`,
 
 - 11:50, at 7.3 °C by the sensor page, the webapi capture above: 4789
   `N2_DIGITAL_OUTPUTS`; 1090, 1091 and 1100 from the watch of that run
-  (`captures/navigator-2.0-watch-20.24-2608-2026-11-06-1102.jsonl`).
+  (`captures/navigator-10-watch-20.24-2608-2026-11-06-1102.jsonl`).
 - 21:02 to 21:06, with frost protection on for all three circuits:
   `idm-dump HOST` and `idm-web HOST --show 4789 5748 5755 12664 7092 7988 8436`,
   printed to the terminal and not captured. The values below are quoted from
   that output.
 - 21:20 to 21:23, after the change: a scan
-  (`captures/navigator-2.0-scan-20.24-2608-2026-11-06-2120.json`) and the
+  (`captures/navigator-10-scan-20.24-2608-2026-11-06-2120.json`) and the
   show above, the level changes around it in
-  `captures/navigator-2.0-level-20.24-2608-2026-11-06-2120.log`.
+  `captures/navigator-10-level-20.24-2608-2026-11-06-2120.log`.
 
 ## The readings
 
@@ -67,8 +67,8 @@ decimal. "At rest" is 1090 `Standby`, 1091 `Keine Anforderung` and 1100
 `Aus`. 1004 read 0 at 21:02 and 21:20. The circuits' flows, B51, B53 and
 B54, stood above 21 °C throughout.
 
-In every scan before, from `navigator-2.0-scan-20.24-1574-2026-09-19-1503.json`
-to `navigator-2.0-scan-20.24-2608-2026-11-05-1617.json`, at 7.4 to 23.0 °C
+In every scan before, from `navigator-10-scan-20.24-1574-2026-09-19-1503.json`
+to `navigator-10-scan-20.24-2608-2026-11-05-1617.json`, at 7.4 to 23.0 °C
 by B32, a circuit whose `Aktive Betriebsart` read "Aus" read 0.00 °C at its
 `Sollvorlauftemperatur`, D included.
 

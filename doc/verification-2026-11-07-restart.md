@@ -16,18 +16,18 @@ stand. A consumer that wants a limit must write it again after a restart.
 
 Every 10 s from 21:20:50 to 21:53:01 over Modbus 74, 88, 4108, 1008, 1090, 1091,
 1100, 1074, 4122, 1004 and 1098, 2134 reads, of which the 11 in the restart
-failed (`captures/navigator-2.0-watch-20.24-2608-2026-11-07-2120.jsonl`). Every
+failed (`captures/navigator-10-watch-20.24-2608-2026-11-07-2120.jsonl`). Every
 10 s over the same span over the web 6245 `N2_MODULATION_OVERVIEW`, 10263
 `N2_PV_POWER` and 12763 `N2_GLTMON`, 582 requests, of which the 3 in the restart
-failed (`captures/navigator-2.0-webwatch-20.24-2608-2026-11-07-2120.jsonl`). The
+failed (`captures/navigator-10-webwatch-20.24-2608-2026-11-07-2120.jsonl`). The
 one write read back
-(`captures/navigator-2.0-write-20.24-2608-2026-11-07-2133.log`). A walk of the
+(`captures/navigator-10-write-20.24-2608-2026-11-07-2133.log`). A walk of the
 web interface at Fachmann level before the restart, from 21:22 to 21:33, and one
 after it, from 21:41 to 21:52
-(`captures/navigator-2.0-webapi-20.24-2608-2026-11-07-2122.json`,
+(`captures/navigator-10-webapi-20.24-2608-2026-11-07-2122.json`,
 `…-2026-11-07-2140.json`). The web interface was at Fachmann level from 21:21:27
 to the restart and from 21:40:48 to 21:52:51
-(`captures/navigator-2.0-level-20.24-2608-2026-11-07-2120.log`). Software
+(`captures/navigator-10-level-20.24-2608-2026-11-07-2120.log`). Software
 20.24-2608 on both channels throughout, before and after the restart.
 
 ## Before

@@ -17,21 +17,21 @@ charge ends.
 As on 2026-11-06 (`doc/verification-2026-11-06-pv-surplus-own-draw.md`):
 `PV008` at `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always. `PV006`,
 10333, read 40 and `PV011`, 10389, 2.0 min at 18:43
-(`captures/navigator-2.0-show-20.24-2608-2026-11-07-1843.txt`); the rest
+(`captures/navigator-10-show-20.24-2608-2026-11-07-1843.txt`); the rest
 was not read again. The web interface was at Fachmann level from 18:43:27
-to 18:56:48 (`captures/navigator-2.0-level-20.24-2608-2026-11-07-1843.log`).
+to 18:56:48 (`captures/navigator-10-level-20.24-2608-2026-11-07-1843.log`).
 Only 74 and 88 were written.
 
 ## What was recorded
 
 Every 10 s from 18:43:30 to 18:56:40 over Modbus 74, 88, 1008, 1090, 1091,
 1100, 1074, 4122, 1004 and 1098, 800 reads and none failed
-(`captures/navigator-2.0-watch-20.24-2608-2026-11-07-1843.jsonl`). Every
+(`captures/navigator-10-watch-20.24-2608-2026-11-07-1843.jsonl`). Every
 10 s from 18:43:45 to 18:56:36 over the web 6245 `N2_MODULATION_OVERVIEW`,
 10263 `N2_PV_POWER` and 12763 `N2_GLTMON`, 234 requests and none failed
-(`captures/navigator-2.0-webwatch-20.24-2608-2026-11-07-1843.jsonl`). The
+(`captures/navigator-10-webwatch-20.24-2608-2026-11-07-1843.jsonl`). The
 writes, 40, each read back
-(`captures/navigator-2.0-write-20.24-2608-2026-11-07-1844.log`). Software
+(`captures/navigator-10-write-20.24-2608-2026-11-07-1844.log`). Software
 20.24-2608 on both channels throughout.
 
 ## Before

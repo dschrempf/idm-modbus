@@ -22,19 +22,19 @@ below full speed past the minimum runtime.
 As on 2026-11-07 (`doc/verification-2026-11-07-power-limit.md`): `PV008` at
 `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always, `PV006` 40 °C, `PV011`
 2.0 min, not read again. The web interface was at Fachmann level from 18:54
-to 19:44 (`captures/navigator-2.0-level-20.24-2608-2026-11-08-1854.log`).
+to 19:44 (`captures/navigator-10-level-20.24-2608-2026-11-08-1854.log`).
 Only 74, 88 and 4108 were written.
 
 ## What was recorded
 
 Every 10 s from 18:52:57 to 19:43:28 over Modbus 74, 88, 4108, 1008, 1090,
 1091, 1100, 1074, 4122, 1004 and 1098, 3344 reads and none failed
-(`captures/navigator-2.0-watch-20.24-2608-2026-11-08-1852.jsonl`). Every
+(`captures/navigator-10-watch-20.24-2608-2026-11-08-1852.jsonl`). Every
 10 s from 18:53:20 to 19:43:31 over the web 6245 `N2_MODULATION_OVERVIEW`,
 10263 `N2_PV_POWER` and 12763 `N2_GLTMON`, 906 requests and none failed
-(`captures/navigator-2.0-webwatch-20.24-2608-2026-11-08-1854.jsonl`). The
+(`captures/navigator-10-webwatch-20.24-2608-2026-11-08-1854.jsonl`). The
 writes, 278, each read back
-(`captures/navigator-2.0-write-20.24-2608-2026-11-08-1853.log`). Software
+(`captures/navigator-10-write-20.24-2608-2026-11-08-1853.log`). Software
 20.24-2608 on both channels throughout.
 
 ## Before

@@ -1,6 +1,6 @@
 -- |
 -- Module      :  Main
--- Description :  Read the registers of a Navigator 2.0, once or round after round
+-- Description :  Read the registers of a Navigator 10, once or round after round
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 module Main (main) where
@@ -30,12 +30,12 @@ import Text.Read (readMaybe)
 data Mode
   = -- | a line per register, for a person
     Report Scope
-  | -- | the capture format of @captures\/navigator-2.0-scan-*.json@
+  | -- | the capture format of @captures\/navigator-10-scan-*.json@
     Capture
-  | -- | the capture format of @captures\/navigator-2.0-watch-*.jsonl@: the
+  | -- | the capture format of @captures\/navigator-10-watch-*.jsonl@: the
     -- same registers, round after round, until interrupted
     Watch Period [Register]
-  | -- | the capture format of @captures\/navigator-2.0-widths-*.json@: how
+  | -- | the capture format of @captures\/navigator-10-widths-*.json@: how
     -- wide the registers at addresses the parameter list does not name are
     Widths [Address]
 
@@ -131,7 +131,7 @@ run host mode = case mode of
       (length samples - length readings)
   Capture -> connected $ \s -> do
     warn s
-    samples <- probe s Table.navigator20
+    samples <- probe s Table.navigator10
     putStrLn (capture s (map (\sample -> fields (sampleRegister sample) (Returned (sampleResult sample))) samples))
   Watch period regs -> watch (open defaultPatience defaultPoll (Host host) port unit) period regs
   Widths addrs -> connected $ \s -> do
@@ -179,13 +179,13 @@ render s =
 warn :: Session -> IO ()
 warn s =
   either
-    (hPutStrLn stderr . ("warning: " <>) . T.unpack . mismatchText (T.pack . show) modbusVersionText Table.navigator20Software)
+    (hPutStrLn stderr . ("warning: " <>) . T.unpack . mismatchText (T.pack . show) modbusVersionText Table.navigator10Software)
     (const (pure ()))
     (writable s)
 
 -- | A capture: the software the session read, and the entries.
 --
--- The parameter list is in @data\/navigator-2.0-registers.tsv@ and is not
+-- The parameter list is in @data\/navigator-10-registers.tsv@ and is not
 -- repeated here, so that a correction to the transcription cannot leave the
 -- capture saying something else. The value is the number as written, not as
 -- the Navigator means it: a capture that already applied the sentinel rule

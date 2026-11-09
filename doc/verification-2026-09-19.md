@@ -3,7 +3,7 @@
 2026-09-19. Every one of the 663 addresses in document 812170 revision 10 was
 read once, sequentially, over one connection, with 150 ms between requests.
 Read access only; nothing was written. The raw result is
-`captures/navigator-2.0-scan-20.24-1574-2026-09-19-1503.json`, which `idm-dump --json`
+`captures/navigator-10-scan-20.24-1574-2026-09-19-1503.json`, which `idm-dump --json`
 writes. It is kept locally, not in the public repository; `captures/README.md`
 describes it.
 
@@ -18,7 +18,7 @@ capture that already applied a convention could not be the evidence for it.
 | | |
 |---|---|
 | Model | iDM AERO ALM 2-8 |
-| Controller | Navigator 2.0, firmware `T_NAV10_20.24-1574-g183d9b17a` |
+| Controller | Navigator 10, firmware `T_NAV10_20.24-1574-g183d9b17a` |
 | Heating circuits | A, C, D (D without a room unit), and B, the machine's own internal circuit |
 | Buffer | 300 l |
 | Domestic hot water | 300 l |

@@ -19,7 +19,7 @@ document that `doc/software-versions.md` points to.
 - `doc/verification-2026-09-20.md`: the display against the registers.
 - At Kunde level the legionella settings `FW045` and `FW046` and `N2_PING`
   no longer show, against
-  `captures/navigator-2.0-webapi-20.24-1574-2026-09-20-2218.json`; at
+  `captures/navigator-10-webapi-20.24-1574-2026-09-20-2218.json`; at
   Fachmann level they do. Find out whether a setting changed since or the
   update hid them.
 

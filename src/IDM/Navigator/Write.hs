@@ -1,6 +1,6 @@
 -- |
 -- Module      :  IDM.Navigator.Write
--- Description :  Writing a register of a Navigator 2.0, at a cost the type states
+-- Description :  Writing a register of a Navigator 10, at a cost the type states
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 --

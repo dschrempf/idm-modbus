@@ -1,6 +1,6 @@
 # idm-modbus
 
-Modbus TCP for iDM heat pumps with Navigator 2.0 control, in Haskell.
+Modbus TCP for iDM heat pumps with Navigator 10 control, in Haskell.
 
 The point of this library is not that it talks Modbus — plenty of things do.
 The point is that its register table is a transcription of the manufacturer's
@@ -9,17 +9,24 @@ it serves, and that every claim in it has been checked against a running
 machine. Existing projects in this space are frank about guessing;
 `doc/research.md` says which parts and why.
 
+The parameter list is iDM's for the previous controller, the Navigator 2.0:
+document 812170, "Modbus TCP – Navigatorregelung 2.0". No Modbus manual for
+the Navigator 10 is at hand, and the Navigator 10 serves that register map,
+with the additions and differences the table records — measured here, not
+documented. Its firmware names it, `T_NAV10_20.24-…`,
+and continues the Navigator 2.0's `20.x` numbering. Whether the library works
+on a Navigator 2.0 is untested.
+
 Writing some registers wears out an EEPROM — a register's `Persistence`, in
 `IDM.Navigator.Register`, says whether — so a write goes to a `Target` whose
 type states its cost, and only to the few targets listed in
-`data/navigator-2.0-targets.tsv`.
+`data/navigator-10-targets.tsv`.
 
 ## Status
 
 Early. The table describes controller software 20.24-2608: 722 registers, 692
-from revision 12 of the parameter list, document 812170, and 30 from the
-controller's register page `N2_GLTMON`; every address in it was read on the
-machine. The read path works, over Modbus and over the web backend. Writing
+from revision 12 of 812170, and 30 from the controller's register page
+`N2_GLTMON`; every address in it was read on the machine. The read path works, over Modbus and over the web backend. Writing
 exists for three targets, each tried on the machine:
 
 - `PvSurplus`, 74: the controller reads it in kW and adds its own draw back,
@@ -43,7 +50,7 @@ prints address, access right, EEPROM marking, value, unit and name. With
 `--all` it sweeps the entire parameter list instead, which is how you find out
 what your own machine has fitted. With `--json` it sweeps every address,
 write-only ones included, and writes the capture format of
-`captures/navigator-2.0-scan-*.json`: address, status, exception code, bytes,
+`captures/navigator-10-scan-*.json`: address, status, exception code, bytes,
 and the number those bytes spell, uninterpreted. With
 `--watch SECONDS ADDRESS...` it reads the given addresses every so many
 seconds until interrupted, and writes a line per read in the same format,
@@ -61,7 +68,7 @@ round and writes a line per request, verbatim but for what names the machine.
 clock, and `--leave-fachmann` closes it again.
 
 `idm-write HOST ADDRESS VALUE` writes a target, one of the addresses in
-`data/navigator-2.0-targets.tsv`, and reads it back. A target stored in the
+`data/navigator-10-targets.tsv`, and reads it back. A target stored in the
 EEPROM is not touched without `--eeprom`, not even read; with it, it is read
 first and left alone if it holds the value already. A confirmed write says the
 register holds the value, not that the controller acts on it.
@@ -74,7 +81,7 @@ reads. `tools/drivepv.py` writes a schedule fixed before the run to 74, 88 and
 
 Each of them first reads the controller's software. A write, and a change of
 the user level, goes ahead only on the software the table describes,
-`data/navigator-2.0-software.tsv`; a read goes ahead on any, warns where it
+`data/navigator-10-software.tsv`; a read goes ahead on any, warns where it
 differs, and every capture records it.
 
 Before anything will answer, Modbus TCP has to be switched on in the
@@ -85,12 +92,12 @@ service code is the day and month of the current date. Port 502, unit id 1.
 
 | | |
 |---|---|
-| `data/navigator-2.0-registers.tsv` | the parameter list and the controller's register page, transcribed; the single source of truth |
-| `data/navigator-2.0-enums.tsv` | enumerated values, as literally printed in the manual |
-| `data/navigator-2.0-gltmon-parameters.tsv` | the parameter identifier of a register the manual does not list, where a moved setting showed it; written by hand |
-| `data/navigator-2.0-targets.tsv` | the registers a write may go to, with an English name each; written by hand |
-| `data/navigator-2.0-software.tsv` | the controller software the table describes, the only one a write goes to; written by hand |
-| `data/navigator-2.0-web-2026-09-20.tsv` | what the controller's web pages showed, read off the screen; written by hand |
+| `data/navigator-10-registers.tsv` | the parameter list and the controller's register page, transcribed; the single source of truth |
+| `data/navigator-10-enums.tsv` | enumerated values, as literally printed in the manual |
+| `data/navigator-10-gltmon-parameters.tsv` | the parameter identifier of a register the manual does not list, where a moved setting showed it; written by hand |
+| `data/navigator-10-targets.tsv` | the registers a write may go to, with an English name each; written by hand |
+| `data/navigator-10-software.tsv` | the controller software the table describes, the only one a write goes to; written by hand |
+| `data/navigator-10-web-2026-09-20.tsv` | what the controller's web pages showed, read off the screen; written by hand |
 | `captures/` | what a real machine answered, and nothing the list already says; kept out of git; `captures/README.md` names the files |
 | `tools/transcribe.py` | rebuilds both TSVs from the manual's PDF, and the targets module |
 | `tools/webprobe.py` | captures the web backend's answers, reads only |

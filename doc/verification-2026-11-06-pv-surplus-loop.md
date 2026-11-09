@@ -19,20 +19,20 @@ As in the morning (`doc/verification-2026-11-06-pv-surplus-own-draw.md`):
 2.0 min, `PV006` 40 °C, `N2_PV_HEATING_HYSTERESIS` (13300) 4 K. The web
 interface was at Fachmann level from 19:54, for the speed; the output of
 `--enter-fachmann` was lost, and `--status` read `Fachmann (2)` at 19:54:58
-(`captures/navigator-2.0-level-20.24-2608-2026-11-06-1954.log`, written by
+(`captures/navigator-10-level-20.24-2608-2026-11-06-1954.log`, written by
 hand). Nothing but 74 was written.
 
 ## What was recorded
 
 Every 10 s from 19:51:50 to 20:39:00 over Modbus 74, 1008, 1090, 1091,
 1100, 1074, 4122, 1004 and 1098, 2553 reads and none failed
-(`captures/navigator-2.0-watch-20.24-2608-2026-11-06-1951.jsonl`). Every
+(`captures/navigator-10-watch-20.24-2608-2026-11-06-1951.jsonl`). Every
 10 s from 19:54:11 to 20:38:52 over the web 6245 `N2_MODULATION_OVERVIEW`
 and 10263 `N2_PV_POWER`, 538 requests and none failed
-(`captures/navigator-2.0-webwatch-20.24-2608-2026-11-06-1954.jsonl`). The
+(`captures/navigator-10-webwatch-20.24-2608-2026-11-06-1954.jsonl`). The
 writes, 21 for the first run and 15 for the second, none failed
-(`captures/navigator-2.0-write-20.24-2608-2026-11-06-1954.log`,
-`captures/navigator-2.0-write-20.24-2608-2026-11-06-2013.log`).
+(`captures/navigator-10-write-20.24-2608-2026-11-06-1954.log`,
+`captures/navigator-10-write-20.24-2608-2026-11-06-2013.log`).
 
 ## Before
 

@@ -6,12 +6,12 @@ hand-written web TSV as evidence.
 
 ## Two web sources
 
-`data/navigator-2.0-web-*.tsv` is written by hand: what the controller's own
+`data/navigator-10-web-*.tsv` is written by hand: what the controller's own
 web pages showed, at the minute they were read. It carries no addresses, so
 the mapping it tests is stated only in the register table; the join is on the
 sensor designator a register name already holds.
 
-`captures/navigator-2.0-webapi-*.json` is what the controller's web interface
+`captures/navigator-10-webapi-*.json` is what the controller's web interface
 answered, captured rather than transcribed. It is the stronger witness of the
 two, because the settings it walks name their value with the manufacturer's
 own parameter identifier, the `FW030` and `BV002` of the parameter list, so

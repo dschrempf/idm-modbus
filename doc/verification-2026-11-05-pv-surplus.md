@@ -12,7 +12,7 @@ reached `PV006`'s 35 °C, and stopped there while 74 still held 3.0.
 ## What was set
 
 By hand at the display, at Fachmann level, before the run, and left so
-after it (`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-2108.json`):
+after it (`captures/navigator-10-webapi-20.24-2608-2026-11-05-2108.json`):
 
 | Setting                                | Before    | After      |
 | -------------------------------------- | --------- | ---------- |
@@ -23,7 +23,7 @@ after it (`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-2108.json`):
 | `PV013` `N2_HEATLIMIT_SKIP`            | –         | Always     |
 
 The PV menu is hidden while `PV008` is `N2_NONE`, so the before column is
-empty but for `PV008` (`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1859.json`).
+empty but for `PV008` (`captures/navigator-10-webapi-20.24-2608-2026-11-05-1859.json`).
 The others read their defaults: `PV011` `N2_PVTIMECONST` 2.0 min, `PV003`
 `N2_PV_FLOOR_HEATING` 0.0 K, `PV007` `N2_PV_PEAK_POWER` 5.0 kW. `PV010` and
 `PV015` appear at no level; 812184 says `PV010` applies to the 0–10 V and
@@ -36,10 +36,10 @@ one each.
 
 Every 10 s from 21:04 to 21:42, over Modbus 74, 1008, 1090, 1091, 1100,
 1074, 4122, 1004 and 1098, 2070 reads and none failed
-(`captures/navigator-2.0-watch-20.24-2608-2026-11-05-2103.jsonl`). The
+(`captures/navigator-10-watch-20.24-2608-2026-11-05-2103.jsonl`). The
 writes, by `idm-write` from a second Modbus connection while the watch
 polled, 25 and none failed, each line after the laptop's time
-(`captures/navigator-2.0-write-20.24-2608-2026-11-05-2114.log`). The web
+(`captures/navigator-10-write-20.24-2608-2026-11-05-2114.log`). The web
 backend before and after the run
 (`…-2108.json`, `…-2138.json`). The PV page, `N2_PV_POWER`, setting 10263,
 was read by `idm-web --show` at 21:08, 21:14 and 21:20; those reads were

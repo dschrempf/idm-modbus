@@ -49,10 +49,10 @@ is evidence for anything here.
 
 | | |
 |---|---|
-| Web backend | `captures/navigator-2.0-webapi-20.24-1574-2026-09-20-2138.json`, 21:38–21:41 |
-| Registers | `captures/navigator-2.0-scan-20.24-1574-2026-09-20-2141.json`, 21:41–21:43 |
+| Web backend | `captures/navigator-10-webapi-20.24-1574-2026-09-20-2138.json`, 21:38–21:41 |
+| Registers | `captures/navigator-10-scan-20.24-1574-2026-09-20-2141.json`, 21:41–21:43 |
 | Offset | under 5 minutes |
-| Graph | `captures/navigator-2.0-webapi-20.24-1574-2026-09-20-2218.json`, 22:18–22:21 |
+| Graph | `captures/navigator-10-webapi-20.24-1574-2026-09-20-2218.json`, 22:18–22:21 |
 
 The captures are kept locally, not in the public repository;
 `captures/README.md` describes them.
@@ -142,7 +142,7 @@ Not every register has a page, and saying which is part of the result.
 
 **The manual's enumeration for 1005 is incomplete.** The backend offers the
 operating modes −1, 0, 1, 2, 3, 5 and 4; the parameter list documents 0, 1, 2, 4
-and 5, and page 439 of 812170 lists no 3. `data/navigator-2.0-enums.tsv` is
+and 5, and page 439 of 812170 lists no 3. `data/navigator-10-enums.tsv` is
 faithful to the manual here — the gap is the manual's. What 3 and −1 mean is
 open.
 
@@ -191,7 +191,7 @@ minute the capture was taken. The window that arrives unasked is 2026-09-19
 15:39 to 2026-09-20 21:39, the 30 hours the interface's own second tab asks
 for.
 
-A second capture, `captures/navigator-2.0-webapi-20.24-1574-2026-09-20-2218.json` at
+A second capture, `captures/navigator-10-webapi-20.24-1574-2026-09-20-2218.json` at
 22:18–22:21, asks for the graph on purpose: `graph`/`overview`, then
 `graph`/`traverse`, then `graph`/`detail` for each graph the controller offers
 over each span the interface plots. `fromSecs` reaches back from now rather than
@@ -222,7 +222,7 @@ suspect. It is worth knowing before anyone dates something by this graph, and
 nothing below rests on it: the duration of a run, the number of runs and the days
 they fall on are the same either way.
 
-The hour did not last. In `captures/navigator-2.0-webapi-20.24-1574-2026-09-29-1333.json`
+The hour did not last. In `captures/navigator-10-webapi-20.24-1574-2026-09-29-1333.json`
 the stage channel starts the charges at 10:02, inside the window, and agrees
 with the message log to the second; the controller had been restarted on 09-23
 at 08:40, the only change seen between the two captures. On 2026-10-01 a
@@ -300,8 +300,8 @@ at 10:00 on this machine. It was done on 2026-10-01, and they agree:
 
 ## Reproducing
 
-    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-2.0-webapi-DATE.json
-    cabal run idm-dump -- HOST --json > captures/navigator-2.0-scan-DATE.json
+    IDM_PIN=... tools/webprobe.py HOST > captures/navigator-10-webapi-DATE.json
+    cabal run idm-dump -- HOST --json > captures/navigator-10-scan-DATE.json
 
 Run them in that order and within a few minutes of each other. The script needs
 nothing but a Python interpreter, holds its own websocket client, and takes

@@ -42,7 +42,7 @@ parseRegisters =
 parseEnums :: B.ByteString -> Either String [((Address, Int), Text)]
 parseEnums = tsv ["address", "code", "label"] parseEnum
 
--- | The one row of @data\/navigator-2.0-software.tsv@.
+-- | The one row of @data\/navigator-10-software.tsv@.
 parseSoftware :: B.ByteString -> Either String Software
 parseSoftware bytes = tsv ["series", "major", "minor", "patch"] row bytes >>= one
   where

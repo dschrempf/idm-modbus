@@ -19,7 +19,7 @@ leaves a measurement standing only as far as it is measured again.
 Every session of `idm-dump`, `idm-write`, `idm-web` and `tools/webprobe.py`
 reads the version when it opens, over Modbus from 522 to 526 or over the web
 from `N2_SYSTEM_INFO`, and every capture since 2026-11-05 records it. The
-software the table describes is stated in `data/navigator-2.0-software.tsv`,
+software the table describes is stated in `data/navigator-10-software.tsv`,
 and a write goes ahead only on it.
 
 ## Log
@@ -43,18 +43,18 @@ and the log keeps every restart: since 2026-09-19 `N2_LOG_HISTORY` shows two
 restarts, on 2026-09-23 at 08:40 after a user shutdown, between two readings
 of 1574, and on 2026-11-05 at 16:09.
 
-The first column was read in `captures/navigator-2.0-webapi-20.24-1574-2026-09-24-1544.json`,
+The first column was read in `captures/navigator-10-webapi-20.24-1574-2026-09-24-1544.json`,
 `…-20.24-1574-2026-09-29-1333.json` and `…-20.24-1574-2026-10-01-1158.json`, all alike, and the
 software version on 2026-09-19 (`research.md`). The second was read in
-`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1624.json`, and over Modbus in
-`captures/navigator-2.0-widths-20.24-2608-2026-11-05-1639.json`.
+`captures/navigator-10-webapi-20.24-2608-2026-11-05-1624.json`, and over Modbus in
+`captures/navigator-10-widths-20.24-2608-2026-11-05-1639.json`.
 
 ## 2026-11-05: 20.24-1574 to 20.24-2608
 
 ### The update
 
 The controller's log, `N2_LOG_HISTORY` in
-`captures/navigator-2.0-webapi-20.24-2608-2026-11-05-1624.json`, shows the restart and
+`captures/navigator-10-webapi-20.24-2608-2026-11-05-1624.json`, shows the restart and
 nothing of an update itself:
 
     2026-11-5 16:09:46    997  T20ERR_NEUSTART_1
@@ -72,7 +72,7 @@ recorded.
 ### What changed
 
 Read on 2026-11-05 between 16:17 and 16:39. The register scan,
-`captures/navigator-2.0-scan-20.24-2608-2026-11-05-1617.json`, is compared with
+`captures/navigator-10-scan-20.24-2608-2026-11-05-1617.json`, is compared with
 `…-20.24-1574-2026-10-15-0847.json`. The settings walk, `…-webapi-20.24-2608-2026-11-05-1624.json`
 completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01-1158.json`.
 
@@ -110,14 +110,14 @@ completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01
   Fachmann level they do. A setting changed since may hide them, as well as
   the update.
 - **The table** was rebuilt on 2608 from the scan
-  `captures/navigator-2.0-scan-20.24-2608-2026-11-05-1912.json`, the widths
+  `captures/navigator-10-scan-20.24-2608-2026-11-05-1912.json`, the widths
   of every address the page lists, `…-widths-20.24-2608-2026-11-05-1850.json`,
   and the walk `…-webapi-20.24-2608-2026-11-05-1859.json`. Every address
   the scan of 16:17 read answered as it did then, and every address new to
   the table answers: the 25 revision 12 added, and the 16 new page rows and
   4126 and 4128 the table takes from the page.
 - **The Fachmann level** is still entered with the code spelled from the
-  clock (`captures/navigator-2.0-level-20.24-2608-2026-11-05-1624.log`). It fell back to
+  clock (`captures/navigator-10-level-20.24-2608-2026-11-05-1624.log`). It fell back to
   Kunde during the walk, between 16:34:02 and 16:34:04, ten minutes after it
   was entered. Entered again at 16:36:33
   and read every 30 s (`…-level-20.24-2608-2026-11-05-1636.log`), it held at 16:43:56

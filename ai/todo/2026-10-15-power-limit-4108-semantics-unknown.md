@@ -71,7 +71,7 @@ minutes. A cap that holds the draw near the floor, 0.6 to 0.74 kW, under a
 constant surplus would give a long low run, which is what
 `pv-control-of-74-and-88` now aims at; this is its step 1.
 
-Step 2 as a PV run: 4108 listed in `data/navigator-2.0-targets.tsv` and the
+Step 2 as a PV run: 4108 listed in `data/navigator-10-targets.tsv` and the
 module regenerated, then a store charge with 74 at a constant 2.0 and 4108
 written 0.8 a few minutes after the start, renewed beside 74, and -1 at the
 end. What answers it: 4122 and 6245's speed against the limit, and whether

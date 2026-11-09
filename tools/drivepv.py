@@ -11,7 +11,7 @@ third client:
     cabal run idm-dump -- HOST --watch 10 74 88 4108 1008 1090 1091 1100 1074 4122 1004 1098 > WATCH
     tools/drivepv.py HOST WATCH --final -0.5 \
       2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 2.0-4122/20/ein+1620/0 \
-      > captures/navigator-2.0-write-SOFTWARE-YYYY-MM-DD-HHMM.log
+      > captures/navigator-10-write-SOFTWARE-YYYY-MM-DD-HHMM.log
 
 A phase is VALUE/PERIOD/UNTIL[/TARGET[/LIMIT]]. VALUE, written to 74, is a number in
 kW, or T-4122, the number T minus the last 4122 of the watch, which is what

@@ -2,7 +2,7 @@
 
 -- |
 -- Module      :  Main
--- Description :  Write one register of a Navigator 2.0
+-- Description :  Write one register of a Navigator 10
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 module Main (main) where
@@ -13,7 +13,7 @@ import IDM.Modbus.TCP
 import IDM.Navigator.Client (defaultPoll, withSession, writable)
 import IDM.Navigator.Register
 import IDM.Navigator.Software (mismatchText, modbusVersionText)
-import IDM.Navigator.Table (navigator20Software)
+import IDM.Navigator.Table (navigator10Software)
 import IDM.Navigator.Target
 import IDM.Navigator.Write
 import System.Environment (getArgs, getProgName)
@@ -39,13 +39,13 @@ usage = do
   putStrLn $ "usage: " <> name <> " HOST ADDRESS VALUE [--eeprom]"
   putStrLn ""
   putStrLn "  Writes VALUE to the register at ADDRESS and reads it back."
-  putStrLn "  Only the targets of data/navigator-2.0-targets.tsv may be"
+  putStrLn "  Only the targets of data/navigator-10-targets.tsv may be"
   putStrLn "  written. A write that changes a register stored in the EEPROM"
   putStrLn "  costs one of the controller's 300000 EEPROM cycles, so without"
   putStrLn "  --eeprom nothing is done for one, not even a read. With it, the"
   putStrLn "  register is read first and left alone if it holds VALUE already."
   putStrLn "  Nothing is written unless the controller runs the software the"
-  putStrLn "  table describes, data/navigator-2.0-software.tsv."
+  putStrLn "  table describes, data/navigator-10-software.tsv."
   putStrLn ""
   putStrLn "  Targets:"
   mapM_ (\(SomeTarget t) -> putStrLn ("    " <> describe (targetRegister t) <> costText (targetCost t))) targets
@@ -76,7 +76,7 @@ run host addrArg valueArg consent = case find addrArg of
   where
     refusal m =
       "refused, nothing written: "
-        <> T.unpack (mismatchText (T.pack . show) modbusVersionText navigator20Software m)
+        <> T.unpack (mismatchText (T.pack . show) modbusVersionText navigator10Software m)
     find a = case readMaybe a :: Maybe Integer of
       Just n
         | n >= 0 && n <= 65535 ->

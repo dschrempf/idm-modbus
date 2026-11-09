@@ -3,7 +3,7 @@
 
 -- |
 -- Module      :  Main
--- Description :  Read a Navigator 2.0's web backend, and open or close the Fachmann level
+-- Description :  Read a Navigator 10's web backend, and open or close the Fachmann level
 -- Copyright   :  2026 Dominik Schrempf
 -- License     :  BSD-3-Clause
 module Main (main) where
@@ -17,7 +17,7 @@ import Data.Time (ZonedTime, defaultTimeLocale, formatTime, getZonedTime)
 import GHC.Clock (getMonotonicTime)
 import IDM.Modbus.TCP (Host (..))
 import IDM.Navigator.Software (Mismatch, WebVersion (..), mismatchText)
-import IDM.Navigator.Table (navigator20Software)
+import IDM.Navigator.Table (navigator10Software)
 import IDM.Navigator.Web
 import IDM.Navigator.Web.Level
 import IDM.Navigator.Web.Session
@@ -32,7 +32,7 @@ data Mode
     Report
   | -- | settings, read for a person
     Show [SettingId]
-  | -- | the capture format of @captures\/navigator-2.0-webwatch-*.jsonl@
+  | -- | the capture format of @captures\/navigator-10-webwatch-*.jsonl@
     Watch Period [SettingId]
   | Enter
   | Leave
@@ -139,7 +139,7 @@ softwareLine :: Either Unread WebVersion -> String
 softwareLine = either (\u -> "not read: " <> show u) (T.unpack . webVersionText)
 
 mismatch :: Mismatch Unread WebVersion -> String
-mismatch = T.unpack . mismatchText (T.pack . show) webVersionText navigator20Software
+mismatch = T.unpack . mismatchText (T.pack . show) webVersionText navigator10Software
 
 -- | On the terminal, both versions, where the session read another software
 -- than the table describes.

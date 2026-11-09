@@ -12,11 +12,11 @@ circuit held, and watching both sides, joins all six.
 
 |             |                                                                                                                             |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Registers   | `captures/navigator-2.0-watch-20.24-1574-2026-10-15-0836.jsonl`, 1520, 1524, 1526, 1534, 1538, 1540                         |
-| Web backend | `captures/navigator-2.0-webwatch-20.24-1574-2026-10-15-0836.jsonl`, the settings 6966, 6980, 7862, 7876, 8310, 8324         |
+| Registers   | `captures/navigator-10-watch-20.24-1574-2026-10-15-0836.jsonl`, 1520, 1524, 1526, 1534, 1538, 1540                         |
+| Web backend | `captures/navigator-10-webwatch-20.24-1574-2026-10-15-0836.jsonl`, the settings 6966, 6980, 7862, 7876, 8310, 8324         |
 | Interval    | 10 s, both, 08:36–08:47                                                                                                     |
-| Scans       | `captures/navigator-2.0-scan-20.24-1574-2026-10-15-0837.json` before, `-0841.json` with all three moved, `-0847.json` after |
-| Widths      | `captures/navigator-2.0-widths-20.24-1574-2026-10-15-0836.json` and `-0841.json`, 1520 to 1546, circuits A to G             |
+| Scans       | `captures/navigator-10-scan-20.24-1574-2026-10-15-0837.json` before, `-0841.json` with all three moved, `-0847.json` after |
+| Widths      | `captures/navigator-10-widths-20.24-1574-2026-10-15-0836.json` and `-0841.json`, 1520 to 1546, circuits A to G             |
 | User level  | Fachmann, entered for the run and left afterwards                                                                           |
 
 The settings were changed by hand, at the controller; the library sent only
@@ -60,7 +60,7 @@ leaves the six as tied as before.
 
 ## Where the join is stated
 
-`data/navigator-2.0-gltmon-parameters.tsv`, by hand, since only a write
+`data/navigator-10-gltmon-parameters.tsv`, by hand, since only a write
 settled it and no capture can derive it. `tools/transcribe.py` reads it into
 the register table's `parameter` column, refuses an address that is not a row
 of the page and an identifier another row carries already, and, given a
