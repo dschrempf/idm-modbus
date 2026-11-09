@@ -2,8 +2,7 @@
 
 The order the open todos are worked in, and why; what each needs stays in
 its own note. The findings from the community projects come first, then the
-PV control, then the rest. Revise this note when a todo opens, closes or
-moves up.
+PV control, then the rest.
 
 ## 1. From the community projects
 

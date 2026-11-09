@@ -93,4 +93,4 @@ a `tools/webprobe.py` capture during it.
   every register a building management system writes.
 - `watch-the-request-reason-pv-in-idm-web`: whether a start or stop was PV's,
   read from the web backend.
-- `order-of-the-open-todos`: where this folder stands among the other todos.
+- `todo/README.md`: where this folder stands among the other todos.

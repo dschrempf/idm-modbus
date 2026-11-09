@@ -96,7 +96,7 @@ that watch is kept apart from session 2 for may hit a write as well.
 ## Closed on 2026-11-09
 
 Sessions 1, 2 and 5 done; 6a became `pv-control-of-74-and-88`. The rest went
-to `order-of-the-open-todos`, which orders every open todo, not only those of
+to `todo/README.md`, which orders every open todo, not only those of
 2026-10-15: session 3 is `page-heat-exceeds-waermemenge-registers-by-1-19`,
 session 4 `decide-how-a-measured-fact-enters-the-table`, 6b
 `what-glt-requests-1710-1712-1713-do-unsettled` and the 4108 runs of
