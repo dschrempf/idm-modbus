@@ -86,7 +86,8 @@ run host addrArg valueArg consent = case find addrArg of
       _ -> Nothing
 
 -- | A value as the register's datatype reads it: a number for a @FLOAT@, a
--- whole number for the integral datatypes, 0 or 1 for a @BOOL@.
+-- whole number for the integral datatypes, a code for an enumeration, 0 or 1
+-- for a @BOOL@.
 parseValue :: Register -> String -> Maybe Value
 parseValue reg s = case registerDatatype reg of
   Float32 -> Real <$> readMaybe s
@@ -94,7 +95,9 @@ parseValue reg s = case registerDatatype reg of
     "0" -> Just (Flag False)
     "1" -> Just (Flag True)
     _ -> Nothing
-  _ -> Count <$> readMaybe s
+  _ -> case registerScale reg of
+    Magnitude -> Count <$> readMaybe s
+    Enumeration -> Code <$> readMaybe s
 
 -- | A line for a person, and whether the write did what was asked.
 report :: Register -> SCost c -> Value -> Outcome c -> (String, Bool)
@@ -125,6 +128,7 @@ number :: Value -> String
 number v = case v of
   Real x -> show x
   Count n -> show n
+  Code n -> show n
   Flag b -> if b then "1" else "0"
   DriveSignal NotDriven -> "-1"
   DriveSignal (Driven n) -> show n

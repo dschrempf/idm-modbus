@@ -127,7 +127,7 @@ data Answer = Answer
 data Sample = Sample
   { sampleRegister :: Register,
     sampleResult :: Either Failure Answer,
-    -- | the enumeration label, where the manual gives one
+    -- | the label of a code, where the table gives one
     sampleLabel :: Maybe Text
   }
 
@@ -144,7 +144,7 @@ readOne s reg = do
       { sampleRegister = reg,
         sampleResult = result,
         sampleLabel = case result of
-          Right (Answer _ _ (Measured (Count n))) -> enumLabel addr n
+          Right (Answer _ _ (Measured (Code n))) -> enumLabel addr n
           _ -> Nothing
       }
   where

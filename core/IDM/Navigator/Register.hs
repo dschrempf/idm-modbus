@@ -25,6 +25,7 @@ module IDM.Navigator.Register
     costOf,
     SCost (..),
     Unit (..),
+    Scale (..),
     Source (..),
     Range (..),
     Presence (..),
@@ -151,6 +152,16 @@ data Unit
     UnknownUnit Text
   deriving (Show, Eq, Ord, Lift)
 
+-- | What a register's whole number is.
+data Scale
+  = -- | an amount, or a reading of the controller's own scale
+    Magnitude
+  | -- | a code of an enumeration, which 'IDM.Navigator.Table.enumLabel' names.
+    -- The transcription gives it to a register with labels, but for a @BOOL@
+    -- and a percentage, whose labels mark points of its scale.
+    Enumeration
+  deriving (Show, Eq, Ord, Lift)
+
 -- | Documented bounds for a writable register.
 data Range = Range
   { rangeMinimum :: Double,
@@ -195,6 +206,7 @@ data Register = Register
     registerRange :: Maybe Range,
     registerDefault :: Maybe Double,
     registerUnit :: Maybe Unit,
+    registerScale :: Scale,
     registerSource :: Source,
     registerPresence :: Presence
   }
@@ -233,7 +245,9 @@ reading none noneOr just r = case r of
 -- 'NotDriven' and @'Driven' 0@ are therefore different states, and neither is
 -- the absence of a pump: a fitted pump that nothing is calling for and a pump
 -- that was never installed both answer @-1@. See
--- @doc\/verification-2026-09-20.md@.
+-- @doc\/verification-2026-09-20.md@. On this machine 1104, the charge pump's
+-- status, answers @-1@ while the pump is driven too, and 1074 carries its
+-- signal; see @doc\/verification-2026-10-16-charge-pump.md@.
 data Drive
   = NotDriven
   | -- | per cent of the pump's speed range
@@ -243,6 +257,8 @@ data Drive
 data Value
   = Real Double
   | Count Int
+  | -- | a code of an 'Enumeration'
+    Code Int
   | Flag Bool
   | DriveSignal Drive
   deriving (Show, Eq)
@@ -302,24 +318,30 @@ navigator reg v = case (registerDatatype reg, v) of
     | otherwise -> NoValueOr v
   (DWord, Count n) -> sentinel (n == 0xFFFFFFFF) v
   -- -1 answers for an unfitted sensor, and -2 at 1714 and 1715, whose meaning
-  -- is unknown
-  (UChar, Count n) -> sentinel (n < 0) v
+  -- is unknown. A range reaches below zero only where a code was measured
+  -- there: 1005 holds -1 for "Aus".
+  (UChar, Count n) -> sentinel (n < 0 && not (inRange (fromIntegral n))) (whole n)
   (Boolean, Count n) -> sentinel (n >= 254) (Flag (n /= 0))
   (Word, Count n)
     | signedWord reg -> Measured (meaning (n - if n > 0x7FFF then 65536 else 0))
-    | otherwise -> sentinel (n == 0xFFFF) v
+    | otherwise -> sentinel (n == 0xFFFF) (whole n)
   -- 'OneRegister' claims no sentinel; 'asWritten' pairs each other datatype
   -- with one constructor, so nothing else arises
   _ -> Measured v
   where
     sentinel isSentinel w = if isSentinel then NoValue else Measured w
+    whole n = case registerScale reg of
+      Magnitude -> Count n
+      Enumeration -> Code n
     outOfRange x =
       maybe False (\r -> x < rangeMinimum r || x > rangeMaximum r) (registerRange reg)
+    inRange x =
+      maybe False (\r -> rangeMinimum r <= x && x <= rangeMaximum r) (registerRange reg)
     -- A signed percentage is a pump's control signal, and -1 is a state of it.
     meaning n
       | registerUnit reg == Just Percent =
           DriveSignal (if n < 0 then NotDriven else Driven n)
-      | otherwise = Count n
+      | otherwise = whole n
 
 -- | Why 'encode' refused a value. Nothing is sent for it.
 data Refusal
@@ -337,9 +359,10 @@ data Refusal
 
 -- | The registers that write a value, as 'wire' sends them: the inverse of
 -- 'asWritten', so a @FLOAT@ goes low word first and a @UCHAR@ or a signed
--- @WORD@ in two's complement. A @BOOL@ is written from a 'Flag', and a
--- pump's control signal from a 'DriveSignal'. A -1 is an ordinary value
--- here: what writing a sentinel means is not documented.
+-- @WORD@ in two's complement. A @BOOL@ is written from a 'Flag', a pump's
+-- control signal from a 'DriveSignal', and an 'Enumeration' from a 'Code'.
+-- A -1 is an ordinary value here: what writing a sentinel means is not
+-- documented.
 encode :: Register -> Value -> Either Refusal Registers
 encode reg v = case (registerAccess reg, registerDatatype reg, v) of
   (ReadOnly, _, _) -> Left (NotWritable ReadOnly)
@@ -354,10 +377,10 @@ encode reg v = case (registerAccess reg, registerDatatype reg, v) of
   (_, DWord, Count n) -> do
     w <- whole 0 0xFFFFFFFF n
     Right (Two (fromIntegral w) (fromIntegral (w `shiftR` 16)))
-  (_, UChar, Count n) -> word16 <$> whole (-32768) 32767 n
-  (_, Word, Count n)
-    | signedWord reg -> word16 <$> whole (-32768) 32767 n
-    | otherwise -> word16 <$> whole 0 65535 n
+  (_, UChar, Count n) | registerScale reg == Magnitude -> word16 <$> whole (-32768) 32767 n
+  (_, UChar, Code n) | registerScale reg == Enumeration -> word16 <$> whole (-32768) 32767 n
+  (_, Word, Count n) | registerScale reg == Magnitude -> wordOf n
+  (_, Word, Code n) | registerScale reg == Enumeration -> wordOf n
   (_, Word, DriveSignal d)
     | signedWord reg && registerUnit reg == Just Percent ->
         word16 <$> whole (-32768) 32767 (case d of NotDriven -> -1; Driven n -> n)
@@ -374,6 +397,9 @@ encode reg v = case (registerAccess reg, registerDatatype reg, v) of
       | otherwise = i <$ inRange (fromIntegral n)
       where
         i = toInteger n
+    wordOf n
+      | signedWord reg = word16 <$> whole (-32768) 32767 n
+      | otherwise = word16 <$> whole 0 65535 n
     word16 :: Integer -> Registers
     word16 i = One (fromIntegral (i .&. 0xFFFF))
 

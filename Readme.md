@@ -112,7 +112,8 @@ port 502 with unit id 1.
 |                                           |                                                                                                                                                    |
 | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `data/navigator-10-registers.tsv`         | the parameter list and the controller's register page, transcribed; the single source of truth                                                     |
-| `data/navigator-10-enums.tsv`             | enumerated values, exactly as printed in the manual                                                                                                |
+| `data/navigator-10-enums.tsv`             | enumerated values, as printed in the manual, and the codes measured beside them                                                                    |
+| `data/navigator-10-measured-enums.tsv`    | codes of an enumeration measured on the machine that the manual does not print, each with its evidence; hand-written                               |
 | `data/navigator-10-gltmon-parameters.tsv` | manufacturer's parameter IDs for registers the manual does not list, found by changing a setting and watching which register follows; hand-written |
 | `data/navigator-10-targets.tsv`           | the registers that may be written, each with an English name; hand-written                                                                         |
 | `data/navigator-10-software.tsv`          | the controller software the table describes, the only one writes are allowed on; hand-written                                                      |

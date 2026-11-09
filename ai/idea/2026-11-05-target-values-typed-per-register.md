@@ -5,6 +5,6 @@
 would fix the value's type per constructor: `Double` for a temperature or a
 power, `Bool` for a request, an enumeration for an operating mode.
 
-The enumerations meet the 1005 defect first
-(`decide-how-a-measured-fact-enters-the-table`): the table lacks -1 "Aus" and 3
-"Urlaub". Settle that first.
+For an enumeration the table has what this needs: `registerScale` marks it,
+and its codes, 1005's measured -1 "Aus" and 3 "Urlaub" among them
+(`decide-how-a-measured-fact-enters-the-table`), are in the enums table.

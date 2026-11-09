@@ -3,9 +3,11 @@ address	code	label
 90	1	Yellow
 90	2	Green
 90	4	Supergreen
+1005	-1	Aus
 1005	0	Standby
 1005	1	Automatik
 1005	2	Abwesend
+1005	3	Urlaub
 1005	4	Nur Warmwasser
 1005	5	Nur Heizung/Kühlung
 1006	0	nicht konfiguriert

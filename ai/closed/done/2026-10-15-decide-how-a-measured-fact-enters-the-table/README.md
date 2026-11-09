@@ -42,3 +42,25 @@ decision to a change of its own. Read `table-transcription` first.
   found, and the reads that show -1 is a value.
 - `charge-pump-status-1104-reads-not-driven-while-pumping.md`: the watch
   that settled 1104, and the two options for the table.
+
+## Done 2026-11-09
+
+`facts-from-812184-have-no-home-in-the-table` stays dropped: its facts are
+read from a document, which no capture can confirm, and they stay prose. A
+fact measured on the machine is decided apart from it:
+
+- **1005.** A third hand-written input,
+  `data/navigator-10-measured-enums.tsv`, with the document holding each
+  code's evidence. `tools/transcribe.py` adds the codes to the enums table,
+  widens the range to -1 to 5, and refuses a code the manual prints. A
+  `UCHAR` reads a negative word inside its range as a value. Its rows carry
+  no software: re-measuring every finding at each update is not feasible.
+- **`Code`.** So that a -1 never stands bare, a new column `scale`, derived
+  from the labels, gives `Register` its `registerScale`, and `decode` gives
+  an enumeration a `Code` rather than a `Count`. 1104's labels mark points of
+  a scale and 1712 is a `BOOL`, so neither is an enumeration.
+- **1104.** Prose: `doc/research.md`'s open questions and the haddock of
+  `Drive`. It was measured on 20.24-1574 only; the re-check is in
+  `recheck-control-behavior-on-20-24-2608`.
+- **The resolution of an EEPROM `FLOAT`** waits in
+  `eeprom-guard-needs-exact-round-trip`.

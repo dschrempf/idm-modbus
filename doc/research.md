@@ -388,7 +388,15 @@ answered three questions the documentation leaves open. The measurements are in
    ([verification-2026-10-15-web-app.md](verification-2026-10-15-web-app.md)).
    No documented `UCHAR` has a negative minimum, and every `WORD` documented
    from 0 up stays at or below 100, so for these the sentinel cannot collide
-   with a real reading. A `FLOAT` can: no
+   with a real reading. One `UCHAR` holds -1 all the same: 1005, the
+   operating mode, which the manual gives the codes 0, 1, 2, 4 and 5 within a
+   range of 0 to 5. The controller's web app labels -1 "Aus", without frost
+   protection, and 3 "Urlaub", and over Modbus "Aus" reads `ffff` and
+   "Urlaub" 3
+   ([verification-2026-10-15-web-app.md](verification-2026-10-15-web-app.md)).
+   The table takes the two codes from `data/navigator-10-measured-enums.tsv`,
+   which widens 1005's range to -1, and a negative `UCHAR` inside its range
+   is a value. A `FLOAT` can: no
    negative minimum is printed for one, yet -1 °C is an outdoor temperature,
    so -1.0 is absence only where a documented range excludes it. This is the
    "unavailable status indicator" kodebach could not pin down.
@@ -563,15 +571,15 @@ above the 0.8 kW the PV page printed as the forecast. See
   page's runtime and electrical energy for that day agree with the registers
   while its heat is 1.17 times 1754's (`doc/verification-2026-10-01-charge.md`).
   What remains open is the quantity the page computes as heat.
-- **Operating modes -1 and 3.** The parameter list gives 1005 the codes 0, 1,
-  2, 4 and 5, within a documented range of 0 to 5. The controller's web app
-  offers -1 and 3 besides, and labels them "Aus", without frost protection,
-  and "Urlaub"
-  ([verification-2026-10-15-web-app.md](verification-2026-10-15-web-app.md)).
-  Over Modbus, "Urlaub" reads 3 and "Aus" `ffff`, the word of an unfitted
-  sensor, so `decode` takes a machine switched off for no value. The table
-  carries the manual's five, since `tools/transcribe.py` takes enumerations
-  from the manual alone.
+- **1104 on 20.24-2608.** On 20.24-1574 the charge pump's status 1104 read
+  `ffff`, "not driven", at all 190 reads of a run in which the controller's
+  page printed M73 at 60 to 100 % and 1074 followed it
+  ([verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md)).
+  On 20.24-2608 it reads `ffff` at rest; whether it follows M73 there is
+  untested. Also unexplained: why the page printed M73 at -1.0 on
+  2026-09-20 while the pump ran
+  ([verification-2026-09-20.md](verification-2026-09-20.md)). The table
+  says only that 1104 answers.
 
 ## Sources
 

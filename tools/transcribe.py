@@ -36,6 +36,16 @@ in data/navigator-10-gltmon-parameters.tsv, which this script reads and never
 writes. Given a webapi capture, each identifier is checked against it: the
 tree must hold it, at the value the page printed for its address.
 
+Some codes of an enumeration are measured rather than printed: 1005 holds -1
+"Aus" and 3 "Urlaub", which the manual does not label. They are written by
+hand in data/navigator-10-measured-enums.tsv, each with the document holding
+its evidence; this script reads that file, never writes it, and widens the
+register's range to a code outside it. A code the manual prints is refused
+there, so a revision that prints one forces its row out.
+
+The scale column says whether a register's number is a magnitude or a code of
+an enumeration, which decoding keeps apart. It is derived from the labels.
+
 The table describes one software of the controller, the one its captures
 were read on, and data/navigator-10-software.tsv states it by hand; this
 script reads that file and never writes it. A capture read on another
@@ -341,6 +351,53 @@ def share_within_families(enums, registers):
                 if b == source:
                     out.setdefault((a, c), label)
     return out
+
+
+def read_measured_enums(path, registers, enums):
+    """The hand-written codes the manual does not print, each with the
+    document that holds its evidence, added to the enumerations.
+
+    Refused: an address the table lacks, a code already labeled, which a
+    later revision printing it makes redundant, evidence that is not a file of
+    the repository, and a code outside a range the table does not state, which
+    decoding could not tell from the sentinel. A code outside the stated range
+    widens it, since the register holds it.
+    """
+    with path.open(newline="") as fh:
+        rows = list(csv.DictReader(fh, delimiter="\t"))
+    out = dict(enums)
+    for row in rows:
+        a, c, label = int(row["address"]), int(row["code"]), row["label"]
+        r = registers.get(a)
+        if r is None:
+            sys.exit(f"{path}: {a} is not a register of the table")
+        if (a, c) in out:
+            sys.exit(f"{path}: {a} labels {c} already, as {out[(a, c)]!r}")
+        if not (HERE / row["evidence"]).is_file():
+            sys.exit(f"{path}: {a} {c}: no file {row['evidence']}")
+        if r["min"] == "" or r["max"] == "":
+            sys.exit(f"{path}: {a} {c}: the table states no range to hold it")
+        if c < float(r["min"]):
+            r["min"] = str(c)
+        if c > float(r["max"]):
+            r["max"] = str(c)
+        out[(a, c)] = label
+    return out
+
+
+def scale(r, labeled):
+    """Whether a register's number is a magnitude or a code of an enumeration.
+
+    A labeled register is an enumeration, but for a BOOL, which decoding reads
+    as a flag, and a percentage, whose labels mark points of its scale: 1104
+    labels -1, 0 and 100.
+    """
+    coded = (
+        r["address"] in labeled
+        and r["datatype"] in ("UCHAR", "WORD")
+        and r["unit"] != "%"
+    )
+    return "enumeration" if coded else "magnitude"
 
 
 def parse_enums(text, known):
@@ -801,12 +858,14 @@ def main():
     join_parameters(joins, registers)
     if args.webapi:
         check_joins(joins, page, capture)
+    enums = read_measured_enums(data / "navigator-10-measured-enums.tsv", registers, enums)
+    labeled = {a for a, _ in enums}
 
     with table.open("w", newline="") as fh:
         w = csv.writer(fh, delimiter="\t", lineterminator="\n")
         w.writerow(
             "address datatype access persistence name parameter "
-            "min max default unit source observed".split()
+            "min max default unit scale source observed".split()
         )
         for a in sorted(registers):
             r = registers[a]
@@ -814,7 +873,7 @@ def main():
                 [
                     r["address"], r["datatype"], r["access"], r["persistence"],
                     r["name"], r["parameter"], r["min"], r["max"], r["default"],
-                    r["unit"], r["source"],
+                    r["unit"], scale(r, labeled), r["source"],
                     observed.get(a) or "untested",
                 ]
             )

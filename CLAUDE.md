@@ -51,8 +51,9 @@ The register table is data, not code, and it flows one way:
 manual impossible to apply cleanly. A defect in a register name, unit or
 range is a defect in that script, not in the Haskell parser. The hand-written
 inputs are `data/navigator-10-targets.tsv`, the registers a write may go
-to, `data/navigator-10-gltmon-parameters.tsv` and
-`data/navigator-10-software.tsv`. Listing a target goes with trying on the
+to, `data/navigator-10-gltmon-parameters.tsv`,
+`data/navigator-10-measured-enums.tsv`, the codes measured beside the
+manual's, and `data/navigator-10-software.tsv`. Listing a target goes with trying on the
 machine that a write to it takes effect. Note `table-transcription`: what the
 script reads, refuses and writes; read it before running or changing it, or
 adding a target.
@@ -160,7 +161,8 @@ is a measurement and not a strategy: `tools/drivepv.py` writes one, and
   1074 and 1104 to 1109 read it as "not being driven".
 - A `UCHAR` arrives as a whole register, `ffff` and not `00ff`, and the
   controller reads it as a signed word: it prints the `fffe` of 1714 and 1715
-  as -2.
+  as -2. At 1005 `ffff` is no sentinel but the operating mode "Aus", a code
+  the manual does not print; its range, widened to -1, says so.
 - The Navigator stalls when polled hard, hence `pollIntervalMicroseconds`.
 
 `doc/research.md` records the sources and the open questions;

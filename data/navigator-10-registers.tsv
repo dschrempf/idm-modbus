@@ -1,613 +1,613 @@
-address	datatype	access	persistence	name	parameter	min	max	default	unit	source	observed
-74	FLOAT	RW/RO	volatile	Aktueller PV-Überschuss					kW	manual	present
-76	FLOAT	RW/RO	volatile	Leistung E-Heizstab					kW	manual	present
-78	FLOAT	RW/RO	volatile	Aktuelle PV Produktion					kW	manual	present
-82	FLOAT	RW/RO	volatile	Hausverbrauch				0	kW	manual	present
-84	FLOAT	RW/RO	volatile	Batterieentladung				0	kW	manual	present
-86	WORD	RW/RO	volatile	Batteriefüllstand				-1	%	manual	present
-88	FLOAT	RW/RO	volatile	PV-Zielwert (Smartfox und Solar-Log)				0	kW	manual	present
-90	UCHAR	RO	volatile	Smart Grid Status		0	4	1		manual	present
-500	FLOAT	RO	unknown	myiDM-ID						gltmon	present
-504	one-register	RO	unknown	Trennwärmetauscher						gltmon	present
-506	one-register	RO	unknown	Wärmequelle						gltmon	present
-508	one-register	RO	unknown	Wärmepumpentype						gltmon	present
-520	one-register	RO	unknown	Softwaretype (bitcodiert)						gltmon	present
-522	one-register	RO	unknown	Softwareversion (Major)						gltmon	present
-524	one-register	RO	unknown	Software Version (Minor)						gltmon	present
-526	one-register	RO	unknown	Software Version (Patch)						gltmon	present
-1000	FLOAT	RO	volatile	Außentemperatur (B32)					°C	manual	present
-1002	FLOAT	RO	volatile	Gemittelte Außentemperatur					°C	manual	present
-1004	UCHAR	RO	volatile	Interne Meldung						manual	present
-1005	UCHAR	RW	eeprom	Betriebsart System	SYSMODE	0	5	1		manual	present
-1006	UCHAR	RO	volatile	Variabler Eingang		0	3	0		manual	present
-1008	FLOAT	RO	volatile	Wärmespeichertemperatur (B38)					°C	manual	present
-1010	FLOAT	RO	volatile	Kältespeichertemperatur (B40)					°C	manual	present
-1012	FLOAT	RO	volatile	Trinkwassererwärmertemp. unten (B41)					°C	manual	present
-1014	FLOAT	RO	volatile	Trinkwassererwärmertemp. oben (B48)					°C	manual	present
-1030	FLOAT	RO	volatile	Warmwasserzapftemperatur (B42)					°C	manual	present
-1032	UCHAR	RW	eeprom	Warmwasser-Solltemperatur	FW030	35	95	46	°C	manual	present
-1033	UCHAR	RW	eeprom	Warmwasserladung Einschalttemperatur	FW027	30	50	46	°C	manual	present
-1034	UCHAR	RW	eeprom	Warmwasserladung Ausschalttemperatur	FW028	46	53	50	°C	manual	present
-1048	FLOAT	RO	volatile	Aktueller Strompreis					€/MWh	manual	present
-1050	FLOAT	RO	volatile	Wärmepumpen Vorlauftemperatur (B33)					°C	manual	present
-1052	FLOAT	RO	volatile	Wärmepumpen Rücklauftemperatur (B34)					°C	manual	present
-1054	FLOAT	RO	volatile	HGL Vorlauftemperatur (B35)					°C	manual	present
-1056	FLOAT	RO	volatile	Wärmequelleneintrittstemperatur (B43)					°C	manual	present
-1058	FLOAT	RO	volatile	Wärmequellenaustrittstemperatur (B36)					°C	manual	present
-1060	FLOAT	RO	volatile	Luftansaugtemperatur (B37)					°C	manual	present
-1062	FLOAT	RO	volatile	Luftwärmetauschertemperatur (B72)					°C	manual	present
-1064	FLOAT	RO	volatile	Luftansaugtemperatur 2 (B46)					°C	manual	present
-1066	FLOAT	RO	volatile	Ladefühler (B45)					°C	manual	present
-1068	FLOAT	RO	volatile	Rücklauftemperatur Wärmesenke (B124)					°C	manual	present
-1070	FLOAT	RO	volatile	Vorlauftemperatur Wärmesenke (B125)					°C	manual	present
-1072	FLOAT	RO	unknown	Durchfluss Wärmesenke					l/min	gltmon	present
-1074	WORD	RO	volatile	Ladepumpe Wärmesenke Steuersignal (M73)		0	100	-1	%	manual	present
-1086	FLOAT	RO	volatile	Grundwassereintrittstemperatur (B119)					°C	manual	present
-1088	FLOAT	RO	volatile	Grundwassereintrittstemperatur (B120)					°C	manual	present
-1090	UCHAR	RO	volatile	Betriebsart Wärmepumpe		0	8			manual	present
-1091	UCHAR	RO	volatile	Heizanforderung Wärmepumpe		0	1	0		manual	present
-1092	UCHAR	RO	volatile	Kühlanforderung Wärmepumpe		0	1	0		manual	present
-1093	UCHAR	RO	volatile	Warmwasseranforderung Wärmepumpe		0	1	0		manual	present
-1098	UCHAR	RO	volatile	EVU - Sperrkontakt		0	1	1		manual	present
-1099	UCHAR	RO	volatile	Summenstörung Wärmepumpe		0	1			manual	present
-1100	UCHAR	RO	volatile	Status Verdichter 1		0	1			manual	present
-1101	UCHAR	RO	volatile	Status Verdichter 2		0	1			manual	present
-1102	UCHAR	RO	volatile	Status Verdichter 3		0	1			manual	present
-1103	UCHAR	RO	volatile	Status Verdichter 4		0	1			manual	present
-1104	WORD	RO	volatile	Status Ladepumpe (M73)		0	100	-1	%	manual	present
-1105	WORD	RO	volatile	Status Sole/Zwischenkreispumpe (M16)		0	100	-1	%	manual	present
-1106	WORD	RO	volatile	Status Wärmequellen-/Grundwasserpumpe (M15)		0	100	-1	%	manual	present
-1108	WORD	RO	volatile	Status ISC Kältespeicherpumpe (M84)		0	100	-1	%	manual	present
-1109	WORD	RO	volatile	Status ISC Rückkühlpumpe (M17)		0	100	-1	%	manual	present
-1110	WORD	RO	volatile	Umschaltventil Heizkreis Heizen/Kühlen (M61)		0	1			manual	present
-1111	WORD	RO	volatile	Umschaltventil Speicher Heizen/Kühlen (M62)		0	1			manual	present
-1112	WORD	RO	volatile	Umschaltventil Heizen/Warmwasser (M63)		0	1			manual	present
-1113	WORD	RO	volatile	Umschaltv. Wärmequelle Heizen/Kühlen (M74)		0	1			manual	present
-1114	WORD	RO	volatile	Umschaltventil Solar Heizen/Warmwasser(M78)		0	1			manual	present
-1115	WORD	RO	volatile	Umschaltv. Solar Speicher/Wärmequelle (M79)		0	1			manual	present
-1116	WORD	RO	volatile	Umschaltventil ISC Wärmequelle/Kältespeicher (M89)		0	1			manual	present
-1117	WORD	RO	volatile	Umschaltventil ISC Speicher / Bypass (M99)		0	1			manual	present
-1118	WORD	RO	volatile	Zirkulationspumpe (M64)		0	1			manual	present
-1120	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 1	BV002	-40	40	-5	°C	manual	present
-1121	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 2	BV003	-40	40	-20	°C	manual	present
-1122	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 1	BV102	-40	40	-5	°C	manual	present
-1123	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 2	BV103	-40	40	-20	°C	manual	present
-1124	UCHAR	RO	volatile	Bivalenz Betriebszustand		0	3			manual	present
-1147	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Heizen		0	20			manual	present
-1148	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Kühlen		0	20			manual	present
-1149	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Warmwasser		0	20			manual	present
-1150	UCHAR	RO	volatile	Kaskade / Laufende Stufen Heizen		0	20			manual	present
-1151	UCHAR	RO	volatile	Kaskade / Laufende Stufen Kühlen		0	20			manual	present
-1152	UCHAR	RO	volatile	Kaskade / Laufende Stufen Warmwasser		0	20			manual	present
-1174	one-register	RO	unknown	Verriegelung (Bitcodiert nach Stufen)						gltmon	present
-1200	FLOAT	RO	volatile	Kaskade / Angeforderte Heiztemperatur					°C	manual	present
-1202	FLOAT	RO	volatile	Kaskade / Angeforderte Kühltemperatur					°C	manual	present
-1204	FLOAT	RO	volatile	Kaskade / Angeforderte Warmwassertemperatur					°C	manual	present
-1206	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Heizen					°C	manual	present
-1208	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Kühlen					°C	manual	present
-1210	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Warmwasser					°C	manual	present
-1220	UCHAR	RW	volatile	Kaskade / Minimale Leistung Heizen		0	100		%	manual	present
-1221	UCHAR	RW	volatile	Kaskade / Maximale Leistung Heizen		0	100		%	manual	present
-1222	UCHAR	RW	volatile	Kaskade / Minimale Leistung Kühlen		0	100		%	manual	present
-1223	UCHAR	RW	volatile	Kaskade / Maximale Leistung Kühlen		0	100		%	manual	present
-1224	UCHAR	RW	volatile	Kaskade / Minimale Leistung Warmwasser		0	100		%	manual	present
-1225	UCHAR	RW	volatile	Kaskade / Maximale Leistung Warmwasser		0	100		%	manual	present
-1226	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Parallel		-40	40		°C	manual	present
-1227	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Alternativ		-40	40		°C	manual	present
-1228	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Parallel		-40	40		°C	manual	present
-1229	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Alternativ		-40	40		°C	manual	present
-1230	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmw. Parallel		-40	40		°C	manual	present
-1231	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmw. Alternativ		-40	40		°C	manual	present
-1350	FLOAT	RO	volatile	Heizkreis A Vorlauftemperatur (B51)					°C	manual	present
-1352	FLOAT	RO	volatile	Heizkreis B Vorlauftemperatur (B52)					°C	manual	present
-1354	FLOAT	RO	volatile	Heizkreis C Vorlauftemperatur (B53)					°C	manual	present
-1356	FLOAT	RO	volatile	Heizkreis D Vorlauftemperatur (B54)					°C	manual	present
-1358	FLOAT	RO	volatile	Heizkreis E Vorlauftemperatur (B55)					°C	manual	present
-1360	FLOAT	RO	volatile	Heizkreis F Vorlauftemperatur (B56)					°C	manual	present
-1362	FLOAT	RO	volatile	Heizkreis G Vorlauftemperatur (B57)					°C	manual	present
-1364	FLOAT	RO	volatile	Heizkreis A Raumtemperatur (B61)					°C	manual	present
-1366	FLOAT	RO	volatile	Heizkreis B Raumtemperatur (B62)					°C	manual	present
-1368	FLOAT	RO	volatile	Heizkreis C Raumtemperatur (B63)					°C	manual	present
-1370	FLOAT	RO	volatile	Heizkreis D Raumtemperatur (B64)					°C	manual	present
-1372	FLOAT	RO	volatile	Heizkreis E Raumtemperatur (B65)					°C	manual	present
-1374	FLOAT	RO	volatile	Heizkreis F Raumtemperatur (B66)					°C	manual	present
-1376	FLOAT	RO	volatile	Heizkreis G Raumtemperatur (B67)					°C	manual	present
-1378	FLOAT	RO	volatile	Heizkreis A Sollvorlauftemperatur					°C	manual	present
-1380	FLOAT	RO	volatile	Heizkreis B Sollvorlauftemperatur					°C	manual	present
-1382	FLOAT	RO	volatile	Heizkreis C Sollvorlauftemperatur					°C	manual	present
-1384	FLOAT	RO	volatile	Heizkreis D Sollvorlauftemperatur					°C	manual	present
-1386	FLOAT	RO	volatile	Heizkreis E Sollvorlauftemperatur					°C	manual	present
-1388	FLOAT	RO	volatile	Heizkreis F Sollvorlauftemperatur					°C	manual	present
-1390	FLOAT	RO	volatile	Heizkreis G Sollvorlauftemperatur					°C	manual	present
-1392	FLOAT	RO	volatile	Feuchtesensor (B31)		0	100		%rF	manual	present
-1393	UCHAR	RW	eeprom	Betriebsart Heizkreis A	HKA01	0	5	1		manual	present
-1394	UCHAR	RW	eeprom	Betriebsart Heizkreis B	HKB01	0	5	1		manual	present
-1395	UCHAR	RW	eeprom	Betriebsart Heizkreis C	HKC01	0	5	1		manual	present
-1396	UCHAR	RW	eeprom	Betriebsart Heizkreis D	HKD01	0	5	1		manual	present
-1397	UCHAR	RW	eeprom	Betriebsart Heizkreis E	HKE01	0	5	1		manual	present
-1398	UCHAR	RW	eeprom	Betriebsart Heizkreis F	HKF01	0	5	1		manual	present
-1399	UCHAR	RW	eeprom	Betriebsart Heizkreis G	HKG01	0	5	1		manual	present
-1401	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK A	HKA04	15	30	22	°C	manual	present
-1403	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK B	HKB04	15	30	22	°C	manual	present
-1405	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK C	HKC04	15	30	22	°C	manual	present
-1407	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK D	HKD04	15	30	22	°C	manual	present
-1409	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK E	HKE04	15	30	22	°C	manual	present
-1411	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK F	HKF04	15	30	22	°C	manual	present
-1413	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK G	HKG04	15	30	22	°C	manual	present
-1415	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK A	HKA05	10	25	18	°C	manual	present
-1417	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK B	HKB05	10	25	18	°C	manual	present
-1419	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK C	HKC05	10	25	18	°C	manual	present
-1421	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK D	HKD05	10	25	18	°C	manual	present
-1423	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK E	HKE05	10	25	18	°C	manual	present
-1425	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK F	HKF05	10	25	18	°C	manual	present
-1427	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK G	HKG05	10	25	18	°C	manual	present
-1429	FLOAT	RW	eeprom	Heizkurve HK A	HKA10	0.1	3.5	0.6		manual	present
-1431	FLOAT	RW	eeprom	Heizkurve HK B	HKB10	0.1	3.5	0.6		manual	present
-1433	FLOAT	RW	eeprom	Heizkurve HK C	HKC10	0.1	3.5	0.6		manual	present
-1435	FLOAT	RW	eeprom	Heizkurve HK D	HKD10	0.1	3.5	0.6		manual	present
-1437	FLOAT	RW	eeprom	Heizkurve HK E	HKE10	0.1	3.5	0.6		manual	present
-1439	FLOAT	RW	eeprom	Heizkurve HK F	HKF10	0.1	3.5	0.6		manual	present
-1441	FLOAT	RW	eeprom	Heizkurve HK G	HKG10	0.1	3.5	0.6		manual	present
-1442	UCHAR	RW	eeprom	Heizgrenze HK A	HKA08	0	50	15	°C	manual	present
-1443	UCHAR	RW	eeprom	Heizgrenze HK B	HKB08	0	50	15	°C	manual	present
-1444	UCHAR	RW	eeprom	Heizgrenze HK C	HKC08	0	50	15	°C	manual	present
-1445	UCHAR	RW	eeprom	Heizgrenze HK D	HKD08	0	50	15	°C	manual	present
-1446	UCHAR	RW	eeprom	Heizgrenze HK E	HKE08	0	50	15	°C	manual	present
-1447	UCHAR	RW	eeprom	Heizgrenze HK F	HKF08	0	50	15	°C	manual	present
-1448	UCHAR	RW	eeprom	Heizgrenze HK G	HKG08	0	50	15	°C	manual	present
-1449	UCHAR	RW	eeprom	Sollvorlauftemperatur HK A (Konstant-HK)	HKA03	20	90	45	°C	manual	present
-1450	UCHAR	RW	eeprom	Sollvorlauftemperatur HK B (Konstant-HK)	HKB03	20	90	45	°C	manual	present
-1451	UCHAR	RW	eeprom	Sollvorlauftemperatur HK C (Konstant-HK)	HKC03	20	90	45	°C	manual	present
-1452	UCHAR	RW	eeprom	Sollvorlauftemperatur HK D (Konstant-HK)	HKD03	20	90	45	°C	manual	present
-1453	UCHAR	RW	eeprom	Sollvorlauftemperatur HK E (Konstant-HK)	HKE03	20	90	45	°C	manual	present
-1454	UCHAR	RW	eeprom	Sollvorlauftemperatur HK F (Konstant-HK)	HKF03	20	90	45	°C	manual	present
-1455	UCHAR	RW	eeprom	Sollvorlauftemperatur HK G (Konstant-HK)	HKG03	20	90	45	°C	manual	present
-1457	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK A	HKA50	15	30	23	°C	manual	present
-1459	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK B	HKB50	15	30	23	°C	manual	present
-1461	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK C	HKC50	15	30	23	°C	manual	present
-1463	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK D	HKD50	15	30	23	°C	manual	present
-1465	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK E	HKE50	15	30	23	°C	manual	present
-1467	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK F	HKF50	15	30	23	°C	manual	present
-1469	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK G	HKG50	15	30	23	°C	manual	present
-1471	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK A	HKA51	15	30	25	°C	manual	present
-1473	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK B	HKB51	15	30	25	°C	manual	present
-1475	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK C	HKC51	15	30	25	°C	manual	present
-1477	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK D	HKD51	15	30	25	°C	manual	present
-1479	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK E	HKE51	15	30	25	°C	manual	present
-1481	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK F	HKF51	15	30	25	°C	manual	present
-1483	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK G	HKG51	15	30	25	°C	manual	present
-1484	UCHAR	RW	eeprom	Kühlgrenze HK A	HKA58	0	36	25	°C	manual	present
-1485	UCHAR	RW	eeprom	Kühlgrenze HK B	HKB58	0	36	25	°C	manual	present
-1486	UCHAR	RW	eeprom	Kühlgrenze HK C	HKC58	0	36	25	°C	manual	present
-1487	UCHAR	RW	eeprom	Kühlgrenze HK D	HKD58	0	36	25	°C	manual	present
-1488	UCHAR	RW	eeprom	Kühlgrenze HK E	HKE58	0	36	25	°C	manual	present
-1489	UCHAR	RW	eeprom	Kühlgrenze HK F	HKF58	0	36	25	°C	manual	present
-1490	UCHAR	RW	eeprom	Kühlgrenze HK G	HKG58	0	36	25	°C	manual	present
-1491	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK A	HKA53	8	30	18	°C	manual	present
-1492	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK B	HKB53	8	30	18	°C	manual	present
-1493	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK C	HKC53	8	30	18	°C	manual	present
-1494	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK D	HKD53	8	30	18	°C	manual	present
-1495	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK E	HKE53	8	30	18	°C	manual	present
-1496	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK F	HKF53	8	30	18	°C	manual	present
-1497	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK G	HKG53	8	30	18	°C	manual	present
-1498	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis A		0	2	0		manual	present
-1499	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis B		0	2	0		manual	present
-1500	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis C		0	2	0		manual	present
-1501	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis D		0	2	0		manual	present
-1502	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis E		0	2	0		manual	present
-1503	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis F		0	2	0		manual	present
-1504	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis G		0	2	0		manual	present
-1505	UCHAR	RW	eeprom	Parallelverschiebung HK A	HKA03	0	30	0	°C	manual	present
-1506	UCHAR	RW	eeprom	Parallelverschiebung HK B	HKB03	0	30	0	°C	manual	present
-1507	UCHAR	RW	eeprom	Parallelverschiebung HK C	HKC03	0	30	0	°C	manual	present
-1508	UCHAR	RW	eeprom	Parallelverschiebung HK D	HKD03	0	30	0	°C	manual	present
-1509	UCHAR	RW	eeprom	Parallelverschiebung HK E	HKE03	0	30	0	°C	manual	present
-1510	UCHAR	RW	eeprom	Parallelverschiebung HK F	HKF03	0	30	0	°C	manual	present
-1511	UCHAR	RW	eeprom	Parallelverschiebung HK G	HKG03	0	30	0	°C	manual	present
-1520	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen A	HSA05				°C	gltmon	present
-1524	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen C	HSC05				°C	gltmon	present
-1526	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen D	HSD05				°C	gltmon	present
-1534	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen A	HSA04				°C	gltmon	present
-1538	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen C	HSC04				°C	gltmon	present
-1540	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen D	HSD04				°C	gltmon	present
-1650	FLOAT	W	volatile	Externe Raumtemperatur HK A		15	30		°C	manual	present
-1652	FLOAT	W	volatile	Externe Raumtemperatur HK B		15	30		°C	manual	present
-1654	FLOAT	W	volatile	Externe Raumtemperatur HK C		15	30		°C	manual	present
-1656	FLOAT	W	volatile	Externe Raumtemperatur HK D		15	30		°C	manual	present
-1658	FLOAT	W	volatile	Externe Raumtemperatur HK E		15	30		°C	manual	present
-1660	FLOAT	W	volatile	Externe Raumtemperatur HK F		15	30		°C	manual	present
-1662	FLOAT	W	volatile	Externe Raumtemperatur HK G		15	30		°C	manual	present
-1680	UCHAR	RO	volatile	Störung Wärmequellenkreis		0	1			manual	present
-1681	UCHAR	RO	volatile	Störung Druckschalter Wärmequellenkreis (iPump T und TERRA SWM)		0	1			manual	present
-1682	UCHAR	RO	volatile	Störung Ladepumpe 1 Zwischenkreis (M125)		0	1			manual	present
-1683	UCHAR	RO	volatile	Störung Ladepumpe 2 Zwischenkreis (M118)		0	1			manual	present
-1690	FLOAT	W	volatile	Externe Außentemperatur					°C	manual	present
-1692	FLOAT	W	volatile	Externe Feuchte		0	100		%rF	manual	present
-1694	UCHAR	RW	eeprom	Externe Anforderungstemperatur Heizen	PH003	20	65	40	°C	manual	present
-1695	UCHAR	RW	eeprom	Externe Anforderungstemperatur Kühlen	PC004	10	25	18	°C	manual	present
-1696	FLOAT	W	volatile	GLT Temperaturanforderung Heizen				0	°C	manual	present
-1698	FLOAT	W	volatile	GLT Temperaturanforderung Kühlen				100	°C	manual	present
-1710	BOOL	RW	volatile	Anforderung Heizen		0	1	0		manual	present
-1711	BOOL	RW	volatile	Anforderung Kühlen		0	1	0		manual	present
-1712	BOOL	RW	volatile	Anforderung Warmwasserladung		0	1	0		manual	present
-1713	BOOL	RW	volatile	Ext. Ansteuerung „Einmalige WW-Ladung“		0	1	0		manual	present
-1714	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW/SWM/SW Twin) und Sole-/Zwischenkreispumpe M16 (bei SW/SWM/SW Twin/SW Max)		0	100	-1	%	manual	present
-1715	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW Max)		0	100	-1	%	manual	present
-1716	FLOAT	W	volatile	GLT Wärmespeichertemperatur					°C	manual	present
-1718	FLOAT	W	volatile	GLT Kältespeichertemperatur					°C	manual	present
-1720	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. unten					°C	manual	present
-1722	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. oben					°C	manual	present
-1746	FLOAT	RO	unknown	Elektrische Leistungsaufnahme (gesamt)					kWh	gltmon	present
-1748	FLOAT	RO	volatile	Wärmemenge Heizen					kWh	manual	present
-1750	FLOAT	RO	volatile	Wärmemenge Gesamt					kWh	manual	present
-1752	FLOAT	RO	volatile	Wärmemenge Kühlen					kWh	manual	present
-1754	FLOAT	RO	volatile	Wärmemenge Warmwasser					kWh	manual	present
-1756	FLOAT	RO	volatile	Wärmemenge Abtauung					kWh	manual	present
-1758	FLOAT	RO	volatile	Wärmemenge Passive Kühlung					kWh	manual	present
-1760	FLOAT	RO	volatile	Wärmemenge Solar					kWh	manual	present
-1762	FLOAT	RO	volatile	Wärmemenge Elektroheizeinsatz					kWh	manual	present
-1790	FLOAT	RO	volatile	Thermische Momentanleistung					kW	manual	present
-1792	FLOAT	RO	volatile	Momentanleistung Solar					kW	manual	present
-1850	FLOAT	RO	volatile	Solar Kollektortemperatur (B73)					°C	manual	present
-1852	FLOAT	RO	volatile	Solar Kollektorrücklauftemperatur (B75)					°C	manual	present
-1854	FLOAT	RO	volatile	Solar Ladetemperatur (B74)					°C	manual	present
-1856	UCHAR	RW	eeprom	Betriebsart Solar	SC002	0	4	0		manual	present
-1857	FLOAT	RO	volatile	Solar WQ-Referenztemp./Pooltemp. (B76)					°C	manual	present
-1870	FLOAT	RO	volatile	ISC Ladetemperatur Kühlen (B44)					°C	manual	present
-1872	FLOAT	RO	volatile	ISC Rückkühltemperatur (B49)					°C	manual	present
-1874	UCHAR	RO	volatile	ISC Modus		0	8			manual	present
-1950	one-register	RO	unknown	Alarm Code 1						gltmon	present
-1952	one-register	RO	unknown	Alarm Code 2						gltmon	present
-1954	one-register	RO	unknown	Alarm Code 3						gltmon	present
-1956	one-register	RO	unknown	Alarm Code 4						gltmon	present
-1958	one-register	RO	unknown	Alarm Code 5						gltmon	present
-1999	UCHAR	W	volatile	Störmeldungen quittieren						manual	present
-2000	UCHAR	RO	volatile	Zonenmodul 1 Modus Heizen/Kühlen A14		0	1			manual	absent
-2001	UCHAR	RO	volatile	Zonenmodul 1 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2002	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2004	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 1					°C	manual	absent
-2006	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2007	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 1		0	4			manual	absent
-2008	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 1		0	1			manual	absent
-2009	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2011	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 2					°C	manual	absent
-2013	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2014	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 2		0	4			manual	absent
-2015	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 2		0	1			manual	absent
-2016	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2018	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 3					°C	manual	absent
-2020	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2021	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 3		0	4			manual	absent
-2022	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 3		0	1			manual	absent
-2023	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2025	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 4					°C	manual	absent
-2027	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2028	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 4		0	4			manual	absent
-2029	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 4		0	1			manual	absent
-2030	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2032	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 5					°C	manual	absent
-2034	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2035	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 5		0	4			manual	absent
-2036	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 5		0	1			manual	absent
-2037	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2039	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 6					°C	manual	absent
-2041	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2042	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 6		0	4			manual	absent
-2043	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 6		0	1			manual	absent
-2065	UCHAR	RO	volatile	Zonenmodul 2 Modus Heizen/Kühlen A14		0	1			manual	absent
-2066	UCHAR	RO	volatile	Zonenmodul 2 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2067	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2069	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 1					°C	manual	absent
-2071	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2072	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 1		0	4			manual	absent
-2073	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 1		0	1			manual	absent
-2074	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2076	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 2					°C	manual	absent
-2078	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2079	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 2		0	4			manual	absent
-2080	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 2		0	1			manual	absent
-2081	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2083	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 3					°C	manual	absent
-2085	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2086	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 3		0	4			manual	absent
-2087	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 3		0	1			manual	absent
-2088	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2090	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 4					°C	manual	absent
-2092	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2093	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 4		0	4			manual	absent
-2094	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 4		0	1			manual	absent
-2095	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2097	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 5					°C	manual	absent
-2099	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2100	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 5		0	4			manual	absent
-2101	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 5		0	1			manual	absent
-2102	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2104	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 6					°C	manual	absent
-2106	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2107	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 6		0	4			manual	absent
-2108	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 6		0	1			manual	absent
-2130	UCHAR	RO	volatile	Zonenmodul 3 Modus Heizen/Kühlen A14		0	1			manual	absent
-2131	UCHAR	RO	volatile	Zonenmodul 3 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2132	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2134	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 1					°C	manual	absent
-2136	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2137	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 1		0	4			manual	absent
-2138	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 1		0	1			manual	absent
-2139	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2141	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 2					°C	manual	absent
-2143	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2144	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 2		0	4			manual	absent
-2145	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 2		0	1			manual	absent
-2146	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2148	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 3					°C	manual	absent
-2150	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2151	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 3		0	4			manual	absent
-2152	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 3		0	1			manual	absent
-2153	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2155	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 4					°C	manual	absent
-2157	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2158	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 4		0	4			manual	absent
-2159	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 4		0	1			manual	absent
-2160	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2162	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 5					°C	manual	absent
-2164	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2165	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 5		0	4			manual	absent
-2166	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 5		0	1			manual	absent
-2167	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2169	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 6					°C	manual	absent
-2171	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2172	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 6		0	4			manual	absent
-2173	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 6		0	1			manual	absent
-2195	UCHAR	RO	volatile	Zonenmodul 4 Modus Heizen/Kühlen A14		0	1			manual	absent
-2196	UCHAR	RO	volatile	Zonenmodul 4 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2197	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2199	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 1					°C	manual	absent
-2201	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2202	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 1		0	4			manual	absent
-2203	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 1		0	1			manual	absent
-2204	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2206	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 2					°C	manual	absent
-2208	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2209	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 2		0	4			manual	absent
-2210	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 2		0	1			manual	absent
-2211	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2213	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 3					°C	manual	absent
-2215	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2216	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 3		0	4			manual	absent
-2217	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 3		0	1			manual	absent
-2218	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2220	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 4					°C	manual	absent
-2222	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2223	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 4		0	4			manual	absent
-2224	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 4		0	1			manual	absent
-2225	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2227	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 5					°C	manual	absent
-2229	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2230	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 5		0	4			manual	absent
-2231	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 5		0	1			manual	absent
-2232	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2234	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 6					°C	manual	absent
-2236	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2237	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 6		0	4			manual	absent
-2238	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 6		0	1			manual	absent
-2260	UCHAR	RO	volatile	Zonenmodul 5 Modus Heizen/Kühlen A14		0	1			manual	absent
-2261	UCHAR	RO	volatile	Zonenmodul 5 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2262	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2264	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 1					°C	manual	absent
-2266	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2267	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 1		0	4			manual	absent
-2268	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 1		0	1			manual	absent
-2269	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2271	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 2					°C	manual	absent
-2273	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2274	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 2		0	4			manual	absent
-2275	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 2		0	1			manual	absent
-2276	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2278	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 3					°C	manual	absent
-2280	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2281	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 3		0	4			manual	absent
-2282	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 3		0	1			manual	absent
-2283	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2285	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 4					°C	manual	absent
-2287	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2288	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 4		0	4			manual	absent
-2289	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 4		0	1			manual	absent
-2290	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2292	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 5					°C	manual	absent
-2294	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2295	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 5		0	4			manual	absent
-2296	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 5		0	1			manual	absent
-2297	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2299	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 6					°C	manual	absent
-2301	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2302	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 6		0	4			manual	absent
-2303	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 6		0	1			manual	absent
-2325	UCHAR	RO	volatile	Zonenmodul 6 Modus Heizen/Kühlen A14		0	1			manual	absent
-2326	UCHAR	RO	volatile	Zonenmodul 6 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2327	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2329	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 1					°C	manual	absent
-2331	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2332	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 1		0	4			manual	absent
-2333	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 1		0	1			manual	absent
-2334	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2336	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 2					°C	manual	absent
-2338	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2339	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 2		0	4			manual	absent
-2340	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 2		0	1			manual	absent
-2341	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2343	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 3					°C	manual	absent
-2345	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2346	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 3		0	4			manual	absent
-2347	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 3		0	1			manual	absent
-2348	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2350	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 4					°C	manual	absent
-2352	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2353	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 4		0	4			manual	absent
-2354	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 4		0	1			manual	absent
-2355	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2357	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 5					°C	manual	absent
-2359	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2360	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 5		0	4			manual	absent
-2361	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 5		0	1			manual	absent
-2362	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2364	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 6					°C	manual	absent
-2366	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2367	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 6		0	4			manual	absent
-2368	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 6		0	1			manual	absent
-2390	UCHAR	RO	volatile	Zonenmodul 7 Modus Heizen/Kühlen A14		0	1			manual	absent
-2391	UCHAR	RO	volatile	Zonenmodul 7 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2392	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2394	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 1					°C	manual	absent
-2396	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2397	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 1		0	4			manual	absent
-2398	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 1		0	1			manual	absent
-2399	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2401	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 2					°C	manual	absent
-2403	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2404	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 2		0	4			manual	absent
-2405	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 2		0	1			manual	absent
-2406	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2408	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 3					°C	manual	absent
-2410	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2411	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 3		0	4			manual	absent
-2412	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 3		0	1			manual	absent
-2413	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2415	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 4					°C	manual	absent
-2417	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2418	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 4		0	4			manual	absent
-2419	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 4		0	1			manual	absent
-2420	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2422	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 5					°C	manual	absent
-2424	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2425	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 5		0	4			manual	absent
-2426	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 5		0	1			manual	absent
-2427	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2429	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 6					°C	manual	absent
-2431	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2432	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 6		0	4			manual	absent
-2433	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 6		0	1			manual	absent
-2455	UCHAR	RO	volatile	Zonenmodul 8 Modus Heizen/Kühlen A14		0	1			manual	absent
-2456	UCHAR	RO	volatile	Zonenmodul 8 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2457	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2459	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 1					°C	manual	absent
-2461	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2462	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 1		0	4			manual	absent
-2463	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 1		0	1			manual	absent
-2464	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2466	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 2					°C	manual	absent
-2468	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2469	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 2		0	4			manual	absent
-2470	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 2		0	1			manual	absent
-2471	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2473	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 3					°C	manual	absent
-2475	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2476	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 3		0	4			manual	absent
-2477	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 3		0	1			manual	absent
-2478	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2480	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 4					°C	manual	absent
-2482	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2483	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 4		0	4			manual	absent
-2484	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 4		0	1			manual	absent
-2485	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2487	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 5					°C	manual	absent
-2489	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2490	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 5		0	4			manual	absent
-2491	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 5		0	1			manual	absent
-2492	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2494	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 6					°C	manual	absent
-2496	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2497	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 6		0	4			manual	absent
-2498	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 6		0	1			manual	absent
-2520	UCHAR	RO	volatile	Zonenmodul 9 Modus Heizen/Kühlen A14		0	1			manual	absent
-2521	UCHAR	RO	volatile	Zonenmodul 9 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2522	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2524	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 1					°C	manual	absent
-2526	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2527	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 1		0	4			manual	absent
-2528	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 1		0	1			manual	absent
-2529	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2531	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 2					°C	manual	absent
-2533	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2534	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 2		0	4			manual	absent
-2535	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 2		0	1			manual	absent
-2536	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2538	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 3					°C	manual	absent
-2540	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2541	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 3		0	4			manual	absent
-2542	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 3		0	1			manual	absent
-2543	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2545	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 4					°C	manual	absent
-2547	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2548	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 4		0	4			manual	absent
-2549	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 4		0	1			manual	absent
-2550	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2552	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 5					°C	manual	absent
-2554	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2555	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 5		0	4			manual	absent
-2556	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 5		0	1			manual	absent
-2557	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2559	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 6					°C	manual	absent
-2561	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2562	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 6		0	4			manual	absent
-2563	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 6		0	1			manual	absent
-2585	UCHAR	RO	volatile	Zonenmodul 10 Modus Heizen/Kühlen A14		0	1			manual	absent
-2586	UCHAR	RO	volatile	Zonenmodul 10 Entfeuchtungsausgang A12		0	1	0		manual	absent
-2587	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 1		15	30		°C	manual	absent
-2589	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 1					°C	manual	absent
-2591	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 1		0	100		%rF	manual	absent
-2592	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 1		0	4			manual	absent
-2593	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 1		0	1			manual	absent
-2594	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 2		15	30		°C	manual	absent
-2596	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 2					°C	manual	absent
-2598	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 2		0	100		%rF	manual	absent
-2599	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 2		0	4			manual	absent
-2600	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 2		0	1			manual	absent
-2601	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 3		15	30		°C	manual	absent
-2603	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 3					°C	manual	absent
-2605	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 3		0	100		%rF	manual	absent
-2606	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 3		0	4			manual	absent
-2607	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 3		0	1			manual	absent
-2608	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 4		15	30		°C	manual	absent
-2610	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 4					°C	manual	absent
-2612	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 4		0	100		%rF	manual	absent
-2613	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 4		0	4			manual	absent
-2614	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 4		0	1			manual	absent
-2615	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 5		15	30		°C	manual	absent
-2617	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 5					°C	manual	absent
-2619	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 5		0	100		%rF	manual	absent
-2620	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 5		0	4			manual	absent
-2621	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 5		0	1			manual	absent
-2622	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 6		15	30		°C	manual	absent
-2624	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 6					°C	manual	absent
-2626	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 6		0	100		%rF	manual	absent
-2627	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 6		0	4			manual	absent
-2628	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 6		0	1			manual	absent
-4001	UCHAR	RO	volatile	Booster Störungen		0	3			manual	present
-4002	UCHAR	RO	volatile	Booster Verriegelung		0	3			manual	present
-4010	FLOAT	RO	volatile	Booster A Wärmequelleneintrittstemperatur					°C	manual	present
-4012	FLOAT	RO	volatile	Booster A Wärmequellenaustrittstemperatur					°C	manual	present
-4014	FLOAT	RO	volatile	Booster A Wärmespeichertemperatur (B104)					°C	manual	present
-4016	FLOAT	RO	volatile	Booster A Vorlauftemperatur					°C	manual	present
-4018	FLOAT	RO	volatile	Booster A Rücklauftemperatur					°C	manual	present
-4020	WORD	RO	volatile	Booster A Wärmequellenpumpe		0	100	-1	%	manual	present
-4021	WORD	RO	volatile	Booster A Ladepumpe		0	100	-1	%	manual	present
-4022	UCHAR	RO	volatile	Booster A Verdichter		0	1			manual	present
-4040	FLOAT	RO	volatile	Booster B Wärmequelleneintrittstemperatur					°C	manual	present
-4042	FLOAT	RO	volatile	Booster B Wärmequellenaustrittstemperatur					°C	manual	present
-4044	FLOAT	RO	volatile	Booster B Wärmespeichertemperatur (B104)					°C	manual	present
-4046	FLOAT	RO	volatile	Booster B Vorlauftemperatur					°C	manual	present
-4048	FLOAT	RO	volatile	Booster B Rücklauftemperatur					°C	manual	present
-4050	WORD	RO	volatile	Booster B Wärmequellenpumpe		0	100	-1	%	manual	present
-4051	WORD	RO	volatile	Booster B Ladepumpe		0	100	-1	%	manual	present
-4052	UCHAR	RO	volatile	Booster B Verdichter		0	1			manual	present
-4108	FLOAT	RW	volatile	Leistungsbegrenzung Wärmepumpe				-1	kW	manual	present
-4110	one-register	RW	unknown	Sperre						gltmon	present
-4113	one-register	RW	unknown	Sperre Booster 1						gltmon	present
-4114	one-register	RW	unknown	Sperre Booster 2						gltmon	present
-4122	FLOAT	RO	volatile	Elektrische Gesamtleistung Wärmepumpe					kW	manual	present
-4124	FLOAT	RO	volatile	Elektr. Gesamtleist. Wärmepumpe (Smartfox)					kW	manual	present
-4126	FLOAT	RO	unknown	thermische Leistung (basierend auf Durchflusssensor)					kW	gltmon	present
-4128	FLOAT	RO	unknown	Wärmemenge gesamt					kWh	gltmon	present
-4132	FLOAT	RW	unknown	Kaskadenleistung Heizen					%	gltmon	present
-4136	FLOAT	RW	unknown	Kaskadenleistung Kühlen					%	gltmon	present
-4140	FLOAT	RW	unknown	Kaskadenleistung Vorrangladung					%	gltmon	present
+address	datatype	access	persistence	name	parameter	min	max	default	unit	scale	source	observed
+74	FLOAT	RW/RO	volatile	Aktueller PV-Überschuss					kW	magnitude	manual	present
+76	FLOAT	RW/RO	volatile	Leistung E-Heizstab					kW	magnitude	manual	present
+78	FLOAT	RW/RO	volatile	Aktuelle PV Produktion					kW	magnitude	manual	present
+82	FLOAT	RW/RO	volatile	Hausverbrauch				0	kW	magnitude	manual	present
+84	FLOAT	RW/RO	volatile	Batterieentladung				0	kW	magnitude	manual	present
+86	WORD	RW/RO	volatile	Batteriefüllstand				-1	%	magnitude	manual	present
+88	FLOAT	RW/RO	volatile	PV-Zielwert (Smartfox und Solar-Log)				0	kW	magnitude	manual	present
+90	UCHAR	RO	volatile	Smart Grid Status		0	4	1		enumeration	manual	present
+500	FLOAT	RO	unknown	myiDM-ID						magnitude	gltmon	present
+504	one-register	RO	unknown	Trennwärmetauscher						magnitude	gltmon	present
+506	one-register	RO	unknown	Wärmequelle						magnitude	gltmon	present
+508	one-register	RO	unknown	Wärmepumpentype						magnitude	gltmon	present
+520	one-register	RO	unknown	Softwaretype (bitcodiert)						magnitude	gltmon	present
+522	one-register	RO	unknown	Softwareversion (Major)						magnitude	gltmon	present
+524	one-register	RO	unknown	Software Version (Minor)						magnitude	gltmon	present
+526	one-register	RO	unknown	Software Version (Patch)						magnitude	gltmon	present
+1000	FLOAT	RO	volatile	Außentemperatur (B32)					°C	magnitude	manual	present
+1002	FLOAT	RO	volatile	Gemittelte Außentemperatur					°C	magnitude	manual	present
+1004	UCHAR	RO	volatile	Interne Meldung						magnitude	manual	present
+1005	UCHAR	RW	eeprom	Betriebsart System	SYSMODE	-1	5	1		enumeration	manual	present
+1006	UCHAR	RO	volatile	Variabler Eingang		0	3	0		enumeration	manual	present
+1008	FLOAT	RO	volatile	Wärmespeichertemperatur (B38)					°C	magnitude	manual	present
+1010	FLOAT	RO	volatile	Kältespeichertemperatur (B40)					°C	magnitude	manual	present
+1012	FLOAT	RO	volatile	Trinkwassererwärmertemp. unten (B41)					°C	magnitude	manual	present
+1014	FLOAT	RO	volatile	Trinkwassererwärmertemp. oben (B48)					°C	magnitude	manual	present
+1030	FLOAT	RO	volatile	Warmwasserzapftemperatur (B42)					°C	magnitude	manual	present
+1032	UCHAR	RW	eeprom	Warmwasser-Solltemperatur	FW030	35	95	46	°C	magnitude	manual	present
+1033	UCHAR	RW	eeprom	Warmwasserladung Einschalttemperatur	FW027	30	50	46	°C	magnitude	manual	present
+1034	UCHAR	RW	eeprom	Warmwasserladung Ausschalttemperatur	FW028	46	53	50	°C	magnitude	manual	present
+1048	FLOAT	RO	volatile	Aktueller Strompreis					€/MWh	magnitude	manual	present
+1050	FLOAT	RO	volatile	Wärmepumpen Vorlauftemperatur (B33)					°C	magnitude	manual	present
+1052	FLOAT	RO	volatile	Wärmepumpen Rücklauftemperatur (B34)					°C	magnitude	manual	present
+1054	FLOAT	RO	volatile	HGL Vorlauftemperatur (B35)					°C	magnitude	manual	present
+1056	FLOAT	RO	volatile	Wärmequelleneintrittstemperatur (B43)					°C	magnitude	manual	present
+1058	FLOAT	RO	volatile	Wärmequellenaustrittstemperatur (B36)					°C	magnitude	manual	present
+1060	FLOAT	RO	volatile	Luftansaugtemperatur (B37)					°C	magnitude	manual	present
+1062	FLOAT	RO	volatile	Luftwärmetauschertemperatur (B72)					°C	magnitude	manual	present
+1064	FLOAT	RO	volatile	Luftansaugtemperatur 2 (B46)					°C	magnitude	manual	present
+1066	FLOAT	RO	volatile	Ladefühler (B45)					°C	magnitude	manual	present
+1068	FLOAT	RO	volatile	Rücklauftemperatur Wärmesenke (B124)					°C	magnitude	manual	present
+1070	FLOAT	RO	volatile	Vorlauftemperatur Wärmesenke (B125)					°C	magnitude	manual	present
+1072	FLOAT	RO	unknown	Durchfluss Wärmesenke					l/min	magnitude	gltmon	present
+1074	WORD	RO	volatile	Ladepumpe Wärmesenke Steuersignal (M73)		0	100	-1	%	magnitude	manual	present
+1086	FLOAT	RO	volatile	Grundwassereintrittstemperatur (B119)					°C	magnitude	manual	present
+1088	FLOAT	RO	volatile	Grundwassereintrittstemperatur (B120)					°C	magnitude	manual	present
+1090	UCHAR	RO	volatile	Betriebsart Wärmepumpe		0	8			enumeration	manual	present
+1091	UCHAR	RO	volatile	Heizanforderung Wärmepumpe		0	1	0		enumeration	manual	present
+1092	UCHAR	RO	volatile	Kühlanforderung Wärmepumpe		0	1	0		magnitude	manual	present
+1093	UCHAR	RO	volatile	Warmwasseranforderung Wärmepumpe		0	1	0		enumeration	manual	present
+1098	UCHAR	RO	volatile	EVU - Sperrkontakt		0	1	1		enumeration	manual	present
+1099	UCHAR	RO	volatile	Summenstörung Wärmepumpe		0	1			enumeration	manual	present
+1100	UCHAR	RO	volatile	Status Verdichter 1		0	1			enumeration	manual	present
+1101	UCHAR	RO	volatile	Status Verdichter 2		0	1			enumeration	manual	present
+1102	UCHAR	RO	volatile	Status Verdichter 3		0	1			enumeration	manual	present
+1103	UCHAR	RO	volatile	Status Verdichter 4		0	1			enumeration	manual	present
+1104	WORD	RO	volatile	Status Ladepumpe (M73)		0	100	-1	%	magnitude	manual	present
+1105	WORD	RO	volatile	Status Sole/Zwischenkreispumpe (M16)		0	100	-1	%	magnitude	manual	present
+1106	WORD	RO	volatile	Status Wärmequellen-/Grundwasserpumpe (M15)		0	100	-1	%	magnitude	manual	present
+1108	WORD	RO	volatile	Status ISC Kältespeicherpumpe (M84)		0	100	-1	%	magnitude	manual	present
+1109	WORD	RO	volatile	Status ISC Rückkühlpumpe (M17)		0	100	-1	%	magnitude	manual	present
+1110	WORD	RO	volatile	Umschaltventil Heizkreis Heizen/Kühlen (M61)		0	1			enumeration	manual	present
+1111	WORD	RO	volatile	Umschaltventil Speicher Heizen/Kühlen (M62)		0	1			magnitude	manual	present
+1112	WORD	RO	volatile	Umschaltventil Heizen/Warmwasser (M63)		0	1			magnitude	manual	present
+1113	WORD	RO	volatile	Umschaltv. Wärmequelle Heizen/Kühlen (M74)		0	1			magnitude	manual	present
+1114	WORD	RO	volatile	Umschaltventil Solar Heizen/Warmwasser(M78)		0	1			magnitude	manual	present
+1115	WORD	RO	volatile	Umschaltv. Solar Speicher/Wärmequelle (M79)		0	1			magnitude	manual	present
+1116	WORD	RO	volatile	Umschaltventil ISC Wärmequelle/Kältespeicher (M89)		0	1			magnitude	manual	present
+1117	WORD	RO	volatile	Umschaltventil ISC Speicher / Bypass (M99)		0	1			magnitude	manual	present
+1118	WORD	RO	volatile	Zirkulationspumpe (M64)		0	1			magnitude	manual	present
+1120	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 1	BV002	-40	40	-5	°C	magnitude	manual	present
+1121	WORD	RW	eeprom	2. Wärmeerzeuger - Bivalenzpunkt 2	BV003	-40	40	-20	°C	magnitude	manual	present
+1122	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 1	BV102	-40	40	-5	°C	magnitude	manual	present
+1123	WORD	RW	eeprom	3. Wärmeerzeuger - Bivalenzpunkt 2	BV103	-40	40	-20	°C	magnitude	manual	present
+1124	UCHAR	RO	volatile	Bivalenz Betriebszustand		0	3			enumeration	manual	present
+1147	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Heizen		0	20			magnitude	manual	present
+1148	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Kühlen		0	20			magnitude	manual	present
+1149	UCHAR	RO	volatile	Kaskade / Verfügbare Stufen Warmwasser		0	20			magnitude	manual	present
+1150	UCHAR	RO	volatile	Kaskade / Laufende Stufen Heizen		0	20			magnitude	manual	present
+1151	UCHAR	RO	volatile	Kaskade / Laufende Stufen Kühlen		0	20			magnitude	manual	present
+1152	UCHAR	RO	volatile	Kaskade / Laufende Stufen Warmwasser		0	20			magnitude	manual	present
+1174	one-register	RO	unknown	Verriegelung (Bitcodiert nach Stufen)						magnitude	gltmon	present
+1200	FLOAT	RO	volatile	Kaskade / Angeforderte Heiztemperatur					°C	magnitude	manual	present
+1202	FLOAT	RO	volatile	Kaskade / Angeforderte Kühltemperatur					°C	magnitude	manual	present
+1204	FLOAT	RO	volatile	Kaskade / Angeforderte Warmwassertemperatur					°C	magnitude	manual	present
+1206	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Heizen					°C	magnitude	manual	present
+1208	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Kühlen					°C	magnitude	manual	present
+1210	FLOAT	RO	volatile	Kaskade / Gemittelte Vorlauftemperatur Warmwasser					°C	magnitude	manual	present
+1220	UCHAR	RW	volatile	Kaskade / Minimale Leistung Heizen		0	100		%	magnitude	manual	present
+1221	UCHAR	RW	volatile	Kaskade / Maximale Leistung Heizen		0	100		%	magnitude	manual	present
+1222	UCHAR	RW	volatile	Kaskade / Minimale Leistung Kühlen		0	100		%	magnitude	manual	present
+1223	UCHAR	RW	volatile	Kaskade / Maximale Leistung Kühlen		0	100		%	magnitude	manual	present
+1224	UCHAR	RW	volatile	Kaskade / Minimale Leistung Warmwasser		0	100		%	magnitude	manual	present
+1225	UCHAR	RW	volatile	Kaskade / Maximale Leistung Warmwasser		0	100		%	magnitude	manual	present
+1226	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Parallel		-40	40		°C	magnitude	manual	present
+1227	WORD	RW	volatile	Kaskade / Bivalenzpunkt Heizen Alternativ		-40	40		°C	magnitude	manual	present
+1228	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Parallel		-40	40		°C	magnitude	manual	present
+1229	WORD	RW	volatile	Kaskade / Bivalenzpunkt Kühlen Alternativ		-40	40		°C	magnitude	manual	present
+1230	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmw. Parallel		-40	40		°C	magnitude	manual	present
+1231	WORD	RW	volatile	Kaskade / Bivalenzpunkt Warmw. Alternativ		-40	40		°C	magnitude	manual	present
+1350	FLOAT	RO	volatile	Heizkreis A Vorlauftemperatur (B51)					°C	magnitude	manual	present
+1352	FLOAT	RO	volatile	Heizkreis B Vorlauftemperatur (B52)					°C	magnitude	manual	present
+1354	FLOAT	RO	volatile	Heizkreis C Vorlauftemperatur (B53)					°C	magnitude	manual	present
+1356	FLOAT	RO	volatile	Heizkreis D Vorlauftemperatur (B54)					°C	magnitude	manual	present
+1358	FLOAT	RO	volatile	Heizkreis E Vorlauftemperatur (B55)					°C	magnitude	manual	present
+1360	FLOAT	RO	volatile	Heizkreis F Vorlauftemperatur (B56)					°C	magnitude	manual	present
+1362	FLOAT	RO	volatile	Heizkreis G Vorlauftemperatur (B57)					°C	magnitude	manual	present
+1364	FLOAT	RO	volatile	Heizkreis A Raumtemperatur (B61)					°C	magnitude	manual	present
+1366	FLOAT	RO	volatile	Heizkreis B Raumtemperatur (B62)					°C	magnitude	manual	present
+1368	FLOAT	RO	volatile	Heizkreis C Raumtemperatur (B63)					°C	magnitude	manual	present
+1370	FLOAT	RO	volatile	Heizkreis D Raumtemperatur (B64)					°C	magnitude	manual	present
+1372	FLOAT	RO	volatile	Heizkreis E Raumtemperatur (B65)					°C	magnitude	manual	present
+1374	FLOAT	RO	volatile	Heizkreis F Raumtemperatur (B66)					°C	magnitude	manual	present
+1376	FLOAT	RO	volatile	Heizkreis G Raumtemperatur (B67)					°C	magnitude	manual	present
+1378	FLOAT	RO	volatile	Heizkreis A Sollvorlauftemperatur					°C	magnitude	manual	present
+1380	FLOAT	RO	volatile	Heizkreis B Sollvorlauftemperatur					°C	magnitude	manual	present
+1382	FLOAT	RO	volatile	Heizkreis C Sollvorlauftemperatur					°C	magnitude	manual	present
+1384	FLOAT	RO	volatile	Heizkreis D Sollvorlauftemperatur					°C	magnitude	manual	present
+1386	FLOAT	RO	volatile	Heizkreis E Sollvorlauftemperatur					°C	magnitude	manual	present
+1388	FLOAT	RO	volatile	Heizkreis F Sollvorlauftemperatur					°C	magnitude	manual	present
+1390	FLOAT	RO	volatile	Heizkreis G Sollvorlauftemperatur					°C	magnitude	manual	present
+1392	FLOAT	RO	volatile	Feuchtesensor (B31)		0	100		%rF	magnitude	manual	present
+1393	UCHAR	RW	eeprom	Betriebsart Heizkreis A	HKA01	0	5	1		enumeration	manual	present
+1394	UCHAR	RW	eeprom	Betriebsart Heizkreis B	HKB01	0	5	1		enumeration	manual	present
+1395	UCHAR	RW	eeprom	Betriebsart Heizkreis C	HKC01	0	5	1		enumeration	manual	present
+1396	UCHAR	RW	eeprom	Betriebsart Heizkreis D	HKD01	0	5	1		enumeration	manual	present
+1397	UCHAR	RW	eeprom	Betriebsart Heizkreis E	HKE01	0	5	1		enumeration	manual	present
+1398	UCHAR	RW	eeprom	Betriebsart Heizkreis F	HKF01	0	5	1		enumeration	manual	present
+1399	UCHAR	RW	eeprom	Betriebsart Heizkreis G	HKG01	0	5	1		enumeration	manual	present
+1401	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK A	HKA04	15	30	22	°C	magnitude	manual	present
+1403	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK B	HKB04	15	30	22	°C	magnitude	manual	present
+1405	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK C	HKC04	15	30	22	°C	magnitude	manual	present
+1407	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK D	HKD04	15	30	22	°C	magnitude	manual	present
+1409	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK E	HKE04	15	30	22	°C	magnitude	manual	present
+1411	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK F	HKF04	15	30	22	°C	magnitude	manual	present
+1413	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Normal HK G	HKG04	15	30	22	°C	magnitude	manual	present
+1415	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK A	HKA05	10	25	18	°C	magnitude	manual	present
+1417	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK B	HKB05	10	25	18	°C	magnitude	manual	present
+1419	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK C	HKC05	10	25	18	°C	magnitude	manual	present
+1421	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK D	HKD05	10	25	18	°C	magnitude	manual	present
+1423	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK E	HKE05	10	25	18	°C	magnitude	manual	present
+1425	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK F	HKF05	10	25	18	°C	magnitude	manual	present
+1427	FLOAT	RW	eeprom	Raumsolltemperatur Heizen Eco HK G	HKG05	10	25	18	°C	magnitude	manual	present
+1429	FLOAT	RW	eeprom	Heizkurve HK A	HKA10	0.1	3.5	0.6		magnitude	manual	present
+1431	FLOAT	RW	eeprom	Heizkurve HK B	HKB10	0.1	3.5	0.6		magnitude	manual	present
+1433	FLOAT	RW	eeprom	Heizkurve HK C	HKC10	0.1	3.5	0.6		magnitude	manual	present
+1435	FLOAT	RW	eeprom	Heizkurve HK D	HKD10	0.1	3.5	0.6		magnitude	manual	present
+1437	FLOAT	RW	eeprom	Heizkurve HK E	HKE10	0.1	3.5	0.6		magnitude	manual	present
+1439	FLOAT	RW	eeprom	Heizkurve HK F	HKF10	0.1	3.5	0.6		magnitude	manual	present
+1441	FLOAT	RW	eeprom	Heizkurve HK G	HKG10	0.1	3.5	0.6		magnitude	manual	present
+1442	UCHAR	RW	eeprom	Heizgrenze HK A	HKA08	0	50	15	°C	magnitude	manual	present
+1443	UCHAR	RW	eeprom	Heizgrenze HK B	HKB08	0	50	15	°C	magnitude	manual	present
+1444	UCHAR	RW	eeprom	Heizgrenze HK C	HKC08	0	50	15	°C	magnitude	manual	present
+1445	UCHAR	RW	eeprom	Heizgrenze HK D	HKD08	0	50	15	°C	magnitude	manual	present
+1446	UCHAR	RW	eeprom	Heizgrenze HK E	HKE08	0	50	15	°C	magnitude	manual	present
+1447	UCHAR	RW	eeprom	Heizgrenze HK F	HKF08	0	50	15	°C	magnitude	manual	present
+1448	UCHAR	RW	eeprom	Heizgrenze HK G	HKG08	0	50	15	°C	magnitude	manual	present
+1449	UCHAR	RW	eeprom	Sollvorlauftemperatur HK A (Konstant-HK)	HKA03	20	90	45	°C	magnitude	manual	present
+1450	UCHAR	RW	eeprom	Sollvorlauftemperatur HK B (Konstant-HK)	HKB03	20	90	45	°C	magnitude	manual	present
+1451	UCHAR	RW	eeprom	Sollvorlauftemperatur HK C (Konstant-HK)	HKC03	20	90	45	°C	magnitude	manual	present
+1452	UCHAR	RW	eeprom	Sollvorlauftemperatur HK D (Konstant-HK)	HKD03	20	90	45	°C	magnitude	manual	present
+1453	UCHAR	RW	eeprom	Sollvorlauftemperatur HK E (Konstant-HK)	HKE03	20	90	45	°C	magnitude	manual	present
+1454	UCHAR	RW	eeprom	Sollvorlauftemperatur HK F (Konstant-HK)	HKF03	20	90	45	°C	magnitude	manual	present
+1455	UCHAR	RW	eeprom	Sollvorlauftemperatur HK G (Konstant-HK)	HKG03	20	90	45	°C	magnitude	manual	present
+1457	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK A	HKA50	15	30	23	°C	magnitude	manual	present
+1459	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK B	HKB50	15	30	23	°C	magnitude	manual	present
+1461	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK C	HKC50	15	30	23	°C	magnitude	manual	present
+1463	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK D	HKD50	15	30	23	°C	magnitude	manual	present
+1465	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK E	HKE50	15	30	23	°C	magnitude	manual	present
+1467	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK F	HKF50	15	30	23	°C	magnitude	manual	present
+1469	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Normal HK G	HKG50	15	30	23	°C	magnitude	manual	present
+1471	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK A	HKA51	15	30	25	°C	magnitude	manual	present
+1473	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK B	HKB51	15	30	25	°C	magnitude	manual	present
+1475	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK C	HKC51	15	30	25	°C	magnitude	manual	present
+1477	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK D	HKD51	15	30	25	°C	magnitude	manual	present
+1479	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK E	HKE51	15	30	25	°C	magnitude	manual	present
+1481	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK F	HKF51	15	30	25	°C	magnitude	manual	present
+1483	FLOAT	RW	eeprom	Raumsolltemperatur Kühlen Eco HK G	HKG51	15	30	25	°C	magnitude	manual	present
+1484	UCHAR	RW	eeprom	Kühlgrenze HK A	HKA58	0	36	25	°C	magnitude	manual	present
+1485	UCHAR	RW	eeprom	Kühlgrenze HK B	HKB58	0	36	25	°C	magnitude	manual	present
+1486	UCHAR	RW	eeprom	Kühlgrenze HK C	HKC58	0	36	25	°C	magnitude	manual	present
+1487	UCHAR	RW	eeprom	Kühlgrenze HK D	HKD58	0	36	25	°C	magnitude	manual	present
+1488	UCHAR	RW	eeprom	Kühlgrenze HK E	HKE58	0	36	25	°C	magnitude	manual	present
+1489	UCHAR	RW	eeprom	Kühlgrenze HK F	HKF58	0	36	25	°C	magnitude	manual	present
+1490	UCHAR	RW	eeprom	Kühlgrenze HK G	HKG58	0	36	25	°C	magnitude	manual	present
+1491	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK A	HKA53	8	30	18	°C	magnitude	manual	present
+1492	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK B	HKB53	8	30	18	°C	magnitude	manual	present
+1493	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK C	HKC53	8	30	18	°C	magnitude	manual	present
+1494	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK D	HKD53	8	30	18	°C	magnitude	manual	present
+1495	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK E	HKE53	8	30	18	°C	magnitude	manual	present
+1496	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK F	HKF53	8	30	18	°C	magnitude	manual	present
+1497	UCHAR	RW	eeprom	Sollvorlauftemperatur Kühlen HK G	HKG53	8	30	18	°C	magnitude	manual	present
+1498	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis A		0	2	0		enumeration	manual	present
+1499	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis B		0	2	0		enumeration	manual	present
+1500	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis C		0	2	0		enumeration	manual	present
+1501	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis D		0	2	0		enumeration	manual	present
+1502	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis E		0	2	0		enumeration	manual	present
+1503	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis F		0	2	0		enumeration	manual	present
+1504	UCHAR	RO	volatile	Aktive Betriebsart Heizkreis G		0	2	0		enumeration	manual	present
+1505	UCHAR	RW	eeprom	Parallelverschiebung HK A	HKA03	0	30	0	°C	magnitude	manual	present
+1506	UCHAR	RW	eeprom	Parallelverschiebung HK B	HKB03	0	30	0	°C	magnitude	manual	present
+1507	UCHAR	RW	eeprom	Parallelverschiebung HK C	HKC03	0	30	0	°C	magnitude	manual	present
+1508	UCHAR	RW	eeprom	Parallelverschiebung HK D	HKD03	0	30	0	°C	magnitude	manual	present
+1509	UCHAR	RW	eeprom	Parallelverschiebung HK E	HKE03	0	30	0	°C	magnitude	manual	present
+1510	UCHAR	RW	eeprom	Parallelverschiebung HK F	HKF03	0	30	0	°C	magnitude	manual	present
+1511	UCHAR	RW	eeprom	Parallelverschiebung HK G	HKG03	0	30	0	°C	magnitude	manual	present
+1520	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen A	HSA05				°C	magnitude	gltmon	present
+1524	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen C	HSC05				°C	magnitude	gltmon	present
+1526	FLOAT	RW	unknown	Minimale Vorlauftemperatur Heizen D	HSD05				°C	magnitude	gltmon	present
+1534	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen A	HSA04				°C	magnitude	gltmon	present
+1538	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen C	HSC04				°C	magnitude	gltmon	present
+1540	FLOAT	RW	unknown	Maximale Vorlauftemperatur Heizen D	HSD04				°C	magnitude	gltmon	present
+1650	FLOAT	W	volatile	Externe Raumtemperatur HK A		15	30		°C	magnitude	manual	present
+1652	FLOAT	W	volatile	Externe Raumtemperatur HK B		15	30		°C	magnitude	manual	present
+1654	FLOAT	W	volatile	Externe Raumtemperatur HK C		15	30		°C	magnitude	manual	present
+1656	FLOAT	W	volatile	Externe Raumtemperatur HK D		15	30		°C	magnitude	manual	present
+1658	FLOAT	W	volatile	Externe Raumtemperatur HK E		15	30		°C	magnitude	manual	present
+1660	FLOAT	W	volatile	Externe Raumtemperatur HK F		15	30		°C	magnitude	manual	present
+1662	FLOAT	W	volatile	Externe Raumtemperatur HK G		15	30		°C	magnitude	manual	present
+1680	UCHAR	RO	volatile	Störung Wärmequellenkreis		0	1			enumeration	manual	present
+1681	UCHAR	RO	volatile	Störung Druckschalter Wärmequellenkreis (iPump T und TERRA SWM)		0	1			magnitude	manual	present
+1682	UCHAR	RO	volatile	Störung Ladepumpe 1 Zwischenkreis (M125)		0	1			magnitude	manual	present
+1683	UCHAR	RO	volatile	Störung Ladepumpe 2 Zwischenkreis (M118)		0	1			magnitude	manual	present
+1690	FLOAT	W	volatile	Externe Außentemperatur					°C	magnitude	manual	present
+1692	FLOAT	W	volatile	Externe Feuchte		0	100		%rF	magnitude	manual	present
+1694	UCHAR	RW	eeprom	Externe Anforderungstemperatur Heizen	PH003	20	65	40	°C	magnitude	manual	present
+1695	UCHAR	RW	eeprom	Externe Anforderungstemperatur Kühlen	PC004	10	25	18	°C	magnitude	manual	present
+1696	FLOAT	W	volatile	GLT Temperaturanforderung Heizen				0	°C	magnitude	manual	present
+1698	FLOAT	W	volatile	GLT Temperaturanforderung Kühlen				100	°C	magnitude	manual	present
+1710	BOOL	RW	volatile	Anforderung Heizen		0	1	0		magnitude	manual	present
+1711	BOOL	RW	volatile	Anforderung Kühlen		0	1	0		magnitude	manual	present
+1712	BOOL	RW	volatile	Anforderung Warmwasserladung		0	1	0		magnitude	manual	present
+1713	BOOL	RW	volatile	Ext. Ansteuerung „Einmalige WW-Ladung“		0	1	0		magnitude	manual	present
+1714	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW/SWM/SW Twin) und Sole-/Zwischenkreispumpe M16 (bei SW/SWM/SW Twin/SW Max)		0	100	-1	%	magnitude	manual	present
+1715	UCHAR	RW	volatile	Externe Anforderung Grundwasserpumpe M15 (bei SW Max)		0	100	-1	%	magnitude	manual	present
+1716	FLOAT	W	volatile	GLT Wärmespeichertemperatur					°C	magnitude	manual	present
+1718	FLOAT	W	volatile	GLT Kältespeichertemperatur					°C	magnitude	manual	present
+1720	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. unten					°C	magnitude	manual	present
+1722	FLOAT	W	volatile	GLT Trinkwarmwassererwärmertemp. oben					°C	magnitude	manual	present
+1746	FLOAT	RO	unknown	Elektrische Leistungsaufnahme (gesamt)					kWh	magnitude	gltmon	present
+1748	FLOAT	RO	volatile	Wärmemenge Heizen					kWh	magnitude	manual	present
+1750	FLOAT	RO	volatile	Wärmemenge Gesamt					kWh	magnitude	manual	present
+1752	FLOAT	RO	volatile	Wärmemenge Kühlen					kWh	magnitude	manual	present
+1754	FLOAT	RO	volatile	Wärmemenge Warmwasser					kWh	magnitude	manual	present
+1756	FLOAT	RO	volatile	Wärmemenge Abtauung					kWh	magnitude	manual	present
+1758	FLOAT	RO	volatile	Wärmemenge Passive Kühlung					kWh	magnitude	manual	present
+1760	FLOAT	RO	volatile	Wärmemenge Solar					kWh	magnitude	manual	present
+1762	FLOAT	RO	volatile	Wärmemenge Elektroheizeinsatz					kWh	magnitude	manual	present
+1790	FLOAT	RO	volatile	Thermische Momentanleistung					kW	magnitude	manual	present
+1792	FLOAT	RO	volatile	Momentanleistung Solar					kW	magnitude	manual	present
+1850	FLOAT	RO	volatile	Solar Kollektortemperatur (B73)					°C	magnitude	manual	present
+1852	FLOAT	RO	volatile	Solar Kollektorrücklauftemperatur (B75)					°C	magnitude	manual	present
+1854	FLOAT	RO	volatile	Solar Ladetemperatur (B74)					°C	magnitude	manual	present
+1856	UCHAR	RW	eeprom	Betriebsart Solar	SC002	0	4	0		enumeration	manual	present
+1857	FLOAT	RO	volatile	Solar WQ-Referenztemp./Pooltemp. (B76)					°C	magnitude	manual	present
+1870	FLOAT	RO	volatile	ISC Ladetemperatur Kühlen (B44)					°C	magnitude	manual	present
+1872	FLOAT	RO	volatile	ISC Rückkühltemperatur (B49)					°C	magnitude	manual	present
+1874	UCHAR	RO	volatile	ISC Modus		0	8			enumeration	manual	present
+1950	one-register	RO	unknown	Alarm Code 1						magnitude	gltmon	present
+1952	one-register	RO	unknown	Alarm Code 2						magnitude	gltmon	present
+1954	one-register	RO	unknown	Alarm Code 3						magnitude	gltmon	present
+1956	one-register	RO	unknown	Alarm Code 4						magnitude	gltmon	present
+1958	one-register	RO	unknown	Alarm Code 5						magnitude	gltmon	present
+1999	UCHAR	W	volatile	Störmeldungen quittieren						magnitude	manual	present
+2000	UCHAR	RO	volatile	Zonenmodul 1 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2001	UCHAR	RO	volatile	Zonenmodul 1 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2002	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2004	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2006	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2007	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2008	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 1		0	1			enumeration	manual	absent
+2009	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2011	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2013	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2014	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2015	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 2		0	1			enumeration	manual	absent
+2016	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2018	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2020	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2021	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2022	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 3		0	1			enumeration	manual	absent
+2023	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2025	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2027	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2028	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2029	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 4		0	1			enumeration	manual	absent
+2030	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2032	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2034	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2035	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2036	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 5		0	1			enumeration	manual	absent
+2037	FLOAT	RW/RO	volatile	Zonenmodul 1 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2039	FLOAT	RW	volatile	Zonenmodul 1 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2041	UCHAR	RW/RO	volatile	Zonenmodul 1 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2042	UCHAR	RW	volatile	Zonenmodul 1 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2043	UCHAR	RO	volatile	Zonenmodul 1 Status Relais Raum 6		0	1			enumeration	manual	absent
+2065	UCHAR	RO	volatile	Zonenmodul 2 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2066	UCHAR	RO	volatile	Zonenmodul 2 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2067	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2069	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2071	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2072	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2073	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 1		0	1			enumeration	manual	absent
+2074	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2076	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2078	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2079	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2080	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 2		0	1			enumeration	manual	absent
+2081	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2083	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2085	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2086	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2087	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 3		0	1			enumeration	manual	absent
+2088	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2090	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2092	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2093	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2094	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 4		0	1			enumeration	manual	absent
+2095	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2097	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2099	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2100	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2101	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 5		0	1			enumeration	manual	absent
+2102	FLOAT	RW/RO	volatile	Zonenmodul 2 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2104	FLOAT	RW	volatile	Zonenmodul 2 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2106	UCHAR	RW/RO	volatile	Zonenmodul 2 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2107	UCHAR	RW	volatile	Zonenmodul 2 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2108	UCHAR	RO	volatile	Zonenmodul 2 Status Relais Raum 6		0	1			enumeration	manual	absent
+2130	UCHAR	RO	volatile	Zonenmodul 3 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2131	UCHAR	RO	volatile	Zonenmodul 3 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2132	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2134	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2136	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2137	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2138	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 1		0	1			enumeration	manual	absent
+2139	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2141	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2143	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2144	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2145	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 2		0	1			enumeration	manual	absent
+2146	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2148	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2150	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2151	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2152	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 3		0	1			enumeration	manual	absent
+2153	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2155	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2157	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2158	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2159	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 4		0	1			enumeration	manual	absent
+2160	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2162	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2164	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2165	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2166	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 5		0	1			enumeration	manual	absent
+2167	FLOAT	RW/RO	volatile	Zonenmodul 3 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2169	FLOAT	RW	volatile	Zonenmodul 3 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2171	UCHAR	RW/RO	volatile	Zonenmodul 3 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2172	UCHAR	RW	volatile	Zonenmodul 3 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2173	UCHAR	RO	volatile	Zonenmodul 3 Status Relais Raum 6		0	1			enumeration	manual	absent
+2195	UCHAR	RO	volatile	Zonenmodul 4 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2196	UCHAR	RO	volatile	Zonenmodul 4 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2197	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2199	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2201	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2202	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2203	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 1		0	1			enumeration	manual	absent
+2204	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2206	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2208	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2209	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2210	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 2		0	1			enumeration	manual	absent
+2211	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2213	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2215	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2216	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2217	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 3		0	1			enumeration	manual	absent
+2218	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2220	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2222	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2223	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2224	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 4		0	1			enumeration	manual	absent
+2225	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2227	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2229	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2230	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2231	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 5		0	1			enumeration	manual	absent
+2232	FLOAT	RW/RO	volatile	Zonenmodul 4 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2234	FLOAT	RW	volatile	Zonenmodul 4 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2236	UCHAR	RW/RO	volatile	Zonenmodul 4 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2237	UCHAR	RW	volatile	Zonenmodul 4 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2238	UCHAR	RO	volatile	Zonenmodul 4 Status Relais Raum 6		0	1			enumeration	manual	absent
+2260	UCHAR	RO	volatile	Zonenmodul 5 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2261	UCHAR	RO	volatile	Zonenmodul 5 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2262	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2264	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2266	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2267	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2268	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 1		0	1			enumeration	manual	absent
+2269	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2271	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2273	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2274	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2275	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 2		0	1			enumeration	manual	absent
+2276	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2278	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2280	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2281	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2282	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 3		0	1			enumeration	manual	absent
+2283	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2285	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2287	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2288	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2289	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 4		0	1			enumeration	manual	absent
+2290	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2292	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2294	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2295	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2296	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 5		0	1			enumeration	manual	absent
+2297	FLOAT	RW/RO	volatile	Zonenmodul 5 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2299	FLOAT	RW	volatile	Zonenmodul 5 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2301	UCHAR	RW/RO	volatile	Zonenmodul 5 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2302	UCHAR	RW	volatile	Zonenmodul 5 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2303	UCHAR	RO	volatile	Zonenmodul 5 Status Relais Raum 6		0	1			enumeration	manual	absent
+2325	UCHAR	RO	volatile	Zonenmodul 6 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2326	UCHAR	RO	volatile	Zonenmodul 6 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2327	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2329	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2331	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2332	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2333	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 1		0	1			enumeration	manual	absent
+2334	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2336	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2338	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2339	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2340	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 2		0	1			enumeration	manual	absent
+2341	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2343	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2345	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2346	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2347	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 3		0	1			enumeration	manual	absent
+2348	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2350	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2352	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2353	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2354	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 4		0	1			enumeration	manual	absent
+2355	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2357	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2359	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2360	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2361	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 5		0	1			enumeration	manual	absent
+2362	FLOAT	RW/RO	volatile	Zonenmodul 6 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2364	FLOAT	RW	volatile	Zonenmodul 6 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2366	UCHAR	RW/RO	volatile	Zonenmodul 6 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2367	UCHAR	RW	volatile	Zonenmodul 6 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2368	UCHAR	RO	volatile	Zonenmodul 6 Status Relais Raum 6		0	1			enumeration	manual	absent
+2390	UCHAR	RO	volatile	Zonenmodul 7 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2391	UCHAR	RO	volatile	Zonenmodul 7 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2392	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2394	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2396	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2397	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2398	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 1		0	1			enumeration	manual	absent
+2399	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2401	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2403	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2404	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2405	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 2		0	1			enumeration	manual	absent
+2406	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2408	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2410	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2411	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2412	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 3		0	1			enumeration	manual	absent
+2413	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2415	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2417	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2418	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2419	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 4		0	1			enumeration	manual	absent
+2420	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2422	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2424	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2425	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2426	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 5		0	1			enumeration	manual	absent
+2427	FLOAT	RW/RO	volatile	Zonenmodul 7 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2429	FLOAT	RW	volatile	Zonenmodul 7 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2431	UCHAR	RW/RO	volatile	Zonenmodul 7 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2432	UCHAR	RW	volatile	Zonenmodul 7 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2433	UCHAR	RO	volatile	Zonenmodul 7 Status Relais Raum 6		0	1			enumeration	manual	absent
+2455	UCHAR	RO	volatile	Zonenmodul 8 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2456	UCHAR	RO	volatile	Zonenmodul 8 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2457	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2459	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2461	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2462	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2463	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 1		0	1			enumeration	manual	absent
+2464	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2466	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2468	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2469	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2470	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 2		0	1			enumeration	manual	absent
+2471	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2473	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2475	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2476	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2477	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 3		0	1			enumeration	manual	absent
+2478	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2480	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2482	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2483	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2484	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 4		0	1			enumeration	manual	absent
+2485	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2487	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2489	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2490	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2491	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 5		0	1			enumeration	manual	absent
+2492	FLOAT	RW/RO	volatile	Zonenmodul 8 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2494	FLOAT	RW	volatile	Zonenmodul 8 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2496	UCHAR	RW/RO	volatile	Zonenmodul 8 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2497	UCHAR	RW	volatile	Zonenmodul 8 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2498	UCHAR	RO	volatile	Zonenmodul 8 Status Relais Raum 6		0	1			enumeration	manual	absent
+2520	UCHAR	RO	volatile	Zonenmodul 9 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2521	UCHAR	RO	volatile	Zonenmodul 9 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2522	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2524	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2526	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2527	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2528	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 1		0	1			enumeration	manual	absent
+2529	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2531	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2533	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2534	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2535	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 2		0	1			enumeration	manual	absent
+2536	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2538	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2540	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2541	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2542	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 3		0	1			enumeration	manual	absent
+2543	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2545	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2547	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2548	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2549	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 4		0	1			enumeration	manual	absent
+2550	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2552	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2554	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2555	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2556	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 5		0	1			enumeration	manual	absent
+2557	FLOAT	RW/RO	volatile	Zonenmodul 9 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2559	FLOAT	RW	volatile	Zonenmodul 9 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2561	UCHAR	RW/RO	volatile	Zonenmodul 9 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2562	UCHAR	RW	volatile	Zonenmodul 9 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2563	UCHAR	RO	volatile	Zonenmodul 9 Status Relais Raum 6		0	1			enumeration	manual	absent
+2585	UCHAR	RO	volatile	Zonenmodul 10 Modus Heizen/Kühlen A14		0	1			enumeration	manual	absent
+2586	UCHAR	RO	volatile	Zonenmodul 10 Entfeuchtungsausgang A12		0	1	0		enumeration	manual	absent
+2587	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 1		15	30		°C	magnitude	manual	absent
+2589	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 1					°C	magnitude	manual	absent
+2591	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 1		0	100		%rF	magnitude	manual	absent
+2592	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 1		0	4			enumeration	manual	absent
+2593	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 1		0	1			enumeration	manual	absent
+2594	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 2		15	30		°C	magnitude	manual	absent
+2596	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 2					°C	magnitude	manual	absent
+2598	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 2		0	100		%rF	magnitude	manual	absent
+2599	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 2		0	4			enumeration	manual	absent
+2600	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 2		0	1			enumeration	manual	absent
+2601	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 3		15	30		°C	magnitude	manual	absent
+2603	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 3					°C	magnitude	manual	absent
+2605	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 3		0	100		%rF	magnitude	manual	absent
+2606	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 3		0	4			enumeration	manual	absent
+2607	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 3		0	1			enumeration	manual	absent
+2608	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 4		15	30		°C	magnitude	manual	absent
+2610	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 4					°C	magnitude	manual	absent
+2612	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 4		0	100		%rF	magnitude	manual	absent
+2613	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 4		0	4			enumeration	manual	absent
+2614	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 4		0	1			enumeration	manual	absent
+2615	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 5		15	30		°C	magnitude	manual	absent
+2617	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 5					°C	magnitude	manual	absent
+2619	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 5		0	100		%rF	magnitude	manual	absent
+2620	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 5		0	4			enumeration	manual	absent
+2621	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 5		0	1			enumeration	manual	absent
+2622	FLOAT	RW/RO	volatile	Zonenmodul 10 Raumtemperatur Raum 6		15	30		°C	magnitude	manual	absent
+2624	FLOAT	RW	volatile	Zonenmodul 10 Raumsolltemperatur Raum 6					°C	magnitude	manual	absent
+2626	UCHAR	RW/RO	volatile	Zonenmodul 10 Raumfeuchte Raum 6		0	100		%rF	magnitude	manual	absent
+2627	UCHAR	RW	volatile	Zonenmodul 10 Betriebsart Raum 6		0	4			enumeration	manual	absent
+2628	UCHAR	RO	volatile	Zonenmodul 10 Status Relais Raum 6		0	1			enumeration	manual	absent
+4001	UCHAR	RO	volatile	Booster Störungen		0	3			enumeration	manual	present
+4002	UCHAR	RO	volatile	Booster Verriegelung		0	3			magnitude	manual	present
+4010	FLOAT	RO	volatile	Booster A Wärmequelleneintrittstemperatur					°C	magnitude	manual	present
+4012	FLOAT	RO	volatile	Booster A Wärmequellenaustrittstemperatur					°C	magnitude	manual	present
+4014	FLOAT	RO	volatile	Booster A Wärmespeichertemperatur (B104)					°C	magnitude	manual	present
+4016	FLOAT	RO	volatile	Booster A Vorlauftemperatur					°C	magnitude	manual	present
+4018	FLOAT	RO	volatile	Booster A Rücklauftemperatur					°C	magnitude	manual	present
+4020	WORD	RO	volatile	Booster A Wärmequellenpumpe		0	100	-1	%	magnitude	manual	present
+4021	WORD	RO	volatile	Booster A Ladepumpe		0	100	-1	%	magnitude	manual	present
+4022	UCHAR	RO	volatile	Booster A Verdichter		0	1			magnitude	manual	present
+4040	FLOAT	RO	volatile	Booster B Wärmequelleneintrittstemperatur					°C	magnitude	manual	present
+4042	FLOAT	RO	volatile	Booster B Wärmequellenaustrittstemperatur					°C	magnitude	manual	present
+4044	FLOAT	RO	volatile	Booster B Wärmespeichertemperatur (B104)					°C	magnitude	manual	present
+4046	FLOAT	RO	volatile	Booster B Vorlauftemperatur					°C	magnitude	manual	present
+4048	FLOAT	RO	volatile	Booster B Rücklauftemperatur					°C	magnitude	manual	present
+4050	WORD	RO	volatile	Booster B Wärmequellenpumpe		0	100	-1	%	magnitude	manual	present
+4051	WORD	RO	volatile	Booster B Ladepumpe		0	100	-1	%	magnitude	manual	present
+4052	UCHAR	RO	volatile	Booster B Verdichter		0	1			magnitude	manual	present
+4108	FLOAT	RW	volatile	Leistungsbegrenzung Wärmepumpe				-1	kW	magnitude	manual	present
+4110	one-register	RW	unknown	Sperre						magnitude	gltmon	present
+4113	one-register	RW	unknown	Sperre Booster 1						magnitude	gltmon	present
+4114	one-register	RW	unknown	Sperre Booster 2						magnitude	gltmon	present
+4122	FLOAT	RO	volatile	Elektrische Gesamtleistung Wärmepumpe					kW	magnitude	manual	present
+4124	FLOAT	RO	volatile	Elektr. Gesamtleist. Wärmepumpe (Smartfox)					kW	magnitude	manual	present
+4126	FLOAT	RO	unknown	thermische Leistung (basierend auf Durchflusssensor)					kW	magnitude	gltmon	present
+4128	FLOAT	RO	unknown	Wärmemenge gesamt					kWh	magnitude	gltmon	present
+4132	FLOAT	RW	unknown	Kaskadenleistung Heizen					%	magnitude	gltmon	present
+4136	FLOAT	RW	unknown	Kaskadenleistung Kühlen					%	magnitude	gltmon	present
+4140	FLOAT	RW	unknown	Kaskadenleistung Vorrangladung					%	magnitude	gltmon	present

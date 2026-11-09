@@ -167,8 +167,9 @@ render s =
         NoValueOr v -> "-- or " <> shown v
         Measured v -> shown v
     shown v = case (v, sampleLabel s) of
-      (Count n, Just l) -> show n <> " " <> T.unpack l
-      (Count n, Nothing) -> show n
+      (Count n, _) -> show n
+      (Code n, Just l) -> show n <> " " <> T.unpack l
+      (Code n, Nothing) -> show n
       (Real x, _) -> printf "%.2f" x
       (Flag b, _) -> if b then "on" else "off"
       (DriveSignal NotDriven, _) -> "not driven"
@@ -339,12 +340,14 @@ watchLine t s reg o =
   where
     stamp = formatTime defaultTimeLocale "%Y-%m-%dT%H:%M:%S%3Q%Ez"
 
--- 'Flag' and 'DriveSignal' are what 'decode' makes of a word; 'asWritten'
--- applies no convention, so the capture only ever sees the first two.
+-- 'Code', 'Flag' and 'DriveSignal' are what 'decode' makes of a word;
+-- 'asWritten' applies no convention, so the capture only ever sees the first
+-- two.
 number :: Value -> String
 number v = case v of
   Real x -> show x
   Count n -> show n
+  Code n -> show n
   Flag b -> if b then "true" else "false"
   DriveSignal NotDriven -> "-1"
   DriveSignal (Driven n) -> show n

@@ -183,6 +183,25 @@ checks =
       decodeRaw 1006 (B.pack [0xff, 0xff]) == Just NoValue
         && decodeRaw 1714 (B.pack [0xff, 0xfe]) == Just NoValue
     ),
+    ( "a machine switched off holds a code, not no value",
+      -- 1005 read ffff in "Aus" and 0003 in "Urlaub", which the manual does
+      -- not print, so its range reaches down to the measured -1
+      decodeRaw 1005 (B.pack [0xff, 0xff]) == Just (Measured (Code (-1)))
+        && Table.enumLabel (Address 1005) (-1) == Just (T.pack "Aus")
+        && decodeRaw 1005 (B.pack [0x00, 0x03]) == Just (Measured (Code 3))
+        && Table.enumLabel (Address 1005) 3 == Just (T.pack "Urlaub")
+    ),
+    ( "a code is not a count, and a scale's labeled points are neither",
+      decodeRaw 1110 (B.pack [0x00, 0x01]) == Just (Measured (Code 1))
+        && decodeRaw 1032 (B.pack [0x00, 0x2e]) == Just (Measured (Count 46))
+        && registerScale (register 1104) == Magnitude
+        && registerScale (register 1712) == Magnitude
+    ),
+    ( "an enumeration is written from a code, and a count from a count",
+      encode (register 1005) (Code (-1)) == Right (One 0xFFFF)
+        && encode (register 1005) (Count 1) == Left (Mismatch UChar (Count 1))
+        && encode (register 1032) (Code 46) == Left (Mismatch UChar (Code 46))
+    ),
     ( "widths match the datatypes",
       registerWidth Float32 == registerPair && registerWidth UChar == singleRegister
     ),
@@ -473,6 +492,7 @@ roundTrips r = case registerDatatype r of
     let n = maybe 1 (round . rangeMaximum) (registerRange r)
         v
           | registerUnit r == Just Percent && maybe False ((< 0) . rangeMinimum) (registerRange r) = DriveSignal (Driven n)
+          | registerScale r == Enumeration = Code n
           | otherwise = Count n
      in back v == Right (Just (Measured v))
   where

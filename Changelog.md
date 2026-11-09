@@ -118,6 +118,20 @@
   `idm-dump --watch`, and writes final values to all three when it ends, so
   no value it was writing stays behind. `tools/runtable.py` lines up a run's watch,
   webwatch and write log by time, with the mean of 74 the controller weighs.
+- `Code`, the `Value` of a register whose number is a code of an
+  enumeration, as against a `Count`. `Register` gained `registerScale`, a
+  `Scale`, `Magnitude` or `Enumeration`, which `tools/transcribe.py` derives
+  from the labels into a `scale` column of the table: a labeled register is
+  an enumeration, but for a `BOOL` and a percentage, whose labels mark points
+  of its scale. `decode` gives an enumeration a `Code`, `encode` takes one
+  there and refuses a `Count` as a `Mismatch`, and the reverse. `idm-write`
+  reads its value as the register's scale says.
+- `data/navigator-10-measured-enums.tsv`, the codes measured on the machine
+  that the manual does not print, written by hand, each with the document
+  holding its evidence. `tools/transcribe.py` adds them to the enumerations,
+  widens the register's range to a code outside it, and refuses a code the
+  manual labels already. It holds 1005's -1 "Aus" and 3 "Urlaub"
+  (`doc/verification-2026-10-15-web-app.md`).
 
 ### Changed
 
@@ -271,3 +285,7 @@
   `replyTo`, formerly `answerIn`, reads that as `Inaccessible`, a request
   fails with `Refused`, and the session goes on. `idm-web --show` names the
   user level beside a refused setting and goes on with the next.
+- 1005, the operating mode, read a machine switched off for no value: "Aus"
+  arrives as `ffff`, the word of an unfitted sensor. Its range now reaches
+  the measured -1, a `UCHAR` reads a negative word inside its range as a
+  value, and 1005 reads `Code (-1)`, "Aus", and `Code 3`, "Urlaub".

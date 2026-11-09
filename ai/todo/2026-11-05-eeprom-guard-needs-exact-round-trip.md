@@ -37,8 +37,10 @@ the same day: 4108 is volatile. Which write settles it is open again.
    Each of the two writes costs one cycle.
 2. If the bytes differ, compare decoded values instead, at the resolution
    the controller keeps. That resolution is not in the table, so it would
-   be a measured fact entering the table, the question of
-   `decide-how-a-measured-fact-enters-the-table`.
+   be a measured fact entering the table. For codes,
+   `decide-how-a-measured-fact-enters-the-table` chose a hand-written input
+   that `tools/transcribe.py` joins, citing its evidence; a resolution
+   would follow it.
 
 Option 2 without step 1 would guess a resolution. Step 1 alone is enough if
 the bytes match.

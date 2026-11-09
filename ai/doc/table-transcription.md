@@ -50,6 +50,24 @@ the settings tree no address, so only moving a setting and watching which
 register follows can join them. The script reads that file in either case
 and, given the webapi capture, refuses a join the capture contradicts.
 
+## Codes the manual does not print
+
+A code of an enumeration measured on the machine is the third hand-written
+input, `data/navigator-10-measured-enums.tsv`: address, code, label, and the
+document in `doc/` that holds the evidence. The script adds the codes to the
+enumerations and widens the register's range to a code outside it, so 1005
+reads -1 to 5 and its `ffff`, "Aus", decodes as a value. It refuses an
+address the table lacks, a code already labeled, which a revision printing it
+makes redundant, evidence that is no file, and a register with no range. A
+row carries no software: like the manual's, its fact is taken to hold until
+a measurement says otherwise. A fact that is not a code, such as 1104 not
+following M73, stays prose in `doc/`.
+
+The `scale` column, `magnitude` or `enumeration`, is derived from the labels:
+a labeled register is an enumeration, but for a `BOOL` and a percentage,
+whose labels mark points of its scale, as at 1104. `decode` gives an
+enumeration a `Code` rather than a `Count`.
+
 ## Software
 
 The script reads `data/navigator-10-software.tsv` and refuses a capture

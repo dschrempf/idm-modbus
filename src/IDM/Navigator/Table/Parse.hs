@@ -36,7 +36,7 @@ parsedFile parse path = joinCode $ do
 parseRegisters :: B.ByteString -> Either String [Register]
 parseRegisters =
   tsv
-    ["address", "datatype", "access", "persistence", "name", "parameter", "min", "max", "default", "unit", "source", "observed"]
+    ["address", "datatype", "access", "persistence", "name", "parameter", "min", "max", "default", "unit", "scale", "source", "observed"]
     parseRegister
 
 parseEnums :: B.ByteString -> Either String [((Address, Int), Text)]
@@ -71,13 +71,14 @@ tsv header row bytes = case zip [1 :: Int ..] (map (T.splitOn "\t") (T.lines (TE
   [] -> Left "1: no header"
 
 parseRegister :: [Text] -> Either String Register
-parseRegister [addr, dtype, access, persistence, name, param, lo, hi, def, unit, source, presence] = do
+parseRegister [addr, dtype, access, persistence, name, param, lo, hi, def, unit, scale, source, presence] = do
   a <- parseAddress addr
   d <- cell "datatype" parseDatatype dtype
   acc <- cell "access" parseAccess access
   p <- cell "persistence" parsePersistence persistence
   r <- parseRange lo hi
   df <- traverse (cell "default" readMaybeT) (nonEmpty def)
+  sc <- cell "scale" parseScale scale
   s <- cell "source" parseSource source
   pr <- cell "observed" parsePresence presence
   pure
@@ -91,10 +92,11 @@ parseRegister [addr, dtype, access, persistence, name, param, lo, hi, def, unit,
         registerRange = r,
         registerDefault = df,
         registerUnit = parseUnit <$> nonEmpty unit,
+        registerScale = sc,
         registerSource = s,
         registerPresence = pr
       }
-parseRegister cells = Left ("12 cells expected, found " <> show (length cells))
+parseRegister cells = Left ("13 cells expected, found " <> show (length cells))
 
 parseEnum :: [Text] -> Either String ((Address, Int), Text)
 parseEnum [addr, code, label] = do
@@ -142,6 +144,12 @@ parsePersistence t = case t of
   "eeprom" -> Just Eeprom
   "volatile" -> Just Volatile
   "unknown" -> Just UnknownPersistence
+  _ -> Nothing
+
+parseScale :: Text -> Maybe Scale
+parseScale t = case t of
+  "magnitude" -> Just Magnitude
+  "enumeration" -> Just Enumeration
   _ -> Nothing
 
 parseSource :: Text -> Maybe Source

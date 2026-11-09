@@ -13,7 +13,11 @@ document that `doc/software-versions.md` points to.
   are locks (`power-limit-4108-semantics-unknown`).
 - `doc/verification-2026-10-16-charge-pump.md`: 1074 is M73's signal, now
   from the manual too, and 1104 does not follow it
-  (`charge-pump-status-1104-reads-not-driven-while-pumping`).
+  (`charge-pump-status-1104-reads-not-driven-while-pumping`). It is prose
+  in `doc/research.md`'s open questions and in the haddock of `Drive`
+  (`decide-how-a-measured-fact-enters-the-table`); if it holds here too,
+  weigh again a `Presence` constructor for a register that answers but does
+  not follow its quantity, which takes 1104 out of `present`.
 - `doc/verification-2026-11-05-floor.md`: the floor of 24 rps at 0.67 kW.
 - `doc/verification-2026-10-01-charge.md`: a hot water charge.
 - `doc/verification-2026-09-20.md`: the display against the registers.
