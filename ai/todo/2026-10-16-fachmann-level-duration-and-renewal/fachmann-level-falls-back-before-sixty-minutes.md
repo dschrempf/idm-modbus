@@ -24,6 +24,8 @@ plans that renewal around the hour.
 1. On several days, enter the level and read it every 30 s with
    `idm-web --status` until it falls back, as the log of 16:36 did; once at
    rest, once with a watch asking every 10 s, once with the display touched.
+   The watch is the optional part of the heating run of 2026-11-09 at
+   15:00 (`recheck-control-behavior-on-20-24-2608`).
 2. State in those four places what step 1 finds, and record it in a dated
    `doc/`.
 3. Re-check `fachmann-entry-right-after-leaving-is-ignored` against it.

@@ -45,6 +45,9 @@ the one the manufacturer means.
   long-running `idm-dump --watch 600` gives that. With some days of both,
   each hypothesis is a regression on the daily rows, which I can do from the
   captures.
+- The counters start with the watch of the heating run of 2026-11-09 at
+  15:00 and go on at 600 s after it (`recheck-control-behavior-on-20-24-2608`).
+  That day's row holds the noon PV run; the rows from 2026-11-10 count.
 - Then record the outcome in a dated `doc/`, and close the open question in
   `doc/research.md`.
 
