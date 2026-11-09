@@ -43,31 +43,36 @@ Settled on the machine, 2026-11-05 to 2026-11-09:
   (noon of 2026-11-09, `doc/verification-2026-11-09-power-limit-floor.md`).
 - The controller names a PV run's request `RD_REQ_PV`, in `system`
   `overview` and `home` `detail` alike (same run).
+- 4108 at 1.0 from before the start let the start program through at up to
+  1.43 kW and then held 1.01 kW, 38 to 40 rps, for 26 minutes; the
+  controller withdrew the request 30 min 50 s after the start, B38 2.1 K
+  below `PV006`, for no reason a capture shows: not a defrost, an error or
+  a lock (evening of 2026-11-09,
+  `doc/verification-2026-11-09-power-limit-held-at-1-0.md`).
 
 So 4108 holds a run past the minimum runtime at 1.0 to 1.5 kW, and ends it
 below 1.0: about 1.0 kW is the lowest run it gives, not the floor's 0.6 to
-0.74. Open: how long a run at 1.0 from the start holds, what decides at the
+0.74. Open: what ended the run at 1.0 before `PV006`, what decides at the
 minimum runtime, whether 88 weighs in a start or a stop, what sets the 30
 minutes, and what the controller does with a value no one renews.
 
 ## Next, in order
 
-1. 4108, `Leistungsbegrenzung Wärmepumpe`, as a cap under a PV run: a
-   constant surplus at 74, which alone drives the speed to the top, and a
-   limit at 4108. 1.5 and 1.2 from before the start capped the run, 1.0
-   under a running one too, and 0.9 ended it. Left: 1.0 from before the
-   start, held to `PV006`. The steps are in
-   `power-limit-4108-semantics-unknown.md`.
-2. The meter-style run with `PV011` at 0.5 min, with the PV the meter
+1. The meter-style run with `PV011` at 0.5 min, with the PV the meter
    simulates near the floor's draw: whether the loop settles there, and
    whether a settled loop, its mean near 0, ends at the minimum runtime as
    74 at 0 did. This is the feed evcc's Lambda workaround would give an
    iDM, but renewed every 60 s and clamped at 0; stock evcc adds the draw
    (`what-evcc-writes-to-74.md`).
-3. The overnight test of 74, `does-the-control-act-on-a-74-no-one-renews.md`.
+2. The overnight test of 74, `does-the-control-act-on-a-74-no-one-renews.md`.
    A restart from the display is measured; a power cycle at the mains
    switch is not, and is not needed for it.
-4. A PV hot water charge.
+3. A PV hot water charge.
+
+4108 as a cap, the former step 1, is done: 1.0 to 1.5 caps a run, 0.9
+ends it, and 1.0 from the start held 30 minutes and then ended before
+`PV006`. Why it ended is open in `power-limit-4108-semantics-unknown.md`,
+with the run that would tell, not ranked among the steps.
 
 Every run watches the request reason beside its settings,
 `idm-web HOST --watch 10 --reason SETTING...`
@@ -77,13 +82,13 @@ as PV's or a circuit's.
 ## Files
 
 - `power-limit-4108-semantics-unknown.md`: 4108 from the first reads to the
-  cap of 2026-11-08 and the line at 1.0 of 2026-11-09, and the run left of
-  step 1; what of 4108 lies outside a PV run.
+  cap of 2026-11-08, the line at 1.0 and the run held at 1.0 of 2026-11-09,
+  and what ended that run; what of 4108 lies outside a PV run.
 - `does-88-set-the-export-the-pv-controller-holds.md`: the runs of
-  2026-11-07 on 88, answered no for the speed, and step 2 with its
+  2026-11-07 on 88, answered no for the speed, and step 1 with its
   schedule.
 - `does-the-control-act-on-a-74-no-one-renews.md`: 74 keeps its value past
-  `SSYSPV030`'s five hours; whether the control acts on it is step 3.
+  `SSYSPV030`'s five hours; whether the control acts on it is step 2.
 - `what-a-power-cycle-does-to-74-and-the-controller.md`: what a restart
   leaves behind, 74 among it; answered for `System Neustart`, open for a
   power cycle and an update.

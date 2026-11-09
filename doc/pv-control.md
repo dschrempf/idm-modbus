@@ -279,7 +279,11 @@ the minimum runtime. On 2026-11-08 one at `PV006`, after 46 minutes 30
 seconds at 52 to 59 rps, with 74 at 2.0 and 4108 at 1.5 throughout. On
 2026-11-09 one 17 minutes 30 seconds after the start, within 8 s of 0.9
 written to 4108 at a draw of 1.0 kW, where 1.0 had capped the run: a limit
-below 1.0 ends a run however close to the draw. Not
+below 1.0 ends a run however close to the draw. That evening one 30 minutes
+50 seconds after the start, at 37 rps, with 74 at 2.0 and 4108 at 1.0
+throughout and the store 2.1 K below `PV006`: the controller withdrew the
+request, for no reason the captures show
+(`doc/verification-2026-11-09-power-limit-held-at-1-0.md`). Not
 settled what
 "requested" is, why the minimum runtime did not hold, or why 0 held the one
 run and ended the other.
@@ -317,9 +321,14 @@ start, it let the start program draw 1.24 to 1.30 kW and then held the draw
 at 1.19 kW on average past the minimum runtime; lowered to 1.0 under the
 run, it brought the speed down to 38.4 rps within 20 s and the draw to
 0.98 kW; lowered to 0.9, it ended the run within 8 s
-(`doc/verification-2026-11-09-power-limit-floor.md`). So 4108 holds a run
-at 1.0 to 1.5 kW, and below 1.0 ends it: the lowest run it gives is about
-1.0 kW, above the floor's draw. Whether a limit below 1.0 written before
+(`doc/verification-2026-11-09-power-limit-floor.md`). Written 1.0 before
+the start, it let the start program draw up to 1.43 kW and then held the
+draw at 1.01 kW on average, 37 to 41 rps, for 26 minutes, until the
+controller ended the run 2.1 K below `PV006`
+(`doc/verification-2026-11-09-power-limit-held-at-1-0.md`). So 4108 holds a
+run at 1.0 to 1.5 kW, and below 1.0 ends it: the lowest run it gives is
+about 1.0 kW, above the floor's draw. What ended the run at 1.0 early is
+open. Whether a limit below 1.0 written before
 the start holds off the start is untested. And
 `IV002` `N2_MOD_MAX_POWER_HEATING`, a Fachmann setting in percent that would
 cap every heating run, not only a PV one, and did not bind in the one run

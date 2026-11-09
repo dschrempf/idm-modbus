@@ -157,6 +157,36 @@ through, as 1.2 did, and how long a run at 1.0 holds. Whether a limit
 below 1.0 written before the start holds off a start stays open: no use a
 consumer has for 4108 depends on it.
 
+## 2026-11-09, evening: 1.0 from the start holds 30 minutes, then ends
+
+4108 at 1.0 from before the start, beside 74 at a constant 2.0, held to
+the end: the start program drew 1.11 to 1.43 kW at 50.4 rps and was not
+cut; after it the speed came down to 37.2 to 40.8 rps and the draw held
+1.01 kW on average for 26 minutes, past the minimum runtime. Then the
+controller withdrew the request, `info` 33 to 0 before the compressor
+stopped, 30 min 50 s after the start, with B38 at 37.9 °C, 2.1 K below
+`PV006`; no error, no lock, no defrost
+(`doc/verification-2026-11-09-power-limit-held-at-1-0.md`). The run on 1.5
+of 2026-11-08 had gone on to 40.00 °C.
+
+The steps of 2026-11-08 are done: 4108 caps a PV run at 1.0 to 1.5 kW from
+the start and under a running run, and ends it below 1.0. Left of them:
+what ended the run at 1.0. Two candidates, neither ruled out:
+
+- **The flow against `PV006`.** It read 39.8 °C at the stop, below 40.
+  Against it: on 2026-11-08 B38 reached 40.00 °C, so the flow, above B38
+  while the store charges, stood above 40 for a while without ending that
+  run. Nothing recorded the flow then.
+- **A time of about 30 minutes**, for a capped run or one at low speed; the
+  run on 1.5 held 46 min 30 s.
+
+The run that tells them apart: 1.0 again from a store near 30 °C, with
+1050 `Wärmepumpen Vorlauftemperatur (B33)` in the Modbus watch. A stop
+near 30 minutes with B38 and the flow well below 40 is the time; a stop at
+a flow of 40 or so is the temperature. Plotting the flow in a graph of the
+controller's, so that its history outlasts the watch, is a `save` and
+stays manual.
+
 ## 2026-11-08: evcc does not use it
 
 Neither idm-waermepumpen (evcc-io/evcc#19002) nor the Lambda threads it

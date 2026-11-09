@@ -40,8 +40,9 @@ Writing is supported for three targets, each tried on the machine:
   tried so far had any effect on a PV run.
 - `HeatPumpPowerLimit` (4108): a limit from 1.0 to 1.5 kW caps a PV run
   after its start program, also when it is lowered while the run goes on; a
-  limit below 1.0 kW ends the run. The value is lost when the controller
-  restarts.
+  limit below 1.0 kW ends the run. A run capped at 1.0 kW held 30 minutes
+  and then ended before the store reached its PV maximum, for a reason not
+  yet known. The value is lost when the controller restarts.
 
 `doc/pv-control.md` collects what we know about the controller's PV control
 and what is still open.

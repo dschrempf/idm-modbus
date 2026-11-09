@@ -109,9 +109,11 @@
 - A third target, `HeatPumpPowerLimit`, 4108
   `Leistungsbegrenzung Wärmepumpe`. A limit from 1.0 to 1.5 kW caps a PV
   run after its start program, also when lowered under the run, and one
-  below 1.0 kW ends it
+  below 1.0 kW ends it; one capped at 1.0 kW ended after 30 minutes, short
+  of `PV006`, for a reason not yet known
   (`doc/verification-2026-11-08-power-limit-cap.md`,
   `doc/verification-2026-11-09-power-limit-floor.md`,
+  `doc/verification-2026-11-09-power-limit-held-at-1-0.md`,
   `doc/verification-2026-11-07-power-limit.md`), and a restart returns it to
   its default, -1, so its cost `'Free` holds
   (`doc/verification-2026-11-07-restart.md`).

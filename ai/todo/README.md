@@ -5,9 +5,10 @@ its own note. The PV control comes first, then the rest.
 
 ## 1. PV control
 
-`pv-control-of-74-and-88`, in its README's order: 4108 at 1.0 from before
-the start, held to `PV006`; the meter-style run with `PV011` at 0.5 min;
-the overnight test of 74; a PV hot water charge.
+`pv-control-of-74-and-88`, in its README's order: the meter-style run with
+`PV011` at 0.5 min; the overnight test of 74; a PV hot water charge. 4108
+as a cap is done; what ended the run at 1.0 before `PV006` is open in its
+note, unranked.
 
 Each run on 74 or 88 watches the request reason too, with
 `idm-web --watch SECONDS --reason` (`watch-the-request-reason-pv-in-idm-web`,

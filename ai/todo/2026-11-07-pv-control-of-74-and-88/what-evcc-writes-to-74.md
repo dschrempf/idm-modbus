@@ -30,7 +30,7 @@ watchdog with a 2-minute timeout. Its author holds that an iDM behaves the
 same and the YAML carries over with the registers changed; untested on an
 iDM.
 
-On this machine that is the meter-style feed of step 2 of the README, with
+On this machine that is the meter-style run of the README, with
 two differences:
 
 - **Renewed every 60 s.** The Lambda wants a value within 5 minutes and
@@ -38,11 +38,11 @@ two differences:
   (`SSYSPV030`) and smoothed over `PV011`.
 - **Never negative.** Here a value below 0 ends a run. Clamped, a run ends
   at `PV006`, or at the minimum runtime where 0 ends it, as on the evening
-  of 2026-11-07 but not on 2026-11-06. Step 2 should feed the export
+  of 2026-11-07 but not on 2026-11-06. That run should feed the export
   unclamped, and note what the same run would do clamped.
 
 ## Reported
 
 Answered in evcc-io/evcc#19002 on 2026-11-08: the double count, not to
-clamp at 0, and 4108 as a cap set before the start. Once step 2 has run,
+clamp at 0, and 4108 as a cap set before the start. Once the meter-style run is done,
 its outcome goes there too.
