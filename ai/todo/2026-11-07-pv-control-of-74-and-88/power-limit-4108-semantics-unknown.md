@@ -148,5 +148,5 @@ steps above.
 
 Two questions this folder's runs do not answer: what 4108 does outside a PV
 run, for a grid operator's dimming, and what the locks at 4110, 4113 and
-4114 do. Both need writes of their own, and both are in the mail of
-`ask-idm-support-for-812170-covering-20-24-2608`.
+4114 do. Both need writes of their own; the mail to iDM support that would
+have asked them was dropped (`ask-idm-support-for-812170-covering-20-24-2608`).

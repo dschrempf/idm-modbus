@@ -6,12 +6,9 @@ PV control, then the rest.
 
 ## 1. From the community projects
 
-1. `watch-the-request-reason-pv-in-idm-web`: step 1 is a capture during the
-   next PV run; steps 2 and 3 after its design questions, before the runs
-   that need the reason.
-2. `ask-idm-support-for-812170-covering-20-24-2608`: the mail.
-   `search-the-web-for-812663-newer-than-rev-0` found no revision newer
-   than 0, so the mail is the way.
+`watch-the-request-reason-pv-in-idm-web`: step 1 is a capture during the
+next PV run; steps 2 and 3 after its design questions, before the runs that
+need the reason.
 
 ## 2. PV control
 

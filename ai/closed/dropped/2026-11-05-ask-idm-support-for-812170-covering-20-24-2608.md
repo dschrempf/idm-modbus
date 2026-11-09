@@ -36,3 +36,9 @@ Xerolux/idm-heatpump-api and is in `manual/` as `812663-rev0.pdf`. Its
 parameter list is revision 12's but for zone rooms 7 to 9 and a footnote
 (`doc/research.md`, "The authoritative source"), so it answers none of the
 questions above; the mail now asks for a newer revision of it.
+
+## 2026-11-09: dropped
+
+The mail will not be written. The questions it held stay open where they
+are measured: 4108 and the locks at 4110 to 4114 in
+`power-limit-4108-semantics-unknown`; a newer 812663 has no note of its own.
