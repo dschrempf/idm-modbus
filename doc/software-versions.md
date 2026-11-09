@@ -107,10 +107,15 @@ completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01
 - **Graph channels:** the same 59, but 112 and 365, both `T20x_QACT`
   before, are now `N2_THERMAL_PERFORMANCE_POLY` and
   `N2_THERMAL_PERFORMANCE_FLOWSENSOR`.
-- **At Kunde level** the legionella settings `FW045` and `FW046` and
-  `N2_PING` no longer show, against `…-webapi-20.24-1574-2026-09-20-2218.json`. At
-  Fachmann level they do. A setting changed since may hide them, as well as
-  the update.
+- **The legionella settings** `FW045` and `FW046` are not in the walks of
+  2608, at Kunde level or at Fachmann. The update did not hide them: they
+  went on 20.24-1574 already, between `…-webapi-20.24-1574-2026-09-24-1544.json`
+  and `…-1574-2026-09-29-1333.json`, when `FW044`, the legionella function,
+  went from `N2_HEATPUMP` to `N2_OFF` (`FW044` 3 and 0). Every walk since
+  reads it Off and lacks both, so the controller shows them only while the
+  function is on. `N2_PING` is in the overview of 4614 in every walk; only
+  its `detail` is no longer asked, as the walk asks `detail` of
+  `VALUE_ITEMS` alone (`tools/webprobe.py`).
 - **The table** was rebuilt on 2608 from the scan
   `captures/navigator-10-scan-20.24-2608-2026-11-05-1912.json`, the widths
   of every address the page lists, `…-widths-20.24-2608-2026-11-05-1850.json`,

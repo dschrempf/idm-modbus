@@ -21,12 +21,8 @@ document that `doc/software-versions.md` points to.
 - `doc/verification-2026-11-05-floor.md`: the floor of 24 rps at 0.67 kW.
 - `doc/verification-2026-10-01-charge.md`: a hot water charge.
 - `doc/verification-2026-09-20.md`: the display against the registers.
-- At Kunde level the legionella settings `FW045` and `FW046` and `N2_PING`
-  no longer show, against
-  `captures/navigator-10-webapi-20.24-1574-2026-09-20-2218.json`; at
-  Fachmann level they do. Find out whether a setting changed since or the
-  update hid them.
-
 Re-checked by reads on 2026-11-05 already: every address, the settings
 tree's ids and identifiers, the protocol, the Fachmann code, and the labels
-of `systemMode` (`adapt-to-software-20-24-2608`, `rechecks.md`).
+of `systemMode` (`adapt-to-software-20-24-2608`, `rechecks.md`). Settled
+from the captures on 2026-11-09: `FW045` and `FW046` went with `FW044` Off,
+on 20.24-1574, and `N2_PING` never went (`doc/software-versions.md`).
