@@ -32,8 +32,9 @@ data Mode
     Report
   | -- | settings, read for a person
     Show [SettingId]
-  | -- | the capture format of @captures\/navigator-10-webwatch-*.jsonl@
-    Watch Period [SettingId]
+  | -- | the capture format of @captures\/navigator-10-webwatch-*.jsonl@:
+    -- a line per query of a round
+    Watch Period [Query]
   | Enter
   | Leave
 
@@ -58,7 +59,7 @@ modeArg :: [String] -> IO Mode
 modeArg args = case args of
   ["--status"] -> pure Report
   ("--show" : ids@(_ : _)) -> Show <$> traverse settingArg ids
-  ("--watch" : period : ids@(_ : _)) -> Watch <$> periodArg period <*> traverse settingArg ids
+  ("--watch" : period : rest) -> Watch <$> periodArg period <*> watchArgs rest
   ["--enter-fachmann"] -> pure Enter
   ["--leave-fachmann"] -> pure Leave
   _ -> usage
@@ -67,6 +68,15 @@ periodArg :: String -> IO Period
 periodArg a = case readMaybe a of
   Just n | n > 0 -> pure (Period n)
   _ -> die (a <> ": not a positive whole number of seconds")
+
+-- | The reason is asked first in a round, and makes the settings optional.
+watchArgs :: [String] -> IO [Query]
+watchArgs args = case args of
+  ("--reason" : ids) -> (SystemOverview :) <$> settings ids
+  (_ : _) -> settings args
+  [] -> usage
+  where
+    settings = traverse (fmap SettingDetail . settingArg)
 
 settingArg :: String -> IO SettingId
 settingArg a = case readMaybe a :: Maybe Int of
@@ -79,17 +89,20 @@ usage = do
   name <- getProgName
   putStrLn $ "usage: " <> name <> " HOST --status"
   putStrLn $ "       " <> name <> " HOST --show SETTING..."
-  putStrLn $ "       " <> name <> " HOST --watch SECONDS SETTING..."
+  putStrLn $ "       " <> name <> " HOST --watch SECONDS [--reason] SETTING..."
   putStrLn $ "       " <> name <> " HOST --enter-fachmann | --leave-fachmann"
   putStrLn ""
   putStrLn $ "  " <> pinVariable <> " holds the PIN of the web interface."
-  putStrLn "  --status prints the user level, the controller's clock and the"
-  putStrLn "  notices standing. --show reads settings by the id the settings"
-  putStrLn "  tree gives them, e.g. 4768 for the sensor values, and names the"
-  putStrLn "  user level where it does not reach one."
+  putStrLn "  --status prints the user level, the controller's clock, the"
+  putStrLn "  notices standing, and what the heat pump does and at whose"
+  putStrLn "  request, by the keys the web interface translates. --show reads"
+  putStrLn "  settings by the id the settings tree gives them, e.g. 4768 for the"
+  putStrLn "  sensor values, and names the user level where it does not reach one."
   putStrLn "  --watch asks the given settings every SECONDS until interrupted,"
   putStrLn "  and prints a line per request: the request, the local time it was"
   putStrLn "  asked, and the responses, verbatim but for what names the machine."
+  putStrLn "  --reason asks the system overview as well, first in every round;"
+  putStrLn "  its heatpump holds the mode and the request's reason."
   putStrLn "  --enter-fachmann sends the code of the controller's clock, from"
   putStrLn "  Kunde only; --leave-fachmann acknowledges the notice that level"
   putStrLn "  raises. The level holds, for the display as well, until it is left"
@@ -115,6 +128,11 @@ run host pin mode = case mode of
           printf "user level  %s\nclock       %s\nprotocol    %d\n" (levelText (statusUserLevel st)) (show (statusClock st)) (statusProtocol st)
           standing <- askNotifications s >>= orDie
           mapM_ (\n -> printf "notice      %s %s\n" (codeText (notificationCode n)) (notificationText n)) standing
+          op <- askOperation s >>= orDie
+          printf "operation   %s\n" (modeText (operationMode op))
+          case operationReasons op of
+            [] -> putStrLn "reason      none"
+            rs -> mapM_ (printf "reason      %s\n" . reasonText) rs
         Show ids -> do
           warn s
           refused <- concat <$> traverse (showSetting s) ids
@@ -194,21 +212,32 @@ renderSetting st = header <> body (settingValue st)
     infoText (InfoNumber x) = show x
     infoText (InfoText t) = T.unpack t
 
+modeText :: OperationMode -> String
+modeText m = case m of
+  OtherMode n -> "mode " <> show n
+  _ -> show m
+
+-- | The key, or the value of a bit that has none.
+reasonText :: Reason -> String
+reasonText r = case r of
+  Unnamed b -> "bit " <> show b
+  _ -> maybe (show r) T.unpack (reasonKey r)
+
 levelText :: UserLevel -> String
 levelText l = case l of
   Customer -> "Kunde (0)"
   Fachmann -> "Fachmann (2)"
   OtherLevel n -> show n
 
--- | Ask the same settings round after round, a line per request, until
+-- | Ask the same queries round after round, a line per request, until
 -- interrupted.
 --
 -- A session that ends is opened again for the next request. Each request it
 -- cost is still a line, with an @error@, so the gap is in the capture. Every
 -- line carries the software of the session it was asked on, which a new
 -- session reads anew.
-watch :: Host -> Pin -> Period -> [SettingId] -> IO ()
-watch host pin (Period seconds) ids = do
+watch :: Host -> Pin -> Period -> [Query] -> IO ()
+watch host pin (Period seconds) queries = do
   hSetBuffering stdout LineBuffering
   -- a PIN that is refused now will be refused at every round
   first <- open defaultPace host pin
@@ -220,29 +249,29 @@ watch host pin (Period seconds) ids = do
     go s due = do
       now <- getMonotonicTime
       threadDelay (round (max 0 (due - now) * 1e6))
-      s' <- sweep ids s
+      s' <- sweep queries s
       -- a round that overran starts the next at once, without catching up
       getMonotonicTime >>= go s' . max (due + fromIntegral seconds)
     reopen = open defaultPace host pin >>= either (\e -> Nothing <$ complain (show e)) (\s -> Just s <$ warn s)
     sweep [] s = pure s
-    sweep (i : is) s =
+    sweep (q : qs) s =
       maybe reopen (pure . Just) s >>= \case
-        Nothing -> getZonedTime >>= \t -> line t Nothing i (Left "not connected") >> sweep is Nothing
+        Nothing -> getZonedTime >>= \t -> line t Nothing q (Left "not connected") >> sweep qs Nothing
         Just s' -> do
           t <- getZonedTime
-          r <- ask s' (SettingDetail i)
-          either (\e -> complain (show e) >> line t (Just s') i (Left (show e))) (line t (Just s') i . Right) r
-          ended s' >>= maybe (sweep is (Just s')) (const (close s' >> sweep is Nothing))
-    line t s i r = BL.putStrLn (encode (watchLine t s i r))
+          r <- ask s' q
+          either (\e -> complain (show e) >> line t (Just s') q (Left (show e))) (line t (Just s') q . Right) r
+          ended s' >>= maybe (sweep qs (Just s')) (const (close s' >> sweep qs Nothing))
+    line t s q r = BL.putStrLn (encode (watchLine t s q r))
     complain = hPutStrLn stderr
 
 -- | A line of a watch: an entry of a @webapi@ capture, with the time to the
 -- millisecond, the software of the session, and what went wrong if nothing
 -- came back.
-watchLine :: ZonedTime -> Maybe Session -> SettingId -> Either String [Value] -> Value
-watchLine t s i r =
+watchLine :: ZonedTime -> Maybe Session -> Query -> Either String [Value] -> Value
+watchLine t s q r =
   object
-    [ "request" .= queryJSON (SettingDetail i),
+    [ "request" .= queryJSON q,
       "captured" .= formatTime defaultTimeLocale "%Y-%m-%dT%H:%M:%S%3Q%Ez" t,
       "software" .= fmap (softwareJSON . sessionSoftware) s,
       "responses" .= either (const []) id r,

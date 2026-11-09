@@ -4,7 +4,9 @@
 One row per round of an `idm-dump --watch`: every address the watch reads,
 the mean of 74 over the window the controller averages it over (`PV011`, 2
 minutes by default), and, given a webwatch of 6245 and 10263, the
-compressor's speed and motor power and the PV page's forecast. The mean is
+compressor's speed and motor power and the PV page's forecast. A webwatch
+with `--reason` adds the heat pump's `operationMode` and the bits of its
+`info`, joined by `+`, whose names per mode `IDM.Navigator.Web` states. The mean is
 taken from the write log where one is given, whose times are exact, and from
 the watch's reads of 74 otherwise:
 
@@ -39,8 +41,12 @@ def html_cells(html):
     return [c.strip() for c in re.sub(r"<[^>]+>", "|", html).split("|") if c.strip()]
 
 
+def bits(n):
+    return "+".join(str(1 << i) for i in range(n.bit_length()) if n >> i & 1) or "0"
+
+
 def read_web(path):
-    """(time, field, value) from 6245's speed and motor power and 10263's forecast."""
+    """(time, field, value) from 6245's speed and motor power, 10263's forecast and the heat pump's request."""
     out = []
     for line in open(path):
         try:
@@ -50,6 +56,13 @@ def read_web(path):
         if not r.get("responses"):
             continue
         t = datetime.fromisoformat(r["captured"])
+        if r["request"]["controller"] == "system":
+            for m in r["responses"]:
+                pump = m.get("system", {}).get("heatpump")
+                if pump:
+                    out.append((t, "mode", pump["operationMode"]))
+                    out.append((t, "info", bits(pump.get("info", 0))))
+            continue
         setting = r["request"]["data"]["settingId"]
         html = r["responses"][0].get("settingDetail", {}).get("value", "")
         cells = html_cells(html)
@@ -118,6 +131,7 @@ def main():
         steps = [(t, v) for t, addr, v in reads if addr == 74]
     web = read_web(a.web) if a.web else []
     fields = ["rps", "motor", "forecast"] if web else []
+    fields += [f for f in ("mode", "info") if any(field == f for _, field, _ in web)]
 
     header = ["time"] + [str(x) for x in addresses] + ["mean74"] + fields
     rows = []

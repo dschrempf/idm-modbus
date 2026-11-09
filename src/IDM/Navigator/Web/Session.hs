@@ -34,6 +34,7 @@ module IDM.Navigator.Web.Session
     askStatus,
     askNotifications,
     askSetting,
+    askOperation,
   )
 where
 
@@ -137,3 +138,6 @@ askNotifications s = askFor notifications s NotificationOverview
 
 askSetting :: Session -> SettingId -> IO (Either Failure Setting)
 askSetting s = askFor setting s . SettingDetail
+
+askOperation :: Session -> IO (Either Failure Operation)
+askOperation s = askFor operation s SystemOverview

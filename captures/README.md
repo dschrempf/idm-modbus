@@ -11,7 +11,7 @@ The kind of capture is in the name:
     navigator-10-watch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl     idm-dump HOST --watch SECONDS ADDRESS...
     navigator-10-widths-SOFTWARE-YYYY-MM-DD-HHMM.json     idm-dump HOST --widths ADDRESS...
     navigator-10-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json     tools/webprobe.py HOST
-    navigator-10-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl  idm-web HOST --watch SECONDS SETTING...
+    navigator-10-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl  idm-web HOST --watch SECONDS [--reason] SETTING...
     navigator-10-webui-SOFTWARE-YYYY-MM-DD-HHMM/          curl, below
     navigator-10-level-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-web HOST --leave-fachmann, --enter-fachmann
     navigator-10-show-SOFTWARE-YYYY-MM-DD-HHMM.txt        idm-web HOST --show SETTING...
@@ -55,7 +55,10 @@ bytes as a number.
 
 A `webwatch` capture is a line per request, each an entry of a `webapi`
 capture — `request`, `captured`, `responses` — with the time to the
-millisecond and an `error`, null unless nothing came back.
+millisecond and an `error`, null unless nothing came back. Its requests are
+`setting` `detail`s, and with `--reason` the `system` `overview` first in
+every round, whose `heatpump` holds `operationMode` and, while a request
+stands, `info`.
 
 A `level` log is what `idm-web` printed when it changed the user level
 during a watch, each change after the laptop's time. It says which stretch of

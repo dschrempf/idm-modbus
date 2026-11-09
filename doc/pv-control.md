@@ -107,11 +107,14 @@ here is the source's until a dated `doc/` measures it.
   (16384), `RD_REQ_ION` (32768) and `RD_REQ_HEATING_BOOSTER` (65536); more
   than one bit besides bit 1, which it clears before counting and does not
   name, reads `RD_REQ_MORE_DEMANDS`. Hot water and cooling have tables of
-  their own. The webapi capture at rest,
+  their own; `reasonBits` in `IDM.Navigator.Web` transcribes all three. The
+  webapi capture at rest,
   `captures/navigator-10-webapi-20.24-2608-2026-11-06-1148.json`, has no
   `info` in its `heatpump`; during the PV run of 2026-11-09 it read 33,
   bits 1 and 32, `RD_REQ_PV`
-  (`doc/verification-2026-11-09-power-limit-floor.md`).
+  (`doc/verification-2026-11-09-power-limit-floor.md`), and in heating on
+  2026-11-05 at 16:24 it read 513, bits 1 and 512, `RD_REQ_HK_C`, circuit
+  C's request (`captures/navigator-10-webapi-20.24-2608-2026-11-05-1624.json`).
 - **The GLT monitor**, 12763 `N2_GLTMON`, at Fachmann level: per address a
   `Value`, the controller's internal one, and a `GLT Value`, the last one
   written (812170 §4.4). On 2026-10-16 it listed 74 to 88 with an empty
@@ -361,9 +364,9 @@ Each is a read that the tests so far did not take:
    (`captures/navigator-10-webapi-20.24-2608-2026-11-07-2140.json`).
    During a PV run both frames carried it, `info` 33 in `heatpump` and in
    widget 17, `RD_REQ_PV`; widget 10 carried none
-   (`doc/verification-2026-11-09-power-limit-floor.md`). `idm-web --watch`
-   reads settings only; reading it every round needs a `Query` for it, a
-   change to `idm-web`.
+   (`doc/verification-2026-11-09-power-limit-floor.md`).
+   `idm-web --watch SECONDS --reason` reads it every round, and
+   `tools/runtable.py` lines it up with the run.
 3. **The PV graph at a finer step**: whether graph 101 serves points closer
    than 304 s for a short `fromSecs`.
 4. **The outputs `Y` and the target consumption**: the gains are at 10403

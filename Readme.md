@@ -71,14 +71,17 @@ each. Options:
 `idm-web` talks to the controller's web backend, the websocket its web
 interface uses. It needs the web interface's PIN in `IDM_PIN`. Options:
 
-- `--status` prints the user level, the controller's clock and any active
-  notices.
+- `--status` prints the user level, the controller's clock, any active
+  notices, and what the heat pump is doing and why: its mode, and the
+  reasons for the request, such as `RD_REQ_PV` for the PV control.
 - `--show SETTING...` reads settings by their ID in the settings tree. For
   example, 4768 holds the sensor values the web interface lists, including
   the refrigerant side, which Modbus does not expose.
-- `--watch SECONDS SETTING...` polls the given settings repeatedly and prints
-  one line per request. The answers are printed as received, except that
-  anything identifying the machine is redacted.
+- `--watch SECONDS [--reason] SETTING...` polls the given settings
+  repeatedly and prints one line per request. The answers are printed as
+  received, except that anything identifying the machine is redacted.
+  `--reason` also asks for the system overview each round, which holds the
+  heat pump's mode and request reason; with it, the settings are optional.
 - `--enter-fachmann` switches to the Fachmann (installer) level, using the
   code derived from the controller's clock. `--leave-fachmann` switches back.
 

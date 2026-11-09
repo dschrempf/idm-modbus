@@ -9,9 +9,9 @@ its own note. The PV control comes first, then the rest.
 the start, held to `PV006`; the meter-style run with `PV011` at 0.5 min;
 the overnight test of 74; a PV hot water charge.
 
-`watch-the-request-reason-pv-in-idm-web` goes along with them: step 1, a
-capture during a run, is done; steps 2 and 3 come before the runs that need
-the reason. Its design is settled.
+Each run on 74 or 88 watches the request reason too, with
+`idm-web --watch SECONDS --reason` (`watch-the-request-reason-pv-in-idm-web`,
+done).
 
 ## 2. The rest
 

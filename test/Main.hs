@@ -11,7 +11,7 @@ import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy.Char8 as BL
-import Data.List (group, sort)
+import Data.List (group, nub, sort)
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import GHC.Float (double2Float, float2Double)
@@ -266,6 +266,35 @@ checks =
     ( "the notice of an open level is found by its text",
       notifications (json "{\"current\":[{\"code\":\"20005\",\"dateTime\":\"2026-09-29 13:34:19\",\"index\":0,\"level\":1,\"quitType\":2,\"textEnum\":\"N2_USERLEVELACTIVE\",\"textEnum2\":\"\"}]}")
         == Just [Notification (NotificationCode (T.pack "20005")) userLevelNotice 2]
+    ),
+    ( "the system overview names a PV request, and keeps the bit it does not name",
+      -- the heat pump of the system overview during the PV run of 2026-11-09
+      let hp = "\"heatpump\":{\"active\":true,\"info\":33,\"operationMode\":1,\"systemMode\":1}"
+       in fmap (replyTo SystemOverview) [json ("{\"system\":{" <> hp <> "}}")] == [Just (Answered (json ("{" <> hp <> "}")))]
+            && operation (json ("{" <> hp <> "}")) == Just (Operation Heating [Unnamed 1, PV])
+    ),
+    ( "a heat pump at rest sends no reason, and a circuit's request is lettered",
+      operation (json "{\"heatpump\":{\"active\":false,\"operationMode\":0,\"systemMode\":1}}") == Just (Operation Ready [])
+        -- 2026-11-05 16:24
+        && operation (json "{\"heatpump\":{\"active\":true,\"info\":513,\"operationMode\":1}}") == Just (Operation Heating [Unnamed 1, CircuitRequest CircuitC])
+        && fmap (map reasonKey . operationReasons) (operation (json "{\"heatpump\":{\"info\":513,\"operationMode\":1}}")) == Just [Nothing, Just (T.pack "RD_REQ_HK_C")]
+    ),
+    ( "a bit names a reason by the mode, and none in a mode without a table",
+      let reasons mode info = operationReasons <$> operation (json ("{\"heatpump\":{\"info\":" <> show (info :: Int) <> ",\"operationMode\":" <> show (mode :: Int) <> "}}"))
+       in reasons 2 16 == Just [PV]
+            && reasons 4 32 == Just [PV]
+            && reasons 4 16 == Just [ExternalBus]
+            && reasons 2 64 == Just [Unnamed 64]
+            && reasons 8 32 == Just [Unnamed 32]
+            && fmap operationMode (operation (json "{\"heatpump\":{\"operationMode\":3}}")) == Just (OtherMode 3)
+    ),
+    ( "each mode names a bit once, each a single bit, by a key of its own",
+      let modes = [Ready, Heating, Cooling, HotWater, Defrost]
+          single b = b > 0 && (b :: Int) `elem` takeWhile (<= b) (iterate (* 2) 1)
+          keys = [reasonKey r | m <- modes, (_, r) <- reasonBits m]
+       in and [all single bits && unique bits && unique (map snd (reasonBits m)) | m <- modes, let bits = map fst (reasonBits m)]
+            && all (/= Nothing) keys
+            && length (group (sort keys)) == length (group (sort [show r | m <- modes, (_, r) <- reasonBits m]))
     ),
     ( "a setting carries the parameter identifier and the double as sent",
       fmap (\st -> (settingParameter st, settingValue st)) (setting (json "{\"id\":\"6784\",\"name\":\"N2_HEATCURVE\",\"param\":\"HKA10\",\"type\":\"float\",\"value\":0.4000000059604645}"))
@@ -557,3 +586,6 @@ wellOrdered :: Register -> Bool
 wellOrdered r = case registerRange r of
   Just (Range lo hi) -> lo <= hi
   Nothing -> True
+
+unique :: (Eq a) => [a] -> Bool
+unique xs = length (nub xs) == length xs

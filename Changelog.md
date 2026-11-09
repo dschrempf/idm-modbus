@@ -134,6 +134,17 @@
   widens the register's range to a code outside it, and refuses a code the
   manual labels already. It holds 1005's -1 "Aus" and 3 "Urlaub"
   (`doc/verification-2026-10-15-web-app.md`).
+- The heat pump's request reason, from the web backend. `Query` gained
+  `SystemOverview`, the `system` `overview`, and `operation` reads its
+  `heatpump` to an `Operation`: the `OperationMode` and the bits of `info`,
+  each a `Reason` by the key the web interface translates, `PV` among them,
+  and `Unnamed` for a bit the mode does not name. `reasonBits` states the
+  bits per mode, `reasonKey` the keys; `askOperation` asks for it.
+  `idm-web --status` prints the mode and the reasons.
+  `idm-web HOST --watch SECONDS --reason SETTING...` asks the
+  `system` `overview` first in every round, a line of its own in the
+  webwatch capture, with no setting needed; `tools/runtable.py` adds its
+  `mode` and `info` columns.
 
 ### Changed
 

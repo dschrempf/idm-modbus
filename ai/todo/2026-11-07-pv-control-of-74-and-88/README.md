@@ -69,9 +69,10 @@ minutes, and what the controller does with a value no one renews.
    switch is not, and is not needed for it.
 4. A PV hot water charge.
 
-Step 1 of `watch-the-request-reason-pv-in-idm-web`, a `tools/webprobe.py`
-capture during a run, was taken on 2026-11-09; its steps 2 and 3 come
-before the runs that need the reason.
+Every run watches the request reason beside its settings,
+`idm-web HOST --watch 10 --reason SETTING...`
+(`watch-the-request-reason-pv-in-idm-web`, done), so a start or stop reads
+as PV's or a circuit's.
 
 ## Files
 
@@ -96,8 +97,8 @@ before the runs that need the reason.
 
 - `controller-behavior-when-glt-values-stop-unknown`: the same question for
   every register a building management system writes.
-- `watch-the-request-reason-pv-in-idm-web`: whether a start or stop was PV's,
-  read from the web backend.
+- `watch-the-request-reason-pv-in-idm-web`, done: `idm-web --watch --reason`
+  reads whether a start or stop was PV's.
 - `todo/README.md`: where this folder stands among the other todos.
 - `does-a-low-surplus-at-74-cap-the-speed`, done: the question that led
   here, answered no for every value written to 74.

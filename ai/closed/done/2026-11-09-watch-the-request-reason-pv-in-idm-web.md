@@ -1,5 +1,15 @@
 # Watch the request reason, PV among it, in `idm-web`
 
+**Done on 2026-11-09.** Steps 2 and 3 as designed below. `SystemOverview`
+and `operation` in `IDM.Navigator.Web` read `heatpump` to an `Operation`,
+the mode and a `Reason` per bit, `Unnamed` for a bit the mode does not
+name; `reasonBits` transcribes the heating, cooling and hot water tables of
+`Jf` in `main-7UP7UE6I.js`. `idm-web --status` prints them, and
+`idm-web HOST --watch SECONDS --reason SETTING...` asks the `system`
+`overview` first in every round, settings optional; `tools/runtable.py`
+adds `mode` and `info` columns. Tried on the machine at rest, Kunde level:
+`Ready`, no reason. Not yet watched during a run.
+
 `idm-web --watch` reads settings only, so no run on 74 so far recorded
 whether the controller itself registered a PV request. That reason would
 settle questions the runs leave open (`doc/pv-control.md`, observation 2):

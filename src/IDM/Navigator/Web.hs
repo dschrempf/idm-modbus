@@ -44,6 +44,15 @@ module IDM.Navigator.Web
     notifications,
     userLevelNotice,
 
+    -- * The heat pump's request
+    Operation (..),
+    OperationMode (..),
+    Reason (..),
+    Circuit (..),
+    operation,
+    reasonBits,
+    reasonKey,
+
     -- * Settings
     ParameterId (..),
     Setting (..),
@@ -66,6 +75,7 @@ import Data.Aeson (Value (..), object, (.:), (.:?), (.=))
 import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
 import Data.Aeson.Types (Parser, parseMaybe, withObject)
+import Data.Bits (bit, finiteBitSize, testBit)
 import Data.Char (chr, isDigit, isHexDigit)
 import Data.Maybe (fromMaybe, listToMaybe)
 import Data.Text (Text)
@@ -112,6 +122,9 @@ data Query
   | -- | every channel that could be plotted, whether or not a graph holds it
     GraphTraverse
   | GraphDetail GraphId Span
+  | -- | the system page: the heat pump, the buffer, the hot water, the
+    -- circuits, the energy flow
+    SystemOverview
   deriving (Show, Eq)
 
 queryJSON :: Query -> Value
@@ -124,6 +137,7 @@ queryJSON q = case q of
   GraphTraverse -> request "graph" "traverse" []
   GraphDetail (GraphId g) (Span from step) ->
     request "graph" "detail" ["id" .= g, "fromSecs" .= from, "stepSecs" .= step]
+  SystemOverview -> request "system" "overview" []
   where
     request :: Text -> Text -> [(K.Key, Value)] -> Value
     request c m d =
@@ -142,6 +156,7 @@ answerKey q = case q of
   GraphOverview -> "graph"
   GraphTraverse -> "graphTraverse"
   GraphDetail _ _ -> "graphDetail"
+  SystemOverview -> "system"
 
 -- | What a message says to the query it answers.
 data Reply
@@ -182,6 +197,7 @@ naming q = case q of
   GraphOverview -> Nothing
   GraphTraverse -> Nothing
   GraphDetail g s -> Just (namesGraph g s)
+  SystemOverview -> Nothing
   where
     namesSetting (SettingId i) = holds $ withObject "setting" $ \o -> (== i) <$> o .: "id"
     -- the answer names its graph only by the name @graphs@ gives the id, and
@@ -265,6 +281,142 @@ notifications = parseMaybe $ withObject "notification" $ \o -> do
 -- it is how the web interface leaves the level.
 userLevelNotice :: Text
 userLevelNotice = "N2_USERLEVELACTIVE"
+
+-- | What the heat pump does, and why: @heatpump@ of the @system@ overview,
+-- where the web interface's JavaScript reads it (@Jf@ in
+-- @main-7UP7UE6I.js@ of 20.24-2608).
+data Operation = Operation
+  { operationMode :: OperationMode,
+    -- | the bits of @info@, lowest first. The controller sends no @info@ at
+    -- rest, read here as no bit.
+    operationReasons :: [Reason]
+  }
+  deriving (Show, Eq)
+
+-- | @operationMode@, by the text the web interface prints for it.
+data OperationMode
+  = -- | 0, @RD_READY@
+    Ready
+  | -- | 1, @RD_OPERATING_MODE_HEATING@
+    Heating
+  | -- | 2, @RD_ACTIVE_COOLING@
+    Cooling
+  | -- | 4, @RD_HOT_WATER@
+    HotWater
+  | -- | 8, @RD_OPERATING_MODE_DEFROST@
+    Defrost
+  | OtherMode Int
+  deriving (Show, Eq)
+
+operationModeOf :: Int -> OperationMode
+operationModeOf n = case n of
+  0 -> Ready
+  1 -> Heating
+  2 -> Cooling
+  4 -> HotWater
+  8 -> Defrost
+  _ -> OtherMode n
+
+-- | A bit of @info@, by the translation key the web interface prints for it
+-- ('reasonKey'). A key may name a bit in more than one mode, and a different
+-- bit in each ('reasonBits').
+data Reason
+  = -- | "No Request", though a bit
+    NoInfo
+  | ExternalDI
+  | ExternalBus
+  | -- | "System Cooling"
+    SystemCooling
+  | PV
+  | FrostProtection
+  | CircuitRequest Circuit
+  | SystemOff
+  | ION
+  | HeatingBooster
+  | SingleCharge
+  | SingleBoostCharge
+  | Schedule
+  | ScheduleBoost
+  | ComfortCharge
+  | Cascade
+  | HotWaterBooster
+  | -- | a bit the web interface does not name in the mode, by its value: 1
+    -- in every mode, which it clears before it counts the bits, and every
+    -- bit in a mode it has no table for
+    Unnamed Int
+  deriving (Show, Eq)
+
+-- | A heating circuit, A to G as the controller letters them.
+data Circuit = CircuitA | CircuitB | CircuitC | CircuitD | CircuitE | CircuitF | CircuitG
+  deriving (Show, Eq, Ord, Enum, Bounded)
+
+-- | The bits the web interface names in a mode, by their value.
+reasonBits :: OperationMode -> [(Int, Reason)]
+reasonBits m = case m of
+  Heating ->
+    [(2, NoInfo), (4, ExternalDI), (8, ExternalBus), (16, SystemCooling), (32, PV), (64, FrostProtection)]
+      <> circuits
+      <> [(16384, SystemOff), (32768, ION), (65536, HeatingBooster)]
+  Cooling ->
+    [(2, NoInfo), (4, ExternalDI), (8, ExternalBus), (16, PV)]
+      <> circuits
+      <> [(16384, SystemOff), (32768, ION)]
+  HotWater ->
+    [ (2, SingleCharge),
+      (4, SingleBoostCharge),
+      (8, ExternalDI),
+      (16, ExternalBus),
+      (32, PV),
+      (64, SystemCooling),
+      (128, Schedule),
+      (256, ScheduleBoost),
+      (512, SystemOff),
+      (1024, ComfortCharge),
+      (2048, ION),
+      (4096, Cascade),
+      (8192, HotWaterBooster)
+    ]
+  _ -> []
+  where
+    circuits = zip (iterate (* 2) 128) (map CircuitRequest [minBound .. maxBound])
+
+-- | The translation key the web interface prints for a reason.
+reasonKey :: Reason -> Maybe Text
+reasonKey r = case r of
+  NoInfo -> Just "RD_REQ_NO_INFO"
+  ExternalDI -> Just "RD_REQ_EXTERNAL_DI"
+  ExternalBus -> Just "RD_REQ_EXTERNAL_BUS"
+  SystemCooling -> Just "RD_REQ_ISC"
+  PV -> Just "RD_REQ_PV"
+  FrostProtection -> Just "RD_REQ_FROST_PROT"
+  CircuitRequest c -> Just ("RD_REQ_HK_" <> T.singleton (toEnum (fromEnum 'A' + fromEnum c)))
+  SystemOff -> Just "RD_REQ_SYS_OFF"
+  ION -> Just "RD_REQ_ION"
+  HeatingBooster -> Just "RD_REQ_HEATING_BOOSTER"
+  SingleCharge -> Just "RD_REQ_SINGLE_LOADING"
+  SingleBoostCharge -> Just "RD_REQ_SINGLE_LOADING_BOOST"
+  Schedule -> Just "RD_REQ_SCHEDULE"
+  ScheduleBoost -> Just "RD_REQ_SCHEDULE_BOOST"
+  ComfortCharge -> Just "RD_REQ_DHW_COMFORT"
+  Cascade -> Just "RD_REQ_CASCADE"
+  HotWaterBooster -> Just "RD_REQ_DHW_BOOSTER"
+  Unnamed _ -> Nothing
+
+-- | Read the payload of a @system@ answer.
+operation :: Value -> Maybe Operation
+operation = parseMaybe $ withObject "system" $ \o -> o .: "heatpump" >>= withObject "heatpump" heatPump
+  where
+    heatPump h = do
+      mode <- operationModeOf <$> h .: "operationMode"
+      info <- fromMaybe 0 <$> h .:? "info"
+      pure (Operation mode (reasonsOf mode info))
+    reasonsOf :: OperationMode -> Int -> [Reason]
+    reasonsOf mode info =
+      [ fromMaybe (Unnamed b) (lookup b (reasonBits mode))
+      | i <- [0 .. finiteBitSize info - 1],
+        testBit info i,
+        let b = bit i
+      ]
 
 -- | The manufacturer's identifier of a parameter, the @FW030@ and @BV002@ of the
 -- parameter list. The one place the settings tree and the register table
