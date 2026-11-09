@@ -11,7 +11,7 @@ the overnight test of 74; a PV hot water charge.
 
 `watch-the-request-reason-pv-in-idm-web` goes along with them: step 1, a
 capture during a run, is done; steps 2 and 3 come before the runs that need
-the reason. Its design is settled but for which frame the flag asks.
+the reason. Its design is settled.
 
 ## 2. The rest
 

@@ -37,8 +37,8 @@ Step 1, during the PV run of `doc/verification-2026-11-09-power-limit-floor.md`
 bits 1 and 32; the JavaScript clears bit 1 before it counts bits
 (`SV` in `main-7UP7UE6I.js`), and names it nowhere, so the reason is
 `RD_REQ_PV`. The display was not read beside it. No other request of the
-walk carried an `info`. Step 1 is done; the frame the flag asks is still
-to be chosen, and bit 1 is a bit step 2's parser keeps unnamed.
+walk carried an `info`. Step 1 is done, and bit 1 is a bit step 2's parser
+keeps unnamed.
 
 ## Steps
 
@@ -65,7 +65,9 @@ to be chosen, and bit 1 is a bit step 2's parser keeps unnamed.
   `web-backend-and-captures`; `home` and `system` are already asked by
   `tools/webprobe.py`.
 
-Which frame, or both, the flag asks: open, with step 1's finding above.
+The flag asks `system` `overview` alone: the frame the web interface's
+JavaScript reads the reason from, with the mode beside it in `heatpump`.
+`home` `detail` repeats it in widget 17.
 
 A new `Query`, an `idm-web` argument and the capture format go into
 `Changelog.md`.
