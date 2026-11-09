@@ -1,5 +1,17 @@
 # Transcribe the table from 812663
 
+## Outcome, 2026-11-09
+
+Done. Decided with Dominik: the script reads 812663 alone, so rooms 7 to 9
+leave the table; `decide-how-a-measured-fact-enters-the-table` stays a change
+of its own, so this diff stays checkable. With the scan of 2026-11-05 19:12,
+the widths of 18:50 and the walk of 18:59, rev. 12 still regenerates today's
+files byte for byte; 812663 removes the 110 rows of rooms 7 to 9 and their
+140 enumerations, and nothing else; `Target.hs` is unchanged. 812663's thumb
+index, 9 to 13 at the page edge, entered the rows until the script cropped
+the page to `TYPE_AREA`. The footnote under 1050 and 1052 is in no column of
+the table.
+
 The table is transcribed from 812170 rev. 12, the Navigator 2.0's manual.
 812663 rev. 0 is the Navigator 10's own, and the table should rest on it.
 Its parameter list is rev. 12's row for row but for two things

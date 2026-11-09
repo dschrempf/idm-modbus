@@ -2,11 +2,11 @@
 """Transcribe the iDM parameter list into the tables under data/.
 
 The manufacturer's manual is a PDF and is not redistributed here. Obtain it
-(iDM document 812170 revision 12 for Navigator 2.0; support sends it on
-request, and doc/research.md says where else it is), put it in manual/, which
-git ignores, and feed it in:
+(iDM document 812663 revision 0, "Modbus TCP Navigator 10"; support sends
+it on request, and doc/research.md says where else it is), put it in manual/,
+which git ignores, and feed it in:
 
-    tools/transcribe.py manual/812170-rev12.pdf [--scan SCAN]
+    tools/transcribe.py manual/812663-rev0.pdf [--scan SCAN]
         [--webapi WEBAPI --widths WIDTHS]
 
 The script reads the PDF with pdftotext, which the development shell
@@ -100,10 +100,17 @@ FONT_SLACK = 0.5
 
 HERE = Path(__file__).resolve().parent.parent
 
+# the part of an A4 page, in points from its left edge, that the list is
+# printed in: 812663 prints a thumb index, 9 to 13, at the edge of every page,
+# which the layout text would otherwise set into the rows beside it
+TYPE_AREA = (30, 565)
+
 
 def pdftotext(pdf, mode):
+    left, right = TYPE_AREA
+    crop = ["-x", str(left), "-y", "0", "-W", str(right - left), "-H", "842"]
     return subprocess.run(
-        ["pdftotext", mode, str(pdf), "-"],
+        ["pdftotext", mode, *crop, str(pdf), "-"],
         check=True, capture_output=True, text=True, encoding="utf-8",
     ).stdout
 
@@ -301,7 +308,7 @@ def family(r):
     """What a register shares with the others the manual lists it beside.
 
     Heating circuits A to G, compressors 1 to 4, and zone modules 1 to 10 with
-    their rooms 1 to 8 get an address each, but the enumeration of their values
+    their rooms 1 to 6 get an address each, but the enumeration of their values
     is printed once, beside the first of them. Members are alike in everything
     but the letter or number ending the name and the number of the zone module.
     """

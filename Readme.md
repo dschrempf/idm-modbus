@@ -10,13 +10,14 @@ from the manufacturer's parameter list, fills the gaps from the list of
 registers the controller itself reports, and has checked every entry against a
 running machine.
 
-iDM wrote that parameter list, document 812170 ("Modbus TCP –
-Navigatorregelung 2.0"), for the previous controller, the Navigator 2.0. The
-Navigator 10's own manual, 812663, prints the same parameter list for an
-older software, 20.23. The machine serves that register map, with some
-additions and differences that we measured and that the table records. Its firmware string, `T_NAV10_20.24-…`, names the
-Navigator 10 and continues the Navigator 2.0's `20.x` version numbers. Nobody
-has tried the library on a Navigator 2.0 yet.
+iDM printed that parameter list in the Navigator 10's Modbus manual,
+document 812663 ("Modbus TCP Navigator 10"), for an older software, 20.23.
+The machine serves that register map, with some additions and differences
+that we measured and that the table records. The manual of the previous
+controller, the Navigator 2.0, document 812170, prints the same list, with
+three more rooms per zone module. The Navigator 10's firmware string,
+`T_NAV10_20.24-…`, continues the Navigator 2.0's `20.x` version numbers.
+Nobody has tried the library on a Navigator 2.0 yet.
 
 Some registers are stored in an EEPROM, which wears out with every write.
 `Persistence` in `IDM.Navigator.Register` tells you which ones. For that
@@ -27,7 +28,7 @@ written at all.
 ## Status
 
 The project is at an early stage. The table describes controller software
-20.24-2608 and has 722 registers: 692 from revision 12 of 812170 and 30 from
+20.24-2608 and has 612 registers: 582 from revision 0 of 812663 and 30 from
 the controller's register page `N2_GLTMON`. Every address in it has been read
 on the machine. Reading works, both over Modbus and over the web backend.
 Writing is supported for three targets, each tried on the machine:

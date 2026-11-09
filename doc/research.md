@@ -31,35 +31,37 @@ it).
 
 ## The authoritative source
 
-**iDM document 812170, revision 12, "Modbus TCP – Navigatorregelung 2.0",
-40 pages, its parameter list dated 18 June 2025 and written for software
-20.23-515.**
-
-It is written for the Navigator 2.0. The Navigator 10 has a Modbus manual of
-its own, **812663 revision 0, "Modbus TCP Navigator 10", 36 pages, dated 18
-June 2025 and written for software `NAV10_20.23-903` and
-`T_NAV10_20.23-1336`**. It was found on 2026-11-09 in
+**iDM document 812663, revision 0, "Modbus TCP Navigator 10", 36 pages,
+dated 18 June 2025 and written for software `NAV10_20.23-903` and
+`T_NAV10_20.23-1336`.** It was found on 2026-11-09 in
 Xerolux/idm-heatpump-api, which ships it as
 `docs/New/Modbus_TCP_NAVIGATOR_10.pdf` (md5
-`2f209d0fb0b48c586454fb08755cb47e`). Its parameter list is revision 12's
-row for row: address, datatype, access, EEPROM star, name, range, default
-and unit. Two differences: the zone modules lose rooms 7 to 9, and a
-footnote changes. For a machine with a separating heat exchanger, revision
-12 sends a reader of 1050 and 1052 to 1068, and 812663 sends both to 1070;
-each is right for one of the two, 1070 being the flow B125 and 1068 the
-return B124. The application examples, the PV chapter 4.3.10 and the GLT
+`2f209d0fb0b48c586454fb08755cb47e`). The table has been transcribed from it
+since 2026-11-09.
+
+The Navigator 2.0 has a Modbus manual of its own, **812170, "Modbus TCP –
+Navigatorregelung 2.0", whose revision 12, 40 pages, has its parameter list
+dated 18 June 2025 and written for software 20.23-515.** 812663's parameter
+list is revision 12's row for row: address, datatype, access, EEPROM star,
+name, range, default and unit. Two differences: the zone modules lose rooms 7
+to 9, and a footnote changes. For a machine with a separating heat exchanger,
+revision 12 sends a reader of 1050 and 1052 to 1068, and 812663 sends both
+to 1070; each is right for one of the two, 1070 being the flow B125 and 1068
+the return B124. The application examples, the PV chapter 4.3.10 and the GLT
 monitor 4.4 are word for word the same, but for "NAVIGATOR Pro" becoming
 "iDM Einzelraumregelung". So 812663 documents what was measured, that the
-Navigator 10 serves 812170's map, and moves no row of the table: it too
-prints 1072 as a `UCHAR` and 4112 as a `FLOAT`, lacks 4126 and 4128, and
-covers 20.23, not 20.24.
+Navigator 10 serves 812170's map: it too prints 1072 as a `UCHAR` and 4112
+as a `FLOAT`, lacks 4126 and 4128, and covers 20.23, not 20.24. Moving the
+table to it took out the 110 rows of rooms 7 to 9, absent on this machine as
+every zone module row is, and nothing else.
 
-iDM does not publish it on their own site. Forum users report that support
-sends it on request. A LoxWiki comment of 2026-10-09 attaches it as
+iDM publishes neither on their own site. Forum users report that support
+sends 812170 on request. A LoxWiki comment of 2026-10-09 attaches revision 12 as
 `Montageanleitung_Modbus_TCP_Navigator_2_0.2025.pdf` (md5
 `21ac38ed0982d565f96550c249d6a3fa`), on the page "IDM-IPump mit
 Loxone-Modbus-TCP (Navigator 2.0)". The table was transcribed from revision
-10, 36 pages, dated 20 April 2022, for software 20.21-101, until 2026-11-05;
+12 from 2026-11-05 to 2026-11-09, and before that from revision 10, 36
+pages, dated 20 April 2022, for software 20.21-101;
 the Loxone library mirrored that one for customers integrating iDM with
 Loxone:
 

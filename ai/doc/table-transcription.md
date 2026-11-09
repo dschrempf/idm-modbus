@@ -59,9 +59,14 @@ by hand, `unknown` where a part was never read.
 ## Reading the manual
 
 `manual/` holds the manufacturer's PDFs, which the script reads, and is
-ignored by git. The list is printed
+ignored by git. The table is read from 812663 rev. 0, the Navigator 10's
+manual; given 812170 rev. 12 instead, the script writes the same files but
+for the 110 rows of rooms 7 to 9 and their enumerations. The list is printed
 inconsistently — the same column appears in a different order on different
 pages — so cells are read by the column they are printed in, taken from the
 page heading, not by the order they appear in. From revision 12 on a remark
 may follow a name on the next line, and only its smaller type tells it from
 a name that wraps, so the script reads the type's height off the PDF too.
+812663 prints a thumb index, 9 to 13, at the edge of every page, which the
+layout text sets into the rows beside it; the script crops the page to the
+type area, `TYPE_AREA`, before reading either view.

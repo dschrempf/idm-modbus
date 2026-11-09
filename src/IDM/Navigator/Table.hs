@@ -33,9 +33,8 @@ import IDM.Navigator.Register
 import IDM.Navigator.Software (Software)
 import IDM.Navigator.Table.Parse (parseEnums, parseRegisters, parseSoftware, parsedFile)
 
--- | Every register of document 812170 revision 12, the parameter list of
--- the Navigator 2.0, whose map the Navigator 10 answers, and of
--- @N2_GLTMON@, in address order.
+-- | Every register of document 812663 revision 0, the Navigator 10's
+-- Modbus manual, and of @N2_GLTMON@, in address order.
 navigator10 :: [Register]
 navigator10 = $$(parsedFile parseRegisters "data/navigator-10-registers.tsv")
 

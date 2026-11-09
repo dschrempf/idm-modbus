@@ -173,7 +173,7 @@ data Presence
 
 -- | Which document describes a register.
 data Source
-  = -- | the parameter list, document 812170
+  = -- | the parameter list, document 812663, the Navigator 10's Modbus manual
     Manual
   | -- | the controller's own list of the addresses it serves, the web page
     -- @N2_GLTMON@. It states a name, a unit and an access right, and nothing

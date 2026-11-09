@@ -147,6 +147,12 @@
   `Leistungsbegrenzung Kaskade`, 4113 now answers on its own, and the page
   names nothing there. Every address the table holds was read on the
   machine.
+- The table is transcribed from 812663 revision 0, "Modbus TCP Navigator
+  10", the Navigator 10's own manual, rather than from 812170 revision 12,
+  the Navigator 2.0's. It has 612 registers rather than 722: the 110 of the
+  zone modules' rooms 7 to 9, which 812663 does not print, are gone, with
+  their enumerations. Nothing else changes. `tools/transcribe.py` crops the
+  page to the type area, so 812663's thumb index does not enter the rows.
 - `tools/transcribe.py` takes a value one register wide where the address
   after it answers on its own, drops a manual row the width measured
   contradicts even where the page names nothing in its place, and drops a

@@ -33,8 +33,8 @@ cases again; prose leaves the 1005 defect standing. That note also says
 812184 calls 4122 a model output; on this machine it is the inverter's figure
 (`doc/verification-2026-10-16-draw.md`).
 
-Settle it with `transcribe-the-table-from-812663`, which changes the same
-script and its sources. Read `table-transcription` first.
+`transcribe-the-table-from-812663` moved the script to 812663 and left this
+decision to a change of its own. Read `table-transcription` first.
 
 ## Files
 

@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal run idm-dump -- HOST --json > captures/navigator-10-scan-SOFTWARE-YYYY-MM-DD-HHMM.json
     cabal run idm-dump -- HOST --watch 10 1066 1012 > captures/navigator-10-watch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
     cabal run idm-dump -- HOST --widths 1534 1074 > captures/navigator-10-widths-SOFTWARE-YYYY-MM-DD-HHMM.json
-    tools/transcribe.py manual/812170-rev12.pdf --scan SCAN [--webapi WEBAPI --widths WIDTHS]
+    tools/transcribe.py manual/812663-rev0.pdf --scan SCAN [--webapi WEBAPI --widths WIDTHS]
     IDM_PIN=... tools/webprobe.py HOST > captures/navigator-10-webapi-SOFTWARE-YYYY-MM-DD-HHMM.json
     IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
     IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
@@ -34,15 +34,15 @@ and month of the current date). Port 502, unit id 1.
 
 ## Architecture
 
-The machine is a Navigator 10. Its Modbus map is that of 812170, the
-Navigator 2.0's manual, as far as measured. 812663, the Navigator 10's own
-Modbus manual, prints the same parameter list for software 20.23;
+The machine is a Navigator 10, and the table is transcribed from 812663,
+its Modbus manual, for software 20.23. 812170, the Navigator 2.0's manual,
+prints the same parameter list but for the zone modules' rooms 7 to 9;
 `doc/research.md` says how the two differ and why the controller is the
 Navigator 10.
 
 The register table is data, not code, and it flows one way:
 
-    manual/812170-rev12.pdf → pdftotext -layout and -bbox → tools/transcribe.py
+    manual/812663-rev0.pdf → pdftotext -layout and -bbox → tools/transcribe.py
       → data/navigator-10-{registers,enums}.tsv → splice → IDM.Navigator.Table
       → src/IDM/Navigator/Target.hs (with data/navigator-10-targets.tsv)
 
