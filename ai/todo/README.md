@@ -15,20 +15,11 @@ done).
 
 ## 2. The rest
 
-The heating run of 2026-11-09 was watched read only
-(`recheck-control-behavior-on-20-24-2608`). It read the counters of
-`page-heat-exceeds-waermemenge-registers-by-1-19` during the run only, and
-measured sixty minutes of the level of
-`fachmann-level-duration-and-renewal`.
-
 1. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
-2. `fachmann-level-duration-and-renewal`: measurements at rest, then the
-   renewal in `IDM.Navigator.Web.Level`.
-3. `page-heat-exceeds-waermemenge-registers-by-1-19`: a watch over several
+2. `page-heat-exceeds-waermemenge-registers-by-1-19`: a watch over several
    days, on days without a run.
-4. `recheck-control-behavior-on-20-24-2608`: during any run watched anyway.
-5. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
+3. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
    target.
-6. `controller-behavior-when-glt-values-stop-unknown`: a register each time
+4. `controller-behavior-when-glt-values-stop-unknown`: a register each time
    one is listed as a target.

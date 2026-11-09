@@ -2,7 +2,10 @@
 
 The controller's software as read, by date. Every `verification-*.md` is
 dated, so this log says which software a measurement was made on. An update
-leaves a measurement standing only as far as it is measured again.
+is re-checked by what a read can check at rest: the scan, the widths, the
+settings walk. A measurement of the machine's behavior, a run watched for
+hours, is not repeated at each update; it stands with the software it was
+made on.
 
 ## Where the versions are read
 
@@ -148,6 +151,6 @@ and the compressor starts 50 s after the request. The Fachmann level held
 sixty minutes from the entry under a 10 s watch
 ([verification-2026-11-09-heating-run-as-on-1574.md](verification-2026-11-09-heating-run-as-on-1574.md)).
 Graph channels 112 and 365 are in no graph the controller offers, and a
-read cannot reach them. Not re-checked: the floor of
-[verification-2026-11-05-floor.md](verification-2026-11-05-floor.md), a hot
-water charge, and the display beyond the request reason.
+read cannot reach them. The floor of
+[verification-2026-11-05-floor.md](verification-2026-11-05-floor.md) and a
+hot water charge stand as measured on 20.24-1574.

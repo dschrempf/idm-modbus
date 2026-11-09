@@ -46,11 +46,11 @@ item 12503, a code spelled from the controller's clock, as a number, from
 Kunde only, and leaves it by acknowledging the `N2_USERLEVELACTIVE` notice.
 Both work on the machine, and the display switches with them. The level is
 the controller's, not the connection's: it holds until it is left or the
-controller ends it. On 20.24-1574 that was sixty minutes from the entry,
-however often it was read meanwhile; on 20.24-2608 it was after 8 minutes,
-after 10, and not within 73, and what ends it is unknown
-(`fachmann-level-duration-and-renewal`). The frost protection wizard's code page is not a way in: it
-answers "wizard is not available!" unless a wizard runs.
+controller ends it, sixty minutes from the entry, however often it was
+read meanwhile, on both softwares
+(`doc/verification-2026-11-09-heating-run-as-on-1574.md`). The frost
+protection wizard's code page is not a way in: it answers "wizard is not
+available!" unless a wizard runs.
 
 Xerolux/idm-heatpump-hass, `docs/wiki/Navigator-Protocol-Analysis.md` in
 `community/`, says the opposite: that a code spelled from the clock opens

@@ -47,15 +47,14 @@ Not reachable by a read: graph channels 112 and 365 are in no graph the
 controller offers, only in the `traverse` group `N2_HEATQUANTITIES`;
 plotting them takes a `save`. The draw's re-check rests on 6245 instead.
 
-Open:
+## Closed 2026-11-09
 
-- 1104 holds on both softwares, so the `Presence` constructor for a
-  register that answers but does not follow its quantity is to be weighed
-  again (`decide-how-a-measured-fact-enters-the-table`, which chose prose
-  until this re-check).
-- `doc/verification-2026-11-05-floor.md`: needs settings changed.
-- `doc/verification-2026-10-01-charge.md`: a hot water charge, watched
-  anyway, mode 4, also tests `reasonBits`' hot water table.
-- `doc/verification-2026-09-20.md`: the display against the registers; on
-  2026-11-09 the reason was read off the web interface, not the display.
-- The stop of a heating run: the watches ended before it.
+Decided against re-checking behavior at each update: a run watched for
+hours cannot be repeated on every software. An update is re-checked by
+what a read checks at rest, the scan, the widths and the walk, and a
+behavior measurement stands with the software it was made on;
+`doc/software-versions.md` says so. The run of 2026-11-09 was the last
+such re-check. 1104 reads `ffff` while its pump runs on both softwares:
+said in `doc/research.md`'s second finding and in the haddock of `Drive`;
+no `Presence` constructor. The floor, the hot water charge and the display
+stand as measured on 20.24-1574.

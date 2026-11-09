@@ -10,10 +10,9 @@
 -- sends to change the user level. They change no setting of the machine, but
 -- they do change what the controller shows, on its display as well as here,
 -- and the level is the controller's, not the connection's: it holds until it
--- is closed again or the controller ends it. On 20.24-1574 that was sixty
--- minutes from the entry, however often it was read meanwhile; on 20.24-2608
--- it was after 8 minutes, after 10, and not within 73, for a reason not yet
--- known (@doc/software-versions.md@).
+-- is closed again or the controller ends it, sixty minutes from the entry,
+-- however often it was read meanwhile
+-- (@doc/verification-2026-11-09-heating-run-as-on-1574.md@).
 --
 -- Entering saves the code of the hour into the settings item
 -- @N2_CODE_ENTRY_EXPERT@, of type @actioncode@, as the settings page does.

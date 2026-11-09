@@ -413,7 +413,9 @@ answered three questions the documentation leaves open. The measurements are in
    defaults to -1, and there the -1 is what it holds until something is
    supplied, so it stays the sentinel. See
    [verification-2026-09-20.md](verification-2026-09-20.md). On this machine
-   1104 reads 65535 while its pump is driven too: the charge pump's signal is
+   1104 reads 65535 while its pump is driven too, on 20.24-1574 and 20.24-2608
+   ([verification-2026-11-09-heating-run-as-on-1574.md](verification-2026-11-09-heating-run-as-on-1574.md)),
+   and the table says only that it answers: the charge pump's signal is
    at 1074, which revision 10 does not list and revision 12 does, as the
    `WORD` `Ladepumpe Wärmesenke Steuersignal (M73)`
    ([verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md)).
@@ -575,14 +577,6 @@ above the 0.8 kW the PV page printed as the forecast. See
   page's runtime and electrical energy for that day agree with the registers
   while its heat is 1.17 times 1754's (`doc/verification-2026-10-01-charge.md`).
   What remains open is the quantity the page computes as heat.
-- **1104 does not follow M73, on either software.** It read `ffff`, "not
-  driven", at every read of a run on 20.24-1574 and of one on 20.24-2608,
-  while the controller's page printed M73 at 60 to 100 % and 1074 followed
-  it ([verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md),
-  [verification-2026-11-09-heating-run-as-on-1574.md](verification-2026-11-09-heating-run-as-on-1574.md)).
-  The table says only that 1104 answers. Still unexplained: why the page
-  printed M73 at -1.0 on 2026-09-20 while the pump ran
-  ([verification-2026-09-20.md](verification-2026-09-20.md)).
 
 ## Sources
 

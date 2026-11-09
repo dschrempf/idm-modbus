@@ -306,3 +306,5 @@
   said the Fachmann level holds for sixty minutes from the entry. That was
   20.24-1574; on 20.24-2608 the controller ended it after as few as eight
   minutes, and once not within 73.
+- They say sixty minutes again: a watch on 20.24-2608 measured them on
+  2026-11-09.

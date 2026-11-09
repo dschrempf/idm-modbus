@@ -1,5 +1,16 @@
 # How long the Fachmann level holds, and how to renew it
 
+## Closed 2026-11-09
+
+Sixty minutes from the entry, on both softwares: on 2026-11-09 it held
+from 14:51:05 to 15:51:02 under a 10 s watch
+(`doc/verification-2026-11-09-heating-run-as-on-1574.md`). `CLAUDE.md`,
+the header of `IDM.Navigator.Web.Level`, the help of `idm-web` and
+`web-backend-and-captures` say sixty minutes. The 8 and 10 minutes of
+2026-11-05, the day of the update, and the 73 of 2026-11-06 stay
+unexplained. The renewal of `fachmann-entry-right-after-leaving-is-ignored`
+is not built: closed with the duration, by decision.
+
 A long watch at Fachmann level must renew the level before it falls back,
 and a renewal right after leaving can be ignored. Both are unsettled, and
 the renewal depends on the duration.
