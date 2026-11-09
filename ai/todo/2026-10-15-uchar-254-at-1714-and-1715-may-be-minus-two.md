@@ -39,32 +39,13 @@ registers, `N2_ERBP` and `N2_ERGP`, and says nothing of -2; no settings tree
 holds the pumps, at Fachmann level either. Left: asking iDM support
 (`ask-idm-support-for-812170-covering-20-24-2608`).
 
-## 2026-11-09: Xerolux's map
+## 2026-11-09: a second machine, and 812663
 
-Xerolux/idm-heatpump-hass (`docs/wiki/Modbus-Register.md` in
-`community/`), whose map comes from a 2025 Navigator 10 specification,
-names 1714 `Externe Anforderung Grundwasserpumpe M15` and 1715 the same
-with "(SW max)", both in %, against `N2_GLTMON`'s Sole-/Zwischenkreispumpe
-at 1714. It counts 254 among the sentinels a register may declare, without
-saying which register; a percent would make -2 a value no request takes,
-which fits "no external request". The map itself is in
-Xerolux/idm-heatpump-api.
-
-## How we might solve it
-
-1. Record the two facts above in a dated `doc/`, and correct the open
-   question in `doc/research.md`.
-2. Decide whether `UCHAR` decoding should look at the whole word. `ffff` as
-   -1 and `fffe` as -2 would match what the controller prints, and a `UCHAR`
-   whose high byte is set would stop being silently truncated. That is a
-   change to `asWritten` and `navigator` in `Register.hs`.
-3. Find out what -2 means:
-   - Search the controller's web JavaScript and translations for how it labels
-     the two settings. That costs nothing.
-   - Ask iDM support.
-   - Read the Fachmann settings of these pumps in a webapi capture, if the
-     tree has them.
-
-   Writing 0 or 1 to the registers would also answer it, but the manual
-   advises against requesting these pumps from outside, and neither is a
-   target.
+Xerolux/idm-heatpump-api read `fffe` at 1714 and 1715 on another Navigator
+10 (`docs/Register-Map-Invariants.md`, in `community/`), so the word is not
+this machine's alone. It keeps the low byte, 254, and declares 254 a
+sentinel at these two registers only, from that reading and nothing else.
+Its names follow the manual's, as the table's do. 812663 rev. 0, the
+Navigator 10's own manual, prints both rows as revision 12 does: `UCHAR`,
+0 to 100 %, default -1. So the default the manual prints is -1, the
+controller prints -2, and the manual names no meaning for either.

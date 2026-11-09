@@ -15,7 +15,8 @@ here is the source's until a dated `doc/` measures it.
 
 ## The sources
 
-- **812170 rev. 12, §4.3.10.** 74 carries the surplus in kW, 4122 the
+- **812170 rev. 12, §4.3.10**, which 812663 rev. 0, the Navigator 10's
+  manual, prints word for word. 74 carries the surplus in kW, 4122 the
   current or forecast draw; "Sobald der PV-Überschuss höher ist als die
   Aufnahmeleistung startet die Wärmepumpe". Its register list prints, beside
   74, 76 `Leistung E-Heizstab`, 78 `Aktuelle PV Produktion`, 82
@@ -125,6 +126,15 @@ here is the source's until a dated `doc/` measures it.
     an AERO ALM on Navigator 2.0, October 2025 to October 2026: the
     controller kept acting overnight on the last value written, and a store
     charge needed about 3.3 kW to start on another machine.
+  - add-sensor-values-for-pv-zielwert
+    ([kodebach/hacs-idm-heatpump#297](https://github.com/kodebach/hacs-idm-heatpump/issues/297)),
+    a Navigator 2.0: writing 88 had no visible effect.
+  - ThomasRammDev/idm_proxy, emulating an SMA Data Manager M: set to SMA, a
+    Navigator 2.0 polls the PV production (30775) and the power at the grid
+    connection point (31249) every 60 s. On that path the controller is
+    given a meter's reading, its own draw netted in, rather than a surplus.
+  - More projects that write 74, none measuring the reaction, are in
+    `doc/research.md`, "Community work".
 
 ## By question
 
@@ -326,11 +336,15 @@ Each is a read that the tests so far did not take:
    internal value of 74, whether it is the mean, the value written or the
    value plus the draw, and of 88. Read on 2026-11-07: both as written.
 2. **The request reason**: `heatpump.info` of the `system` overview, every
-   10 s. `idm-web --watch` reads settings only; this needs the `Query` for
-   the `system` overview in a watch, a change to `idm-web`. A second
-   witness, unverified here: Xerolux/idm-heatpump-hass reads the display's
-   "Anforderungsgrund" from the `home` controller's `detail`, a bitmask per
-   heating and hot water widget in which 32 is PV.
+   10 s, or the `home` controller's `detail`, from which
+   Xerolux/idm-heatpump-api decodes the display's "Anforderungsgrund": per
+   widget an `operationMode`, 1 heating and 4 hot water, and while a request
+   stands an `info` bitmask, the table above. At rest its widgets 10 and 17
+   read `operationMode` 0 and no `info`
+   (`captures/navigator-10-webapi-20.24-2608-2026-11-07-2140.json`); which
+   frame carries the reason during a run is not yet captured.
+   `idm-web --watch` reads settings only; reading either needs a `Query`
+   for it, a change to `idm-web`.
 3. **The PV graph at a finer step**: whether graph 101 serves points closer
    than 304 s for a short `fromSecs`.
 4. **The outputs `Y` and the target consumption**: the gains are at 10403

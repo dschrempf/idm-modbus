@@ -35,8 +35,10 @@ and month of the current date). Port 502, unit id 1.
 ## Architecture
 
 The machine is a Navigator 10. Its Modbus map is that of 812170, the
-Navigator 2.0's manual, as far as measured; no Navigator 10 Modbus manual is
-at hand, and `doc/research.md` says why the controller is the Navigator 10.
+Navigator 2.0's manual, as far as measured. 812663, the Navigator 10's own
+Modbus manual, prints the same parameter list for software 20.23;
+`doc/research.md` says how the two differ and why the controller is the
+Navigator 10.
 
 The register table is data, not code, and it flows one way:
 

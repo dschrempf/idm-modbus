@@ -11,10 +11,10 @@ registers the controller itself reports, and has checked every entry against a
 running machine.
 
 iDM wrote that parameter list, document 812170 ("Modbus TCP –
-Navigatorregelung 2.0"), for the previous controller, the Navigator 2.0. We
-have no Modbus manual for the Navigator 10. In practice it serves the same
-register map, with some additions and differences that we measured and that
-the table records. Its firmware string, `T_NAV10_20.24-…`, names the
+Navigatorregelung 2.0"), for the previous controller, the Navigator 2.0. The
+Navigator 10's own manual, 812663, prints the same parameter list for an
+older software, 20.23. The machine serves that register map, with some
+additions and differences that we measured and that the table records. Its firmware string, `T_NAV10_20.24-…`, names the
 Navigator 10 and continues the Navigator 2.0's `20.x` version numbers. Nobody
 has tried the library on a Navigator 2.0 yet.
 

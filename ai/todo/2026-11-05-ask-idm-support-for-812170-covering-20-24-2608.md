@@ -9,9 +9,9 @@ on the iDM site"), and the partner portal needs partner access
 (`adapt-to-software-20-24-2608`, `beyond-this-update.md`). What remains is a
 mail to iDM support. One mail can ask everything the notes leave to them:
 
-- the Modbus manual of the Navigator 10, or, failing that, a revision of
-  812170 (812570 in English) for 20.24-2608, or what changed since
-  20.23-515: the
+- a revision of 812663, the Navigator 10's Modbus manual, newer than rev. 0
+  (18 June 2025, software 20.23-903 and 20.23-1336), or of 812170 (812570
+  in English), for 20.24-2608, or what changed since 20.23: the
   addresses `N2_GLTMON` lists and revision 12 does not, among them 500 to
   526, 1174, 1950 to 1958, the locks at 4110, 4113 and 4114, and 4126 and
   4128, which revision 12 dropped and the machine serves; 4112, which
@@ -28,3 +28,11 @@ mail to iDM support. One mail can ask everything the notes leave to them:
 
 An answer is a source for the table only as a document; a mail's prose goes
 into `doc/research.md`.
+
+## 2026-11-09: 812663 found
+
+812663 rev. 0, "Modbus TCP Navigator 10", is shipped by
+Xerolux/idm-heatpump-api and is in `manual/` as `812663-rev0.pdf`. Its
+parameter list is revision 12's but for zone rooms 7 to 9 and a footnote
+(`doc/research.md`, "The authoritative source"), so it answers none of the
+questions above; the mail now asks for a newer revision of it.

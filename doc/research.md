@@ -35,9 +35,24 @@ it).
 40 pages, its parameter list dated 18 June 2025 and written for software
 20.23-515.**
 
-It is written for the Navigator 2.0. That the Navigator 10 answers its map is
-measured, not documented: no Modbus manual for the Navigator 10 is at hand,
-only its building management chapter ([Sources](#sources)).
+It is written for the Navigator 2.0. The Navigator 10 has a Modbus manual of
+its own, **812663 revision 0, "Modbus TCP Navigator 10", 36 pages, dated 18
+June 2025 and written for software `NAV10_20.23-903` and
+`T_NAV10_20.23-1336`**. It was found on 2026-11-09 in
+Xerolux/idm-heatpump-api, which ships it as
+`docs/New/Modbus_TCP_NAVIGATOR_10.pdf` (md5
+`2f209d0fb0b48c586454fb08755cb47e`). Its parameter list is revision 12's
+row for row: address, datatype, access, EEPROM star, name, range, default
+and unit. Two differences: the zone modules lose rooms 7 to 9, and a
+footnote changes. For a machine with a separating heat exchanger, revision
+12 sends a reader of 1050 and 1052 to 1068, and 812663 sends both to 1070;
+each is right for one of the two, 1070 being the flow B125 and 1068 the
+return B124. The application examples, the PV chapter 4.3.10 and the GLT
+monitor 4.4 are word for word the same, but for "NAVIGATOR Pro" becoming
+"iDM Einzelraumregelung". So 812663 documents what was measured, that the
+Navigator 10 serves 812170's map, and moves no row of the table: it too
+prints 1072 as a `UCHAR` and 4112 as a `FLOAT`, lacks 4126 and 4128, and
+covers 20.23, not 20.24.
 
 iDM does not publish it on their own site. Forum users report that support
 sends it on request. A LoxWiki comment of 2026-10-09 attaches it as
@@ -159,13 +174,17 @@ None of it is wrong to consult, and none of it should be trusted over the
 manual.
 
 **kodebach/hacs-idm-heatpump.** Python, MIT, a Home Assistant custom component,
-the longest-standing project aimed squarely at Navigator 2.0. Actively
-maintained. Its register definitions live in one module inside the component;
-there is no library to reuse. Its README is honest about the weak spot: for
-pump speeds, valve positions and unavailability indicators, "the documentation
-from IDM does not give any information for these sensors … this is a bit of a
-guess." Its rows from 4108 to 4128 are copied from `N2_GLTMON` and marked
-TODO. In set-max-power-for-14a-enwg
+the longest-standing project aimed squarely at Navigator 2.0, read here at
+8c008ba (2026-10-12). Actively maintained; since v0.15.0-beta.1 it reaches
+the pump through Home Assistant's shared Modbus library. Its register
+definitions live in one module inside the component; there is no library to
+reuse. Its README flags its guesses: it makes "some guesses" for pump speeds,
+and for valve positions and the unavailable value "this is a bit of a
+guess." Of 4108 to 4128 it reads 4122 alone; the others, and 88, 1713, 1714
+and 1715, are names marked TODO. It still reads 1006 as the Smart Grid
+status, revision 10's layout. It reads with function code 4 in blocks of up
+to 32 registers, and writes with function code 16, reading nothing back and
+taking no account of the EEPROM. In set-max-power-for-14a-enwg
 ([kodebach/hacs-idm-heatpump#173](https://github.com/kodebach/hacs-idm-heatpump/issues/173))
 a user reports that writing 4108 had no effect, and that iDM support answered
 it is "for internal use and not supposed to be used by heatpump users". The
@@ -173,30 +192,101 @@ report gives no setup; here a limit below the draw ends a PV run
 ([verification-2026-11-07-power-limit.md](verification-2026-11-07-power-limit.md)),
 and one above the start program's draw caps it
 ([verification-2026-11-08-power-limit-cap.md](verification-2026-11-08-power-limit-cap.md)).
+Its other reports that bear on this machine:
+
+- sometimes-very-wrong-values-for-aktuelle-leistungsaufnahme
+  ([kodebach/hacs-idm-heatpump#61](https://github.com/kodebach/hacs-idm-heatpump/issues/61)):
+  4122 reads 20 to 32 kW for one poll and then returns, on the maintainer's
+  machine too; the integration reads again above a limit the user sets. Not
+  seen here: the 4384 reads of 4122 in the watches of 2026-10-01 to
+  2026-11-08, each a request of function code 3 for its two registers
+  alone, all stay below 8 kW.
+- add-sensor-values-for-pv-zielwert
+  ([kodebach/hacs-idm-heatpump#297](https://github.com/kodebach/hacs-idm-heatpump/issues/297)),
+  on a Navigator 2.0: writing 88 had no visible effect, and 90 reads the
+  Smart Grid status, yellow normally, red under the utility's lock, green
+  with a PV surplus.
+- analogausgaenge-erweiterung-pumpen
+  ([kodebach/hacs-idm-heatpump#269](https://github.com/kodebach/hacs-idm-heatpump/issues/269)):
+  a request at 1712 ends after exactly one hour.
+- interval-for-data-refresh-to-low
+  ([kodebach/hacs-idm-heatpump#16](https://github.com/kodebach/hacs-idm-heatpump/issues/16))
+  and why-is-the-min-refresh-interval-this-high
+  ([kodebach/hacs-idm-heatpump#118](https://github.com/kodebach/hacs-idm-heatpump/discussions/118)):
+  an iDM service partner advised 60 s or more between polls; a user polled
+  every 26 s without trouble, failed below 22 s, and the controller and its
+  display recovered only once the client disconnected.
 
 **AndyNew2/hacs-idm-hpweb.** Python, MIT, a Home Assistant custom component
-started December 2025, reading the web backend instead of Modbus. For the
+started December 2025, read here at c9362c5 (v0.3.6, 2026-10-23), reading
+the web backend instead of Modbus. For the
 Navigator 2.0 it logs in on `/index.php` with the PIN, takes a CSRF token from
 the page, and reads `/data/heatpump.php`, `/data/settings.php`,
 `/data/info.php` and `/data/statistics.php`; for the Navigator 10 it uses the
 websocket on port 61220 that `idm-web` reaches on this Navigator 10, asking
 `setting` `detail` of 4768, 4775, 4782, 4789 and 4754 and `statistic`
-`detail`. Whether 20.24-2608 still serves the HTTP endpoints is untested. What
+`detail`, each answer taken for the next frame. Navigator 10 owners failed
+to set it up over HTTP (unbekannter-fehler-during-setup,
+[AndyNew2/hacs-idm-hpweb#8](https://github.com/AndyNew2/hacs-idm-hpweb/issues/8)),
+and whether 20.24-2608 serves the HTTP endpoints is untested here. What
 its README says Modbus lacks — the flow rate, the hot gas temperature, the
 evaporation and condensation pressures — is what
 [verification-2026-09-20.md](verification-2026-09-20.md) lists as shown by the
 web interface alone, read here from 4768 `N2_SENSORS`; the flow rate, B2, has
-since been found at 1072. It also writes, by a POST to `/data/info.php`: the
-operating mode, `FW027`, `FW028`, `FW048`, `FW044` to `FW046`, and the clock.
+since been found at 1072. On the Navigator 2.0 alone it also writes: the
+operating mode by a POST to `/data/info.php`; `FW027`, `FW028`, `FW048`,
+`FW044` to `FW046` and the clock by a PUT to `/data/settings.php`; and a hot
+water charge by a PUT to `/data/heatpump.php`. Its discussions report:
+
+- navigator-10-german-discussion
+  ([AndyNew2/hacs-idm-hpweb#5](https://github.com/AndyNew2/hacs-idm-hpweb/discussions/5)):
+  a Navigator 10 on `NAVIO_20.23-940-gf62a31e12`, beside Navigator 2.0s on
+  20.23, so the number alone does not tell the generations apart.
+- sensorwerte-fachmannebene
+  ([AndyNew2/hacs-idm-hpweb#10](https://github.com/AndyNew2/hacs-idm-hpweb/discussions/10)):
+  a user entered "Fachmannebene 2" with a code spelled from the
+  controller's clock, on a Navigator Pro 2.0 on 20.23-245, as
+  `IDM.Navigator.Web.Level` does here. On a Navigator 2.0, 1710 cleared
+  itself after exactly one hour, and the target at 1696 governed only above
+  the heating circuits' own targets or once their "Heizkreis kann
+  Anforderung stellen" was off.
 
 **Xerolux/idm-heatpump-api** and **idm-heatpump-hass.** Python, MIT, started
 March 2026. Better engineered — the library is separate from the integration,
 it is typed, it has tests, and register definitions carry metadata including a
 source reference. It aims much wider (Navigator 2.0, 10 and Pro) and says
 plainly that its Navigator 2.0 coverage is incomplete and awaiting "broader raw
-detection captures". Its register map is derived from the 2025 Navigator 10
-specification plus reverse engineering, not from 812170: a specification of
-this controller, so where the two disagree it deserves a look.
+detection captures". Its register map is derived from 812663, which it
+ships ([The authoritative source](#the-authoritative-source)), plus
+measurements on other machines.
+
+The library, read here at 0347f25 (v2.16.1, 2026-11-08), agrees with the
+table on every address and datatype but these:
+
+- 1004, the message number, as a 16-bit word, since codes up to 999 do not
+  fit a byte; the table's `UCHAR` arrives as a whole register too.
+- 1034 with a maximum of 67 rather than 53, from a user's report
+  (register-dhw-charge-off-temp-invalid-value,
+  [Xerolux/idm-heatpump-hass#460](https://github.com/Xerolux/idm-heatpump-hass/issues/460)).
+- A `UCHAR` is its low byte, so `ffff` reads 255 and the `fffe` of 1714 and
+  1715 reads 254, which it declares a sentinel there alone; the controller
+  prints -2.
+- 4112 as a writable `FLOAT`, as 812663 prints it.
+- 4120 as `firmware_version`, a `FLOAT` its model probe reads; it is in
+  neither manual and has not been read here.
+
+Floats are low word first, and a `WORD` with a negative range is signed, so
+-1 at 1074 and 1104 to 1109 stays a value, as here. Over Modbus it writes
+without reading back; its only EEPROM guard is one write a minute per
+register. Over the websocket it decodes the request reason from the
+`home` `detail`: every widget with an `operationMode`, 1 heating and 4 hot
+water, and while a request stands an `info` bitmask, whose table matches the
+one [pv-control.md](pv-control.md) took from the web interface's JavaScript.
+Its test of a PV request uses a frame made by hand. It writes `home/save`,
+`notification/save`, `system.freshwater/save`, `system.heatingcircuit/save`
+and the clock by `setting/save`, each confirmed by its success note and never
+retried; it implements no change of user level. None of its tests reads a
+capture from a machine.
 
 The integration holds no register map of its own; it pins the library. What
 it adds for this project is its wiki, `docs/wiki/`, read here at 3520c5a
@@ -208,14 +298,48 @@ some by a capture: `home/save` with `systemMode`, numbered as 1005,
 `system.freshwater/save` with a parameter identifier, `setting/save` and
 `setting/execute`, and `notification/save`, each answering a
 `<controller>Save` frame with a `note`. It reads the demand reason, "PV"
-among them, from `home/detail`, which `IDM.Navigator.Web` does not query;
-see [pv-control.md](pv-control.md). It decoded the error-code database of
+among them, from `home/detail`, which `tools/webprobe.py` captures and
+`IDM.Navigator.Web` does not query; see [pv-control.md](pv-control.md). It decoded the error-code database of
 iDM's Windows service tool: codes 20 to 999 are the controller's messages,
 and the library packages them. And it says the technician level of the
 websocket does not take a code spelled from the clock, which
 `IDM.Navigator.Web.Level` does on this Navigator 10: it tried another
 request, `authentication/save`, and on 12503 read the notice 20005
 `N2_USERLEVELACTIVE` ("Fachmanncode aktiv") as a failure.
+
+**seaspotter/ioBroker.idm-modbus.** TypeScript, MIT, an ioBroker adapter
+started October 2026, read here at 58eb44a (2026-10-29). It keeps a map per
+generation, from 812170 rev. 10, 812663 rev. 0 and 812049 rev. 1, and marks
+each row it saw answer; the machine it saw is a Navigator 2.0, on which 88,
+90, 4120 and 1068 answer exception 02, and nothing has been tried on a
+Navigator 10. It keeps 1072 a `UCHAR`, noting Xerolux's float as a doubt. It
+reads a `UCHAR` unsigned and -1 in a `WORD` as no value, so it loses both
+the -2 of 1714 and 1715 and the "not being driven" of 1074. Its PV module
+writes 74 to 86 every 30 s, clamps a surplus it computes at 0, and writes 0
+when its source goes stale; what it says the controller does with them is
+unmeasured.
+
+**PV feeders.** Four small projects pass a surplus to an iDM; none measures
+how the controller reacts.
+
+- ThomasRammDev/idm_proxy (a028afd, 2026-04-27) emulates an SMA Data
+  Manager M. Set to SMA, a Navigator 2.0 polls, by its author's account,
+  only 30775 (PV production), 31249 (power at the grid connection point)
+  and 30845 (battery charge), at unit 2, every 60 s. On that path the
+  controller reads a meter, its own draw netted in, and forms the surplus
+  itself. The emulation contradicts itself on the sign of 31249.
+- uwemock/Sungrow_iHomeManager_to_iDM_Heatpump (a1f9b92, 2026-05-29), a
+  Node-RED flow for "Gebäudeleittechnik / Smartfox": 74 is a Sungrow
+  meter's grid power, negated and unclamped, written on a change only and
+  left as it was when the meter does not answer; it also writes 78, 82, 84
+  and 86.
+- ReneMronet/ha-idm-heatpump (4f7b1f4, 2026-05-05), for a Navigator 10:
+  reads 74 and writes 88, from 0 to 50 kW, and 4108, from 0 to 100 kW with
+  a default of 100 against the -1 the machine reads here, when a user
+  changes them. Its README cites 812663.
+- Rudi-Regentonne/CrustyPump (b31a1f3, 2026-10-23), Rust, scrapes the
+  Navigator 2.0's PHP interface: `/data/channellive.php`,
+  `/data/channels.php` and `/data/settings.php`.
 
 **chincherpa/idm_control.** A markdown transcription of a parameter list — but
 of 812049, the Navigator 1.0/1.7 manual. Useful as a reminder that the
@@ -227,7 +351,10 @@ idm-waermepumpen
 ([evcc-io/evcc#19002](https://github.com/evcc-io/evcc/issues/19002)), are the
 best source for the PV surplus path in practice: address 74 to tell the pump
 the current surplus in kW (scale 0.001 from evcc's watts), 1710 to request
-heating, 4122 to read power draw.
+heating, 4122 to read power draw. Its template,
+`templates/definition/charger/idm.yaml` at 25a8e25 (2026-10-20), writes 74
+with function code 16 as a low-word-first float and reads 4122; it writes
+neither 88 nor 4108.
 
 The **Home Assistant community thread** "IDM heatpump integration via modbus
 (pure HA)" documents the plain-YAML approach with the stock `modbus:`
@@ -349,8 +476,9 @@ above the 0.8 kW the PV page printed as the forecast. See
   moves the -1 of the pump signals from the minimum into the default, and the
   cascade block loses its parameter identifiers. Neither revision says what
   20.24 added; the controller's list names 16 addresses revision 12 lacks
-  on 20.24-1574, and 36 on 20.24-2608. Worth asking iDM support for the
-  Navigator 10's own Modbus manual, or a revision of 812170 covering 20.24-2608 —
+  on 20.24-1574, and 36 on 20.24-2608. 812663 rev. 0, for 20.23, adds
+  none of them. Worth asking iDM support for a revision of 812663 or of
+  812170 covering 20.24-2608 —
   revision numbers run per document, so 812184 reaching revision 13 says
   nothing about 812170. The Loxone mirror served revision 10 byte for byte
   (md5 `5cff6722aee3655431b2d4166a6b3d5a`) and did not resolve on
@@ -446,6 +574,8 @@ above the 0.8 kW the PV page printed as the forecast. See
 - 812170 rev. 12, Modbus TCP Navigatorregelung 2.0, attached on the LoxWiki
   page "IDM-IPump mit Loxone-Modbus-TCP (Navigator 2.0)"
 - [812170 rev. 10, Modbus TCP Navigatorregelung 2.0](https://api.library.loxone.com/downloader/file/647/Modbus%20TCP_Navigator%202.0_DE.pdf)
+- [812663 rev. 0, Modbus TCP Navigator 10](https://github.com/Xerolux/idm-heatpump-api/blob/main/docs/New/Modbus_TCP_NAVIGATOR_10.pdf),
+  shipped by Xerolux/idm-heatpump-api
 - [812184 rev. 13, myiDM+energy Navigator 2.0](https://www.idm-energie.at/wp-content/uploads/2021/04/tu_de_812184_myiDMenergy_PV_Variable-Stromtarife_Navigator-2.0-2.pdf)
   — the 26-page file under `uploads/2023/10/` is an excerpt of an earlier
   revision, printed pages 11 to 36
@@ -455,6 +585,12 @@ above the 0.8 kW the PV page printed as the forecast. See
 - [AndyNew2/hacs-idm-hpweb](https://github.com/AndyNew2/hacs-idm-hpweb)
 - [Xerolux/idm-heatpump-api](https://github.com/Xerolux/idm-heatpump-api)
 - [Xerolux/idm-heatpump-hass](https://github.com/Xerolux/idm-heatpump-hass)
+- [seaspotter/ioBroker.idm-modbus](https://github.com/seaspotter/ioBroker.idm-modbus)
+- [ThomasRammDev/idm_proxy](https://github.com/ThomasRammDev/idm_proxy)
+- [uwemock/Sungrow_iHomeManager_to_iDM_Heatpump](https://github.com/uwemock/Sungrow_iHomeManager_to_iDM_Heatpump)
+- [ReneMronet/ha-idm-heatpump](https://github.com/ReneMronet/ha-idm-heatpump)
+- [Rudi-Regentonne/CrustyPump](https://github.com/Rudi-Regentonne/CrustyPump)
+- [evcc's iDM template](https://github.com/evcc-io/evcc/blob/master/templates/definition/charger/idm.yaml)
 - [chincherpa/idm_control](https://github.com/chincherpa/idm_control/blob/master/modbus_tcp_navigator.md)
 - [idm-waermepumpe-einbinden (evcc-io/evcc#11905)](https://github.com/evcc-io/evcc/discussions/11905)
 - [Home Assistant community: IDM heatpump integration via modbus](https://community.home-assistant.io/t/idm-heatpump-integration-via-modbus-pure-ha/701473)

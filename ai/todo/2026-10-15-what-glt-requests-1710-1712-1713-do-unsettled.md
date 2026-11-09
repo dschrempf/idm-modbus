@@ -44,3 +44,17 @@ spent:
    1090, 1091, B38 and the store's target.
 4. Record each in a dated `doc/`, and the answers in the Haddock of the
    targets.
+
+## 2026-11-09: two reports from other machines
+
+Both unmeasured here, and both from the Navigator 2.0; `doc/research.md`,
+"Community work", cites them.
+
+- 1712 ends after exactly one hour
+  (analogausgaenge-erweiterung-pumpen, kodebach/hacs-idm-heatpump#269),
+  which would answer what ends a charge whose request is never withdrawn.
+- 1710 clears itself after exactly one hour, and its target at 1696
+  governs only above the heating circuits' own targets or once their
+  "Heizkreis kann Anforderung stellen" is off (sensorwerte-fachmannebene,
+  AndyNew2/hacs-idm-hpweb#10, a discussion). Step 3 should read 1710 back
+  past the hour.
