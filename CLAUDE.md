@@ -21,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     cabal run idm-write -- HOST 74 3.0               # a target; --eeprom where it costs a cycle
     tools/drivepv.py HOST WATCH --final -0.5 2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 > captures/navigator-10-write-SOFTWARE-YYYY-MM-DD-HHMM.log
     tools/runtable.py WATCH --web WEBWATCH --writes WRITELOG   # a run lined up by time; --last for a status line
-    ormolu -i $(git ls-files '*.hs')   # formatting
+    ormolu -i $(git ls-files '*.hs' ':!src/IDM/Navigator/Target.hs')   # formatting; transcribe.py writes Target.hs
     cabal-fmt -i idm-modbus.cabal
 
 The test suite is a list of `(name, Bool)` pairs in `test/Main.hs`; there is no
