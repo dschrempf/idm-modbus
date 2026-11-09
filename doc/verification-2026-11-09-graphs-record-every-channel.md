@@ -56,6 +56,16 @@ temperature has a point about every 50 minutes, in the eight-day span
 about every 1.6 hours, but the last half hour about every 5 minutes. A
 state channel has one per change in both.
 
+A temperature's point is the mean over the interval it closes, not a
+reading at its time. B38's points of the run at 1.0, 36.20 °C at 17:54:13,
+36.98 at 17:59:17 and 37.75 at 18:04:22, match the means of the 10 s watch
+(`captures/navigator-10-watch-20.24-2608-2026-11-09-1728.jsonl`) over the
+five minutes before each, 36.25, 37.05 and 37.77, where the watch read 36.6
+and 37.5 at the first two times. On 2026-11-08 the point at 19:26:49 reads
+31.89, where the watch read 36.68 then and 33.27 on average from its start
+at 18:52 (`captures/navigator-10-watch-20.24-2608-2026-11-08-1852.jsonl`):
+the point covers the 50 minutes from 18:34:50, most of them before the run.
+
 The span does not make the samples denser: the controller thins what it
 keeps. At 18:36 `Anlage` was asked for the last 2 hours, the shortest span
 the web interface plots, and for two past windows by `toSecs`, which the
@@ -79,11 +89,12 @@ sends `graph`/`overview`, `traverse`, `detail` with a graph's `id`, and
 - **112 and 365 can be read.** `doc/software-versions.md` said no graph
   held them and a read could not reach them; `Pumpe und Kreise` holds them
   now, with their history.
-- **B45 at the stop of the run at 1.0.** The graph has B45 at 38.0 °C at
-  17:54, 38.7 at 17:59, 39.5 at 18:04 and 39.0 at 18:09, B38 at 36.2, 37.0,
-  37.8 and 37.7. The run stopped at 18:02. B45 was near 40, but whether it
-  reached it the samples do not say; for the runs of 2026-11-08 and the noon
-  of 2026-11-09 the 30-hour span has one point of B45 each.
+- **B45 near the stop of the run at 1.0.** The graph has B45's means at
+  38.0 °C to 17:54, 38.74 to 17:59 and 39.48 to 18:04, rising about 0.15 K a
+  minute; the run stopped at 18:02. Carried on at that rate from 17:56:45,
+  the middle of the second interval, B45 stood near 39.6 °C at the stop,
+  below 40, but the means do not say it. For the runs of 2026-11-08 and the
+  noon of 2026-11-09 the 30-hour span has one point of B45 each.
 
 ## What it does not settle
 

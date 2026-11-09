@@ -13,10 +13,12 @@ run needs to know what ends it.
 
 None ruled out:
 
-- **B45 `Ladefühler` against `PV006`.** The controller's graph has it at
-  38.7 °C at 17:59 and 39.5 at 18:04, near 40 at the stop; its five-minute
-  samples do not say whether it reached 40
-  (`doc/verification-2026-11-09-graphs-record-every-channel.md`).
+- **B45 `Ladefühler` against `PV006`.** B45 is the water going into the
+  store, about 2 K above B38 while it charges. The graph's five-minute
+  means put it near 39.6 °C at the stop, below 40
+  (`doc/verification-2026-11-09-graphs-record-every-channel.md`). Against
+  it, as against the flow: on 2026-11-08 it must have passed 40 well before
+  that run ended at B38 40.00 °C.
 - **The flow, B33, against `PV006`.** It read 39.8 °C at the stop. Against
   it: on 2026-11-08 B38 reached 40.00 °C, so the flow, above B38 while the
   store charges, stood above 40 for a while without ending that run.

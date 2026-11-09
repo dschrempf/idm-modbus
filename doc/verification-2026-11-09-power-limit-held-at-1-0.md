@@ -116,10 +116,12 @@ What the captures leave as candidates:
 - **A temperature against `PV006`.** B38 read 37.9 °C, 2.1 K below it. The
   flow read 39.8 °C, below it too; on 2026-11-08 B38 reached 40.00 °C before
   that run ended, and the flow, above B38 while the store charges, must
-  have stood above 40 for a while without ending it. B45 `Ladefühler`, in
-  the controller's graph, read 38.7 °C at 17:59 and 39.5 at 18:04, near 40
-  at the stop; whether it reached 40 its five-minute samples do not say
-  (`doc/verification-2026-11-09-graphs-record-every-channel.md`). No graph
+  have stood above 40 for a while without ending it. B45 `Ladefühler`, the
+  water going into the store, has five-minute means in the controller's
+  graph that put it near 39.6 °C at the stop, below 40
+  (`doc/verification-2026-11-09-graphs-record-every-channel.md`); it stands
+  about 2 K above B38 while the store charges, so on 2026-11-08 it too
+  passed 40 before that run ended. No graph
   channel holds the flow, B33, and the watch of 2026-11-08 did not read it.
 - **A time of about 30 minutes**, for a capped run or one at low speed. The
   run on 1.5 of 2026-11-08 held 46 minutes 30 seconds, so not for every PV
