@@ -10,8 +10,8 @@ one run each; the meter-style run with `PV011` at 0.5 min; the overnight
 test of 74; a PV hot water charge.
 
 `watch-the-request-reason-pv-in-idm-web` goes along with them: step 1, a
-capture, during the next of these runs; steps 2 and 3 after its design
-questions, before the runs that need the reason.
+capture, during the next of these runs; steps 2 and 3 after it, before the
+runs that need the reason. Its design is settled.
 
 ## 2. The rest
 

@@ -74,8 +74,6 @@ a `tools/webprobe.py` capture during it.
 - `does-88-set-the-export-the-pv-controller-holds.md`: the runs of
   2026-11-07 on 88, answered no for the speed, and step 2 with its
   schedule.
-- `does-a-low-surplus-at-74-cap-the-speed.md`: the question that led here;
-  answered no for a constant 74, the rest carried into the 88 run.
 - `does-the-control-act-on-a-74-no-one-renews.md`: 74 keeps its value past
   `SSYSPV030`'s five hours; whether the control acts on it is step 3.
 - `what-a-power-cycle-does-to-74-and-the-controller.md`: what a restart
@@ -94,3 +92,5 @@ a `tools/webprobe.py` capture during it.
 - `watch-the-request-reason-pv-in-idm-web`: whether a start or stop was PV's,
   read from the web backend.
 - `todo/README.md`: where this folder stands among the other todos.
+- `does-a-low-surplus-at-74-cap-the-speed`, done: the question that led
+  here, answered no for every value written to 74.

@@ -79,3 +79,12 @@ a mean still full of the start's 1.7. The low-power charge this note asks
 for is, under that reading, 88 at a negative target with 74 the meter's
 export. `does-88-set-the-export-the-pv-controller-holds` runs both: the
 meter from the first write, then steps of 88.
+
+## Closed on 2026-11-09
+
+Answered: no value written to 74 caps the speed. A constant 74 drives the
+speed to the top, and 74 written as a meter's export overshoots and stops
+early (`doc/pv-control.md`). The low-power run it asked for went to
+`pv-control-of-74-and-88`, where 4108 at 1.5 held a run near 1.4 kW to
+`PV006` (`doc/verification-2026-11-08-power-limit-cap.md`); the lower
+limits, and the meter-style run with `PV011` at 0.5 min, are its steps.

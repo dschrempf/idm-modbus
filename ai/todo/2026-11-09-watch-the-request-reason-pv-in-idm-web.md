@@ -37,15 +37,21 @@ Neither frame has been captured during a run.
 3. `idm-web --watch` records it on every round beside the settings, and
    `--show` or `--status` prints it.
 
-## Design to settle with Dominik before step 2
+## Design, settled on 2026-11-09
 
-- How the watch asks for it: always, a flag, or a pseudo setting id.
-- The line of `captures/navigator-10-webwatch-*.jsonl` changes: a new field,
-  or a record of its own per round. `tools/runtable.py` reads these files,
-  and `captures/README.md` names the format.
+- The watch asks for it behind a flag, `idm-web HOST --watch SECONDS
+  [--reason] SETTING...`: a field of `Watch`, not a pseudo setting id, so a
+  watch without it is unchanged.
+- Each frame asked is a line of its own, an entry of a `webapi` capture like
+  every other line, its `request` the frame's and its responses verbatim; no
+  parsed reason in the capture. `captures/README.md` names the requests.
+  `tools/runtable.py` reads `settingId` from every line and would fail on
+  one without it; it learns to decode these lines, or to skip them.
 - Both reads are `overview` and `detail`, inside the fence of
   `web-backend-and-captures`; `home` and `system` are already asked by
   `tools/webprobe.py`.
+
+Which frame, or both, the flag asks stays with step 1.
 
 A new `Query`, an `idm-web` argument and the capture format go into
 `Changelog.md`.
