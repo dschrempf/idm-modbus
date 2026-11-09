@@ -49,3 +49,18 @@ the controller's, not the connection's: it holds until it is left or for
 sixty minutes from the entry, whichever comes first, however often it is read
 meanwhile. The frost protection wizard's code page is not a way in: it
 answers "wizard is not available!" unless a wizard runs.
+
+Xerolux/idm-heatpump-hass, `docs/wiki/Navigator-Protocol-Analysis.md` in
+`community/`, says the opposite: that a code spelled from the clock opens
+the display's service menu only, and the websocket's technician level needs
+a per-installation code from iDM's service partners. It tried another route,
+`authentication/save` with `{"userlevel": 4, "code": …}`, which the
+controller's JavaScript sends and which answers `{"authorized": false}` to a
+wrong code. On 12503 it reports a "wrong" entry that answered with notice
+20005 `N2_USERLEVELACTIVE` — "Fachmanncode aktiv" in the web interface's
+translations, the notice an entry raises here: most likely an entry that
+worked, read as a failure. Two of its reports bear on `Level`
+and are untested here: repeated wrong entries block the code input for a
+while (`N2_USERLEVELINPUTBLOCKED`), so a retry of the entry must stay
+bounded; and several websocket sessions at once answered without
+interfering.

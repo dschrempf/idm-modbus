@@ -39,6 +39,17 @@ registers, `N2_ERBP` and `N2_ERGP`, and says nothing of -2; no settings tree
 holds the pumps, at Fachmann level either. Left: asking iDM support
 (`ask-idm-support-for-812170-covering-20-24-2608`).
 
+## 2026-11-09: Xerolux's map
+
+Xerolux/idm-heatpump-hass (`docs/wiki/Modbus-Register.md` in
+`community/`), whose map comes from a 2025 Navigator 10 specification,
+names 1714 `Externe Anforderung Grundwasserpumpe M15` and 1715 the same
+with "(SW max)", both in %, against `N2_GLTMON`'s Sole-/Zwischenkreispumpe
+at 1714. It counts 254 among the sentinels a register may declare, without
+saying which register; a percent would make -2 a value no request takes,
+which fits "no external request". The map itself is in
+Xerolux/idm-heatpump-api.
+
 ## How we might solve it
 
 1. Record the two facts above in a dated `doc/`, and correct the open

@@ -46,7 +46,12 @@ does, renewing needs no leaving at all and the gap disappears.
 
 1. `enterFachmann` retries itself, a bounded number of times, when the level
    after is still Kunde, with the pause the measurement finds. `Sent` would
-   then record each attempt.
+   then record each attempt. Xerolux/idm-heatpump-hass reports that
+   repeated wrong entries block the code input for a while
+   (`N2_USERLEVELINPUTBLOCKED`, "Fachmann Code Eingabe blockiert" in the
+   web interface's translations); whether an ignored entry counts as a
+   wrong one is unknown, so the measurement should read the notices between
+   attempts.
 2. A `renewFachmann`: leave, wait the measured pause, enter, confirm. The
    only reason to leave and enter back to back is renewal, so the pause lives
    in one place.

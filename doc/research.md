@@ -198,6 +198,25 @@ detection captures". Its register map is derived from the 2025 Navigator 10
 specification plus reverse engineering, not from 812170: a specification of
 this controller, so where the two disagree it deserves a look.
 
+The integration holds no register map of its own; it pins the library. What
+it adds for this project is its wiki, `docs/wiki/`, read here at 3520c5a
+(2026-11-09). On a Navigator 10 it reads the cascade register 1147 as
+`ffff`, as here, but takes the low byte, 255, and counts 254 among the
+sentinels, which here is `fffe`, read by the controller as -2. It lists the web
+backend's writes, taken from the controller's JavaScript and confirmed for
+some by a capture: `home/save` with `systemMode`, numbered as 1005,
+`system.freshwater/save` with a parameter identifier, `setting/save` and
+`setting/execute`, and `notification/save`, each answering a
+`<controller>Save` frame with a `note`. It reads the demand reason, "PV"
+among them, from `home/detail`, which `IDM.Navigator.Web` does not query;
+see [pv-control.md](pv-control.md). It decoded the error-code database of
+iDM's Windows service tool: codes 20 to 999 are the controller's messages,
+and the library packages them. And it says the technician level of the
+websocket does not take a code spelled from the clock, which
+`IDM.Navigator.Web.Level` does on this Navigator 10: it tried another
+request, `authentication/save`, and on 12503 read the notice 20005
+`N2_USERLEVELACTIVE` ("Fachmanncode aktiv") as a failure.
+
 **chincherpa/idm_control.** A markdown transcription of a parameter list — but
 of 812049, the Navigator 1.0/1.7 manual. Useful as a reminder that the
 generations differ; useless for this controller.
@@ -435,6 +454,7 @@ above the 0.8 kW the PV page printed as the forecast. See
 - [kodebach/hacs-idm-heatpump](https://github.com/kodebach/hacs-idm-heatpump)
 - [AndyNew2/hacs-idm-hpweb](https://github.com/AndyNew2/hacs-idm-hpweb)
 - [Xerolux/idm-heatpump-api](https://github.com/Xerolux/idm-heatpump-api)
+- [Xerolux/idm-heatpump-hass](https://github.com/Xerolux/idm-heatpump-hass)
 - [chincherpa/idm_control](https://github.com/chincherpa/idm_control/blob/master/modbus_tcp_navigator.md)
 - [idm-waermepumpe-einbinden (evcc-io/evcc#11905)](https://github.com/evcc-io/evcc/discussions/11905)
 - [Home Assistant community: IDM heatpump integration via modbus](https://community.home-assistant.io/t/idm-heatpump-integration-via-modbus-pure-ha/701473)

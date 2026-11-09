@@ -327,7 +327,10 @@ Each is a read that the tests so far did not take:
    value plus the draw, and of 88. Read on 2026-11-07: both as written.
 2. **The request reason**: `heatpump.info` of the `system` overview, every
    10 s. `idm-web --watch` reads settings only; this needs the `Query` for
-   the `system` overview in a watch, a change to `idm-web`.
+   the `system` overview in a watch, a change to `idm-web`. A second
+   witness, unverified here: Xerolux/idm-heatpump-hass reads the display's
+   "Anforderungsgrund" from the `home` controller's `detail`, a bitmask per
+   heating and hot water widget in which 32 is PV.
 3. **The PV graph at a finer step**: whether graph 101 serves points closer
    than 304 s for a short `fromSecs`.
 4. **The outputs `Y` and the target consumption**: the gains are at 10403
