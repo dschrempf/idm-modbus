@@ -28,57 +28,34 @@ of `systemMode` (`adapt-to-software-20-24-2608`, `rechecks.md`). Settled
 from the captures on 2026-11-09: `FW045` and `FW046` went with `FW044` Off,
 on 20.24-1574, and `N2_PING` never went (`doc/software-versions.md`).
 
-## Next: the heating run expected on 2026-11-09 at 15:00
+## 2026-11-09: the heating run, watched
 
-Read only, at Kunde level; the Fachmann part is optional. Start about 14:45,
-so the rest before the start is in the captures, and name each capture by
-the minute it starts.
+Read only, 14:50 to 16:29, the level at Fachmann from 14:51 to 15:51;
+`doc/verification-2026-11-09-heating-run-as-on-1574.md`, pointed to by
+`doc/software-versions.md`. Re-checked and unchanged: 1074 follows M73,
+1104 reads `ffff` while the pump is driven
+(`doc/verification-2026-10-16-charge-pump.md`); 4122 follows 6245's motor
+power, the start program holds 50.4 rps for three minutes
+(`doc/verification-2026-10-16-draw.md`); the compressor starts 50 s after
+the request. The request reason read 513, `RD_REQ_HK_C`, as the web
+interface printed it: C's flow had stood 1 K below its set for the
+add-on time, `HKC59`, 15 min, and A's had not; A's bit did not appear when
+its flow fell below later, during the run. Mode 8 and no `info` in the
+defrost.
 
-1. Modbus, every 10 s:
+Not reachable by a read: graph channels 112 and 365 are in no graph the
+controller offers, only in the `traverse` group `N2_HEATQUANTITIES`;
+plotting them takes a `save`. The draw's re-check rests on 6245 instead.
 
-       cabal run idm-dump -- HOST --watch 10 74 4108 1008 1090 1091 1100 1004 1098 1072 1074 1104 4122 4126 1746 1748 1750 1754 > captures/navigator-10-watch-20.24-2608-2026-11-09-HHMM.jsonl
+Open:
 
-   1090, 1091 and 1100 are the mode, the request and the compressor; 1072,
-   1074, 1104 and 4126 the charge pump and the heat; 74 and 4108 what the
-   noon run left standing, -0.5 and -1.0 at 12:56; 1746 to 1754 the
-   counters of `page-heat-exceeds-waermemenge-registers-by-1-19`.
-
-2. The web, every 10 s:
-
-       IDM_PIN=... cabal run idm-web -- HOST --watch 10 --reason 4782 10263 > captures/navigator-10-webwatch-20.24-2608-2026-11-09-HHMM.jsonl
-
-   The request reason; 4782 `N2_ANALOGUE_OUTPUTS`, M73 against 1074; 10263
-   `N2_PV_POWER`, the forecast draw. Both pages answer at Kunde; 6245
-   `N2_MODULATION_OVERVIEW` does not (`idm-web --show`, 2026-11-09 13:33).
-
-3. Optional, at Fachmann: `idm-web HOST --enter-fachmann` before the watch,
-   logged to `captures/navigator-10-level-20.24-2608-2026-11-09-HHMM.log`,
-   and 6245 added to the watch. It gives the speed and motor power for the
-   draw re-check, and, not entered again, the level's duration under a
-   10 s watch, step 1 of `fachmann-level-falls-back-before-sixty-minutes`:
-   the first 6245 refused dates the fall-back.
-
-4. At the display, at the start: the request reason it shows, if it shows
-   one, with the time. `watch-the-request-reason-pv-in-idm-web` never
-   compared the two.
-
-While it runs: `tools/runtable.py WATCH --web WEBWATCH --last`.
-
-Expected: 1090 `Heizbetrieb` and `info` 513, bit 1 and `RD_REQ_HK_C`, as
-on 2026-11-05 at 16:24; circuit C is the only one with `activeMode` 1. A
-hot water charge instead reads mode 4, tests that table of `reasonBits`,
-and re-checks `doc/verification-2026-10-01-charge.md`.
-
-Stop both watches 10 to 15 minutes after 1100 falls to 0, then:
-
-- `IDM_PIN=... tools/webprobe.py HOST > captures/navigator-10-webapi-20.24-2608-2026-11-09-HHMM.json`:
-  graph channels 112 and 365 over the run against 4126, and the statistics
-  page's day.
-- The counters alone, for days, one Modbus client at a time:
-  `cabal run idm-dump -- HOST --watch 600 1746 1748 1750 1754 1100 > captures/navigator-10-watch-20.24-2608-2026-11-09-HHMM.jsonl`.
-
-What it re-checks: `doc/verification-2026-10-16-charge-pump.md`, 1074
-following M73 and 1104 at `ffff`; `doc/verification-2026-10-16-draw.md`,
-4122 against 6245's motor power, at Fachmann only; and the request reason
-outside a PV run, against 1090 and 1091. Not the floor, which needs
-settings changed, nor `doc/verification-2026-09-20.md` beyond the reason.
+- 1104 holds on both softwares, so the `Presence` constructor for a
+  register that answers but does not follow its quantity is to be weighed
+  again (`decide-how-a-measured-fact-enters-the-table`, which chose prose
+  until this re-check).
+- `doc/verification-2026-11-05-floor.md`: needs settings changed.
+- `doc/verification-2026-10-01-charge.md`: a hot water charge, watched
+  anyway, mode 4, also tests `reasonBits`' hot water table.
+- `doc/verification-2026-09-20.md`: the display against the registers; on
+  2026-11-09 the reason was read off the web interface, not the display.
+- The stop of a heating run: the watches ended before it.

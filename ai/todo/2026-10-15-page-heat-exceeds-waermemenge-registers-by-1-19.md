@@ -58,3 +58,13 @@ runs. A write beside one polling watch stalled nothing on 2026-11-05
 (`doc/verification-2026-11-05-pv-surplus.md`); two Modbus clients polling at
 once, and a write while both poll, are untested against the stall. Start it
 on a day without a run, and note in the run's `doc/` if one overlaps it.
+
+## 2026-11-09: the counters, during the heating run only
+
+`captures/navigator-10-watch-20.24-2608-2026-11-09-1450.jsonl` holds 1746,
+1748, 1750 and 1754 every 10 s from 14:50 to 16:29, and
+`…-webapi-20.24-2608-2026-11-09-1629.json` the statistics page's 31 days to
+2026-11-09 at 16:29. The 600 s watch after it,
+`…-watch-20.24-2608-2026-11-09-1633.jsonl`, was stopped at 16:42 by
+request, after one round. The days-long watch is still to be started, on a
+day without a run.

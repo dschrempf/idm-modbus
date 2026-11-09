@@ -42,3 +42,16 @@ three times, the last after 11:37, with no code entered: `PV006` is a Kunde
 setting (`captures/navigator-10-webapi-20.24-2608-2026-11-05-2138.json`).
 So the level outlasted both sixty minutes from the one entry and the ten of
 2026-11-05. Activity at the display or the web interface may extend it.
+
+## 2026-11-09: sixty minutes under a 10 s watch
+
+Step 1, the watch. Entered by `idm-web` at 14:51:05, the write time of
+`captures/navigator-10-level-20.24-2608-2026-11-09-1451.log`, and not
+entered again. A web watch asked 6245 every 10 s on its own session
+(`captures/navigator-10-webwatch-20.24-2608-2026-11-09-1451.jsonl`) beside
+a second session asking Kunde pages: answered to 15:51:02, refused from
+15:51:12. Sixty minutes, as on 20.24-1574. Nothing was set at the display.
+So the durations on 2608 are about 8, 10, 60 and more than 73 minutes;
+what made 2026-11-05 short is still unknown. Remaining of step 1: at rest
+with `--status` every 30 s, and with the display touched.
+(`doc/verification-2026-11-09-heating-run-as-on-1574.md`)

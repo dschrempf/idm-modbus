@@ -575,15 +575,14 @@ above the 0.8 kW the PV page printed as the forecast. See
   page's runtime and electrical energy for that day agree with the registers
   while its heat is 1.17 times 1754's (`doc/verification-2026-10-01-charge.md`).
   What remains open is the quantity the page computes as heat.
-- **1104 on 20.24-2608.** On 20.24-1574 the charge pump's status 1104 read
-  `ffff`, "not driven", at all 190 reads of a run in which the controller's
-  page printed M73 at 60 to 100 % and 1074 followed it
-  ([verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md)).
-  On 20.24-2608 it reads `ffff` at rest; whether it follows M73 there is
-  untested. Also unexplained: why the page printed M73 at -1.0 on
-  2026-09-20 while the pump ran
-  ([verification-2026-09-20.md](verification-2026-09-20.md)). The table
-  says only that 1104 answers.
+- **1104 does not follow M73, on either software.** It read `ffff`, "not
+  driven", at every read of a run on 20.24-1574 and of one on 20.24-2608,
+  while the controller's page printed M73 at 60 to 100 % and 1074 followed
+  it ([verification-2026-10-16-charge-pump.md](verification-2026-10-16-charge-pump.md),
+  [verification-2026-11-09-heating-run-as-on-1574.md](verification-2026-11-09-heating-run-as-on-1574.md)).
+  The table says only that 1104 answers. Still unexplained: why the page
+  printed M73 at -1.0 on 2026-09-20 while the pump ran
+  ([verification-2026-09-20.md](verification-2026-09-20.md)).
 
 ## Sources
 

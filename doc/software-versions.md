@@ -138,3 +138,16 @@ completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01
   (`captures/navigator-10-level-20.24-2608-2026-11-06-1104.log`): a web
   watch asked a setting every 10 s to 11:48, a walk followed to 11:59, and
   `PV006` was changed at the display meanwhile.
+
+### Re-checked on 20.24-2608
+
+What the documents measured of a run on 20.24-1574 holds as far as a
+heating run on 2026-11-09 re-checked it: 1074 follows M73, 1104 reads
+`ffff` while the pump is driven, 4122 follows the inverter's motor power,
+and the compressor starts 50 s after the request. The Fachmann level held
+sixty minutes from the entry under a 10 s watch
+([verification-2026-11-09-heating-run-as-on-1574.md](verification-2026-11-09-heating-run-as-on-1574.md)).
+Graph channels 112 and 365 are in no graph the controller offers, and a
+read cannot reach them. Not re-checked: the floor of
+[verification-2026-11-05-floor.md](verification-2026-11-05-floor.md), a hot
+water charge, and the display beyond the request reason.

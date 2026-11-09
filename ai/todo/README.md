@@ -15,10 +15,11 @@ done).
 
 ## 2. The rest
 
-The heating run expected on 2026-11-09 at 15:00 is watched read only, by
-the steps of `recheck-control-behavior-on-20-24-2608`; it starts the
-counters of `page-heat-exceeds-waermemenge-registers-by-1-19` and may
-measure the level of `fachmann-level-duration-and-renewal`.
+The heating run of 2026-11-09 was watched read only
+(`recheck-control-behavior-on-20-24-2608`). It read the counters of
+`page-heat-exceeds-waermemenge-registers-by-1-19` during the run only, and
+measured sixty minutes of the level of
+`fachmann-level-duration-and-renewal`.
 
 1. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
