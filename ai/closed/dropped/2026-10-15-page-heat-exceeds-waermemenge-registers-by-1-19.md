@@ -1,5 +1,13 @@
 # The statistics page's heat exceeds the Wärmemenge registers by about 1.19
 
+## Dropped 2026-11-09
+
+Nobody needs the manufacturer's COP reproduced. The registers are sound
+for heat: 1754 is the integral of 4126 to 0.6 %, and the page's runtime and
+electrical energy agree with them. What the page counts as heat stays an
+open question in `doc/research.md`; the captures of 2026-11-09 below are
+the start of the data, should someone take it up.
+
 ## The question
 
 The registers are settled. 1754, `Wärmemenge Warmwasser`, is the running
