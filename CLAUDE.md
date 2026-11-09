@@ -67,8 +67,9 @@ What the machine answered lives in `captures/`, which git ignores because the
 repository is public; `captures/README.md` names the files, and a document in
 `doc/` cites a capture by its path there. No capture holds what names the
 machine: the myiDM identifier, `myIdmAddress`, and the strings a web page
-prints for it are redacted. `manual/` holds the manufacturer's PDFs and is
-ignored by git too, as is `community/`, clones of the projects the
+prints for it are redacted. `manual/` holds every manufacturer's document
+the repository cites, so that it needs no other copy, and is ignored by git
+too, as is `community/`, clones of the projects the
 "Community work" of `doc/research.md` names. They are evidence to weigh,
 not code to run, and a document cites one by its upstream name, not by
 its path there.
