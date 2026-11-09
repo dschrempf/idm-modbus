@@ -205,3 +205,13 @@ Two questions this folder's runs do not answer: what 4108 does outside a PV
 run, for a grid operator's dimming, and what the locks at 4110, 4113 and
 4114 do. Both need writes of their own; the mail to iDM support that would
 have asked them was dropped (`ask-idm-support-for-812170-covering-20-24-2608`).
+
+## Closed 2026-11-09
+
+Done for what a consumer of the PV control needs: 4108 is in kW, volatile,
+-1 at rest and after a restart, and caps a PV run at 1.0 to 1.5 kW, from
+the start and under a running run; below 1.0 it ends the run. The open
+question of the run at 1.0, what ended it before `PV006`, went to
+`what-ended-the-run-capped-at-1-0-before-pv006` in
+`pv-control-of-74-and-88`; 4108 outside a PV run and the locks at 4110,
+4113 and 4114 to the idea `power-limit-4108-outside-pv-and-locks-4110-to-4114`.

@@ -75,3 +75,10 @@ watches running and a Fachmann walk on each side
 Open: a power cycle at the mains switch, which may differ in all of this;
 the restart an update makes, whose log has no `T20ERR_USER_SHUTDOWN`; the
 energy counters 1746 to 1762 across a restart.
+
+## 2026-11-09: an idea, not a todo
+
+Moved out of `pv-control-of-74-and-88`: none of its runs needs a power
+cycle, and `System Neustart` answered what a consumer must do after a
+restart, write 74 again. Left: a power cycle at the mains switch, the
+restart an update makes, and the energy counters across a restart.

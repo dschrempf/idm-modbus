@@ -69,10 +69,12 @@ minutes, and what the controller does with a value no one renews.
    switch is not, and is not needed for it.
 3. A PV hot water charge.
 
-4108 as a cap, the former step 1, is done: 1.0 to 1.5 caps a run, 0.9
+4108 as a cap, the former step 1, is done
+(`power-limit-4108-semantics-unknown`, closed): 1.0 to 1.5 caps a run, 0.9
 ends it, and 1.0 from the start held 30 minutes and then ended before
-`PV006`. Why it ended is open in `power-limit-4108-semantics-unknown.md`,
-with the run that would tell, not ranked among the steps.
+`PV006`. Why it ended is open in
+`what-ended-the-run-capped-at-1-0-before-pv006.md`, with the run that would
+tell, not ranked among the steps.
 
 Every run watches the request reason beside its settings,
 `idm-web HOST --watch 10 --reason SETTING...`
@@ -81,17 +83,14 @@ as PV's or a circuit's.
 
 ## Files
 
-- `power-limit-4108-semantics-unknown.md`: 4108 from the first reads to the
-  cap of 2026-11-08, the line at 1.0 and the run held at 1.0 of 2026-11-09,
-  and what ended that run; what of 4108 lies outside a PV run.
+- `what-ended-the-run-capped-at-1-0-before-pv006.md`: the run at 1.0 of
+  2026-11-09 ended 2.1 K below `PV006`; B45, the flow or a time of 30
+  minutes, and the run that tells them apart.
 - `does-88-set-the-export-the-pv-controller-holds.md`: the runs of
   2026-11-07 on 88, answered no for the speed, and step 1 with its
   schedule.
 - `does-the-control-act-on-a-74-no-one-renews.md`: 74 keeps its value past
   `SSYSPV030`'s five hours; whether the control acts on it is step 2.
-- `what-a-power-cycle-does-to-74-and-the-controller.md`: what a restart
-  leaves behind, 74 among it; answered for `System Neustart`, open for a
-  power cycle and an update.
 - `pv-hot-water-charge-on-74-untested.md`: hot water rather than the store,
   once the store charge is settled.
 - `what-evcc-writes-to-74.md`: stock evcc writes the draw plus the surplus,
@@ -107,3 +106,13 @@ as PV's or a circuit's.
 - `todo/README.md`: where this folder stands among the other todos.
 - `does-a-low-surplus-at-74-cap-the-speed`, done: the question that led
   here, answered no for every value written to 74.
+- `power-limit-4108-semantics-unknown`, done: 4108 from the first reads to
+  the cap and the run at 1.0.
+- `what-a-power-cycle-does-to-74-and-the-controller`, an idea since
+  2026-11-09: answered for `System Neustart`, open for a power cycle and an
+  update; no run here needs it.
+- `power-limit-4108-outside-pv-and-locks-4110-to-4114`, an idea: 4108 for a
+  grid operator's dimming, and the locks.
+- `create-the-fachmann-level-graphs`: the refrigerant circuit's channels in
+  a graph, so a run's compressor, condenser and evaporator read after the
+  fact.
