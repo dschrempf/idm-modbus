@@ -1,22 +1,19 @@
 # Order of the open todos
 
 The order the open todos are worked in, and why; what each needs stays in
-its own note. The findings from the community projects come first, then the
-PV control, then the rest.
+its own note. The PV control comes first, then the rest.
 
-## 1. From the community projects
-
-`watch-the-request-reason-pv-in-idm-web`: step 1 is a capture during the
-next PV run; steps 2 and 3 after its design questions, before the runs that
-need the reason.
-
-## 2. PV control
+## 1. PV control
 
 `pv-control-of-74-and-88`, in its README's order: 4108 at 1.2, 1.0 and 0.8,
 one run each; the meter-style run with `PV011` at 0.5 min; the overnight
 test of 74; a PV hot water charge.
 
-## 3. The rest
+`watch-the-request-reason-pv-in-idm-web` goes along with them: step 1, a
+capture, during the next of these runs; steps 2 and 3 after its design
+questions, before the runs that need the reason.
+
+## 2. The rest
 
 1. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
