@@ -75,7 +75,7 @@
   `data/navigator-2.0-targets.tsv`, so the cost, `'Free` or `'EepromCycle`,
   is in the type; `write` in `IDM.Navigator.Write` returns an `Outcome c`. An
   EEPROM write reads first and sends nothing when the value is held already,
-  and every write is read back. The one target is the PV surplus at 74.
+  and every write is read back. The first target is the PV surplus at 74.
   `idm-write HOST ADDRESS VALUE` writes it, and writes an EEPROM target only
   with `--eeprom`.
 - A guard against an unannounced update of the controller's software. The
@@ -102,9 +102,22 @@
   name carries the software, and the captures made before were renamed by
   the controller's log.
 - A second target, `PvTarget`, 88 `PV-Zielwert (Smartfox und Solar-Log)`,
-  the candidate for the target the controller's PV loop holds 74 at.
-- A third target, `HeatPumpPowerLimit`, 4108 `Leistungsbegrenzung
-Wärmepumpe`, the candidate for a cap under a PV run.
+  the candidate for the target the controller's PV loop holds 74 at. It
+  stores what is written, but neither -1.0 nor +1.0 moved a PV run
+  (`doc/verification-2026-11-07-pv-target.md`,
+  `doc/verification-2026-11-07-pv-target-ignored.md`).
+- A third target, `HeatPumpPowerLimit`, 4108
+  `Leistungsbegrenzung Wärmepumpe`. A limit above the draw of the start
+  program caps a PV run, one below the draw ends it
+  (`doc/verification-2026-11-08-power-limit-cap.md`,
+  `doc/verification-2026-11-07-power-limit.md`), and a restart returns it to
+  its default, -1, so its cost `'Free` holds
+  (`doc/verification-2026-11-07-restart.md`).
+- `tools/drivepv.py`, which writes a schedule fixed before a run to 74, 88
+  and 4108 through `idm-write`, phase by phase, beside a running
+  `idm-dump --watch`, and writes final values to all three when it ends, so
+  no value it was writing stays behind. `tools/runtable.py` lines up a run's watch,
+  webwatch and write log by time, with the mean of 74 the controller weighs.
 
 ### Changed
 
@@ -171,7 +184,6 @@ Wärmepumpe`, the candidate for a cap under a PV run.
   its rows without a word. A cell that is stated is read or refused: a
   default or bound that is not a number, or a range with one bound, fails too.
   `ParseError` is gone, and the types of a register derive `Lift`.
-
 - `captures/navigator-2.0-scan-20.24-1574-2026-09-19-1503.json` is a fresh sweep of all
   663 addresses: 232 answered, 431 refused, every refusal `IllegalDataAddress`
   and every one of them in the zone module block or write-only. It reproduces
@@ -184,7 +196,6 @@ Wärmepumpe`, the candidate for a cap under a PV run.
   the format, so the capture is reproducible; `IDM.Navigator.Register.asWritten`
   reads bytes without applying the conventions the manual leaves out, which is
   what a capture must record if it is to be the evidence for them.
-
 - `connect` and `withConnection` take a `Patience`, which bounds connecting
   and each read; `defaultPatience` is five seconds. A read that fails so that
   the stream is out of step or gone ends the connection: it closes the socket,
@@ -220,8 +231,8 @@ Wärmepumpe`, the candidate for a cap under a PV run.
   printed in. Sixty-six names were wrong — 59 cut short of their sensor
   designator, `Außentemperatur (B32)` down to `Außentemperatur (B3`, because a
   footnote marker is printed the same way, and 13 broken across two lines, so
-  that addresses 1206, 1208 and 1210 all read `Kaskade / Gemittelte
-Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
+  that addresses 1206, 1208 and 1210 all read
+  `Kaskade / Gemittelte Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
   number where the controller's parameter identifier belongs; nine more lost
   their unit.
 - Info rows kept HTML entities: `Taupunktwächter&nbsp;Heizkreis A`. A cell now
@@ -247,9 +258,3 @@ Vorlauftemperatur`. Twelve cascade registers lost their range and carried a
   `replyTo`, formerly `answerIn`, reads that as `Inaccessible`, a request
   fails with `Refused`, and the session goes on. `idm-web --show` names the
   user level beside a refused setting and goes on with the next.
-
-### Not yet
-
-- Writing. Writing some registers wears out an EEPROM (a register's
-  `Persistence`), so writes need an interface that makes the cost visible
-  rather than an extra argument on a read function.
