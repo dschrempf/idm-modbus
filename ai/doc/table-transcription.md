@@ -58,8 +58,8 @@ by hand, `unknown` where a part was never read.
 
 ## Reading the manual
 
-`manual/` holds the manufacturer's PDFs and is ignored by git; copy them in
-from the house documents to re-run the transcription. The list is printed
+`manual/` holds the manufacturer's PDFs, which the script reads, and is
+ignored by git. The list is printed
 inconsistently — the same column appears in a different order on different
 pages — so cells are read by the column they are printed in, taken from the
 page heading, not by the order they appear in. From revision 12 on a remark
