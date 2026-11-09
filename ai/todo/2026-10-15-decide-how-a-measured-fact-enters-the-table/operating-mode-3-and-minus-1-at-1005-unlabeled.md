@@ -17,13 +17,11 @@ The web app's own script labels -1 `RD_OFF`, "Aus" (no frost protection),
 and 3 `RD_HOLIDAY`, "Urlaub"; its 0, 1, 2, 4 and 5 carry the manual's labels
 (`doc/verification-2026-10-15-web-app.md`). What stays open:
 
-- how the two labels enter the table: session 4 of
-  `2026-10-15-run-the-open-todos-in-six-sessions`;
+- how the two labels enter the table: this entry's README;
 - `decode` reads "Aus" as no value. Switched at the display on 2026-10-15,
   1005 read `ffff` in "Aus" and `0003` in "Urlaub"
   (`captures/navigator-10-watch-20.24-1574-2026-10-15-1418.jsonl`). -1 is therefore a
-  value 1005 holds, not its sentinel, and the fix belongs with the labels in
-  session 4.
+  value 1005 holds, not its sentinel, and the fix belongs with the labels.
 
 The rest of this note is how it was approached.
 
@@ -51,5 +49,4 @@ meaning is a poor thing to switch the machine into.
 
 A label found this way comes from a source other than the manual, so it
 raises a second question: how `tools/transcribe.py` adds an enum code the
-manual does not print. That is session 4 of
-`run-the-open-todos-in-six-sessions`.
+manual does not print. That is this entry's README.

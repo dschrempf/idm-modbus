@@ -6,6 +6,5 @@ would fix the value's type per constructor: `Double` for a temperature or a
 power, `Bool` for a request, an enumeration for an operating mode.
 
 The enumerations meet the 1005 defect first
-(`operating-mode-3-and-minus-1-at-1005-unlabeled`, session 4 of
-`run-the-open-todos-in-six-sessions`): the table lacks -1 "Aus" and 3
+(`decide-how-a-measured-fact-enters-the-table`): the table lacks -1 "Aus" and 3
 "Urlaub". Settle that first.

@@ -49,3 +49,10 @@ Its names follow the manual's, as the table's do. 812663 rev. 0, the
 Navigator 10's own manual, prints both rows as revision 12 does: `UCHAR`,
 0 to 100 %, default -1. So the default the manual prints is -1, the
 controller prints -2, and the manual names no meaning for either.
+
+## Closed on 2026-11-09
+
+Every measurement this note planned is done, and its finding stands as an
+open question in `doc/research.md`, "-2 at 1714 and 1715". What is left is a
+question to iDM support, which `ask-idm-support-for-812170-covering-20-24-2608`
+asks.

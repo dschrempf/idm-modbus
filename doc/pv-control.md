@@ -326,7 +326,8 @@ whether the controller registered a PV request at all.
 consumption `SYSPV030` takes over "when the smart meter hasn't delivered any
 new values for more than 5 hours". 74 read -0.5 8 h 10 min after the last
 write, on 2026-11-06; the register holds. Not settled what the control uses;
-`controller-behavior-when-glt-values-stop-unknown` plans that test.
+`does-the-control-act-on-a-74-no-one-renews`, in `pv-control-of-74-and-88`,
+plans that test.
 
 ## Observations that would settle these
 

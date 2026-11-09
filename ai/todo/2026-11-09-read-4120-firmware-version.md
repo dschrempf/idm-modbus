@@ -19,4 +19,4 @@ here.
    `doc/software-versions.md` updated. A row in the table goes through
    `tools/transcribe.py` like every row the manual lacks, so it needs a
    source the script reads; if 4120 is worth a row, settle that source
-   first.
+   first, in `decide-how-a-measured-fact-enters-the-table`.

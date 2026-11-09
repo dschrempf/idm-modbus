@@ -143,3 +143,10 @@ points to name 4108 or a cap (`what-evcc-writes-to-74.md` in
 capability since add-dim-curtail-features (evcc-io/evcc#29905) but configures
 no dimmer, so evcc drives an iDM through 74 alone. Nothing to change in the
 steps above.
+
+## Left once the PV runs are done
+
+Two questions this folder's runs do not answer: what 4108 does outside a PV
+run, for a grid operator's dimming, and what the locks at 4110, 4113 and
+4114 do. Both need writes of their own, and both are in the mail of
+`ask-idm-support-for-812170-covering-20-24-2608`.

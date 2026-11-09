@@ -23,7 +23,7 @@ Explanation 1. 1104 read `ffff` at all 190 reads of the run, while 4782 printed
 M73 at 60 to 100 % and 1074 matched it
 (`doc/verification-2026-10-16-charge-pump.md`). Not settled: why the page
 showed M73 at -1.0 on 2026-09-20 while the pump ran. What is left is the
-decision below, session 4 of `2026-10-15-run-the-open-todos-in-six-sessions`.
+decision below, this entry's README.
 
 ## What would explain it
 

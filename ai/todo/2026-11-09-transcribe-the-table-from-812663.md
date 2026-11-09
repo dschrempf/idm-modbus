@@ -34,3 +34,5 @@ the new PDF.
   argues for leaving.
 - Whether the script keeps reading 812170 too, for a Navigator 2.0, or
   reads 812663 alone.
+- With them, `decide-how-a-measured-fact-enters-the-table`: the same
+  script takes in a source other than the manual.

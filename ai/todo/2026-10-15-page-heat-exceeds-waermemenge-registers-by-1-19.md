@@ -47,3 +47,11 @@ the one the manufacturer means.
   captures.
 - Then record the outcome in a dated `doc/`, and close the open question in
   `doc/research.md`.
+
+## Beside other runs
+
+The watch runs for days, so it overlaps the watches and writes of other
+runs. A write beside one polling watch stalled nothing on 2026-11-05
+(`doc/verification-2026-11-05-pv-surplus.md`); two Modbus clients polling at
+once, and a write while both poll, are untested against the stall. Start it
+on a day without a run, and note in the run's `doc/` if one overlaps it.
