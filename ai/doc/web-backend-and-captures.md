@@ -18,7 +18,13 @@ own parameter identifier, the `FW030` and `BV002` of the parameter list, so
 the join to the register table is on the identifier the table already
 carries. It is also the only source that carries time: the graph it captures
 says when the machine ran, which is what a rise in a counter has to be
-attributed to. The capture is verbatim but for the code that opens the
+attributed to. The controller records every channel `graph`/`traverse`
+lists whether or not a graph holds it, about eight days back; a graph only
+chooses what a read returns, and creating one is a `save`, done by hand in
+the web interface. Since 2026-11-09 seven graphs hold all 37 channels of the
+Kunde level; the 17 more of the Fachmann level, the refrigerant circuit's,
+are in none. B33, the flow, is no channel at either level
+(`doc/verification-2026-11-09-graphs-record-every-channel.md`). The capture is verbatim but for the code that opens the
 controller and the strings that name the machine, which are replaced by a
 visible marker.
 

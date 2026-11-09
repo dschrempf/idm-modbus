@@ -150,7 +150,8 @@ heating run on 2026-11-09 re-checked it: 1074 follows M73, 1104 reads
 and the compressor starts 50 s after the request. The Fachmann level held
 sixty minutes from the entry under a 10 s watch
 ([verification-2026-11-09-heating-run-as-on-1574.md](verification-2026-11-09-heating-run-as-on-1574.md)).
-Graph channels 112 and 365 are in no graph the controller offers, and a
-read cannot reach them. The floor of
+Graph channels 112 and 365 were in no graph the controller offered; since
+a graph holding them was created by hand they read, with their history
+([verification-2026-11-09-graphs-record-every-channel.md](verification-2026-11-09-graphs-record-every-channel.md)). The floor of
 [verification-2026-11-05-floor.md](verification-2026-11-05-floor.md) and a
 hot water charge stand as measured on 20.24-1574.

@@ -171,7 +171,7 @@ of 2026-11-08 had gone on to 40.00 °C.
 
 The steps of 2026-11-08 are done: 4108 caps a PV run at 1.0 to 1.5 kW from
 the start and under a running run, and ends it below 1.0. Left of them:
-what ended the run at 1.0. Two candidates, neither ruled out:
+what ended the run at 1.0. Three candidates, none ruled out:
 
 - **The flow against `PV006`.** It read 39.8 °C at the stop, below 40.
   Against it: on 2026-11-08 B38 reached 40.00 °C, so the flow, above B38
@@ -179,13 +179,16 @@ what ended the run at 1.0. Two candidates, neither ruled out:
   run. Nothing recorded the flow then.
 - **A time of about 30 minutes**, for a capped run or one at low speed; the
   run on 1.5 held 46 min 30 s.
+- **B45 `Ladefühler` against `PV006`.** The controller's graph has it at
+  38.7 °C at 17:59 and 39.5 at 18:04, near 40 at the stop; its five-minute
+  samples do not say whether it reached 40
+  (`doc/verification-2026-11-09-graphs-record-every-channel.md`).
 
 The run that tells them apart: 1.0 again from a store near 30 °C, with
-1050 `Wärmepumpen Vorlauftemperatur (B33)` in the Modbus watch. A stop
-near 30 minutes with B38 and the flow well below 40 is the time; a stop at
-a flow of 40 or so is the temperature. Plotting the flow in a graph of the
-controller's, so that its history outlasts the watch, is a `save` and
-stays manual.
+1050 `Wärmepumpen Vorlauftemperatur (B33)` and 1066 `Ladefühler (B45)` in
+the Modbus watch. A stop near 30 minutes with B38, B45 and the flow well
+below 40 is the time; a stop as B45 or the flow reaches 40 is the
+temperature. B45 is in the graph `Anlage` now, B33 in no graph channel.
 
 ## 2026-11-08: evcc does not use it
 
