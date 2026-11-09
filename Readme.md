@@ -38,9 +38,10 @@ Writing is supported for three targets, each tried on the machine:
   going, and a negative value ends it.
 - `PvTarget` (88): writes are accepted and read back, but none of the values
   tried so far had any effect on a PV run.
-- `HeatPumpPowerLimit` (4108): a limit above the draw of the start program
-  caps a PV run, and a limit below it ends the run. The value is lost when the
-  controller restarts.
+- `HeatPumpPowerLimit` (4108): a limit from 1.0 to 1.5 kW caps a PV run
+  after its start program, also when it is lowered while the run goes on; a
+  limit below 1.0 kW ends the run. The value is lost when the controller
+  restarts.
 
 `doc/pv-control.md` collects what we know about the controller's PV control
 and what is still open.

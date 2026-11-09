@@ -13,7 +13,7 @@ covers.
 
 ## Where it stands
 
-Settled on the machine, 2026-11-05 to 2026-11-08:
+Settled on the machine, 2026-11-05 to 2026-11-09:
 
 - 74 is in kW, and the controller adds its own draw back.
 - A PI controller, gains `IV017` to `IV019`, sets the speed on the mean of
@@ -37,20 +37,26 @@ Settled on the machine, 2026-11-05 to 2026-11-08:
   draw held near 1.4 kW for 42 minutes, past the minimum runtime, until
   `PV006` ended it (evening of 2026-11-08,
   `doc/verification-2026-11-08-power-limit-cap.md`).
+- 4108 at 1.2 from before the start capped the run at 1.19 kW past the
+  minimum runtime, after a start program drawing 1.24 to 1.30; lowered
+  under the run to 1.0 it held 0.98 kW; at 0.9 it ended the run within 8 s
+  (noon of 2026-11-09, `doc/verification-2026-11-09-power-limit-floor.md`).
+- The controller names a PV run's request `RD_REQ_PV`, in `system`
+  `overview` and `home` `detail` alike (same run).
 
-So 4108 holds a run below full speed past the minimum runtime, at 1.4 kW
-so far rather than the floor's 0.6 to 0.74. Open: whether a limit below the
-start program's 1.2 kW caps too, what decides at the minimum runtime,
-whether 88 weighs in a start or a stop, what sets the 30 minutes, and what
-the controller does with a value no one renews.
+So 4108 holds a run past the minimum runtime at 1.0 to 1.5 kW, and ends it
+below 1.0: about 1.0 kW is the lowest run it gives, not the floor's 0.6 to
+0.74. Open: how long a run at 1.0 from the start holds, what decides at the
+minimum runtime, whether 88 weighs in a start or a stop, what sets the 30
+minutes, and what the controller does with a value no one renews.
 
 ## Next, in order
 
 1. 4108, `Leistungsbegrenzung Wärmepumpe`, as a cap under a PV run: a
    constant surplus at 74, which alone drives the speed to the top, and a
-   limit at 4108. 1.5 from before the start capped the run to `PV006`;
-   next, the same run with the limit lower, 1.2, 1.0, then 0.8, one run
-   each, never lowered under a running run. The steps are in
+   limit at 4108. 1.5 and 1.2 from before the start capped the run, 1.0
+   under a running one too, and 0.9 ended it. Left: 1.0 from before the
+   start, held to `PV006`. The steps are in
    `power-limit-4108-semantics-unknown.md`.
 2. The meter-style run with `PV011` at 0.5 min, with the PV the meter
    simulates near the floor's draw: whether the loop settles there, and
@@ -63,14 +69,15 @@ the controller does with a value no one renews.
    switch is not, and is not needed for it.
 4. A PV hot water charge.
 
-Before the next run, step 1 of `watch-the-request-reason-pv-in-idm-web`:
-a `tools/webprobe.py` capture during it.
+Step 1 of `watch-the-request-reason-pv-in-idm-web`, a `tools/webprobe.py`
+capture during a run, was taken on 2026-11-09; its steps 2 and 3 come
+before the runs that need the reason.
 
 ## Files
 
 - `power-limit-4108-semantics-unknown.md`: 4108 from the first reads to the
-  cap of 2026-11-08, and the runs of step 1; what of 4108 lies outside a PV
-  run.
+  cap of 2026-11-08 and the line at 1.0 of 2026-11-09, and the run left of
+  step 1; what of 4108 lies outside a PV run.
 - `does-88-set-the-export-the-pv-controller-holds.md`: the runs of
   2026-11-07 on 88, answered no for the speed, and step 2 with its
   schedule.

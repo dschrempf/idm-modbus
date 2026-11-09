@@ -24,7 +24,21 @@ it:
   `info` beside `operationMode` while a request stands, one widget for
   heating and one for hot water.
 
-Neither frame has been captured during a run.
+Both were captured during a run on 2026-11-09, below.
+
+## Found on 2026-11-09: both frames carry it
+
+Step 1, during the PV run of `doc/verification-2026-11-09-power-limit-floor.md`
+(`captures/navigator-10-webapi-20.24-2608-2026-11-09-1243.json`, 12:43:36 to
+12:43:40): `system` `overview` carried `heatpump.info` 33 beside
+`operationMode` 1; `home` `detail` carried `info` 33 beside `operationMode`
+1 in widget 17, and widget 10 `operationMode` 1 without `info`; `home`
+`overview` carried widget 17 alike in each of its three layouts. 33 is
+bits 1 and 32; the JavaScript clears bit 1 before it counts bits
+(`SV` in `main-7UP7UE6I.js`), and names it nowhere, so the reason is
+`RD_REQ_PV`. The display was not read beside it. No other request of the
+walk carried an `info`. Step 1 is done; the frame the flag asks is still
+to be chosen, and bit 1 is a bit step 2's parser keeps unnamed.
 
 ## Steps
 
@@ -39,9 +53,9 @@ Neither frame has been captured during a run.
 
 ## Design, settled on 2026-11-09
 
-- The watch asks for it behind a flag, `idm-web HOST --watch SECONDS
-  [--reason] SETTING...`: a field of `Watch`, not a pseudo setting id, so a
-  watch without it is unchanged.
+- The watch asks for it behind a flag,
+  `idm-web HOST --watch SECONDS [--reason] SETTING...`: a field of `Watch`,
+  not a pseudo setting id, so a watch without it is unchanged.
 - Each frame asked is a line of its own, an entry of a `webapi` capture like
   every other line, its `request` the frame's and its responses verbatim; no
   parsed reason in the capture. `captures/README.md` names the requests.
@@ -51,7 +65,7 @@ Neither frame has been captured during a run.
   `web-backend-and-captures`; `home` and `system` are already asked by
   `tools/webprobe.py`.
 
-Which frame, or both, the flag asks stays with step 1.
+Which frame, or both, the flag asks: open, with step 1's finding above.
 
 A new `Query`, an `idm-web` argument and the capture format go into
 `Changelog.md`.

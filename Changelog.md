@@ -107,9 +107,11 @@
   (`doc/verification-2026-11-07-pv-target.md`,
   `doc/verification-2026-11-07-pv-target-ignored.md`).
 - A third target, `HeatPumpPowerLimit`, 4108
-  `Leistungsbegrenzung Wärmepumpe`. A limit above the draw of the start
-  program caps a PV run, one below the draw ends it
+  `Leistungsbegrenzung Wärmepumpe`. A limit from 1.0 to 1.5 kW caps a PV
+  run after its start program, also when lowered under the run, and one
+  below 1.0 kW ends it
   (`doc/verification-2026-11-08-power-limit-cap.md`,
+  `doc/verification-2026-11-09-power-limit-floor.md`,
   `doc/verification-2026-11-07-power-limit.md`), and a restart returns it to
   its default, -1, so its cost `'Free` holds
   (`doc/verification-2026-11-07-restart.md`).

@@ -6,7 +6,8 @@ The runs on 74 so far (`doc/verification-2026-11-05-pv-surplus.md`,
 `doc/verification-2026-11-07-pv-target.md`,
 `doc/verification-2026-11-07-pv-target-ignored.md`,
 `doc/verification-2026-11-07-power-limit.md`,
-`doc/verification-2026-11-08-power-limit-cap.md`) each answered a question
+`doc/verification-2026-11-08-power-limit-cap.md`,
+`doc/verification-2026-11-09-power-limit-floor.md`) each answered a question
 and raised one the tests could not see into: what starts a PV run, what sets
 its speed, what stops it, and what holds off the next start. This document
 collects what the sources say about that logic and which observations would
@@ -104,10 +105,13 @@ here is the source's until a dated `doc/` measures it.
   `RD_REQ_EXTERNAL_BUS` (8), `RD_REQ_ISC` (16), `RD_REQ_FROST_PROT` (64), the
   circuits `RD_REQ_HK_A` to `RD_REQ_HK_G` (128 to 8192), `RD_REQ_SYS_OFF`
   (16384), `RD_REQ_ION` (32768) and `RD_REQ_HEATING_BOOSTER` (65536); more
-  than one bit reads `RD_REQ_MORE_DEMANDS`. Hot water and cooling have
-  tables of their own. The webapi capture at rest,
+  than one bit besides bit 1, which it clears before counting and does not
+  name, reads `RD_REQ_MORE_DEMANDS`. Hot water and cooling have tables of
+  their own. The webapi capture at rest,
   `captures/navigator-10-webapi-20.24-2608-2026-11-06-1148.json`, has no
-  `info` in its `heatpump`.
+  `info` in its `heatpump`; during the PV run of 2026-11-09 it read 33,
+  bits 1 and 32, `RD_REQ_PV`
+  (`doc/verification-2026-11-09-power-limit-floor.md`).
 - **The GLT monitor**, 12763 `N2_GLTMON`, at Fachmann level: per address a
   `Value`, the controller's internal one, and a `GLT Value`, the last one
   written (812170 §4.4). On 2026-10-16 it listed 74 to 88 with an empty
@@ -269,7 +273,10 @@ did not at 120 rps on the morning of 2026-11-06. Late that evening one
 after 5 minutes 10 seconds at 112.5 rps, 9 s after 0.8 kW was written to
 4108, with 74 at 2.0 throughout: a limit below the draw ends a run before
 the minimum runtime. On 2026-11-08 one at `PV006`, after 46 minutes 30
-seconds at 52 to 59 rps, with 74 at 2.0 and 4108 at 1.5 throughout. Not
+seconds at 52 to 59 rps, with 74 at 2.0 and 4108 at 1.5 throughout. On
+2026-11-09 one 17 minutes 30 seconds after the start, within 8 s of 0.9
+written to 4108 at a draw of 1.0 kW, where 1.0 had capped the run: a limit
+below 1.0 ends a run however close to the draw. Not
 settled what
 "requested" is, why the minimum runtime did not hold, or why 0 held the one
 run and ended the other.
@@ -302,8 +309,15 @@ The levers outside the PV loop: 4108 `Leistungsbegrenzung Wärmepumpe`, a
 start, beside a constant 2.0 at 74, it capped the run: the speed climbed one
 step past the start program and held the draw near 1.4 kW for 42
 minutes, until `PV006` ended the run
-(`doc/verification-2026-11-08-power-limit-cap.md`). Whether a limit below
-the start program's draw caps as well is untested. And
+(`doc/verification-2026-11-08-power-limit-cap.md`). Written 1.2 before the
+start, it let the start program draw 1.24 to 1.30 kW and then held the draw
+at 1.19 kW on average past the minimum runtime; lowered to 1.0 under the
+run, it brought the speed down to 38.4 rps within 20 s and the draw to
+0.98 kW; lowered to 0.9, it ended the run within 8 s
+(`doc/verification-2026-11-09-power-limit-floor.md`). So 4108 holds a run
+at 1.0 to 1.5 kW, and below 1.0 ends it: the lowest run it gives is about
+1.0 kW, above the floor's draw. Whether a limit below 1.0 written before
+the start holds off the start is untested. And
 `IV002` `N2_MOD_MAX_POWER_HEATING`, a Fachmann setting in percent that would
 cap every heating run, not only a PV one, and did not bind in the one run
 that lowered it (`doc/verification-2026-11-05-floor.md`). That run also
@@ -317,8 +331,10 @@ seven minutes.
 from nine minutes after a PV stop, with B38 6 K below the hysteresis
 threshold; on 2026-11-07 a request 29 min 59 s after a PV stop, on 2.0
 standing for 24 minutes. So a PV start waits 30 minutes after a PV stop;
-which setting holds them no source names. The request reason, `heatpump.info`, would show
-whether the controller registered a PV request at all.
+which setting holds them no source names. The request reason,
+`heatpump.info`, shows whether the controller registered a PV request: it
+named the run of 2026-11-09 PV's, but has not been read beside a start
+that waited.
 
 ### What the controller does with a value no one renews
 
@@ -342,10 +358,12 @@ Each is a read that the tests so far did not take:
    widget an `operationMode`, 1 heating and 4 hot water, and while a request
    stands an `info` bitmask, the table above. At rest its widgets 10 and 17
    read `operationMode` 0 and no `info`
-   (`captures/navigator-10-webapi-20.24-2608-2026-11-07-2140.json`); which
-   frame carries the reason during a run is not yet captured.
-   `idm-web --watch` reads settings only; reading either needs a `Query`
-   for it, a change to `idm-web`.
+   (`captures/navigator-10-webapi-20.24-2608-2026-11-07-2140.json`).
+   During a PV run both frames carried it, `info` 33 in `heatpump` and in
+   widget 17, `RD_REQ_PV`; widget 10 carried none
+   (`doc/verification-2026-11-09-power-limit-floor.md`). `idm-web --watch`
+   reads settings only; reading it every round needs a `Query` for it, a
+   change to `idm-web`.
 3. **The PV graph at a finer step**: whether graph 101 serves points closer
    than 304 s for a short `fromSecs`.
 4. **The outputs `Y` and the target consumption**: the gains are at 10403

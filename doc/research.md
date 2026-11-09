@@ -545,6 +545,10 @@ above the 0.8 kW the PV page printed as the forecast. See
   ([verification-2026-11-08-power-limit-cap.md](verification-2026-11-08-power-limit-cap.md)).
   At 0.8, written under a draw of 3.1 kW, it ended the run within 9 s
   ([verification-2026-11-07-power-limit.md](verification-2026-11-07-power-limit.md)).
+  At 1.2 from before the start it capped the run too, and lowered under it
+  to 1.0 it held the draw near 1.0 kW; at 0.9 it ended the run within 8 s,
+  so the lowest run it gives is about 1.0 kW
+  ([verification-2026-11-09-power-limit-floor.md](verification-2026-11-09-power-limit-floor.md)).
   The speed is set by a PI controller whose gains, `IV017` to `IV019`, sit
   in the PV menu at Fachmann level. The sources on this logic, among them a
   target at 88 and the controller's own reason for a request, are in

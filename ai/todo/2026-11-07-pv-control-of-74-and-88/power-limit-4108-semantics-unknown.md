@@ -135,6 +135,28 @@ limit written before the start and held, lower in steps toward the floor:
 changed. A run that stops in the start program, or never starts, ends the
 steps there.
 
+## 2026-11-09: it caps down to 1.0, and ends a run below
+
+4108 at 1.2 from before the start, beside 74 at a constant 2.0: the start
+program drew 1.24 to 1.30 kW at 50.4 rps, above the limit, and was not cut;
+after it the speed came down to 45.5 to 46.8 rps and the draw held at 1.19
+kW on average past the minimum runtime. Lowered under the run to 1.0, by
+replacing the schedule driver (killed without its final writes): the speed
+fell to 38.4 rps within 20 s, the draw to 0.98 kW, and the run went on.
+Lowered to 0.9 after 2 min 38 s at 1.0: the run ended within 8 s
+(`doc/verification-2026-11-09-power-limit-floor.md`). With 0.8 under
+3.1 kW on 2026-11-07, a limit below 1.0 ends a run however close to the
+draw; the line lies between 0.9 and 1.0, above the heating floor's 0.6 to
+0.74 kW. 4108 gives a run at about 1.0 kW at the lowest, not the floor.
+
+The steps of 2026-11-08 change: 1.2 is done, 1.0 capped under a running
+run, and 0.8 is not worth a run of its own. Left of them: 1.0 from before
+the start, to `PV006`, the lowest run a consumer can ask of 4108, which
+shows whether a limit under the start program's draw lets the start program
+through, as 1.2 did, and how long a run at 1.0 holds. Whether a limit
+below 1.0 written before the start holds off a start stays open: no use a
+consumer has for 4108 depends on it.
+
 ## 2026-11-08: evcc does not use it
 
 Neither idm-waermepumpen (evcc-io/evcc#19002) nor the Lambda threads it
