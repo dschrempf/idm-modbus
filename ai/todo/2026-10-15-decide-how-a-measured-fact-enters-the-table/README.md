@@ -19,8 +19,6 @@ are done; what is left is the decision, and with it a defect.
   means deciding how a watch enters the table, or prose in `doc/` and the
   haddock of `Drive`.
   `charge-pump-status-1104-reads-not-driven-while-pumping.md`.
-- **4120, a row the manual lacks.** Only if it answers and is worth a row
-  (`read-4120-firmware-version`, step 3).
 - **The resolution an EEPROM `FLOAT` is stored at.** Only if the first EEPROM
   write reads back other bytes (`eeprom-guard-needs-exact-round-trip`,
   option 2).

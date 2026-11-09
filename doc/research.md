@@ -273,7 +273,9 @@ table on every address and datatype but these:
   prints -2.
 - 4112 as a writable `FLOAT`, as 812663 prints it.
 - 4120 as `firmware_version`, a `FLOAT` its model probe reads; it is in
-  neither manual and has not been read here.
+  neither manual, and here it answers exception 02 by function code 3 and
+  4 alike
+  ([verification-2026-11-09-firmware-register.md](verification-2026-11-09-firmware-register.md)).
 
 Floats are low word first, and a `WORD` with a negative range is signed, so
 -1 at 1074 and 1104 to 1109 stays a value, as here. Over Modbus it writes

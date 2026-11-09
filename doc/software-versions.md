@@ -14,7 +14,9 @@ leaves a measurement standing only as far as it is measured again.
   register, read 24, 2608 and 0, and rows of the table. The page names 528
   `Software Version (Build Info)` and prints `g0c686ed`, but the register
   reads 0, as 4116 does for the whole version string; the table leaves both
-  out.
+  out. 4120, a `FLOAT` `firmware_version` by Xerolux/idm-heatpump-api,
+  answers exception 02
+  ([verification-2026-11-09-firmware-register.md](verification-2026-11-09-firmware-register.md)).
 
 Every session of `idm-dump`, `idm-write`, `idm-web` and `tools/webprobe.py`
 reads the version when it opens, over Modbus from 522 to 526 or over the web

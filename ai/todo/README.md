@@ -6,16 +6,15 @@ PV control, then the rest.
 
 ## 1. From the community projects
 
-1. `read-4120-firmware-version`: one read-only read, minutes, any time.
-2. `transcribe-the-table-from-812663`: two design questions for Dominik,
+1. `transcribe-the-table-from-812663`: two design questions for Dominik,
    then work at the desk.
-3. `decide-how-a-measured-fact-enters-the-table`: not from the community,
-   but it changes the same script as 2, and fixes 1005, which decodes a
+2. `decide-how-a-measured-fact-enters-the-table`: not from the community,
+   but it changes the same script as 1, and fixes 1005, which decodes a
    switched-off machine as no value. Can wait until after the PV runs.
-4. `watch-the-request-reason-pv-in-idm-web`: step 1 is a capture during the
+3. `watch-the-request-reason-pv-in-idm-web`: step 1 is a capture during the
    next PV run; steps 2 and 3 after its design questions, before the runs
    that need the reason.
-5. `ask-idm-support-for-812170-covering-20-24-2608`: the mail.
+4. `ask-idm-support-for-812170-covering-20-24-2608`: the mail.
    `search-the-web-for-812663-newer-than-rev-0` found no revision newer
    than 0, so the mail is the way.
 

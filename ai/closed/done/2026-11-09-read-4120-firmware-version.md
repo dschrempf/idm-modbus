@@ -20,3 +20,14 @@ here.
    `tools/transcribe.py` like every row the manual lacks, so it needs a
    source the script reads; if 4120 is worth a row, settle that source
    first, in `decide-how-a-measured-fact-enters-the-table`.
+
+## 2026-11-09: exception 02, by function code 3 and 4
+
+On 20.24-2608 4120 is not there. Function code 3, as one register and as
+two, and 4121 alone, answer exception 02
+(`captures/navigator-10-widths-20.24-2608-2026-11-09-1024.json`); function
+code 4, which the library uses, as one register and as two, by hand, too.
+`doc/verification-2026-11-09-firmware-register.md` records it, and
+`doc/research.md` and `doc/software-versions.md` cite it. No value, so no
+row for the table, and nothing for
+`decide-how-a-measured-fact-enters-the-table`.
