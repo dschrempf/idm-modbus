@@ -1,160 +1,181 @@
 # idm-modbus
 
-Modbus TCP for iDM heat pumps with Navigator 10 control, in Haskell.
+A Haskell library and command-line tools for iDM heat pumps with the
+Navigator 10 controller, over Modbus TCP and over the controller's web
+interface.
 
-The point of this library is not that it talks Modbus — plenty of things do.
-The point is that its register table is a transcription of the manufacturer's
-own parameter list, completed from the controller's own list of the registers
-it serves, and that every claim in it has been checked against a running
-machine. Existing projects in this space are frank about guessing;
-`doc/research.md` says which parts and why.
+Most existing projects for these heat pumps guess at the register layout, and
+say so; `doc/research.md` goes through them. This one takes its register table
+from the manufacturer's parameter list, fills the gaps from the list of
+registers the controller itself reports, and has checked every entry against a
+running machine.
 
-The parameter list is iDM's for the previous controller, the Navigator 2.0:
-document 812170, "Modbus TCP – Navigatorregelung 2.0". No Modbus manual for
-the Navigator 10 is at hand, and the Navigator 10 serves that register map,
-with the additions and differences the table records — measured here, not
-documented. Its firmware names it, `T_NAV10_20.24-…`,
-and continues the Navigator 2.0's `20.x` numbering. Whether the library works
-on a Navigator 2.0 is untested.
+iDM wrote that parameter list, document 812170 ("Modbus TCP –
+Navigatorregelung 2.0"), for the previous controller, the Navigator 2.0. We
+have no Modbus manual for the Navigator 10. In practice it serves the same
+register map, with some additions and differences that we measured and that
+the table records. Its firmware string, `T_NAV10_20.24-…`, names the
+Navigator 10 and continues the Navigator 2.0's `20.x` version numbers. Nobody
+has tried the library on a Navigator 2.0 yet.
 
-Writing some registers wears out an EEPROM — a register's `Persistence`, in
-`IDM.Navigator.Register`, says whether — so a write goes to a `Target` whose
-type states its cost, and only to the few targets listed in
-`data/navigator-10-targets.tsv`.
+Some registers are stored in an EEPROM, which wears out with every write.
+`Persistence` in `IDM.Navigator.Register` tells you which ones. For that
+reason a write goes to a `Target` whose type includes the cost of the write,
+and only the few registers listed in `data/navigator-10-targets.tsv` can be
+written at all.
 
 ## Status
 
-Early. The table describes controller software 20.24-2608: 722 registers, 692
-from revision 12 of 812170, and 30 from the controller's register page
-`N2_GLTMON`; every address in it was read on the machine. The read path works, over Modbus and over the web backend. Writing
-exists for three targets, each tried on the machine:
+The project is at an early stage. The table describes controller software
+20.24-2608 and has 722 registers: 692 from revision 12 of 812170 and 30 from
+the controller's register page `N2_GLTMON`. Every address in it has been read
+on the machine. Reading works, both over Modbus and over the web backend.
+Writing is supported for three targets, each tried on the machine:
 
-- `PvSurplus`, 74: the controller reads it in kW and adds its own draw back,
-  so 0 keeps a running charge running and a negative value ends it.
-- `PvTarget`, 88: written and read back, but no value tried so far moved a PV
-  run.
-- `HeatPumpPowerLimit`, 4108: a limit above the draw of the start program
-  caps a PV run; one below the draw ends it. It does not survive a restart.
+- `PvSurplus` (74): the controller reads the value in kW and adds the heat
+  pump's own draw back on top. Writing 0 therefore keeps a running charge
+  going, and a negative value ends it.
+- `PvTarget` (88): writes are accepted and read back, but none of the values
+  tried so far had any effect on a PV run.
+- `HeatPumpPowerLimit` (4108): a limit above the draw of the start program
+  caps a PV run, and a limit below it ends the run. The value is lost when the
+  controller restarts.
 
-`doc/pv-control.md` collects what is known about the controller's PV control
+`doc/pv-control.md` collects what we know about the controller's PV control
 and what is still open.
 
-## Use
+## Usage
 
     nix develop
     cabal build
     cabal run idm-dump -- HOST
 
-`idm-dump` reads every register that a reference machine answered for and
-prints address, access right, EEPROM marking, value, unit and name. With
-`--all` it sweeps the entire parameter list instead, which is how you find out
-what your own machine has fitted. With `--json` it sweeps every address,
-write-only ones included, and writes the capture format of
-`captures/navigator-10-scan-*.json`: address, status, exception code, bytes,
-and the number those bytes spell, uninterpreted. With
-`--watch SECONDS ADDRESS...` it reads the given addresses every so many
-seconds until interrupted, and writes a line per read in the same format,
-stamped with the local time. With `--widths ADDRESS...` it measures how many registers wide the
-value at each address is.
+`idm-dump` reads every register that the reference machine answered for, and
+prints the address, access rights, EEPROM marking, value, unit and name of
+each. Options:
 
-`idm-web` reads the controller's web backend, the websocket its own web
-interface uses, with the web interface's PIN in `IDM_PIN`. `--status` prints
-the user level, the controller's clock and the notices standing;
-`--show SETTING...` reads settings by the id of the settings tree, e.g. 4768
-for the sensor values the web interface lists, among them the refrigerant side
-that Modbus does not carry. `--watch SECONDS SETTING...` asks them round after
-round and writes a line per request, verbatim but for what names the machine.
-`--enter-fachmann` opens the Fachmann level with the code of the controller's
-clock, and `--leave-fachmann` closes it again.
+- `--all` scans the whole parameter list instead. Use it to find out what
+  your machine has installed.
+- `--json` scans every address, including write-only ones, and prints the
+  capture format of `captures/navigator-10-scan-*.json`: address, status,
+  exception code, raw bytes, and the number those bytes encode, without
+  further interpretation.
+- `--watch SECONDS ADDRESS...` reads the given addresses every `SECONDS`
+  seconds until you stop it, and prints one line per read in the same format,
+  with a local timestamp.
+- `--widths ADDRESS...` measures how many registers the value at each address
+  takes up.
 
-`idm-write HOST ADDRESS VALUE` writes a target, one of the addresses in
-`data/navigator-10-targets.tsv`, and reads it back. A target stored in the
-EEPROM is not touched without `--eeprom`, not even read; with it, it is read
-first and left alone if it holds the value already. A confirmed write says the
-register holds the value, not that the controller acts on it.
+`idm-web` talks to the controller's web backend, the websocket its web
+interface uses. It needs the web interface's PIN in `IDM_PIN`. Options:
 
-Three scripts in `tools/` serve measurements rather than use.
-`tools/webprobe.py` captures what the web backend answers, sending only its
-reads. `tools/drivepv.py` writes a schedule fixed before the run to 74, 88 and
-4108 through `idm-write`, beside a running `idm-dump --watch`;
-`tools/runtable.py` lines up what was written with what the controller did.
+- `--status` prints the user level, the controller's clock and any active
+  notices.
+- `--show SETTING...` reads settings by their ID in the settings tree. For
+  example, 4768 holds the sensor values the web interface lists, including
+  the refrigerant side, which Modbus does not expose.
+- `--watch SECONDS SETTING...` polls the given settings repeatedly and prints
+  one line per request. The answers are printed as received, except that
+  anything identifying the machine is redacted.
+- `--enter-fachmann` switches to the Fachmann (installer) level, using the
+  code derived from the controller's clock. `--leave-fachmann` switches back.
 
-Each of them first reads the controller's software. A write, and a change of
-the user level, goes ahead only on the software the table describes,
-`data/navigator-10-software.tsv`; a read goes ahead on any, warns where it
-differs, and every capture records it.
+`idm-write HOST ADDRESS VALUE` writes a value to one of the targets in
+`data/navigator-10-targets.tsv` and reads it back. It refuses a target stored
+in the EEPROM unless you pass `--eeprom`, and without that flag does not even
+read it. With the flag, it reads the current value first and writes nothing
+if it already matches. A confirmed write only means that the register holds
+the new value, not that the controller acts on it.
 
-Before anything will answer, Modbus TCP has to be switched on in the
-controller: service level, "Gebäudeleittechnik", "Modbus TCP" to "Ein". The
-service code is the day and month of the current date. Port 502, unit id 1.
+Three of the scripts in `tools/` are for taking measurements, not for
+everyday use:
+
+- `tools/webprobe.py` records what the web backend answers. It only sends
+  read requests.
+- `tools/drivepv.py` writes a schedule, fixed before the run, to 74, 88 and
+  4108 through `idm-write`, while `idm-dump --watch` runs alongside.
+- `tools/runtable.py` lines up what was written with what the controller did.
+
+All of these programs read the controller's software version first. Writes
+and changes of the user level only go ahead if it matches the version the
+table describes, in `data/navigator-10-software.tsv`. Reads work on any
+version but warn if it differs, and every capture records the version.
+
+Before you can connect, you need to switch Modbus TCP on in the controller: in
+the service level, go to "Gebäudeleittechnik" and set "Modbus TCP" to "Ein".
+The service code is today's day and month. The controller then answers on
+port 502 with unit id 1.
 
 ## Layout
 
-| | |
-|---|---|
-| `data/navigator-10-registers.tsv` | the parameter list and the controller's register page, transcribed; the single source of truth |
-| `data/navigator-10-enums.tsv` | enumerated values, as literally printed in the manual |
-| `data/navigator-10-gltmon-parameters.tsv` | the parameter identifier of a register the manual does not list, where a moved setting showed it; written by hand |
-| `data/navigator-10-targets.tsv` | the registers a write may go to, with an English name each; written by hand |
-| `data/navigator-10-software.tsv` | the controller software the table describes, the only one a write goes to; written by hand |
-| `data/navigator-10-web-2026-09-20.tsv` | what the controller's web pages showed, read off the screen; written by hand |
-| `captures/` | what a real machine answered, and nothing the list already says; kept out of git; `captures/README.md` names the files |
-| `tools/transcribe.py` | rebuilds both TSVs from the manual's PDF, and the targets module |
-| `tools/webprobe.py` | captures the web backend's answers, reads only |
-| `tools/drivepv.py`, `tools/runtable.py` | write a fixed schedule to the PV targets, and line it up with what the controller did |
-| `core/IDM/Modbus/TCP/Internal.hs` | framing; `core/IDM/Modbus/TCP.hs` is the part a consumer may reach, neither connecting nor writing |
-| `core/IDM/Navigator/Register.hs` | what a register is, and how to decode one |
-| `src/IDM/Navigator/Table.hs` | the table, parsed at compile time |
-| `src/IDM/Navigator/Software.hs` | the controller's software, as the table states it and as a session reads it |
-| `src/IDM/Navigator/Client.hs` | a session, and reading, paced |
-| `src/IDM/Navigator/Target.hs` | the targets of a write, generated |
-| `src/IDM/Navigator/Write.hs` | writing, at a cost the type states |
-| `core/IDM/Navigator/Write/Core.hs` | what a write sends and comes to, for any register; private to the package |
-| `src/IDM/Navigator/Web.hs`, `Web/` | the web backend: its vocabulary, a read-only session, and the user level |
-| `doc/research.md` | sources, community projects, open questions |
-| `doc/software-versions.md` | the controller's software by date, and what an update changed |
-| `doc/pv-control.md` | the controller's PV control: what the sources say, and how to watch it |
-| `doc/verification-*.md` | one measurement each, dated; its title states what it found |
+|                                           |                                                                                                                                                    |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data/navigator-10-registers.tsv`         | the parameter list and the controller's register page, transcribed; the single source of truth                                                     |
+| `data/navigator-10-enums.tsv`             | enumerated values, exactly as printed in the manual                                                                                                |
+| `data/navigator-10-gltmon-parameters.tsv` | manufacturer's parameter IDs for registers the manual does not list, found by changing a setting and watching which register follows; hand-written |
+| `data/navigator-10-targets.tsv`           | the registers that may be written, each with an English name; hand-written                                                                         |
+| `data/navigator-10-software.tsv`          | the controller software the table describes, the only one writes are allowed on; hand-written                                                      |
+| `data/navigator-10-web-2026-09-20.tsv`    | what the controller's web pages showed, copied from the screen by hand                                                                             |
+| `captures/`                               | raw answers from a real machine, apart from what the parameter list already says; not in git; `captures/README.md` explains the files              |
+| `tools/transcribe.py`                     | regenerates both TSVs and the targets module from the manual's PDF                                                                                 |
+| `tools/webprobe.py`                       | records the web backend's answers, using reads only                                                                                                |
+| `tools/drivepv.py`, `tools/runtable.py`   | write a fixed schedule to the PV targets, and line it up with what the controller did                                                              |
+| `core/IDM/Modbus/TCP/Internal.hs`         | Modbus framing; `core/IDM/Modbus/TCP.hs` is the part a consumer can use, which can neither connect nor write                                       |
+| `core/IDM/Navigator/Register.hs`          | the types that describe a register, and decoding                                                                                                   |
+| `src/IDM/Navigator/Table.hs`              | the register table, parsed at compile time                                                                                                         |
+| `src/IDM/Navigator/Software.hs`           | the controller's software version, as the table states it and as a session reads it                                                                |
+| `src/IDM/Navigator/Client.hs`             | sessions and paced reads                                                                                                                           |
+| `src/IDM/Navigator/Target.hs`             | the write targets; generated                                                                                                                       |
+| `src/IDM/Navigator/Write.hs`              | writing, with the cost in the type                                                                                                                 |
+| `core/IDM/Navigator/Write/Core.hs`        | what a write sends and what it results in, for any register; private to the package                                                                |
+| `src/IDM/Navigator/Web.hs`, `Web/`        | the web backend: its protocol, a read-only session, and the user level                                                                             |
+| `doc/research.md`                         | sources, community projects, open questions                                                                                                        |
+| `doc/software-versions.md`                | the controller's software versions by date, and what each update changed                                                                           |
+| `doc/pv-control.md`                       | the controller's PV control: what the sources say, and how to observe it                                                                           |
+| `doc/verification-*.md`                   | one measurement each, dated; the title states the result                                                                                           |
 
-Correcting the table means re-running `tools/transcribe.py` against a newer
-revision of the manual, which goes in `manual/`, ignored by git because the
-document is the manufacturer's. The script writes the two TSVs and
-`src/IDM/Navigator/Target.hs`, and none of them should be edited by hand —
-that would make the next revision impossible to apply cleanly.
+To correct the table, put a newer revision of the manual in `manual/` and
+re-run `tools/transcribe.py`. Git ignores `manual/`, since the document
+belongs to the manufacturer. The script generates the two TSVs and
+`src/IDM/Navigator/Target.hs`. Don't edit those by hand, or the next revision
+of the manual can no longer be applied cleanly.
 
-## Three things that bite
+## Protocol quirks
 
-- **A 32-bit float arrives low word first.** Against the usual Modbus habit,
-  and the most common bug in community configurations.
-- **An unfitted sensor answers with a sentinel, not an error**: `-1.0` for a
-  `FLOAT`, `-1` for a `UCHAR`, which arrives as a whole signed register, and
-  `65535` for a `WORD`. This library returns `NoValue` rather than letting a
-  -1 into your temperature series, and `NoValueOr` where the sentinel is also
-  a value the register may hold: -1 °C outdoors.
-- **The Navigator stalls when polled hard.** Requests are paced by default.
+- **32-bit floats arrive low word first.** This is the opposite of the usual
+  Modbus convention, and the most common bug in community configurations.
+- **A sensor that is not installed returns a placeholder instead of an
+  error**: `-1.0` for a `FLOAT`, `-1` for a `UCHAR` (which arrives as a full,
+  signed register), and `65535` for a `WORD`. The library returns `NoValue`
+  for these, so a -1 does not end up in your temperature data. Where the
+  placeholder could also be a real reading, such as -1 °C outdoors, it returns
+  `NoValueOr` instead.
+- **The Navigator stalls if you poll it too often.** Requests are spaced out
+  by default.
 
 ## Home automation
 
-Not yet connected to anything. Two routes are open: a daemon of its own,
-built on this library, which is the likelier one, or an MQTT bridge to Home
-Assistant using its discovery protocol, which is what the rest of the
-non-Python ecosystem does. Either is a consumer of this package, and what it
-decides the heat pump should do stays there.
+Nothing uses this library yet. There are two options: a standalone daemon
+built on the library, which is more likely, or an MQTT bridge to Home
+Assistant using its discovery protocol, which is how most non-Python
+integrations do it. Either would be a separate consumer of this package, and
+the decisions about what the heat pump should do would be made there, not
+here.
 
 ## No warranty
 
-This software comes with **no warranty of any kind**, and the authors take no
+This software comes with **no warranty of any kind**. The authors take no
 responsibility for what it does to your heat pump, your house, or anything
-else. You use it entirely at your own risk. It talks to a controller through
-interfaces the manufacturer documents only in part or not at all, it writes
-registers that start and stop the compressor, and it can change the
-controller's user level, which unlocks settings that are not meant for the
-owner. If your heat pump stops heating, breaks, or loses its warranty,
-that is on you, not on us.
+else; you use it at your own risk. It talks to the controller through
+interfaces that the manufacturer documents only partly or not at all, it
+writes registers that start and stop the compressor, and it can change the
+controller's user level, which unlocks settings not meant for owners. If your
+heat pump stops heating, breaks, or loses its warranty, that is your
+responsibility, not ours.
 
 ## License
 
 BSD-3-Clause.
 
 Not affiliated with, endorsed by, or connected to iDM Energiesysteme GmbH. The
-manufacturer's documents are theirs and are not redistributed here.
+manufacturer's documents belong to them and are not redistributed here.
