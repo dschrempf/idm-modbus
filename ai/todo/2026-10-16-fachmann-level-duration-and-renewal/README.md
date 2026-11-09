@@ -9,8 +9,9 @@ the renewal depends on the duration.
 - Duration: sixty minutes on 20.24-1574; on 20.24-2608 it fell back after
   about 8 and 10 minutes on 2026-11-05, and held 73 minutes on 2026-11-06,
   left by hand. Activity at the display or the web interface may extend it.
-  Three claims still say sixty minutes: `CLAUDE.md`, the header of
-  `IDM.Navigator.Web.Level` and the help of `idm-web`.
+  `CLAUDE.md`, the header of `IDM.Navigator.Web.Level`, the help of
+  `idm-web` and `web-backend-and-captures` say so since 2026-11-09, and the
+  73 minutes are in `doc/software-versions.md`.
 - Renewal: an entry straight after leaving was ignored once; pauses of 20 s
   and 30 s took at the first attempt. Repeated wrong entries may block the
   code input (`N2_USERLEVELINPUTBLOCKED`); whether an ignored entry counts
@@ -23,8 +24,8 @@ the renewal depends on the duration.
 2. Measure the pause a renewal needs, and whether the code sent at Fachmann
    restarts the clock: `fachmann-entry-right-after-leaving-is-ignored.md`,
    "The measurement".
-3. Correct the three claims, and build the renewal its options choose; a
-   dated `doc/` for both measurements.
+3. State the duration found in the four places above, and build the
+   renewal its options choose; a dated `doc/` for both measurements.
 
 ## Files
 

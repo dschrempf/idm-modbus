@@ -128,4 +128,8 @@ completed by `…-1636.json`, is compared with `…-webapi-20.24-1574-2026-10-01
   the sixty minutes measured on 20.24-1574. Entered again for the walk that
   began at 18:59:41 and ended at 19:10:32, it was still Fachmann when left
   after it. What ends the level now is not
-  known.
+  known. On 2026-11-06 it held from the entry at 11:04:38 to 12:17:36 and
+  was left by hand after, 73 minutes
+  (`captures/navigator-10-level-20.24-2608-2026-11-06-1104.log`): a web
+  watch asked a setting every 10 s to 11:48, a walk followed to 11:59, and
+  `PV006` was changed at the display meanwhile.

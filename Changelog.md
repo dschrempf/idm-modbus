@@ -289,3 +289,7 @@
   arrives as `ffff`, the word of an unfitted sensor. Its range now reaches
   the measured -1, a `UCHAR` reads a negative word inside its range as a
   value, and 1005 reads `Code (-1)`, "Aus", and `Code 3`, "Urlaub".
+- The help of `idm-web` and the documentation of `IDM.Navigator.Web.Level`
+  said the Fachmann level holds for sixty minutes from the entry. That was
+  20.24-1574; on 20.24-2608 the controller ended it after as few as eight
+  minutes, and once not within 73.
