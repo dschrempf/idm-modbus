@@ -1,0 +1,22 @@
+# Read 4120, a firmware version by Xerolux's account
+
+Xerolux/idm-heatpump-api reads 4120 as `firmware_version`, a `FLOAT` its
+model probe rounds to two places (`idm_heatpump/registers.py` and
+`client.py`, in `community/`). Its own comment says some Navigator 10
+builds reject the register. Neither 812170 nor 812663 prints 4120, the
+controller's register page `N2_GLTMON` does not list it, and on a Navigator
+2.0 seaspotter/ioBroker.idm-modbus saw exception 02. It has never been read
+here.
+
+## Steps
+
+1. `idm-dump HOST --widths 4120` into a widths capture: whether it answers,
+   and at what width.
+2. If it answers: its raw words, decoded as a low-word-first `FLOAT`,
+   against the software the session reads, 20.24-2608. A float cannot
+   hold `20.24-2608` whole; note which part it carries, if any.
+3. A dated `doc/` for the finding either way, and `doc/research.md` and
+   `doc/software-versions.md` updated. A row in the table goes through
+   `tools/transcribe.py` like every row the manual lacks, so it needs a
+   source the script reads; if 4120 is worth a row, settle that source
+   first.
