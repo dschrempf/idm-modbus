@@ -125,6 +125,7 @@ endingText e = case e of
   Malformed frame -> "a malformed frame, " <> hex frame
   ConnectionClosed -> "connection closed"
   Lost why -> why
+  Abandoned -> "the request was interrupted"
 
 -- | The marker that stands for what was read, where it names the machine.
 redactedJSON :: String

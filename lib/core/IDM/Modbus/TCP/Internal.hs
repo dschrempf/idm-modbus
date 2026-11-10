@@ -41,7 +41,7 @@ module IDM.Modbus.TCP.Internal
   )
 where
 
-import Control.Exception (Exception, IOException, bracket, bracketOnError, try)
+import Control.Exception (Exception, IOException, bracket, bracketOnError, onException, try)
 import Data.Bits (testBit, (.&.))
 import qualified Data.ByteString as B
 import Data.IORef (IORef, atomicModifyIORef', newIORef, readIORef, writeIORef)
@@ -157,6 +157,10 @@ data Ending
     ConnectionClosed
   | -- | the socket failed
     Lost String
+  | -- | an exception interrupted the request, which may have gone out, before
+    -- its answer was read; the exception goes on to the caller, so no
+    -- 'Failure' carries this, but every later request fails 'Unsent' with it
+    Abandoned
   deriving (Show, Eq)
 
 -- | What pairs an answer with its request.
@@ -257,7 +261,9 @@ parseWriteResponse expected w frame = do
       Two _ _ -> (16, word16BE addr <> word16BE 2)
 
 -- | Send a PDU and parse its answer. A failure that leaves the stream out of
--- step ends the connection.
+-- step ends the connection, and so does an exception, an asynchronous one
+-- among them, that arrives before the answer was read: it ends it as
+-- 'Abandoned', and goes on.
 transact ::
   Connection ->
   B.ByteString ->
@@ -274,7 +280,9 @@ transact conn pdu parse =
               <> word16BE (fromIntegral (B.length pdu + 1))
               <> B.pack [unUnitId (connectionUnitId conn)]
               <> pdu
-      received <- exchange conn adu
+      received <-
+        exchange conn adu
+          `onException` (writeIORef (connectionEnded conn) (Just Abandoned) >> disconnect conn)
       let result = either (Left . Ended) (parse (TransactionId tid)) received
       case result of
         Left (Ended e) -> do

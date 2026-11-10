@@ -324,6 +324,10 @@
 - `readRegisters` took whatever answer came next for the answer to its request.
   A caller that timed a read out and kept the connection read the late answer
   as the answer to its next request. It now checks the transaction id.
+- A request that an exception interrupted, such as a drive's on SIGTERM, left
+  the connection open with its answer still on the way, and the next request,
+  a final value among them, failed on that answer. The interruption now ends
+  the connection, as `Abandoned`, and later requests fail unsent.
 - `idm-dump HOST` and `idm-dump HOST --json` waited for good on a Navigator
   that stalled; only `--watch` timed its reads out.
 - Addresses 1104 to 1109 reported a fitted pump as absent. They are pump
