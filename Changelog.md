@@ -166,6 +166,18 @@
   read once a round.
 - `IDM.Navigator.Table.readableAt`: the register at an address where a read
   may ask it, or `Unreadable`, `Unlisted` or `WriteOnlyRegister`, why not.
+- `tools/runtable.py` reads the drive file of `idm-drive` as its WATCH: the
+  reads as a watch's, and the writes of 74 for the mean from the file's
+  `write` events the controller acknowledged, so it needs no `--writes`,
+  which stays for the write logs of `tools/drivepv.py` and is refused beside
+  a drive file. A drive file's `export` events add the columns `export`, the
+  PV less 4122, and `written`, the value the bounds left of it, in the row
+  of the round whose 4122 they came from. A webwatch with level lines adds a
+  `level` column, the user level each round was read at, and in a round not
+  at Fachmann the speed and power of 6245, which then has no answer, are
+  `-` rather than the last ones read. `tools/test_runtable.py` tests it on
+  hand-written captures in `tools/fixtures/`, and the dev shell has
+  `python3`.
 
 ### Changed
 

@@ -51,6 +51,7 @@
               hpkgs.haskell-language-server
               ormolu
               poppler-utils
+              python3
             ];
           };
         };
