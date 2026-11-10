@@ -310,3 +310,6 @@
   minutes, and once not within 73.
 - They say sixty minutes again: a watch on 20.24-2608 measured them on
   2026-11-09.
+- `tools/runtable.py` stopped on a web watch that read a setting answering a
+  number rather than a page, such as 10389 `PV011`: it parsed every answer as
+  HTML. It now reads only the two settings it takes a column from.

@@ -64,6 +64,8 @@ def read_web(path):
                     out.append((t, "info", bits(pump.get("info", 0))))
             continue
         setting = r["request"]["data"]["settingId"]
+        if setting not in ("6245", "10263"):
+            continue
         html = r["responses"][0].get("settingDetail", {}).get("value", "")
         cells = html_cells(html)
         if setting == "6245":
