@@ -152,7 +152,9 @@ drive = driveWith . sessionDriveRequests
 -- three openings. An opening that throws is a failed one. A 'report' that
 -- throws is passed over. After the finals, the first exception a 'report'
 -- threw is thrown again; otherwise the first other one turns a 'Finished'
--- into 'Interrupted'.
+-- into 'Interrupted'. An exception thrown to the drive while a 'report'
+-- blocks, as a signal's where stdout is a full pipe, is the report's
+-- failure: it is thrown again rather than returned.
 driveWith :: DriveRequests s -> (DriveEventOn s -> IO ()) -> Period -> [NeedOn s] -> DriveOn s r -> IO (Finish r)
 driveWith rq report (Period seconds) needs d = do
   held <- newIORef Nothing
