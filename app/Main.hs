@@ -6,18 +6,16 @@
 module Main (main) where
 
 import Control.Concurrent (threadDelay)
-import Control.Exception (IOException, try)
 import qualified Data.ByteString as B
 import Data.List (intercalate)
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
-import Data.Time (ZonedTime, defaultTimeLocale, formatTime, getZonedTime)
-import Data.Word (Word8)
-import GHC.Clock (getMonotonicTime)
 import IDM.Modbus.TCP
+import IDM.Navigator.Capture
 import IDM.Navigator.Client
 import IDM.Navigator.Register
-import IDM.Navigator.Software (ModbusVersion (..), mismatchText, modbusVersionText)
+import IDM.Navigator.Rounds (Period (..), RoundEventOn (..), need, rounds)
+import IDM.Navigator.Software (mismatchText, modbusVersionText)
 import qualified IDM.Navigator.Table as Table
 import IDM.Navigator.Web (redacted)
 import System.Environment (getArgs, getProgName)
@@ -38,9 +36,6 @@ data Mode
   | -- | the capture format of @captures\/navigator-10-widths-*.json@: how
     -- wide the registers at addresses the parameter list does not name are
     Widths [Address]
-
--- | Seconds from the start of one round of a watch to the start of the next.
-newtype Period = Period Int
 
 -- | Which registers to ask.
 data Scope
@@ -132,7 +127,7 @@ run host mode = case mode of
   Capture -> connected $ \s -> do
     warn s
     samples <- probe s Table.navigator10
-    putStrLn (capture s (map (\sample -> fields (sampleRegister sample) (Returned (sampleResult sample))) samples))
+    putStrLn (capture s (map (\sample -> readFields (sampleRegister sample) (Just (sampleResult sample))) samples))
   Watch period regs -> watch (open defaultPatience defaultPoll (Host host) port unit) period regs
   Widths addrs -> connected $ \s -> do
     warn s
@@ -185,32 +180,13 @@ warn s =
     (writable s)
 
 -- | A capture: the software the session read, and the entries.
---
--- The parameter list is in @data\/navigator-10-registers.tsv@ and is not
--- repeated here, so that a correction to the transcription cannot leave the
--- capture saying something else. The value is the number as written, not as
--- the Navigator means it: a capture that already applied the sentinel rule
--- could not be the evidence for it.
 capture :: Session -> [[(String, String)]] -> String
 capture s entries =
   "{\n"
-    <> field ("software", software (Just s))
+    <> field ("software", software (Just (sessionSoftware s)))
     <> ",\n"
     <> field ("entries", "[\n" <> intercalate ",\n" (map entry entries) <> "\n]")
     <> "\n}"
-
--- | The version a session read, as a capture records it: like a read, with
--- the three numbers where it answered. A read made on no session has none.
-software :: Maybe Session -> String
-software Nothing = "null"
-software (Just s) =
-  "{" <> intercalate ", " (map field (status <> parts)) <> "}"
-  where
-    o = Returned (sessionSoftware s)
-    status = [("status", quote (statusText o)), ("exception", maybe "null" show (refusal o))]
-    parts = case sessionSoftware s of
-      Right v -> [("major", show (modbusMajor v)), ("minor", show (modbusMinor v)), ("patch", show (modbusPatch v))]
-      Left _ -> []
 
 entry :: [(String, String)] -> String
 entry fs = " {\n" <> intercalate ",\n" (map (("  " <>) . field) fs) <> "\n }"
@@ -234,61 +210,9 @@ widths conn a@(Address n) =
 -- | Bytes and nothing else: no datatype is known to spell them as a number.
 widthEntry :: WidthRead -> [(String, String)]
 widthEntry (WidthRead (Address a) q r) =
-  [ ("address", show a),
-    ("quantity", show (quantityCount q)),
-    ("status", quote (statusText o)),
-    ("exception", maybe "null" show (refusal o)),
-    ("raw", either (const "null") (if Table.readsMyIdm (Address a) q then const redactedJSON else quote . hex) r)
-  ]
-  where
-    o = Returned r
-
--- | What became of a read: what the machine returned, or nothing, because
--- there was no connection to ask on.
-data Outcome a
-  = Returned (Either Failure a)
-  | Unanswered
-
-fields :: Register -> Outcome Answer -> [(String, String)]
-fields reg o =
-  [ ("address", show addr),
-    ("status", quote (statusText o)),
-    ("exception", maybe "null" show (refusal o)),
-    ("raw", maybe "null" (hidden . quote . hex . answerRaw) answer),
-    ("value", maybe "null" (hidden . number . answerWritten) answer)
-  ]
-  where
-    Address addr = registerAddress reg
-    hidden = if namesMachine reg then const redactedJSON else id
-    answer = case o of
-      Returned (Right a) -> Just a
-      _ -> Nothing
-
--- | Whether a read of the register takes in the myiDM identifier.
-namesMachine :: Register -> Bool
-namesMachine reg = Table.readsMyIdm (registerAddress reg) (registerWidth (registerDatatype reg))
-
--- | The marker that stands for what was read, where it names the machine.
-redactedJSON :: String
-redactedJSON = quote (T.unpack redacted)
-
-field :: (String, String) -> String
-field (key, value) = quote key <> ": " <> value
-
--- | Why an address holds no value: the machine refused it, or the read itself
--- went wrong, which says nothing about the address.
-statusText :: Outcome a -> String
-statusText o = case o of
-  Returned (Right _) -> "ok"
-  Returned (Left (DeviceException _)) -> "exception"
-  _ -> "error"
-
--- | The Modbus exception code behind a refusal. An unfitted option answers 2,
--- @IllegalDataAddress@, and the capture is where that is shown.
-refusal :: Outcome a -> Maybe Word8
-refusal o = case o of
-  Returned (Left (DeviceException e)) -> Just (exceptionByte e)
-  _ -> Nothing
+  [("address", show a), ("quantity", show (quantityCount q))]
+    <> statusFields (Just r)
+    <> [("raw", either (const "null") (if Table.readsMyIdm (Address a) q then const redactedJSON else quote . hex) r)]
 
 -- | Read the same registers round after round, a line per read, until
 -- interrupted.
@@ -297,66 +221,17 @@ refusal o = case o of
 -- not end a run left to watch a charge. Each read it cost is still a line, with
 -- status @error@, so the gap is in the capture rather than only on stderr.
 -- Every line carries the software of the session it was read on, which a new
--- connection reads anew.
+-- connection reads anew. A line is printed as its read is made.
 watch :: IO Session -> Period -> [Register] -> IO ()
-watch opening (Period seconds) regs = do
+watch opening period regs = do
   hSetBuffering stdout LineBuffering
-  getMonotonicTime >>= go Nothing
+  rounds opening report period [need regs (const (pure ()))]
   where
-    go session due = do
-      now <- getMonotonicTime
-      threadDelay (round (max 0 (due - now) * 1e6))
-      session' <- maybe reopen (pure . Just) session >>= sweep regs
-      -- a round that overran starts the next at once, without catching up
-      getMonotonicTime >>= go session' . max (due + fromIntegral seconds)
-    reopen = do
-      r <- try opening
-      case r of
-        Right s -> Just s <$ warn s
-        Left e -> Nothing <$ complain (show (e :: IOException))
-    sweep [] session = pure session
-    sweep (r : rs) Nothing = emit r Unanswered >> sweep rs Nothing
-    sweep (r : rs) (Just s) = do
-      t <- getZonedTime
-      sample <- readOne s r
-      putStrLn (watchLine t (Just s) r (Returned (sampleResult sample)))
-      case sampleResult sample of
-        Left (Ended why) -> lose why
-        Left (Unsent why) -> lose why
-        _ -> do
-          threadDelay (pollIntervalMicroseconds (sessionPoll s))
-          sweep rs (Just s)
-      where
-        lose why = do
-          complain (endingText why)
-          close s
-          sweep rs Nothing
-    emit r o = getZonedTime >>= \t -> putStrLn (watchLine t Nothing r o)
-    complain = hPutStrLn stderr
-
-watchLine :: ZonedTime -> Maybe Session -> Register -> Outcome Answer -> String
-watchLine t s reg o =
-  "{" <> intercalate ", " (map field (("time", quote (stamp t)) : ("software", software s) : fields reg o)) <> "}"
-  where
-    stamp = formatTime defaultTimeLocale "%Y-%m-%dT%H:%M:%S%3Q%Ez"
-
--- 'Code', 'Flag' and 'DriveSignal' are what 'decode' makes of a word;
--- 'asWritten' applies no convention, so the capture only ever sees the first
--- two.
-number :: Value -> String
-number v = case v of
-  Real x -> show x
-  Count n -> show n
-  Code n -> show n
-  Flag b -> if b then "true" else "false"
-  DriveSignal NotDriven -> "-1"
-  DriveSignal (Driven n) -> show n
-
-quote :: String -> String
-quote t = "\"" <> t <> "\""
-
-hex :: B.ByteString -> String
-hex = concatMap (printf "%02x") . B.unpack
+    report e = case e of
+      ReadDone a -> putStrLn (watchLine a)
+      Opened s -> warn s
+      NotOpened why -> hPutStrLn stderr (T.unpack why)
+      Dropped why -> hPutStrLn stderr (endingText why)
 
 endingText :: Ending -> String
 endingText e = case e of

@@ -147,6 +147,23 @@
   `system` `overview` first in every round, a line of its own in the
   webwatch capture, with no setting needed; `tools/runtable.py` adds its
   `mode` and `info` columns.
+- `IDM.Navigator.Rounds`, the loop of `idm-dump --watch` as a library. A
+  part of a program names its `Need`, the registers it reads, and `rounds`
+  reads the union of the needs once per `Period`, in one session, each
+  register once in the order of first mention, and hands each need a
+  `Round` of the reads it named. A read is an `Asked`, with its local and
+  monotonic time, its session and its `Sample`, or none where no session
+  was open. A lost connection ends the session, the rest of the round is not
+  asked, and the next round opens a new one. The library prints nothing:
+  each read, opening, failed opening and loss is a `RoundEvent`, handed to a
+  callback as it happens. `readRound` reads one round over any
+  `RoundRequests`, so the test suite runs it against a fake controller.
+  `IDM.Navigator.Client.sampleOf` makes a `Sample` from what a read returned.
+- `IDM.Navigator.Capture`, the line of a watch capture, `watchLine`, over an
+  `Asked`, and the fields the scan and widths captures share with it.
+  `idm-dump --watch` prints its lines from the `RoundEvent`s of `rounds`,
+  each as its read is made, unchanged but that an address given twice is
+  read once a round.
 
 ### Changed
 
