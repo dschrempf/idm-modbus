@@ -5,6 +5,7 @@
 -- License     :  BSD-3-Clause
 module Main (main) where
 
+import Control.Monad (foldM)
 import Control.Monad.Trans.State.Strict (State, modify, runState, state)
 import qualified Data.Aeson as A
 import qualified Data.Aeson.Key as K
@@ -14,9 +15,13 @@ import qualified Data.ByteString.Lazy.Char8 as BL
 import Data.List (group, nub, sort)
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
+import Data.Time (ZonedTime, defaultTimeLocale, parseTimeOrError)
 import GHC.Float (double2Float, float2Double)
 import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
+import IDM.Navigator.Capture (watchLineOn)
+import IDM.Navigator.Client (Answer (..), Sample (..), sampleOf)
 import IDM.Navigator.Register
+import IDM.Navigator.Rounds
 import IDM.Navigator.Software
 import qualified IDM.Navigator.Table as Table
 import IDM.Navigator.Target
@@ -471,8 +476,177 @@ checks =
     ( "a version that could not be read refuses a write",
       checked modbusAgreement (Software 20 24 2608 (Patch 0)) (Left (Ended NoAnswer))
         == Left (NotRead (Ended NoAnswer) :: Mismatch Failure ModbusVersion)
+    ),
+    ( "a loss in mid-round closes the session and asks nothing more",
+      let (rs, c) = roundsAgainst [] [Right (B.pack [0, 0, 0xbf, 0]), Left (Ended NoAnswer)] (Just (FakeSession 0)) [[register 74, register 88, register 4108]]
+          s0 = Just (FakeSession 0)
+       in seenOf c
+            == [ SawRead (Address 74) s0 (Just (Right (B.pack [0, 0, 0xbf, 0]))),
+                 SawRead (Address 88) s0 (Just (Left (Ended NoAnswer))),
+                 SawDropped NoAnswer,
+                 SawRead (Address 4108) Nothing Nothing
+               ]
+            && requestsOf c == [ReadOn (FakeSession 0) (Address 74), PauseOn (FakeSession 0), ReadOn (FakeSession 0) (Address 88), Closing (FakeSession 0)]
+            && map roundSession rs == [Nothing]
+            && map (map askedMonotonic . roundReads) rs == [[0, 0.25, 0.5]]
+            && [fmap answerRaw . sampleResult <$> roundSample r (Address a) | r <- rs, a <- [88, 4108]]
+              == [Just (Left (Ended NoAnswer)), Nothing]
+    ),
+    ( "a request left unsent ends the session as a loss does",
+      let (_, c) = roundsAgainst [] [Left (Unsent ConnectionClosed)] (Just (FakeSession 0)) [[register 74, register 88]]
+       in seenOf c
+            == [ SawRead (Address 74) (Just (FakeSession 0)) (Just (Left (Unsent ConnectionClosed))),
+                 SawDropped ConnectionClosed,
+                 SawRead (Address 88) Nothing Nothing
+               ]
+            && requestsOf c == [ReadOn (FakeSession 0) (Address 74), Closing (FakeSession 0)]
+    ),
+    ( "the round after a loss opens a session anew, reports it, and reads on it",
+      let (rs, c) = roundsAgainst [] [Left (Ended NoAnswer), Right (B.pack [0, 1])] (Just (FakeSession 0)) [[register 1100], [register 1100]]
+       in seenOf c
+            == [ SawRead (Address 1100) (Just (FakeSession 0)) (Just (Left (Ended NoAnswer))),
+                 SawDropped NoAnswer,
+                 SawOpened (FakeSession 1),
+                 SawRead (Address 1100) (Just (FakeSession 1)) (Just (Right (B.pack [0, 1])))
+               ]
+            && requestsOf c == [ReadOn (FakeSession 0) (Address 1100), Closing (FakeSession 0), Opening, ReadOn (FakeSession 1) (Address 1100), PauseOn (FakeSession 1)]
+            && map roundSession rs == [Nothing, Just (FakeSession 1)]
+    ),
+    ( "a session that does not open asks nothing, and the next round tries again",
+      let (rs, c) = roundsAgainst [Left (T.pack "refused")] [Right (B.pack [0, 0, 0xbf, 0])] Nothing [[register 74, register 88], [register 74]]
+       in seenOf c
+            == [ SawNotOpened (T.pack "refused"),
+                 SawRead (Address 74) Nothing Nothing,
+                 SawRead (Address 88) Nothing Nothing,
+                 SawOpened (FakeSession 1),
+                 SawRead (Address 74) (Just (FakeSession 1)) (Just (Right (B.pack [0, 0, 0xbf, 0])))
+               ]
+            && requestsOf c == [Opening, Opening, ReadOn (FakeSession 1) (Address 74), PauseOn (FakeSession 1)]
+            && map roundSession rs == [Nothing, Just (FakeSession 1)]
+    ),
+    ( "a round reads what every need names, each register once, in the order of first mention",
+      let ignore = const (pure ())
+       in map registerAddress (needed [need [register 74, register 88] ignore, need [register 4108, register 74] ignore, need [register 88, register 1100] ignore])
+            == map Address [74, 88, 4108, 1100]
+    ),
+    ( "a watch line is the line of a capture, byte for byte",
+      -- lines of captures/navigator-10-watch-20.24-2608-2026-11-09-1235.jsonl
+      -- and -2026-11-07-2120.jsonl, which the watch wrote before it read in
+      -- rounds
+      let ok = Just (Right (ModbusVersion 24 2608 0))
+          okText = "{\"status\": \"ok\", \"exception\": null, \"major\": 24, \"minor\": 2608, \"patch\": 0}"
+       in watchLineAt "2026-11-09T12:38:34.026+01:00" ok 4122 (Just (Right (B.pack [0x3d, 0x65, 0x3e, 0x0a])))
+            == "{\"time\": \"2026-11-09T12:38:34.026+01:00\", \"software\": " <> okText <> ", \"address\": 4122, \"status\": \"ok\", \"exception\": null, \"raw\": \"3d653e0a\", \"value\": 0.1349998265504837}"
+            && watchLineAt "2026-11-09T12:38:33.709+01:00" ok 1100 (Just (Right (B.pack [0, 1])))
+              == "{\"time\": \"2026-11-09T12:38:33.709+01:00\", \"software\": " <> okText <> ", \"address\": 1100, \"status\": \"ok\", \"exception\": null, \"raw\": \"0001\", \"value\": 1}"
+            && watchLineAt "2026-11-07T21:20:51.605+01:00" ok 1074 (Just (Right (B.pack [0xff, 0xff])))
+              == "{\"time\": \"2026-11-07T21:20:51.605+01:00\", \"software\": " <> okText <> ", \"address\": 1074, \"status\": \"ok\", \"exception\": null, \"raw\": \"ffff\", \"value\": 65535}"
+            && watchLineAt "2026-11-07T21:39:39.960+01:00" ok 74 (Just (Left (Ended NoAnswer)))
+              == "{\"time\": \"2026-11-07T21:39:39.960+01:00\", \"software\": " <> okText <> ", \"address\": 74, \"status\": \"error\", \"exception\": null, \"raw\": null, \"value\": null}"
+            && watchLineAt "2026-11-07T21:39:41.735+01:00" Nothing 88 Nothing
+              == "{\"time\": \"2026-11-07T21:39:41.735+01:00\", \"software\": null, \"address\": 88, \"status\": \"error\", \"exception\": null, \"raw\": null, \"value\": null}"
+    ),
+    ( "a watch line states a refusal's code, a software not read, and hides the myiDM identifier",
+      watchLineAt "2026-10-15T14:18:57.571+02:00" (Just (Left (DeviceException IllegalDataAddress))) 1110 (Just (Left (DeviceException IllegalDataAddress)))
+        == "{\"time\": \"2026-10-15T14:18:57.571+02:00\", \"software\": {\"status\": \"exception\", \"exception\": 2}, \"address\": 1110, \"status\": \"exception\", \"exception\": 2, \"raw\": null, \"value\": null}"
+        && watchLineAt "2026-10-15T14:18:57.571+02:00" (Just (Left (Ended NoAnswer))) 500 (Just (Right (B.pack [0, 0, 0x42, 0x34])))
+          == "{\"time\": \"2026-10-15T14:18:57.571+02:00\", \"software\": {\"status\": \"error\", \"exception\": null}, \"address\": 500, \"status\": \"ok\", \"exception\": null, \"raw\": \"<redacted>\", \"value\": \"<redacted>\"}"
     )
   ]
+
+-- | A session of the fake controller: the how-manyth opening made it. A
+-- round given a session at the start is given the 0th.
+newtype FakeSession = FakeSession Int
+  deriving (Show, Eq)
+
+-- | A request a round made of the fake controller.
+data RoundRequest
+  = Opening
+  | ReadOn FakeSession Address
+  | Closing FakeSession
+  | PauseOn FakeSession
+  deriving (Show, Eq)
+
+-- | What a round reported, as far as the checks look.
+data Seen
+  = SawRead Address (Maybe FakeSession) (Maybe (Either Failure B.ByteString))
+  | SawOpened FakeSession
+  | SawNotOpened T.Text
+  | SawDropped Ending
+  deriving (Show, Eq)
+
+-- | A controller that answers each opening and each read with the next of
+-- its answers: once they run out, an opening succeeds and a read is not
+-- answered.
+data Controller = Controller
+  { controllerOpenings :: [Either T.Text ()],
+    controllerAnswers :: [Either Failure B.ByteString],
+    controllerSessions :: Int,
+    -- | seconds; a quarter more at every look
+    controllerClock :: Double,
+    -- | latest first
+    controllerRequests :: [RoundRequest],
+    -- | latest first
+    controllerSeen :: [Seen]
+  }
+
+-- | Rounds read one after another off the fake controller, each from the
+-- session the one before it ended with.
+roundsAgainst :: [Either T.Text ()] -> [Either Failure B.ByteString] -> Maybe FakeSession -> [[Register]] -> ([RoundOn FakeSession], Controller)
+roundsAgainst openings answers held regss =
+  let ((done, _), c) = runState (foldM next ([], held) regss) (Controller openings answers 0 0 [] [])
+   in (reverse done, c)
+  where
+    next (done, session) regs = do
+      r <- readRound fake report session regs
+      pure (r : done, roundSession r)
+    fake :: RoundRequests (State Controller) FakeSession
+    fake =
+      RoundRequests
+        { openSession = logged Opening >> state opening,
+          readSample = \s r -> logged (ReadOn s (registerAddress r)) >> sampleOf r <$> state answer,
+          closeSession = logged . Closing,
+          pauseAfter = logged . PauseOn,
+          localClock = pure (zoned "2026-11-10T12:00:00.000+01:00"),
+          monotonicClock = state (\c -> (controllerClock c, c {controllerClock = controllerClock c + 0.25}))
+        }
+    logged q = modify (\c -> c {controllerRequests = q : controllerRequests c})
+    report e = modify (\c -> c {controllerSeen = seen e : controllerSeen c})
+    opening c = case controllerOpenings c of
+      Left why : rest -> (Left why, c {controllerOpenings = rest})
+      rest -> let n = controllerSessions c + 1 in (Right (FakeSession n), c {controllerOpenings = drop 1 rest, controllerSessions = n})
+    answer c = case controllerAnswers c of
+      a : rest -> (a, c {controllerAnswers = rest})
+      [] -> (Left (Ended NoAnswer), c)
+    seen e = case e of
+      ReadDone a -> SawRead (registerAddress (askedRegister a)) (askedSession a) (fmap answerRaw . sampleResult <$> askedSample a)
+      Opened s -> SawOpened s
+      NotOpened why -> SawNotOpened why
+      Dropped why -> SawDropped why
+
+requestsOf :: Controller -> [RoundRequest]
+requestsOf = reverse . controllerRequests
+
+seenOf :: Controller -> [Seen]
+seenOf = reverse . controllerSeen
+
+-- | The watch line of a read at the stamp given, on a session that read the
+-- software given, of the register at the address given: its bytes or its
+-- failure, or 'Nothing' where it was not asked.
+watchLineAt :: String -> Maybe (Either Failure ModbusVersion) -> Int -> Maybe (Either Failure B.ByteString) -> String
+watchLineAt t version a result =
+  watchLineOn
+    id
+    Asked
+      { askedRegister = register a,
+        askedAt = zoned t,
+        askedMonotonic = 0,
+        askedSession = version,
+        askedSample = sampleOf (register a) <$> result
+      }
+
+zoned :: String -> ZonedTime
+zoned = parseTimeOrError False defaultTimeLocale "%Y-%m-%dT%H:%M:%S%Q%Ez"
 
 -- | A request a write made of the fake controller.
 data Request

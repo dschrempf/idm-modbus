@@ -71,7 +71,9 @@ library
     IDM.Navigator.Register
 
   exposed-modules:
+    IDM.Navigator.Capture
     IDM.Navigator.Client
+    IDM.Navigator.Rounds
     IDM.Navigator.Software
     IDM.Navigator.Table
     IDM.Navigator.Target
@@ -109,7 +111,6 @@ executable idm-dump
     , containers
     , idm-modbus
     , text
-    , time
 
 executable idm-web
   import:         exec
@@ -146,4 +147,5 @@ test-suite idm-modbus-test
     , idm-modbus
     , idm-modbus:core
     , text
+    , time
     , transformers

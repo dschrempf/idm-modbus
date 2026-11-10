@@ -26,6 +26,7 @@ module IDM.Navigator.Client
     writable,
     Answer (..),
     Sample (..),
+    sampleOf,
     readOne,
     readMany,
     probe,
@@ -132,23 +133,27 @@ data Sample = Sample
   }
 
 readOne :: Session -> Register -> IO Sample
-readOne s reg = do
-  raw <- readRegisters (sessionConnection s) (pollFunctionCode (sessionPoll s)) addr (registerWidth (registerDatatype reg))
-  let result = case raw of
-        Left e -> Left e
-        Right bytes -> case (asWritten reg bytes, decode reg bytes) of
-          (Just written, Just v) -> Right (Answer bytes written v)
-          _ -> Left (ShortResponse (B.length bytes))
-  pure
-    Sample
-      { sampleRegister = reg,
-        sampleResult = result,
-        sampleLabel = case result of
-          Right (Answer _ _ (Measured (Code n))) -> enumLabel addr n
-          _ -> Nothing
-      }
+readOne s reg =
+  sampleOf reg
+    <$> readRegisters (sessionConnection s) (pollFunctionCode (sessionPoll s)) (registerAddress reg) (registerWidth (registerDatatype reg))
+
+-- | What a register said, from what its read returned: the bytes in wire
+-- order, or the failure.
+sampleOf :: Register -> Either Failure B.ByteString -> Sample
+sampleOf reg raw =
+  Sample
+    { sampleRegister = reg,
+      sampleResult = result,
+      sampleLabel = case result of
+        Right (Answer _ _ (Measured (Code n))) -> enumLabel (registerAddress reg) n
+        _ -> Nothing
+    }
   where
-    addr = registerAddress reg
+    result = case raw of
+      Left e -> Left e
+      Right bytes -> case (asWritten reg bytes, decode reg bytes) of
+        (Just written, Just v) -> Right (Answer bytes written v)
+        _ -> Left (ShortResponse (B.length bytes))
 
 -- | Read registers one after another, pausing in between.
 --
