@@ -45,7 +45,7 @@ navigator10 = $$(parsedFile parseRegisters "data/navigator-10-registers.tsv")
 -- The manual prints an encoding once for a family of addresses;
 -- @tools\/transcribe.py@ gives it to every member whose name differs only in
 -- its final letter or digit, or in the number of its zone module. See
--- @doc\/research.md@. It adds the codes measured on the machine that the
+-- @doc\/modbus.md@. It adds the codes measured on the machine that the
 -- manual does not print, from @data\/navigator-10-measured-enums.tsv@.
 navigator10Enums :: Map (Address, Int) Text
 navigator10Enums = M.fromList $$(parsedFile parseEnums "data/navigator-10-enums.tsv")

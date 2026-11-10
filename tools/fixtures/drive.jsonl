@@ -1,0 +1,46 @@
+{"time": "2026-11-10T12:00:00.000+01:00", "event": "begin", "pid": 4242, "schedule": "schedules/example.toml", "text": "round = 10\nwatch = [74]\n\n[final]\nsurplus = -0.5\ntarget = 0.0\nlimit = -1.0\n\n[[phase]]\nsurplus = 2.0\ntarget = 0.0\nuntil = \"start\"\n\n[[phase]]\npv = 2.0\nmin = -0.1\nmax = 0.1\nuntil = \"stop\"\n"}
+{"time": "2026-11-10T12:00:00.100+01:00", "event": "session", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "writable": true}
+{"time": "2026-11-10T12:00:00.200+01:00", "event": "phase", "index": 0, "phase": {"surplus": 2.0, "target": 0.0, "until": "start"}}
+{"time": "2026-11-10T12:00:01.000+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 74, "status": "ok", "exception": null, "raw": "0000bf00", "value": -0.5}
+{"time": "2026-11-10T12:00:01.200+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 1100, "status": "ok", "exception": null, "raw": "0000", "value": 0}
+{"time": "2026-11-10T12:00:01.400+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 4122, "status": "ok", "exception": null, "raw": "00000000", "value": 0.0}
+{"time": "2026-11-10T12:00:01.500+01:00", "event": "write", "address": 88, "value": 0.0, "outcome": "confirmed", "detail": null}
+{"time": "2026-11-10T12:00:01.600+01:00", "event": "write", "address": 74, "value": 2.0, "outcome": "confirmed", "detail": null}
+{"time": "2026-11-10T12:00:11.000+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 74, "status": "ok", "exception": null, "raw": "00004000", "value": 2.0}
+{"time": "2026-11-10T12:00:11.200+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 1100, "status": "ok", "exception": null, "raw": "0001", "value": 1}
+{"time": "2026-11-10T12:00:11.400+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 4122, "status": "ok", "exception": null, "raw": "cccd3fec", "value": 1.85}
+{"time": "2026-11-10T12:00:11.200+01:00", "event": "start"}
+{"time": "2026-11-10T12:00:11.500+01:00", "event": "phase", "index": 1, "phase": {"pv": 2.0, "min": -0.1, "max": 0.1, "until": "stop"}}
+{"time": "2026-11-10T12:00:11.500+01:00", "event": "export", "pv": 2.0, "draw": 1.85, "export": 0.15, "written": 0.1}
+{"time": "2026-11-10T12:00:11.600+01:00", "event": "write", "address": 74, "value": 0.1, "outcome": "confirmed", "detail": null}
+{"time": "2026-11-10T12:00:21.000+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 74, "status": "ok", "exception": null, "raw": "cccd3dcc", "value": 0.1}
+{"time": "2026-11-10T12:00:21.200+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 1100, "status": "ok", "exception": null, "raw": "0001", "value": 1}
+{"time": "2026-11-10T12:00:21.400+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 4122, "status": "ok", "exception": null, "raw": "eb854001", "value": 2.03}
+{"time": "2026-11-10T12:00:21.500+01:00", "event": "export", "pv": 2.0, "draw": 2.03, "export": -0.03, "written": -0.03}
+{"time": "2026-11-10T12:00:21.600+01:00", "event": "write", "address": 74, "value": -0.03, "outcome": "did-not-stick", "detail": "0000bf00"}
+{"time": "2026-11-10T12:00:31.000+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 74, "status": "ok", "exception": null, "raw": "0000bf00", "value": -0.5}
+{"time": "2026-11-10T12:00:31.200+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 1100, "status": "ok", "exception": null, "raw": "0001", "value": 1}
+{"time": "2026-11-10T12:00:31.400+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 4122, "status": "error", "exception": null, "raw": null, "value": null}
+{"time": "2026-11-10T12:00:31.500+01:00", "event": "skip", "address": 74, "why": "no-draw"}
+{"time": "2026-11-10T12:00:41.000+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 74, "status": "ok", "exception": null, "raw": "0000bf00", "value": -0.5}
+{"time": "2026-11-10T12:00:41.200+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 1100, "status": "ok", "exception": null, "raw": "0001", "value": 1}
+{"time": "2026-11-10T12:00:41.400+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 4122, "status": "ok", "exception": null, "raw": "cccd400c", "value": 2.2}
+{"time": "2026-11-10T12:00:41.500+01:00", "event": "export", "pv": 2.0, "draw": 2.2, "export": -0.2, "written": -0.1}
+{"time": "2026-11-10T12:00:41.600+01:00", "event": "write", "address": 74, "value": -0.1, "outcome": "failed", "detail": "Ended NoAnswer"}
+{"time": "2026-11-10T12:00:46.600+01:00", "event": "lost", "why": "NoAnswer"}
+{"time": "2026-11-10T12:00:51.000+01:00", "software": null, "address": 74, "status": "error", "exception": null, "raw": null, "value": null}
+{"time": "2026-11-10T12:00:51.000+01:00", "software": null, "address": 1100, "status": "error", "exception": null, "raw": null, "value": null}
+{"time": "2026-11-10T12:00:51.000+01:00", "software": null, "address": 4122, "status": "error", "exception": null, "raw": null, "value": null}
+{"time": "2026-11-10T12:00:51.000+01:00", "event": "unopened", "why": "connect: does not exist (Connection refused)"}
+{"time": "2026-11-10T12:00:51.100+01:00", "event": "skip", "address": 74, "why": "no-session"}
+{"time": "2026-11-10T12:01:01.000+01:00", "event": "session", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "writable": true}
+{"time": "2026-11-10T12:01:01.000+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 74, "status": "ok", "exception": null, "raw": "cccd3dcc", "value": 0.1}
+{"time": "2026-11-10T12:01:01.200+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 1100, "status": "ok", "exception": null, "raw": "0000", "value": 0}
+{"time": "2026-11-10T12:01:01.400+01:00", "software": {"status": "ok", "exception": null, "major": 24, "minor": 2608, "patch": 0}, "address": 4122, "status": "ok", "exception": null, "raw": "00000000", "value": 0.0}
+{"time": "2026-11-10T12:01:01.200+01:00", "event": "stop"}
+{"time": "2026-11-10T12:01:01.500+01:00", "event": "final"}
+{"time": "2026-11-10T12:01:01.600+01:00", "event": "write", "address": 88, "value": 0.0, "outcome": "confirmed", "detail": null}
+{"time": "2026-11-10T12:01:01.650+01:00", "event": "signal", "name": "SIGTERM"}
+{"time": "2026-11-10T12:01:01.700+01:00", "event": "write", "address": 4108, "value": -1.0, "outcome": "confirmed", "detail": null}
+{"time": "2026-11-10T12:01:01.800+01:00", "event": "write", "address": 74, "value": -0.5, "outcome": "read-back-failed", "detail": "Ended NoAnswer"}
+{"time": "2026-11-10T12:01:01.900+01:00", "event": "end", "why": "stop", "detail": null}

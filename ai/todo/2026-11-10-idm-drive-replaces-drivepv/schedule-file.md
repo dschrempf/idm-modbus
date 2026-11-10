@@ -97,7 +97,7 @@ Keys, all values in kW or seconds:
 - **The run's start and stop:** the start is the first round in which 1100
   reads Ein, whether or not one read Aus before it, so a drive started
   under a running compressor starts in its first round, as `drivepv.py`
-  does; `doc/verification-2026-11-09-power-limit-floor.md` relies on that.
+  does; `doc/verification/2026-11-09-power-limit-floor.md` relies on that.
   The stop is the first round after the start in which 1100 reads Aus. A
   round in which 1100 gave no value changes neither.
 - **The run's end:** the stop ends the schedule, whatever phase runs, and

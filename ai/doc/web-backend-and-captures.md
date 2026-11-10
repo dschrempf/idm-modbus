@@ -24,12 +24,12 @@ chooses what a read returns, and creating one is a `save`, done by hand in
 the web interface. Since 2026-11-09 seven graphs hold all 37 channels of the
 Kunde level; the 17 more of the Fachmann level, the refrigerant circuit's,
 are in 106 and 107 since 2026-11-10. B33, the flow, is no channel at either
-level (`doc/verification-2026-11-09-graphs-record-every-channel.md`). A graph
+level (`doc/verification/2026-11-09-graphs-record-every-channel.md`). A graph
 answers those of its channels that belong to the level the controller is at
 when it is read: at Kunde level 106 answers none and 107 only 53, and the
 built-in graph 2, of level 2, is left out of `graph`/`overview` but answers
 `detail` with its Kunde channels
-(`doc/verification-2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`). The
+(`doc/verification/2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`). The
 web interface's JavaScript (`main-7UP7UE6I.js`, served by the controller,
 read 2026-11-10) asks history only as `graph`/`detail {id, fromSecs,
 toSecs, stepSecs}`, of a saved graph, never of a list of channels: a channel
@@ -65,12 +65,31 @@ Both work on the machine, and the display switches with them. The level is
 the controller's, not the connection's: it holds until it is left or the
 controller ends it, sixty minutes from the entry, however often it was
 read meanwhile, on both softwares
-(`doc/verification-2026-11-09-heating-run-as-on-1574.md`). An entry sent
+(`doc/verification/2026-11-09-heating-run-as-on-1574.md`). An entry sent
 seconds after a leave answered success and left the level at Kunde; sent
 again 20 s later it took (2026-11-10,
 `captures/navigator-10-level-20.24-2608-2026-11-10-2056.log`). The frost
 protection wizard's code page is not a way in: it answers "wizard is not
 available!" unless a wizard runs.
+
+`idm-web --watch --fachmann` holds the level for a watch through those two
+writes. It reads the level with a `status` `overview` first in every round,
+and `decide` in `IDM.Navigator.Web.Fachmann`, the private sublibrary
+`fachmann`, says what to do: enter it from Kunde; renew it, `renewAfterSeconds`
+from the entry, by leaving it and entering `gapSeconds` later, the reads
+going on at Kunde meanwhile; leave a Fachmann level it did not enter and
+enter it the same way, so that it knows when the sixty minutes began; enter
+again where the level fell back. An entry that answered but left the level
+at Kunde, one declined and one that failed are each a try that did not
+take; after `maxTries` of them in a row, `gapSeconds` apart, the watch
+reads on at Kunde and tries no more, so that it cannot run into
+`N2_USERLEVELINPUTBLOCKED`. The module documents the three constants and
+the measurement behind each. Without a `Writable` it tries nothing. It
+leaves the level on every exit, with SIGINT and SIGTERM ignored from the
+first of them on, and at Kunde that leave sends nothing. It exits at once,
+having sent nothing, on other software, at a level neither Kunde nor
+Fachmann, or at Fachmann without the notice. Each change of level is a line
+of the webwatch with `level` and `userLevel`, and no `request`.
 
 Xerolux/idm-heatpump-hass, `docs/wiki/Navigator-Protocol-Analysis.md` in
 `community/`, says the opposite: that a code spelled from the clock opens

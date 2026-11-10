@@ -172,7 +172,7 @@ drive :: IO Session -> (DriveEvent -> IO ()) -> Period -> [Need] -> Drive r -> I
   only on the round's `roundSession`, and only where `writable` gives a
   `Writable`. Otherwise it is `Skipped` and nothing is sent. Other
   software happens after an update, which restarts the controller and
-  resets 74 to 0 and 4108 to -1 (`doc/verification-2026-11-07-restart.md`).
+  resets 74 to 0 and 4108 to -1 (`doc/verification/2026-11-07-restart.md`).
 - **The final values go out on every exit:** the step's `Left` or any
   exception, a signal's included. They run in `finally`, under the
   ordinary, interruptible mask, not `uninterruptibleMask`: every request

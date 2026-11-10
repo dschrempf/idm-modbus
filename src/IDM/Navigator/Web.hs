@@ -10,7 +10,7 @@
 -- value it shows arrives as JSON over a websocket on port 61220. The protocol is
 -- undocumented. What is known of it comes from the controller's own JavaScript
 -- and from what the controller answered; see
--- @doc\/verification-2026-09-20-webapi.md@.
+-- @doc\/verification\/2026-09-20-webapi.md@.
 --
 -- A request names a controller and a command. The commands that read are
 -- @overview@, @detail@ and @traverse@, and 'Query' can express nothing else.

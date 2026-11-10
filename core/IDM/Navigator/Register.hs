@@ -188,10 +188,10 @@ data Source
     Manual
   | -- | the controller's own list of the addresses it serves, the web page
     -- @N2_GLTMON@. It states a name, a unit and an access right, and nothing
-    -- else; the datatype is measured. See @doc\/verification-2026-10-14-gltmon.md@.
+    -- else; the datatype is measured. See @doc\/verification\/2026-10-14-gltmon.md@.
     -- The parameter identifier is joined by hand, where moving a setting
     -- showed which register followed it; see
-    -- @doc\/verification-2026-10-15-flow-temperature.md@.
+    -- @doc\/verification\/2026-10-15-flow-temperature.md@.
     GltMonitor
   deriving (Show, Eq, Ord, Lift)
 
@@ -218,7 +218,7 @@ data Register = Register
 --
 -- The sentinels are not documented. They were determined by reading every
 -- address of a machine whose configuration is known; see
--- @doc\/verification-2026-09-19.md@.
+-- @doc\/verification\/2026-09-19.md@.
 data Reading a
   = -- | the sentinel, where no value the register may hold equals it. It says
     -- that the register holds no value, not why: an unfitted sensor answers
@@ -245,9 +245,9 @@ reading none noneOr just r = case r of
 -- 'NotDriven' and @'Driven' 0@ are therefore different states, and neither is
 -- the absence of a pump: a fitted pump that nothing is calling for and a pump
 -- that was never installed both answer @-1@. See
--- @doc\/verification-2026-09-20.md@. On this machine 1104, the charge pump's
+-- @doc\/verification\/2026-09-20.md@. On this machine 1104, the charge pump's
 -- status, answers @-1@ while the pump is driven too, and 1074 carries its
--- signal; see @doc\/verification-2026-10-16-charge-pump.md@.
+-- signal; see @doc\/verification\/2026-10-16-charge-pump.md@.
 data Drive
   = NotDriven
   | -- | per cent of the pump's speed range
@@ -269,7 +269,7 @@ data Value
 -- A 32-bit float arrives low word first, against the usual Modbus habit. And a
 -- @UCHAR@ occupies a whole register, which the controller reads as a signed
 -- word: its own register page prints @fffe@ as -2. See
--- @doc\/verification-2026-10-15-web-app.md@.
+-- @doc\/verification\/2026-10-15-web-app.md@.
 --
 -- None of the conventions the manual leaves out are applied: a sentinel is
 -- still a -1 here, and a temperature-carrying @WORD@ is still unsigned. This

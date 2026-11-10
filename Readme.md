@@ -5,7 +5,7 @@ Navigator 10 controller, over Modbus TCP and over the controller's web
 interface.
 
 Most existing projects for these heat pumps guess at the register layout, and
-say so; `doc/research.md` goes through them. This one takes its register table
+say so; `doc/sources.md` goes through them. This one takes its register table
 from the manufacturer's parameter list, fills the gaps from the list of
 registers the controller itself reports, and has checked every entry against a
 running machine.
@@ -83,6 +83,10 @@ interface uses. It needs the web interface's PIN in `IDM_PIN`. Options:
   received, except that anything identifying the machine is redacted.
   `--reason` also asks for the system overview each round, which holds the
   heat pump's mode and request reason; with it, the settings are optional.
+  `--fachmann`, after `--reason` if both are given, holds the Fachmann
+  level for the watch: it enters the level, renews it before the
+  controller's sixty minutes are up, and leaves it when the watch ends,
+  also on Ctrl-C or SIGTERM. Each change of level is a line of its own.
 - `--enter-fachmann` switches to the Fachmann (installer) level, using the
   code derived from the controller's clock. `--leave-fachmann` switches back.
 
@@ -136,10 +140,8 @@ port 502 with unit id 1.
 | `src/IDM/Navigator/Write.hs`              | writing, with the cost in the type                                                                                                                 |
 | `core/IDM/Navigator/Write/Core.hs`        | what a write sends and what it results in, for any register; private to the package                                                                |
 | `src/IDM/Navigator/Web.hs`, `Web/`        | the web backend: its protocol, a read-only session, and the user level                                                                             |
-| `doc/research.md`                         | sources, community projects, open questions                                                                                                        |
-| `doc/software-versions.md`                | the controller's software versions by date, and what each update changed                                                                           |
-| `doc/pv-control.md`                       | the controller's PV control: what the sources say, and how to observe it                                                                           |
-| `doc/verification-*.md`                   | one measurement each, dated; the title states the result                                                                                           |
+| `doc/`                                    | what is known about the controller, by topic, and from where; `doc/README.md` lists the documents                                                  |
+| `doc/verification/`                       | one measurement each, dated; the title states the result                                                                                           |
 
 To correct the table, put a newer revision of the manual in `manual/` and
 re-run `tools/transcribe.py`. Git ignores `manual/`, since the document
@@ -159,6 +161,8 @@ of the manual can no longer be applied cleanly.
   `NoValueOr` instead.
 - **The Navigator stalls if you poll it too often.** Requests are spaced out
   by default.
+
+`doc/modbus.md` has the rest.
 
 ## Home automation
 
