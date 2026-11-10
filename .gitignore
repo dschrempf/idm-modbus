@@ -10,3 +10,5 @@ captures/*
 !captures/README.md
 # others' code, cloned to consult; doc/research.md cites it by its upstream
 community/
+# a scratchpad, local to this checkout
+/SCRATCHPAD.md
