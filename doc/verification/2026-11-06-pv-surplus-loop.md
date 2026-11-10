@@ -14,7 +14,7 @@ values written to 74, not the value written last; see "What it shows".
 
 ## What was set
 
-As in the morning (`doc/verification-2026-11-06-pv-surplus-own-draw.md`):
+As in the morning (`doc/verification/2026-11-06-pv-surplus-own-draw.md`):
 `PV008` at `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always, `PV011`
 2.0 min, `PV006` 40 °C, `N2_PV_HEATING_HYSTERESIS` (13300) 4 K. The web
 interface was at Fachmann level from 19:54, for the speed; the output of

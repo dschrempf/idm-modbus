@@ -47,7 +47,7 @@ spent:
 
 ## 2026-11-09: two reports from other machines
 
-Both unmeasured here, and both from the Navigator 2.0; `doc/research.md`,
+Both unmeasured here, and both from the Navigator 2.0; `doc/sources.md`,
 "Community work", cites them.
 
 - 1712 ends after exactly one hour

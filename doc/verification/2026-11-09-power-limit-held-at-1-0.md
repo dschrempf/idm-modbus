@@ -9,7 +9,7 @@ watch read the controller's reason for the request each round
 (`watch-the-request-reason-pv-in-idm-web`).
 
 1.0 let the start program through, as 1.2 did at noon
-(`doc/verification-2026-11-09-power-limit-floor.md`): 1.11 to 1.43 kW at
+(`doc/verification/2026-11-09-power-limit-floor.md`): 1.11 to 1.43 kW at
 50.4 rps for 3 minutes. After it the speed came down to 37.2 to 40.8 rps
 and the draw held 1.01 kW on average, past the minimum runtime, for 26
 minutes. Then the request ended, 30 minutes 50 seconds after the compressor
@@ -19,7 +19,7 @@ named the request PV's throughout.
 
 ## What was set
 
-As on 2026-11-08 (`doc/verification-2026-11-08-power-limit-cap.md`):
+As on 2026-11-08 (`doc/verification/2026-11-08-power-limit-cap.md`):
 `PV008` at `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always, `PV006`
 40 °C, `PV011` 2.0 min, not read again. The web interface was at Fachmann
 level from 17:29 to 18:03
@@ -47,7 +47,7 @@ At 17:28:53, 1090 read `Standby`, 1091 `Keine Anforderung`, 1100 `Aus`,
 4122 0.0, 1004 0, 1098 `nicht gesperrt`, B38 30.6 °C, 88 0.0, 4108 -1.0, and
 74 -0.5, as the driver had left it at 12:56, 4 h 33 min after the last PV
 stop. A heating run on circuit C's demand lay between
-(`doc/verification-2026-11-09-heating-run-as-on-1574.md`).
+(`doc/verification/2026-11-09-heating-run-as-on-1574.md`).
 
 ## The run
 
@@ -81,7 +81,7 @@ compressor start, and 0.15 to 0.12 K a minute while it ran. 1004 read 0 and
 
 - **The system overview** read `operationMode` 1 and `info` 33 from
   17:30:49 to 18:02:09, and `operationMode` 0 without `info` from 18:02:19
-  on. 33 is `RD_REQ_PV` (`doc/verification-2026-11-09-power-limit-floor.md`,
+  on. 33 is `RD_REQ_PV` (`doc/verification/2026-11-09-power-limit-floor.md`,
   "The request reason"). The flow rose from 31.4 °C at 17:31:09 to 36.5 at
   17:40, 38.0 at 17:50, 39.4 at 18:00 and 39.8 at 18:02:09, the return
   about 2 K below it from 17:40 on. The source inlet read 5.3 to 5.4 °C
@@ -104,7 +104,7 @@ The request ended before the compressor: the overview cleared `info` at
 the round of 18:02:23, and the driver wrote nothing in between. Not a
 defrost: 1090 went from `Heizbetrieb` to `Standby` without reading
 `Abtauung`, which it reads through a defrost
-(`doc/verification-2026-10-16-draw.md`), and the request would stand
+(`doc/verification/2026-10-16-draw.md`), and the request would stand
 through one. The controller's graph channel 10004 `N2_DEFROSTING`, in the
 webprobe walk after the run, marks its last defrost from 15:43 to 15:50,
 in the heating run of the afternoon, and none from 17:31 to 18:02;
@@ -119,7 +119,7 @@ What the captures leave as candidates:
   have stood above 40 for a while without ending it. B45 `Ladefühler`, the
   water going into the store, has five-minute means in the controller's
   graph that put it near 39.6 °C at the stop, below 40
-  (`doc/verification-2026-11-09-graphs-record-every-channel.md`); it stands
+  (`doc/verification/2026-11-09-graphs-record-every-channel.md`); it stands
   about 2 K above B38 while the store charges, so on 2026-11-08 it too
   passed 40 before that run ended. No graph
   channel holds the flow, B33, and the watch of 2026-11-08 did not read it.

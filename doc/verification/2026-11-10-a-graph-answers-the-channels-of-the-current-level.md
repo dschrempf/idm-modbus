@@ -2,7 +2,7 @@
 
 2026-11-10, evening. Two graphs created by hand at Fachmann level to hold
 the 17 channels the Fachmann level adds, the refrigerant circuit's, which
-no graph held (`doc/verification-2026-11-09-graphs-record-every-channel.md`),
+no graph held (`doc/verification/2026-11-09-graphs-record-every-channel.md`),
 then read at Fachmann and at Kunde level. Times are the controller's clock,
 which ran about 30 s ahead of the host's.
 

@@ -8,7 +8,7 @@ manual/
 # captures of the house's machine, kept out of a public repository
 captures/*
 !captures/README.md
-# others' code, cloned to consult; doc/research.md cites it by its upstream
+# others' code, cloned to consult; doc/sources.md cites it by its upstream
 community/
 # a scratchpad, local to this checkout
 /SCRATCHPAD.md

@@ -9,7 +9,7 @@ question for every register a building management system writes, and the
 ## The test
 
 For 74, steps 1 and 2 are done (2026-11-05,
-`doc/verification-2026-11-05-pv-surplus.md`): the gate is `PV008` at
+`doc/verification/2026-11-05-pv-surplus.md`): the gate is `PV008` at
 `N2_GLTSF`, one EEPROM cycle, and the PV page showed the value written at
 once. Step 3 is not: that run ended with 0 written by hand. With the store
 below `PV006`, write 3.0 for a few minutes, stop, and watch the page's

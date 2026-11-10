@@ -10,7 +10,7 @@ It did not settle. After the start program the speed swung between about 35
 and 95 rps, the draw between 0.9 and 2.6 kW, with a period of about 90 s,
 the mean of 74 between -1.02 and +0.67. The swing stayed bounded, where with
 `PV011` at 2.0 min the same feed drove the speed to the top
-(`doc/verification-2026-11-07-pv-target.md`). The run ended 8 minutes after
+(`doc/verification/2026-11-07-pv-target.md`). The run ended 8 minutes after
 the compressor start, before the minimum runtime, in the first step down,
 with the mean at -0.18; a mean of -1.02 two minutes earlier had not ended
 it. It is the third PV run to end at about 8 minutes on a mean at or below
@@ -18,7 +18,7 @@ zero.
 
 ## What was set
 
-As on 2026-11-09 (`doc/verification-2026-11-09-power-limit-held-at-1-0.md`):
+As on 2026-11-09 (`doc/verification/2026-11-09-power-limit-held-at-1-0.md`):
 `PV008` at `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always, `PV006`
 40 °C. `PV011`, 10389, set to 0.1 min at the display before the run, one
 EEPROM cycle, and read 0.1 at every request of the web watch; it stays
@@ -97,13 +97,13 @@ to 34 °C. 1004 read 0 and 1098 `nicht gesperrt` throughout.
   from 21:05:58 to 21:06:38, down to -1.02, 6 to 7 minutes after the start,
   and the run went on. Past the minimum runtime, on the morning of
   2026-11-06, 72 s of a negative mean ended one
-  (`doc/verification-2026-11-06-pv-surplus-own-draw.md`).
+  (`doc/verification/2026-11-06-pv-surplus-own-draw.md`).
 - **A run ends at about 8 minutes on a mean at or below zero.** This one
   ended 8 minutes 0 seconds after the start, the mean at -0.18. On
   2026-11-06 one ended after 8 minutes 10 seconds as the mean came back to
-  zero from below (`doc/verification-2026-11-06-pv-surplus-loop.md`), and on
+  zero from below (`doc/verification/2026-11-06-pv-surplus-loop.md`), and on
   2026-11-07 one after 8 minutes 0 seconds with the mean at -1.23
-  (`doc/verification-2026-11-07-pv-target.md`). Runs whose mean was above
+  (`doc/verification/2026-11-07-pv-target.md`). Runs whose mean was above
   zero at 8 minutes went on past it, to the minimum runtime of 10 minutes
   or beyond.
 

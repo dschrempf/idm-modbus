@@ -3,7 +3,7 @@
 2026-11-09, evening. Graphs created in the web interface by hand, then read
 with `tools/webprobe.py`, to learn whether a channel that no graph held had
 a history, and so whether the flow or the charge sensor at the stop of the
-run of `doc/verification-2026-11-09-power-limit-held-at-1-0.md` can still be
+run of `doc/verification/2026-11-09-power-limit-held-at-1-0.md` can still be
 read.
 
 It does. A channel put into a new graph answered with the same history as
@@ -12,7 +12,7 @@ span, which is as far as any graph reaches. A graph chooses what a read
 returns, not what the controller records. Seven graphs now hold all 37
 channels `graph`/`traverse` lists at Kunde level, among them 112 and 365,
 which no graph held before
-(`doc/verification-2026-11-09-heating-run-as-on-1574.md`). The flow, B33,
+(`doc/verification/2026-11-09-heating-run-as-on-1574.md`). The flow, B33,
 is no graph channel at either level.
 
 ## What was done
@@ -86,7 +86,7 @@ sends `graph`/`overview`, `traverse`, `detail` with a graph's `id`, and
 
 ## What it settles
 
-- **112 and 365 can be read.** `doc/software-versions.md` said no graph
+- **112 and 365 can be read.** `doc/verification/2026-11-09-heating-run-as-on-1574.md` found no graph
   held them and a read could not reach them; `Pumpe und Kreise` holds them
   now, with their history.
 - **B45 near the stop of the run at 1.0.** The graph has B45's means at
@@ -104,7 +104,7 @@ sends `graph`/`overview`, `traverse`, `detail` with a graph's `id`, and
   76, 91, 93, 145, 146 `T25x_AIN_TCOND`, 148 `T23xPRS`, 149, 153 B86, 180,
   182 B87 and 188. No graph holds them. Since 2026-11-10 two graphs do,
   and answer them only at Fachmann level
-  (`doc/verification-2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`).
+  (`doc/verification/2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`).
 - **How far back the history reaches** past the eight days the web
   interface asks for.
 

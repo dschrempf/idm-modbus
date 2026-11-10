@@ -3,7 +3,7 @@
 2026-11-07, evening. One store charge on a surplus written to 74, to
 separate a step of 88, `PV-Zielwert (Smartfox und Solar-Log)`, from the end
 of the minimum runtime, which the second run of the morning could not
-(`doc/verification-2026-11-07-pv-target.md`).
+(`doc/verification/2026-11-07-pv-target.md`).
 
 74 was held at 0 from the compressor's start, and 88 written +1.0 from 5 to
 8 minutes after it, past the start program. The speed held 50.4 rps under
@@ -14,7 +14,7 @@ charge ends.
 
 ## What was set
 
-As on 2026-11-06 (`doc/verification-2026-11-06-pv-surplus-own-draw.md`):
+As on 2026-11-06 (`doc/verification/2026-11-06-pv-surplus-own-draw.md`):
 `PV008` at `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always. `PV006`,
 10333, read 40 and `PV011`, 10389, 2.0 min at 18:43
 (`captures/navigator-10-show-20.24-2608-2026-11-07-1843.txt`); the rest
@@ -105,7 +105,7 @@ read 0 and 1098 `nicht gesperrt` throughout.
   morning's second, but held the run of 2026-11-06 at the top.
 - How to hold a run at low power past the minimum runtime. A mean of 0
   holds the speed and ends the run; a mean above 0, constant, drives the
-  speed to the top (`doc/verification-2026-11-06-pv-surplus-own-draw.md`).
+  speed to the top (`doc/verification/2026-11-06-pv-surplus-own-draw.md`).
 
 ## Reproducing
 

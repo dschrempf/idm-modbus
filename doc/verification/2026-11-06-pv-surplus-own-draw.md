@@ -12,7 +12,7 @@ that, 1.0 written for 12 minutes did not start the pump from standstill;
 
 ## What was set
 
-As on 2026-11-05 (`doc/verification-2026-11-05-pv-surplus.md`): `PV008` at
+As on 2026-11-05 (`doc/verification/2026-11-05-pv-surplus.md`): `PV008` at
 `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always, `PV011` 2.0 min.
 The capture after the run shows one more, read at Fachmann level and in no
 capture before: `N2_PV_HEATING_HYSTERESIS`, setting 13300, 4 K.

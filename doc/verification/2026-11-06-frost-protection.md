@@ -77,7 +77,7 @@ by B32, a circuit whose `Aktive Betriebsart` read "Aus" read 0.00 °C at its
 - **A circuit's frost protection overrides its mode.** D's `Betriebsart`
   "Aus" left its pump running; `HSD40` stopped it. Of the modes, only the
   system's "Aus", -1 at 1005, is documented to stop frost protection
-  (`doc/verification-2026-10-15-web-app.md`).
+  (`doc/verification/2026-10-15-web-app.md`).
 - **Its flow target is 10 °C.** 1384 went from 10.00 to 0.00 °C with
   `HSD40` the only change, while 1378 and 1382 stayed at 10.00. `AE026`
   reads 20 °C, so whatever it governs, it is not the circuit's target. With

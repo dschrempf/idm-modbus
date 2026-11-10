@@ -15,12 +15,12 @@ minimum runtime on a surplus that stood.
 
 ## What was set
 
-As on 2026-11-06 (`doc/verification-2026-11-06-pv-surplus-own-draw.md`):
+As on 2026-11-06 (`doc/verification/2026-11-06-pv-surplus-own-draw.md`):
 `PV008` at `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always. `PV006`,
 40 °C, and `PV011`, 2.0 min, as read at 18:43
-(`doc/verification-2026-11-07-pv-target-ignored.md`), not read again; both
+(`doc/verification/2026-11-07-pv-target-ignored.md`), not read again; both
 are held in EEPROM, so the restart at 21:39
-(`doc/verification-2026-11-07-restart.md`) left them. The web interface was
+(`doc/verification/2026-11-07-restart.md`) left them. The web interface was
 at Fachmann level from 22:08 to 22:19
 (`captures/navigator-10-level-20.24-2608-2026-11-07-2206.log`). Only 74,
 88 and 4108 were written.
@@ -104,7 +104,7 @@ B38 rose to 30.2 °C while the pump circulated before the start and read
   the draw reaches it a cut-off.
 - Whether a limit below the forecast, 0.8 kW here, holds off a start.
 - Why the start came 3 minutes 40 seconds after the request, against 50 s
-  in the evening run before (`doc/verification-2026-11-07-pv-target-ignored.md`).
+  in the evening run before (`doc/verification/2026-11-07-pv-target-ignored.md`).
   The controller had restarted 30 minutes before; whether that holds a
   start, no setting read names.
 

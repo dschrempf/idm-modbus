@@ -10,16 +10,16 @@ It does. Once the start program was over, the speed rose from 50.4 to
 58.8 rps in one round of the watch and went no further: for 42 minutes the
 draw at 4122 read 1.18 to 1.52 kW, 1.39 on average, where a constant
 surplus has driven the speed to the top, 120 rps and about 4 kW
-(`doc/verification-2026-11-06-pv-surplus-own-draw.md`), and 2.0 the evening
+(`doc/verification/2026-11-06-pv-surplus-own-draw.md`), and 2.0 the evening
 before rose 6 to 13 rps every 10 s at the same point
-(`doc/verification-2026-11-07-power-limit.md`). The run went past the
+(`doc/verification/2026-11-07-power-limit.md`). The run went past the
 minimum runtime and on to `PV006`: the compressor stopped as B38 read
 40.00 °C, 46 minutes 30 seconds after its start. It is the first PV run held
 below full speed past the minimum runtime.
 
 ## What was set
 
-As on 2026-11-07 (`doc/verification-2026-11-07-power-limit.md`): `PV008` at
+As on 2026-11-07 (`doc/verification/2026-11-07-power-limit.md`): `PV008` at
 `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always, `PV006` 40 °C, `PV011`
 2.0 min, not read again. The web interface was at Fachmann level from 18:54
 to 19:44 (`captures/navigator-10-level-20.24-2608-2026-11-08-1854.log`).
@@ -90,12 +90,12 @@ throughout.
   below the limit.
 - **A capped run holds past the minimum runtime and ends at `PV006`.** The
   surplus at 74 stood; the stop came at 40.00 °C, as in the run on 3.0 of
-  2026-11-05 (`doc/verification-2026-11-05-pv-surplus.md`).
+  2026-11-05 (`doc/verification/2026-11-05-pv-surplus.md`).
 - **A limit above the forecast does not hold off a start.** 1.5 against the
   forecast's 0.8 kW: the request came 1 minute 24 seconds after the first
   write, the compressor 50 s later.
 - **Read with 2026-11-07,** a limit below the draw ends a run
-  (`doc/verification-2026-11-07-power-limit.md`) and one above it caps the
+  (`doc/verification/2026-11-07-power-limit.md`) and one above it caps the
   climb. Where the line between the two runs, the runs do not say: 0.8 was
   2.3 kW below the draw it met, 1.5 never below it.
 

@@ -37,7 +37,7 @@ and month of the current date). Port 502, unit id 1.
 The machine is a Navigator 10, and the table is transcribed from 812663,
 its Modbus manual, for software 20.23. 812170, the Navigator 2.0's manual,
 prints the same parameter list but for the zone modules' rooms 7 to 9;
-`doc/research.md` says how the two differ and why the controller is the
+`doc/sources.md` says how the two differ and why the controller is the
 Navigator 10.
 
 The register table is data, not code, and it flows one way:
@@ -71,7 +71,7 @@ machine: the myiDM identifier, `myIdmAddress`, and the strings a web page
 prints for it are redacted. `manual/` holds every manufacturer's document
 the repository cites, so that it needs no other copy, and is ignored by git
 too, as is `community/`, clones of the projects the
-"Community work" of `doc/research.md` names. They are evidence to weigh,
+"Community work" of `doc/sources.md` names. They are evidence to weigh,
 not code to run, and a document cites one by its upstream name, not by
 its path there.
 
@@ -165,17 +165,13 @@ is a measurement and not a strategy: `tools/drivepv.py` writes one, and
   the manual does not print; its range, widened to -1, says so.
 - The Navigator stalls when polled hard, hence `pollIntervalMicroseconds`.
 
-`doc/research.md` records the sources and the open questions;
-`doc/verification-2026-09-19.md` records the measurements the decoding rests
-on, `doc/verification-2026-09-20.md` what the controller's own display says
-about the same registers, and `doc/verification-2026-09-20-webapi.md` what its
-web backend says about the settings, joined on the manufacturer's parameter
-identifier. Every later `doc/verification-DATE-*.md` is one measurement, its
-finding in its title. `doc/software-versions.md` dates the controller's
-software, so it says which software a measurement was made on, and
-`doc/pv-control.md` collects what the sources say about the PV control and
-which runs are still open. Claims about the machine belong in `doc/`, with the
-measurement that supports them.
+`doc/` holds topic documents, each the current knowledge on its topic and
+its open questions; `doc/README.md` lists them. `doc/verification/DATE-SLUG.md`
+holds the measurements, one per file, its finding in its title; a topic
+document cites one for every claim about the machine. A new measurement goes
+into `doc/verification/`, and what it changes into the topic documents, so
+that they never read as a log. `doc/software-versions.md` dates the
+controller's software, so it says which software a measurement was made on.
 
 ## Conventions
 

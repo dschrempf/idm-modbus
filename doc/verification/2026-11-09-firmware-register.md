@@ -10,7 +10,7 @@ builds reject it.
 On 20.24-2608 4120 is not there. Read as one register and as two, by
 function code 3 and by function code 4, it answers exception 02, illegal
 data address, and so does 4121 on its own. The software stays readable at
-522 to 526 ([software-versions.md](software-versions.md)), and the table gets
+522 to 526 ([software-versions.md](../software-versions.md)), and the table gets
 no row for 4120.
 
 ## What was recorded
@@ -27,7 +27,7 @@ read the software as 24, 2608, 0.
 
 The library reads with function code 4 by default, and its model probe asks
 for two registers. Function codes 3 and 4 return the same data on this
-machine wherever both were tried ([verification-2026-09-19.md](verification-2026-09-19.md)),
+machine wherever both were tried ([2026-09-19.md](2026-09-19.md)),
 but that covers only addresses that answer. So 4120 was read again by
 function code 4, unit 1, by hand, a few minutes after the capture; no tool
 here writes that read into a capture:
@@ -41,6 +41,6 @@ Both answer exception 02.
 
 The version over Modbus is 522, 524 and 526. 4116, which the page names
 `Firmware Version IDM` and prints as the version string, reads no version
-([verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md)),
+([2026-10-14-gltmon.md](2026-10-14-gltmon.md)),
 and 528, the build, reads 0. Whether 4120 answers on a software other than
 20.24-2608, and on which, is not known here.

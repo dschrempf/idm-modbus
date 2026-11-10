@@ -35,9 +35,9 @@ Once, by hand at the machine's mains switch, with the compressor off.
 3. Keep both watches running, restarted where they fail, until the
    controller answers and has settled. Read 74 at once.
 4. After: a webapi capture again, and the difference to step 1.
-5. Record it in a dated `doc/`, the software read on each side in
+5. Record it in a dated `doc/verification/`, the software read on each side in
    `doc/software-versions.md`, and what a consumer must do after a restart in
-   `doc/research.md`.
+   `doc/modbus.md`.
 
 Planned as the end of the overnight watch of
 `controller-behavior-when-glt-values-stop-unknown`, on the morning of
@@ -49,7 +49,7 @@ The user restarted the controller on 2026-11-06 at about 20:40, with -0.5
 written to 74 at 20:26:24 and nothing watching; no webapi capture was taken
 before. A read of 74 after it answers the first point for that restart:
 on 2026-11-07 at 11:56, 74 read 0.0 and 12763 listed it with an empty
-`GLT Value` (`doc/verification-2026-11-07-pv-target.md`, "Before"). The
+`GLT Value` (`doc/verification/2026-11-07-pv-target.md`, "Before"). The
 restart did not keep the last value; whether a surplus written before one
 still starts a charge after is open.
 
@@ -57,7 +57,7 @@ still starts a charge after is open.
 
 The user restarted the controller from its display at 21:39, with both
 watches running and a Fachmann walk on each side
-(`doc/verification-2026-11-07-restart.md`). Answered for that restart:
+(`doc/verification/2026-11-07-restart.md`). Answered for that restart:
 
 - 74, 88 and 4108 came back 0.0, 0.0 and -1.0, their `GLT Value`s empty;
   4108 had held 3.0, 74 -0.5. So a surplus written before a restart cannot
