@@ -147,6 +147,8 @@
   `system` `overview` first in every round, a line of its own in the
   webwatch capture, with no setting needed; `tools/runtable.py` adds its
   `mode` and `info` columns.
+- `IDM.Navigator.Table.readableAt`: the register at an address where a read
+  may ask it, or `Unreadable`, `Unlisted` or `WriteOnlyRegister`, why not.
 
 ### Changed
 

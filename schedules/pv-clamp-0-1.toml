@@ -1,0 +1,37 @@
+# 74 as the export of a simulated PV, clamped to ±0.1 kW, PV011 at 0.1 min.
+round = 10
+watch = [74, 88, 4108, 1008, 1066, 1070, 1090, 1091, 1100, 1074, 4122, 1004, 1098]
+
+[final]
+surplus = -0.5
+target = 0.0
+limit = -1.0
+
+[[phase]]
+surplus = 2.0
+target = 0.0
+until = "start"
+
+[[phase]]
+pv = 2.0
+min = -0.1
+max = 0.1
+after-start = 720
+
+[[phase]]
+pv = 1.5
+min = -0.1
+max = 0.1
+for = 360
+
+[[phase]]
+pv = 1.2
+min = -0.1
+max = 0.1
+for = 360
+
+[[phase]]
+pv = 1.0
+min = -0.1
+max = 0.1
+until = "stop"
