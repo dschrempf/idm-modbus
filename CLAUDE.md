@@ -17,6 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     IDM_PIN=... cabal run idm-web -- HOST --status      # user level, clock, notices
     IDM_PIN=... cabal run idm-web -- HOST --show 4768   # a setting, read for a person
     IDM_PIN=... cabal run idm-web -- HOST --watch 10 4768 5888 > captures/navigator-10-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl
+    IDM_PIN=... cabal run idm-web -- HOST --watch 10 --reason --fachmann 4768 5888 > captures/navigator-10-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl   # holds the Fachmann level
     IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann   # and --leave-fachmann
     cabal run idm-write -- HOST 74 3.0               # a target; --eeprom where it costs a cycle
     tools/drivepv.py HOST WATCH --final -0.5 2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 > captures/navigator-10-write-SOFTWARE-YYYY-MM-DD-HHMM.log

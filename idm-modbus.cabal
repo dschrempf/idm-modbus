@@ -64,6 +64,16 @@ library core
     , template-haskell
     , text
 
+-- What idm-web's watch decides about the Fachmann level, where the test
+-- suite reaches it: a test suite cannot import a module of an executable.
+library fachmann
+  import:          lib
+  exposed-modules: IDM.Navigator.Web.Fachmann
+  hs-source-dirs:  fachmann
+  build-depends:
+    , base        >=4.7 && <5
+    , idm-modbus
+
 library
   import:             lib
   reexported-modules:
@@ -134,11 +144,13 @@ executable idm-web
   hs-source-dirs: app-web
   build-depends:
     , aeson
-    , base        >=4.7 && <5
+    , base                 >=4.7 && <5
     , bytestring
     , idm-modbus
+    , idm-modbus:fachmann
     , text
     , time
+    , unix
 
 executable idm-write
   import:         exec
@@ -164,6 +176,7 @@ test-suite idm-modbus-test
     , filepath
     , idm-modbus
     , idm-modbus:core
+    , idm-modbus:fachmann
     , idm-modbus:schedule
     , text
     , time
