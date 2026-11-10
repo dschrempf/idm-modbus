@@ -164,6 +164,8 @@
   `idm-dump --watch` prints its lines from the `RoundEvent`s of `rounds`,
   each as its read is made, unchanged but that an address given twice is
   read once a round.
+- `IDM.Navigator.Table.readableAt`: the register at an address where a read
+  may ask it, or `Unreadable`, `Unlisted` or `WriteOnlyRegister`, why not.
 
 ### Changed
 

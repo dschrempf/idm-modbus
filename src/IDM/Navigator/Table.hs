@@ -17,6 +17,8 @@ module IDM.Navigator.Table
     navigator10Enums,
     navigator10Software,
     byAddress,
+    Unreadable (..),
+    readableAt,
     readable,
     present,
     enumLabel,
@@ -57,6 +59,24 @@ navigator10Software = $$(parsedFile parseSoftware "data/navigator-10-software.ts
 
 byAddress :: Map Address Register
 byAddress = M.fromList [(registerAddress r, r) | r <- navigator10]
+
+-- | Why a number names no register a read may ask.
+data Unreadable
+  = -- | no register of the parameter list has the address
+    Unlisted
+  | -- | the register at the address can only be written
+    WriteOnlyRegister
+  deriving (Show, Eq)
+
+-- | The register at an address, where a read may ask it.
+readableAt :: Integer -> Either Unreadable Register
+readableAt n
+  | n < 0 || n > 65535 = Left Unlisted
+  | otherwise = case M.lookup (Address (fromInteger n)) byAddress of
+      Nothing -> Left Unlisted
+      Just r
+        | isReadable (registerAccess r) -> Right r
+        | otherwise -> Left WriteOnlyRegister
 
 -- | Registers that can be read at all.
 readable :: [Register]

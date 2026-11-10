@@ -105,6 +105,22 @@ library
     , time
     , websockets
 
+-- The schedule @idm-drive@ runs: a measurement, fixed before a run, and no
+-- interface, so a consumer does not reach it.
+library schedule
+  import:          lib
+  exposed-modules:
+    IDM.Navigator.Schedule
+    IDM.Navigator.Schedule.Parse
+    IDM.Navigator.Schedule.Step
+
+  hs-source-dirs:  schedule
+  build-depends:
+    , base         >=4.7 && <5
+    , idm-modbus
+    , text
+    , toml-parser  >=2.0 && <2.1
+
 executable idm-dump
   import:         exec
   main-is:        Main.hs
@@ -145,11 +161,14 @@ test-suite idm-modbus-test
   hs-source-dirs: test
   build-depends:
     , aeson
-    , base             >=4.7 && <5
+    , base                 >=4.7 && <5
     , bytestring
     , containers
+    , directory
+    , filepath
     , idm-modbus
     , idm-modbus:core
+    , idm-modbus:schedule
     , text
     , time
     , transformers
