@@ -10,7 +10,7 @@ module Main (main) where
 
 import Control.Concurrent (ThreadId, myThreadId, throwTo)
 import Control.Concurrent.MVar (newMVar, withMVar)
-import Control.Exception (Exception, displayException, fromException)
+import Control.Exception (Exception, IOException, displayException, fromException, try)
 import Control.Monad (void)
 import qualified Data.ByteString as B
 import Data.Char (isAscii, isControl, ord)
@@ -252,7 +252,9 @@ outcomeFields o = case o of
 
 -- | On the first SIGINT or SIGTERM, ignore both from then on, write a
 -- @signal@ line, and interrupt the drive, whose finals then run under the
--- ordinary mask, so that the timeouts of their requests still work.
+-- ordinary mask, so that the timeouts of their requests still work. The
+-- drive is interrupted also where the line cannot be written, as when
+-- stdout is a pipe whose reader the same SIGINT ended.
 interruptOnSignals :: (String -> [(String, String)] -> IO ()) -> ThreadId -> IO ()
 interruptOnSignals emit mainThread = do
   fired <- newIORef False
@@ -265,7 +267,7 @@ interruptOnSignals emit mainThread = do
       if first
         then do
           ignoreSignals
-          emit "signal" [("name", quote name)]
+          void (try (emit "signal" [("name", quote name)]) :: IO (Either IOException ()))
           throwTo mainThread (Interruption signal)
         else pure ()
 
