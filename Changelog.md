@@ -199,9 +199,9 @@
   thrown once the finals began stops them: a write or an opening that
   throws counts as the session lost, and a callback that throws is thrown
   again after them. It ends with `Finish r`, the step's reason or the
-  exception. The library prints
-  nothing and installs no signal handler: each read, opening, loss, write,
-  skip and the start of the finals is a `DriveEvent`, handed to a callback.
+  exception. The library prints nothing and installs no signal handler:
+  each read, opening, loss, write, skip and the start of the finals is a
+  `DriveEvent`, handed to a callback.
   `driveWith` drives over any `DriveRequests`, so the test suite runs it
   against a fake controller. `IDM.Navigator.Rounds` gains `NeedOn`, a need
   on any session, `restrict` and `handOver`, and `IDM.Navigator.Capture`

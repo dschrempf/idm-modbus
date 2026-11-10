@@ -12,8 +12,7 @@
 -- in one session, hands the step its reads, and writes the commands it
 -- answers with; and on every exit, the step's own end or an exception, it
 -- writes the final values, which nothing thrown once they began stops. The
--- step is where a strategy goes, so this module
--- holds none.
+-- step is where a strategy goes, so this module holds none.
 --
 -- A command goes to a free target only, so a loop that renews its values
 -- cannot wear out an EEPROM register. It goes out on the round's session,
