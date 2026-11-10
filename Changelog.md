@@ -195,8 +195,11 @@
   cannot send is `Skipped`, with no session or on other software. On every
   exit, the step's own end or an exception, a signal's included, it writes
   the final values in their order, under the ordinary mask, and opens a
-  session for them where none is, up to three times, 10 s apart. It ends
-  with `Finish r`, the step's reason or the exception. The library prints
+  session for them where none is, up to three times, 10 s apart. Nothing
+  thrown once the finals began stops them: a write or an opening that
+  throws counts as the session lost, and a callback that throws is thrown
+  again after them. It ends with `Finish r`, the step's reason or the
+  exception. The library prints
   nothing and installs no signal handler: each read, opening, loss, write,
   skip and the start of the finals is a `DriveEvent`, handed to a callback.
   `driveWith` drives over any `DriveRequests`, so the test suite runs it

@@ -7,8 +7,8 @@
 -- License     :  BSD-3-Clause
 module Main (main) where
 
-import Control.Exception (fromException, throwIO)
-import Control.Monad (foldM, join)
+import Control.Exception (Exception, SomeException, fromException, throwIO, toException, try)
+import Control.Monad (foldM, join, when)
 import Control.Monad.Trans.State.Strict (State, modify, runState, state)
 import qualified Data.Aeson as A
 import qualified Data.Aeson.Key as K
@@ -720,6 +720,12 @@ checks =
     )
   ]
 
+-- | What a signal's handler throws, in a drive against the fake controller.
+data Signalled = Signalled
+  deriving (Show, Eq)
+
+instance Exception Signalled
+
 -- | A session of the fake controller: the how-manyth opening made it. A
 -- round given a session at the start is given the 0th.
 newtype FakeSession = FakeSession Int
@@ -821,19 +827,50 @@ driveAgainst ::
   [Command] ->
   IO (Finish String, Controller)
 driveAgainst writables openings answers outcomes regs steps finals = do
+  (r, c) <- driveRigged (Rigged (const False) (map Right outcomes) []) writables openings answers regs steps finals
+  either throwIO (\f -> pure (f, c)) r
+
+-- | What throws in a rigged drive.
+data Rigged = Rigged
+  { -- | the reports that throw, once seen
+    riggedReport :: Seen -> Bool,
+    -- | the writes, in order: an outcome, or what the write throws once
+    -- asked; confirmed once they run out
+    riggedWrites :: [Either SomeException (Outcome 'Free)],
+    -- | the openings, in order: what one throws once asked, or 'Nothing'
+    -- where it goes to the controller; all go there once they run out
+    riggedOpenings :: [Maybe SomeException]
+  }
+
+-- | 'driveAgainst' with what throws rigged, and what 'driveWith' threw.
+driveRigged ::
+  Rigged ->
+  [FakeSession] ->
+  [Either T.Text ()] ->
+  [Either Failure B.ByteString] ->
+  [Register] ->
+  [IO (Either String [Command])] ->
+  [Command] ->
+  IO (Either SomeException (Finish String), Controller)
+driveRigged rigged writables openings answers regs steps finals = do
   controller <- newIORef (Controller openings answers 0 0 [] [])
   pending <- newIORef steps
-  written <- newIORef outcomes
+  written <- newIORef (riggedWrites rigged)
+  opened <- newIORef (riggedOpenings rigged)
   let run m = atomicModifyIORef' controller (\c -> let (a, c') = runState m c in (c', a))
       next ref end = atomicModifyIORef' ref (\xs -> case xs of x : rest -> (rest, x); [] -> ([], end))
       writer s (Command t v) = do
         run (requested (WriteOn s (registerAddress (targetRegister t)) v))
-        next written (Sent Confirmed)
+        next written (Right (Sent Confirmed)) >>= either throwIO pure
+      opening =
+        next opened Nothing >>= \o -> case o of
+          Just e -> run (requested Opening) >> throwIO e
+          Nothing -> run (openSession fakeRounds)
       requests =
         DriveRequests
           { driveRoundRequests =
               RoundRequests
-                { openSession = run (openSession fakeRounds),
+                { openSession = opening,
                   readSample = \s r -> run (readSample fakeRounds s r),
                   closeSession = run . closeSession fakeRounds,
                   pauseAfter = run . pauseAfter fakeRounds,
@@ -843,13 +880,16 @@ driveAgainst writables openings answers outcomes regs steps finals = do
             writerOn = \s -> if s `elem` writables then Just (writer s) else Nothing,
             sleepFor = run . requested . SleepFor
           }
-      report e = run . saw $ case e of
-        RoundEvent r -> seenRound r
-        Wrote c o -> SawWrote c o
-        Skipped c why -> SawSkipped c why
-        Drive.Finals -> SawFinals
+      report e = do
+        let seen = case e of
+              RoundEvent r -> seenRound r
+              Wrote c o -> SawWrote c o
+              Skipped c why -> SawSkipped c why
+              Drive.Finals -> SawFinals
+        run (saw seen)
+        when (riggedReport rigged seen) (throwIO (userError "report"))
       stepNext _ = join (next pending (pure (Left "no more steps")))
-  finish <- driveWith requests report (Period 10) [] (Drive regs stepNext finals)
+  finish <- try (driveWith requests report (Period 10) [] (Drive regs stepNext finals))
   (,) finish <$> readIORef controller
 
 -- | The writes a drive made of the fake controller, in order.
@@ -868,6 +908,14 @@ driveChecks = do
   (unopened, c2) <- driveAgainst [] (replicate 5 (Left (T.pack "refused"))) [] [] [register 1100] [pure (Right [surplusOf 1])] exampleFinals
   (other, c3) <- driveAgainst [] [] ein [] [register 1100] [pure (Right [surplusOf 1])] exampleFinals
   (_, c4) <- driveAgainst [s1, s2] [] ein [Failed (Ended NoAnswer)] [register 1100] [] exampleFinals
+  let firstFinal = SawWrote (Command PvTarget (Real 0)) (Sent Confirmed)
+      signalled = toException Signalled
+      throwing = Rigged (const False) [Left signalled] [Nothing, Just signalled, Just signalled]
+      done = [pure (Left "done")]
+  (reported, c5) <- driveRigged (Rigged (\e -> e == SawFinals || e == firstFinal) [] []) [s1] [] ein [register 1100] done exampleFinals
+  (interrupted, c6) <- driveRigged (Rigged (const False) [Left signalled] []) [s1, s2] [] ein [register 1100] done exampleFinals
+  (reopened, c7) <- driveRigged throwing [s1, s2] [] ein [register 1100] done exampleFinals
+  (_, c8) <- driveRigged throwing {riggedOpenings = Nothing : replicate 3 (Just signalled)} [s1] [] ein [register 1100] done exampleFinals
   pure
     [ ( "the finals go out in the order 88, 4108, 74, after the step's end, and the session is closed",
         reason ended == Just "done"
@@ -896,6 +944,26 @@ driveChecks = do
           && SawDropped NoAnswer `elem` seenOf c4
           && Closing s1 `elem` requestsOf c4
           && lastOf 1 (requestsOf c4) == [Closing s2]
+      ),
+      ( "a report that throws in the finals stops none of them, and is thrown again after them",
+        either fromException (const Nothing) reported == Just (userError "report")
+          && writesOf c5 == finalsOn s1
+          && lastOf 1 (requestsOf c5) == [Closing s1]
+      ),
+      ( "a final whose write throws, as where a signal lands in its wait, goes again on a new session, and the drive ends Interrupted",
+        signalledBy interrupted
+          && writesOf c6 == (s1, 88, Real 0) : finalsOn s2
+          && SawDropped Abandoned `elem` seenOf c6
+          && Closing s1 `elem` requestsOf c6
+      ),
+      ( "an opening in the finals that throws is a failed one, within the three",
+        signalledBy reopened
+          && writesOf c7 == (s1, 88, Real 0) : finalsOn s2
+          && length [() | SawNotOpened _ <- seenOf c7] == 2
+          && length [() | Opening <- requestsOf c7] == 4
+          && length [() | Opening <- requestsOf c8] == 4
+          && writesOf c8 == [(s1, 88, Real 0)]
+          && skipped c8 == [(t, NoSession) | Command t _ <- exampleFinals]
       )
     ]
   where
@@ -909,6 +977,9 @@ driveChecks = do
     thrownBy f = case f of
       Finished _ -> Nothing
       Interrupted e -> fromException e
+    signalledBy r = case r of
+      Right (Interrupted e) -> fromException e == Just Signalled
+      _ -> False
     skipped c = [(t, why) | SawSkipped (Command t _) why <- seenOf c]
     lastOf n xs = drop (length xs - n) xs
 
