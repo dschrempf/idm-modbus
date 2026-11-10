@@ -161,6 +161,7 @@ readRound requests report held regs = do
 
 -- | Seconds from the start of one round to the start of the next.
 newtype Period = Period Int
+  deriving (Show, Eq, Ord)
 
 -- | A part of a program: the registers it reads each round, and what it does
 -- with them.

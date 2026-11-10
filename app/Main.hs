@@ -8,7 +8,6 @@ module Main (main) where
 import Control.Concurrent (threadDelay)
 import qualified Data.ByteString as B
 import Data.List (intercalate)
-import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import IDM.Modbus.TCP
 import IDM.Navigator.Capture
@@ -67,14 +66,9 @@ periodArg a = case readMaybe a of
   _ -> Left (a <> ": not a positive whole number of seconds")
 
 registerArg :: String -> Either String Register
-registerArg a = case readMaybe a :: Maybe Integer of
-  Just n
-    | n >= 0,
-      n <= 65535,
-      Just r <- M.lookup (Address (fromInteger n)) Table.byAddress ->
-        if isReadable (registerAccess r)
-          then Right r
-          else Left (a <> ": write-only")
+registerArg a = case Table.readableAt <$> (readMaybe a :: Maybe Integer) of
+  Just (Right r) -> Right r
+  Just (Left Table.WriteOnlyRegister) -> Left (a <> ": write-only")
   _ -> Left (a <> ": not an address in the parameter list")
 
 -- | Any address; the one after it is read too, so the last cannot be 65535.
