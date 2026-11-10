@@ -147,6 +147,16 @@
   `system` `overview` first in every round, a line of its own in the
   webwatch capture, with no setting needed; `tools/runtable.py` adds its
   `mode` and `info` columns.
+- `idm-web HOST --watch SECONDS [--reason] --fachmann SETTING...` holds the
+  Fachmann level for the watch. It reads the level first in every round,
+  enters it at the beginning, renews it 55 minutes from each entry by
+  leaving it and entering 30 s later, enters again where it fell back, and
+  leaves it on every exit, SIGINT and SIGTERM included. After three entries
+  in a row that did not take, 30 s apart, it reads on at Kunde. It exits
+  having sent nothing on other software, at a level neither Kunde nor
+  Fachmann, or at Fachmann without the notice that closes it. Each change of
+  level is a line of the webwatch with `captured`, `software`, `level`,
+  `userLevel` and `error`, and with no `request`.
 
 ### Changed
 

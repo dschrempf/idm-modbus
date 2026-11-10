@@ -21,8 +21,11 @@ import IDM.Navigator.Software
 import qualified IDM.Navigator.Table as Table
 import IDM.Navigator.Target
 import IDM.Navigator.Web
-import IDM.Navigator.Web.Level (fachmannCode)
+import IDM.Navigator.Web.Fachmann
+import IDM.Navigator.Web.Level (Entry (..), fachmannCode)
+import qualified IDM.Navigator.Web.Level as Level
 import IDM.Navigator.Web.Session (softwareOf)
+import qualified IDM.Navigator.Web.Session as Web
 import IDM.Navigator.Write.Core
 import System.Exit (exitFailure)
 
@@ -471,6 +474,50 @@ checks =
     ( "a version that could not be read refuses a write",
       checked modbusAgreement (Software 20 24 2608 (Patch 0)) (Left (Ended NoAnswer))
         == Left (NotRead (Ended NoAnswer) :: Mismatch Failure ModbusVersion)
+    ),
+    ( "a web watch renews the level 55 minutes from its entry, entering 30 s after the leave",
+      let at level = decide CanWrite (Just level) . Holding (Tries 0)
+       in at Fachmann (Entered (55 * 60 - 1)) == Hold
+            && at Fachmann (Entered (55 * 60)) == Renew
+            && at Customer (Paused 29) == Hold
+            && at Customer (Paused 30) == Try
+            -- a Fachmann level the watch did not enter, as at its beginning
+            && at Fachmann Unentered == Renew
+    ),
+    ( "a level that fell back is entered again at the next round",
+      decide CanWrite (Just Customer) (Holding (Tries 0) (Entered 600)) == FellBack
+        && decide CanWrite (Just Customer) (Holding (Tries 0) Unentered) == Try
+    ),
+    ( "an entry that answered but left the level at Kunde is a failed try, as one declined or failed",
+      -- the answer of 2026-11-10 20:56, seconds after a leave
+      let ignored =
+            EntrySent
+              ( Level.Sent
+                  Customer
+                  Customer
+                  [json "{\"settingSave\":{\"note\":{\"text\":\"action has been executed successfully!\",\"type\":\"success\"}}}"]
+              )
+          untaken = [Right ignored, Right (EntryDeclined 4), Left Web.NoAnswer]
+       in all (\r -> afterTry (60 :: Int) (Tries 1) (attempt r) == Holding (Tries 2) (Tried 60)) untaken
+            && attempt (Right ignored) == Untaken (AnsweredAt Customer)
+            && afterTry (60 :: Int) (Tries 2) (attempt (Right (EntrySent (Level.Sent Customer Fachmann []))))
+              == Holding (Tries 0) (Entered 60)
+    ),
+    ( "a web watch tries 30 s apart, gives up after three, and tries no more",
+      let failed = Untaken (AnsweredAt Customer)
+          third = foldl (\h t -> afterTry t (holdingTries h) failed) (Holding (Tries 0) Unentered) [0, 30, 60 :: Double]
+          sinces = [Unentered, Entered 0, Entered 4000, Paused 0, Paused 40, Tried 0, Tried 40, Barred]
+          levels = [Nothing, Just Customer, Just Fachmann, Just (OtherLevel 4)]
+       in decide CanWrite (Just Customer) (Holding (Tries 2) (Tried 29)) == Hold
+            && decide CanWrite (Just Customer) (Holding (Tries 2) (Tried 30)) == Try
+            && holdingTries third == maxTries
+            && and [decide w l (Holding (Tries n) s) == GiveUp | w <- [CanWrite, CannotWrite], l <- levels, s <- sinces, n <- [3, 4]]
+    ),
+    ( "a web watch tries nothing without a Writable, and says so once",
+      let sinces = [Unentered, Entered 0, Entered 4000, Paused 0, Paused 40, Tried 0, Tried 40]
+          levels = [Nothing, Just Customer, Just Fachmann, Just (OtherLevel 4)]
+       in and [decide CannotWrite l (Holding (Tries n) s) == Unwritable | l <- levels, s <- sinces, n <- [0, 2]]
+            && and [decide CannotWrite l (Holding (Tries 0) Barred) == Hold | l <- levels]
     )
   ]
 

@@ -83,6 +83,10 @@ interface uses. It needs the web interface's PIN in `IDM_PIN`. Options:
   received, except that anything identifying the machine is redacted.
   `--reason` also asks for the system overview each round, which holds the
   heat pump's mode and request reason; with it, the settings are optional.
+  `--fachmann`, after `--reason` if both are given, holds the Fachmann
+  level for the watch: it enters the level, renews it before the
+  controller's sixty minutes are up, and leaves it when the watch ends,
+  also on Ctrl-C or SIGTERM. Each change of level is a line of its own.
 - `--enter-fachmann` switches to the Fachmann (installer) level, using the
   code derived from the controller's clock. `--leave-fachmann` switches back.
 
