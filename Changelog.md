@@ -206,7 +206,9 @@
 - `idm-drive HOST SCHEDULE` runs a schedule file of `schedules/` on the
   controller: one session, the schedule's watch and 1100 and 4122 read
   every round, and its writes of 74, 88 and 4108, with the finals to 88,
-  4108 and 74 on every exit, SIGINT and SIGTERM included. It prints one
+  4108 and 74 on every exit, SIGINT and SIGTERM included. A round without a
+  session on the software the table describes is not stepped, so a phase
+  begins in the first round that can write. It prints one
   JSONL stream, the reads as `idm-dump --watch` prints them and a line per
   event, `begin` with the pid and the schedule's text first and `end` with
   why last. `idm-drive --check SCHEDULE` reads the schedule, prints its

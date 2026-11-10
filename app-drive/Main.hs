@@ -133,12 +133,17 @@ run host path (text, s) = do
   emit "begin" [("pid", show pid), ("schedule", string path), ("text", string (T.unpack text))]
   begun <- getMonotonicTime
   progress <- newIORef notBegun
-  let stepping r = do
-        o <- observation begun r
-        (p', es, result) <- (\p -> step s p o) <$> readIORef progress
-        writeIORef progress p'
-        mapM_ (stepEvent emitAt r) es
-        pure result
+  let -- A round whose commands could not go out is not stepped, so a phase's
+      -- 88, which goes in its first round only, waits for one that can write.
+      stepping r
+        | Just session <- roundSession r,
+          Right _ <- writable session = do
+            o <- observation begun r
+            (p', es, result) <- (\p -> step s p o) <$> readIORef progress
+            writeIORef progress p'
+            mapM_ (stepEvent emitAt r) es
+            pure result
+        | otherwise = pure (Right [])
       opening = open defaultPatience defaultPoll (Host host) (Port 502) (UnitId 1)
   finish <-
     drive
