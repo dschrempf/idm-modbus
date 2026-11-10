@@ -24,7 +24,13 @@ chooses what a read returns, and creating one is a `save`, done by hand in
 the web interface. Since 2026-11-09 seven graphs hold all 37 channels of the
 Kunde level; the 17 more of the Fachmann level, the refrigerant circuit's,
 are in none. B33, the flow, is no channel at either level
-(`doc/verification-2026-11-09-graphs-record-every-channel.md`). The capture is verbatim but for the code that opens the
+(`doc/verification-2026-11-09-graphs-record-every-channel.md`). The
+web interface's JavaScript (`main-7UP7UE6I.js`, served by the controller,
+read 2026-11-10) asks history only as `graph`/`detail {id, fromSecs,
+toSecs, stepSecs}`, of a saved graph, never of a list of channels: a channel
+no graph holds has no read of its history. A run reads the refrigerant
+circuit live instead, from the settings pages 4768 `N2_SENSORS` and 5888
+`N2_EVR_OVERVIEW` in its web watch. The capture is verbatim but for the code that opens the
 controller and the strings that name the machine, which are replaced by a
 visible marker.
 
@@ -54,7 +60,10 @@ Both work on the machine, and the display switches with them. The level is
 the controller's, not the connection's: it holds until it is left or the
 controller ends it, sixty minutes from the entry, however often it was
 read meanwhile, on both softwares
-(`doc/verification-2026-11-09-heating-run-as-on-1574.md`). The frost
+(`doc/verification-2026-11-09-heating-run-as-on-1574.md`). An entry sent
+seconds after a leave answered success and left the level at Kunde; sent
+again 20 s later it took (2026-11-10,
+`captures/navigator-10-level-20.24-2608-2026-11-10-2056.log`). The frost
 protection wizard's code page is not a way in: it answers "wizard is not
 available!" unless a wizard runs.
 

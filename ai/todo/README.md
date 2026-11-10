@@ -5,12 +5,9 @@ its own note. The PV control comes first, then the rest.
 
 ## 1. PV control
 
-`create-the-fachmann-level-graphs` first: it takes a few minutes with the
-user at the web interface, and every run after it can be read after the
-fact down to the refrigerant circuit.
-
-Then `pv-control-of-74-and-88`, in its README's order: the meter-style run
-with `PV011` at 0.5 min; the overnight test of 74; a PV hot water charge.
+`pv-control-of-74-and-88`, in its README's order: the clamp run, with
+`PV011` at 0.1 min; lower gains if it leaves a swing; the overnight test of
+74; a PV hot water charge.
 4108 as a cap is done; what ended the run at 1.0 before `PV006` is open in
 `what-ended-the-run-capped-at-1-0-before-pv006`, unranked.
 
@@ -19,6 +16,10 @@ Each run on 74 or 88 watches the request reason too, with
 done).
 
 ## 2. The rest
+
+`create-the-fachmann-level-graphs`, all but done on 2026-11-10: the graphs
+are for a person at the web interface; a run reads the refrigerant circuit
+from its web watch.
 
 1. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.

@@ -49,6 +49,14 @@ Settled on the machine, 2026-11-05 to 2026-11-09:
   below `PV006`, for no reason a capture shows: not a defrost, an error or
   a lock (evening of 2026-11-09,
   `doc/verification-2026-11-09-power-limit-held-at-1-0.md`).
+- With `PV011` at 0.1 min, set at the display and kept, a meter-fed run
+  did not settle: the speed swung between about 35 and 95 rps, 0.9 to 2.6
+  kW, some 90 s from peak to peak, rather than running to the top as at
+  2.0 min. It ended 8 minutes after the start with the mean at -0.18,
+  negative for at most 10 s; a negative stretch of 40 s down to -1.02 at 6
+  minutes had not ended it. The third stop at about 8 minutes on a mean at
+  or below zero (evening of 2026-11-10,
+  `doc/verification-2026-11-10-pv-loop-at-0-1-min-swings.md`).
 
 So 4108 holds a run past the minimum runtime at 1.0 to 1.5 kW, and ends it
 below 1.0: about 1.0 kW is the lowest run it gives, not the floor's 0.6 to
@@ -58,16 +66,19 @@ minutes, and what the controller does with a value no one renews.
 
 ## Next, in order
 
-1. The meter-style run with `PV011` at 0.5 min, with the PV the meter
-   simulates near the floor's draw: whether the loop settles there, and
-   whether a settled loop, its mean near 0, ends at the minimum runtime as
-   74 at 0 did. This is the feed evcc's Lambda workaround would give an
-   iDM, but renewed every 60 s and clamped at 0; stock evcc adds the draw
-   (`what-evcc-writes-to-74.md`).
-2. The overnight test of 74, `does-the-control-act-on-a-74-no-one-renews.md`.
+1. The clamp run: 74 as the export, clamped to ±0.1 kW, every 10 s, with
+   `PV011` at 0.1 min. A clamp adds no lag, unlike a smoothing of the
+   export, and bounds how fast the integral moves the speed: whether that
+   damps the swing, and whether the run passes 8 minutes. The PV the meter
+   simulates holds longer between steps than on 2026-11-10. Needs a clamp
+   form of a phase in `tools/drivepv.py`, and 4768 and 5888 in the web
+   watch (`does-88-set-the-export-the-pv-controller-holds.md`, "Next").
+2. Lower gains, `IV017` to `IV019`, if the clamp leaves a swing: an
+   EEPROM cycle at the display each way.
+3. The overnight test of 74, `does-the-control-act-on-a-74-no-one-renews.md`.
    A restart from the display is measured; a power cycle at the mains
    switch is not, and is not needed for it.
-3. A PV hot water charge.
+4. A PV hot water charge.
 
 4108 as a cap, the former step 1, is done
 (`power-limit-4108-semantics-unknown`, closed): 1.0 to 1.5 caps a run, 0.9
@@ -79,7 +90,10 @@ tell, not ranked among the steps.
 Every run watches the request reason beside its settings,
 `idm-web HOST --watch 10 --reason SETTING...`
 (`watch-the-request-reason-pv-in-idm-web`, done), so a start or stop reads
-as PV's or a circuit's.
+as PV's or a circuit's. The settings always include 4768 `N2_SENSORS`,
+5888 `N2_EVR_OVERVIEW` and 6245 `N2_MODULATION_OVERVIEW`, the refrigerant
+circuit and the inverter, 5888 and 6245 at Fachmann level only: a run
+reads them live, not from a graph, since a graph is edited by hand and can change.
 
 ## Files
 
@@ -114,5 +128,5 @@ as PV's or a circuit's.
 - `power-limit-4108-outside-pv-and-locks-4110-to-4114`, an idea: 4108 for a
   grid operator's dimming, and the locks.
 - `create-the-fachmann-level-graphs`: the refrigerant circuit's channels in
-  a graph, so a run's compressor, condenser and evaporator read after the
-  fact.
+  a graph, for a person reading the web interface; a run reads them from
+  the web watch.

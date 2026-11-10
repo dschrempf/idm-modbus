@@ -44,24 +44,39 @@ in the watch that 88 reads 0.0, stop the watches, and leave the Fachmann
 level. Never end with 88 away from 0. End a schedule on `aus` rather than a
 time, so the driver's -0.5 does not end a run the controller would hold.
 
-## Next: a shorter `PV011`
+## Run: `PV011` at its minimum
 
-On an idle, cool day, a meter-style run with `PV011`, setting 10389, 0.1 to
-360 min, at 0.5 min instead of 2.0: one EEPROM cycle at the display, and one
-more to set it back, unless the run argues for keeping it. Write 74 every
-10 s rather than 20, so the mean holds three writes, and pass `--mean 30` to
-`tools/runtable.py`. The PV the meter simulates is near the floor's draw,
-0.8 kW, so a loop that settles settles low; 2.0 for the start, which 0.8
-would not give:
+Run on the evening of 2026-11-10 with the schedule of
+`doc/verification-2026-11-10-pv-loop-at-0-1-min-swings.md`, "Reproducing":
+2.0 until the start, the export of 2.0 kW of PV for 6 minutes after it, then
+steps down every 3 minutes. The loop swung rather than settled, and the run
+ended at 8 minutes, in the first step. `PV011` stays at 0.1 min.
 
+## Next: the clamp
+
+74 written as the export clamped to ±0.1 kW, every 10 s: beyond the band
+the controller sees only the sign, and the integral moves the speed at a
+fixed, slow rate. Smoothing the export instead would add lag, which is what
+the mean of 2.0 min did. A clamp is a choice a consumer would make; written
+as a fixed schedule it stays a measurement.
+
+`tools/drivepv.py` needs a phase VALUE that clamps T-4122 to a bound, a
+form to settle before the run. The schedule, with the PV held longer than on
+2026-11-10, 2.0 to 12 minutes after the start, past the stop at 8 and the
+minimum runtime at 10:
+
+    cabal run idm-dump -- HOST --watch 10 74 88 4108 1008 1066 1070 1090 1091 1100 1074 4122 1004 1098 > watch.jsonl
+    IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann
+    IDM_PIN=... cabal run idm-web -- HOST --watch 10 --reason 4768 5888 6245 10263 12763 10389 > webwatch.jsonl
     tools/drivepv.py HOST watch.jsonl --final -0.5 --final-target 0 \
-      2.0/10/ein/0 0.8-4122/10/aus > write.log
+      2.0/10/ein/0 CLAMPED(2.0-4122,0.1)/10/ein+720 CLAMPED(1.5-4122,0.1)/10/+360 \
+      CLAMPED(1.2-4122,0.1)/10/+360 CLAMPED(1.0-4122,0.1)/10/aus > write.log
+    IDM_PIN=... tools/webprobe.py HOST > webapi.json
 
-It shows what the two-minute mean adds to the overshoot: with the lag
-shorter, the draw should settle faster and overshoot less. Whether a loop
-settled at a mean near 0 runs past the minimum runtime is the other half:
-74 at 0 did not. A shorter mean also weighs the start on a shorter surplus,
-so the start may come sooner.
+`CLAMPED(...)` stands for the form still to choose. What to read: the
+swing's amplitude and period against 2026-11-10, the mean at 8 minutes and
+whether the run passes it, and the PV below which the run ends. If the swing
+stays, lower gains are next (`README.md`, step 2).
 
 ## 88 left behind
 

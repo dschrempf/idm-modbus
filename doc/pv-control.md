@@ -186,6 +186,10 @@ mean of 74 over `PV011` less a target of 0:
   climbing meanwhile. The controller's own levers are a shorter `PV011`, a
   weaker I and a D above 0, each a Fachmann setting at the display or a web
   `save`, which this package does not send.
+  With `PV011` at 0.1 min the speed no longer ran to the top but swung
+  between about 35 and 95 rps, some 90 s from peak to peak, on the lag the
+  feed leaves, 74 written every 10 s from a 4122 read every 10 s
+  (`doc/verification-2026-11-10-pv-loop-at-0-1-min-swings.md`).
 - **Part of that overshoot was the test's.** The meter-style writes began
   at 20:00:22, with the two-minute window still full of the 1.7 written
   for the start; the mean read 1.70 while the values written were already
@@ -283,7 +287,13 @@ below 1.0 ends a run however close to the draw. That evening one 30 minutes
 50 seconds after the start, at 37 rps, with 74 at 2.0 and 4108 at 1.0
 throughout and the store 2.1 K below `PV006`: the controller withdrew the
 request, for no reason the captures show
-(`doc/verification-2026-11-09-power-limit-held-at-1-0.md`). Not
+(`doc/verification-2026-11-09-power-limit-held-at-1-0.md`). On 2026-11-10
+one 8 minutes 0 seconds after the start, at 82 rps, rising, with `PV011` at
+0.1 min, the mean at -0.18 and negative for at most 10 s, after a negative
+stretch of 40 s down to -1.02 that had not ended it
+(`doc/verification-2026-11-10-pv-loop-at-0-1-min-swings.md`): with the
+stops after 8 minutes 10 seconds and 8 minutes 0 seconds above, the third at
+about 8 minutes on a mean at or below zero. Not
 settled what
 "requested" is, why the minimum runtime did not hold, or why 0 held the one
 run and ended the other.
