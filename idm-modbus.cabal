@@ -118,6 +118,7 @@ library schedule
   import:          lib
   exposed-modules:
     IDM.Navigator.Schedule
+    IDM.Navigator.Schedule.Log
     IDM.Navigator.Schedule.Parse
     IDM.Navigator.Schedule.Step
 
@@ -126,6 +127,7 @@ library schedule
     , base         >=4.7 && <5
     , idm-modbus
     , text
+    , time
     , toml-parser  >=2.0 && <2.1
 
 executable idm-dump

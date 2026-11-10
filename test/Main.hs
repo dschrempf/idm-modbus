@@ -31,6 +31,7 @@ import qualified IDM.Navigator.Drive as Drive
 import IDM.Navigator.Register
 import IDM.Navigator.Rounds
 import IDM.Navigator.Schedule
+import qualified IDM.Navigator.Schedule.Log as Log
 import IDM.Navigator.Schedule.Parse (parseSchedule)
 import IDM.Navigator.Schedule.Step
 import IDM.Navigator.Software
@@ -51,7 +52,8 @@ main :: IO ()
 main = do
   files <- scheduleFiles
   drives <- driveChecks
-  results <- mapM check (checks <> files <> drives)
+  logs <- logChecks
+  results <- mapM check (checks <> files <> drives <> logs)
   if and results then putStrLn "all checks passed" else exitFailure
 
 -- | The checks that read the repository's files.
@@ -1159,3 +1161,92 @@ wellOrdered r = case registerRange r of
 
 unique :: (Eq a) => [a] -> Bool
 unique xs = length (nub xs) == length xs
+
+-- | The checks of the lines idm-drive writes: each event kind built from
+-- literal values, against the line of @tools/fixtures/drive.jsonl@ that
+-- @tools/runtable.py@ is tested on, where it has one.
+logChecks :: IO [(String, Bool)]
+logChecks = do
+  fixture <- lines <$> readFile "tools/fixtures/drive.jsonl"
+  let at t name = [l | l <- fixture, ("{\"time\": \"" <> t <> "\", \"event\": \"" <> name <> "\"") `isPrefixOf'` l]
+      -- the line, as the fixture has it
+      exactly t e = at t (Log.entryName e) == [Log.eventLine (zoned t) e]
+      -- the line, as JSON, where a number is spelled otherwise
+      asJSON t e = map parsed (at t (Log.entryName e)) == [parsed (Log.eventLine (zoned t) e)]
+      t' = ("2026-11-10T12:" <>) . (<> "+01:00")
+      version = Right (ModbusVersion 24 2608 0)
+      entry = Log.driveEntry (const version) (const True)
+      event e = either (const Nothing) Just (entry e)
+      writeOf c o = event (Wrote c o)
+      phase0 = Phase (Constant 2.0) Nothing (Just 0.0) Nothing AtStart
+      phase1 = Phase (Export 2.0 (Bounds (Just (-0.1)) (Just 0.1))) Nothing Nothing Nothing AtStop
+      readOf = Asked (register 74) (zoned (t' "00:01.000")) 0 (Just (FakeSession 1)) (Just (sampleOf (register 74) (Right (B.pack [0, 0, 0xbf, 0]))))
+      line' t name fields = Log.eventLine (zoned t) (Log.Entry name fields)
+      text =
+        "round = 10\nwatch = [74]\n\n[final]\nsurplus = -0.5\ntarget = 0.0\nlimit = -1.0\n\n\
+        \[[phase]]\nsurplus = 2.0\ntarget = 0.0\nuntil = \"start\"\n\n\
+        \[[phase]]\npv = 2.0\nmin = -0.1\nmax = 0.1\nuntil = \"stop\"\n"
+      escaped = "a\"b\\c\n\t\r\x01\x7f é ∑ 😀"
+  pure
+    [ ( "idm-drive's begin, session, unopened and lost lines are the fixture's",
+        exactly (t' "00:00.000") (Log.beginEntry 4242 "schedules/example.toml" (T.pack text))
+          && maybe False (exactly (t' "00:00.100")) (event (RoundEvent (Opened (FakeSession 1))))
+          && maybe False (exactly (t' "00:51.000")) (event (RoundEvent (NotOpened (T.pack "connect: does not exist (Connection refused)"))))
+          && maybe False (exactly (t' "00:46.600")) (event (RoundEvent (Dropped NoAnswer)))
+          && fmap (Log.eventLine (zoned (t' "00:00.100"))) (Log.driveEntry (const version) (const False) (RoundEvent (Opened (FakeSession 1))))
+            == Right (line' (t' "00:00.100") "session" [("software", "{\"status\": \"ok\", \"exception\": null, \"major\": 24, \"minor\": 2608, \"patch\": 0}"), ("writable", "false")])
+      ),
+      ( "idm-drive writes a read as the watch line, and it is the fixture's",
+        either (\l -> l `elem` fixture) (const False) (entry (RoundEvent (ReadDone readOf)))
+      ),
+      ( "idm-drive's phase, start, stop, export and skip lines of the step are the fixture's",
+        exactly (t' "00:01.450") (Log.stepEntry (BeganPhase 0 phase0))
+          && exactly (t' "00:11.500") (Log.stepEntry (BeganPhase 1 phase1))
+          && exactly (t' "00:11.200") (Log.stepEntry CompressorStarted)
+          && exactly (t' "01:01.200") (Log.stepEntry CompressorStopped)
+          && exactly (t' "00:11.500") (Log.stepEntry (Exported (Computation 2.0 1.85 0.15 0.1)))
+          && asJSON (t' "00:21.500") (Log.stepEntry (Exported (Computation 2.0 2.03 (-0.03) (-0.03))))
+          && exactly (t' "00:31.500") (Log.stepEntry (NoDraw PvSurplus))
+      ),
+      ( "idm-drive's write lines of each outcome in the fixture are the fixture's",
+        maybe False (exactly (t' "00:01.500")) (writeOf (targetOf 0) (Sent Confirmed))
+          && maybe False (exactly (t' "00:01.600")) (writeOf (surplusOf 2) (Sent Confirmed))
+          && maybe False (asJSON (t' "00:21.600")) (writeOf (surplusOf (-0.03)) (Sent (DidNotStick (B.pack [0, 0, 0xbf, 0]))))
+          && maybe False (exactly (t' "00:41.600")) (writeOf (surplusOf (-0.1)) (Failed (Ended NoAnswer)))
+          && maybe False (exactly (t' "01:01.700")) (writeOf (limitOf (-1)) (Sent Confirmed))
+          && maybe False (exactly (t' "01:01.800")) (writeOf (surplusOf (-0.5)) (Sent (ReadBackFailed (DeviceException ServerDeviceFailure))))
+      ),
+      ( "idm-drive's write lines of the outcomes the fixture lacks say what event-log.md says",
+        fmap (Log.eventLine (zoned (t' "00:00.000"))) (writeOf (surplusOf 1) (Sent Unconfirmed))
+          == Just (line' (t' "00:00.000") "write" [("address", "74"), ("value", "1.0"), ("outcome", "\"unconfirmed\""), ("detail", "null")])
+          && fmap (Log.eventLine (zoned (t' "00:00.000"))) (writeOf (surplusOf (1 / 0)) (Refused (NotFinite (1 / 0))))
+            == Just (line' (t' "00:00.000") "write" [("address", "74"), ("value", "null"), ("outcome", "\"refused\""), ("detail", "\"NotFinite Infinity\"")])
+          && fmap (Log.eventLine (zoned (t' "00:00.000"))) (writeOf (surplusOf 1) (Failed (Unsent ConnectionClosed)))
+            == Just (line' (t' "00:00.000") "write" [("address", "74"), ("value", "1.0"), ("outcome", "\"failed\""), ("detail", "\"Unsent ConnectionClosed; nothing was sent\"")])
+      ),
+      ( "idm-drive's skip lines name the target and why",
+        event (Skipped (surplusOf 1) NoSession) == Just (Log.Entry "skip" [("address", "74"), ("why", "\"no-session\"")])
+          && event (Skipped (limitOf 1) SoftwareDiffers) == Just (Log.Entry "skip" [("address", "4108"), ("why", "\"not-writable\"")])
+      ),
+      ( "idm-drive's signal, final and end lines are the fixture's, and an end names a signal or an error",
+        exactly (t' "01:01.450") (Log.signalEntry "SIGTERM")
+          && maybe False (exactly (t' "01:01.500")) (event Drive.Finals)
+          && exactly (t' "01:01.900") (Log.endEntry (Finished Stopped))
+          && Log.endEntry (Finished ScheduleDone) == Log.Entry "end" [("why", "\"schedule\""), ("detail", "null")]
+          && Log.endEntry (Interrupted (toException (Log.Interruption 15))) == Log.Entry "end" [("why", "\"signal\""), ("detail", "null")]
+          && Log.endEntry (Interrupted (toException (userError "step"))) == Log.Entry "end" [("why", "\"error\""), ("detail", "\"user error (step)\"")]
+      ),
+      ( "idm-drive's JSON strings are ASCII, and read back as the text they escape",
+        all (< '\x80') (Log.string escaped)
+          && A.decode (BL.pack (Log.string escaped)) == Just (A.String (T.pack escaped))
+      ),
+      ( "the drive fixture has no line of a kind event-log.md does not name",
+        all
+          (`elem` ["begin", "session", "unopened", "lost", "phase", "start", "stop", "export", "skip", "write", "signal", "final", "end"])
+          [T.unpack k | Just (A.Object o) <- map parsed fixture, Just (A.String k) <- [KM.lookup (K.fromString "event") o]]
+      )
+    ]
+  where
+    parsed :: String -> Maybe A.Value
+    parsed = A.decode . BL.pack
+    isPrefixOf' p l = take (length p) l == p

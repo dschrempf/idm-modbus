@@ -22,11 +22,17 @@ or addresses; `why` and `detail` are strings; a missing value is `null`.
 | `start`    | none; `time` is that of the 1100 read                                    |
 | `stop`     | none; `time` is that of the 1100 read                                    |
 | `export`   | `pv`; `draw`; `export`, `pv` less `draw`; `written`, rounded and bounded |
-| `skip`     | `address`; `why`: `no-draw`, `no-session` or `not-writable`              |
+| `skip`     | `address`; `why`: `no-draw`, `no-session` or `not-writable`; see below   |
 | `write`    | `address`, `value`, `outcome`, `detail`                                  |
 | `signal`   | `name`: `SIGINT` or `SIGTERM`                                            |
 | `final`    | none; the finals follow, as `write` events                               |
 | `end`      | `why`: `schedule`, `stop`, `signal` or `error`; `detail`, for an error   |
+
+Outside the finals, a `skip` with `no-session` follows only a write that
+lost the session, and one with `not-writable` does not occur: `idm-drive`
+steps the schedule only in a round with a writable session, so a round
+that cannot write leaves no line for what it held back
+(`IDM.Navigator.Schedule.Log`).
 
 `begin` holds the schedule's text, not only its path: `schedules/` is
 tracked and will change, and the capture, which git does not hold, is the

@@ -4,7 +4,8 @@
     python3 tools/test_runtable.py
 
 `fixtures/drive.jsonl` is a drive file with an event of every kind
-`idm-drive` writes and a `write` of every outcome but `unconfirmed`;
+`idm-drive` writes, its `write` events `confirmed`, `did-not-stick`,
+`read-back-failed` and `failed`, and `test_acknowledged` takes every outcome;
 `watch.jsonl`, `write.log` and `webwatch.jsonl` are a watch, a `drivepv.py`
 write log and a webwatch with level lines. Where `captures/` holds write
 logs, or the directory `RUNTABLE_CAPTURES` names, a last test runs each with
