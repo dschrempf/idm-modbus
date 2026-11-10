@@ -12,6 +12,14 @@
 -- 'IDM.Navigator.Capture.watchLine'; every other line is an 'Entry', stamped
 -- by 'eventLine'. The executable keeps the clocks, the printing and the
 -- signals.
+--
+-- The schedule is stepped only in a round with a writable session, so a
+-- round that cannot write leaves no line for what it held back: its
+-- @session@, @lost@ or @unopened@ line implies it. Outside the finals, a
+-- @skip@ with @no-session@ follows only a write that lost the session, and
+-- one with @not-writable@ does not occur. On other software the drive does
+-- not see the compressor's stop and runs until a signal; an update restarts
+-- the controller, which resets 74 and 4108.
 module IDM.Navigator.Schedule.Log
   ( -- * Event lines
     Entry (..),
