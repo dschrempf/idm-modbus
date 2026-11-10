@@ -218,7 +218,7 @@ data Register = Register
 --
 -- The sentinels are not documented. They were determined by reading every
 -- address of a machine whose configuration is known; see
--- @doc\/verification\/2026-09-19.md@.
+-- @doc\/verification\/2026-09-19-scan.md@.
 data Reading a
   = -- | the sentinel, where no value the register may hold equals it. It says
     -- that the register holds no value, not why: an unfitted sensor answers
@@ -245,9 +245,9 @@ reading none noneOr just r = case r of
 -- 'NotDriven' and @'Driven' 0@ are therefore different states, and neither is
 -- the absence of a pump: a fitted pump that nothing is calling for and a pump
 -- that was never installed both answer @-1@. See
--- @doc\/verification\/2026-09-20.md@. On this machine 1104, the charge pump's
--- status, answers @-1@ while the pump is driven too, and 1074 carries its
--- signal; see @doc\/verification\/2026-10-16-charge-pump.md@.
+-- @doc\/verification\/2026-09-20-display.md@. On this machine 1104, the
+-- charge pump's status, answers @-1@ while the pump is driven too, and 1074
+-- carries its signal; see @doc\/verification\/2026-10-16-charge-pump.md@.
 data Drive
   = NotDriven
   | -- | per cent of the pump's speed range

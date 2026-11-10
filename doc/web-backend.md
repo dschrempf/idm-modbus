@@ -29,7 +29,7 @@ on 2026-11-07.
 ## What it shows that Modbus does not
 
 No register in the parameter list or on the register page carries
-([2026-09-20](verification/2026-09-20.md)):
+([2026-09-20-display](verification/2026-09-20-display.md)):
 
 - the refrigerant circuit: B71 Heißgastemperatur, B78/B78v
   Verdampfungsdruck and -temperatur, B79 Verdampferaustritt, B86/B86v

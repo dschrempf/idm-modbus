@@ -16,12 +16,14 @@ and rooms at 1364 to 1368. The sensors the sensor page leaves out are the
 registers that answer -1.0. Settings off their default agree too, which a
 wrongly named register would have to do by accident: 1033 and 1034 at 36 and
 44, the heating curves at 0.4, and only circuit D, the one switched off,
-reading 0 at its mode ([2026-09-20](verification/2026-09-20.md)). Nineteen
-settings join on the parameter identifier the web backend sends, and all
-agree ([2026-09-20-webapi](verification/2026-09-20-webapi.md)).
+reading 0 at its mode
+([2026-09-20-display](verification/2026-09-20-display.md)). Nineteen settings
+join on the parameter identifier the web backend sends, and all agree
+([2026-09-20-webapi](verification/2026-09-20-webapi.md)).
 
 1112, the valve M63, which the list leaves unenumerated, reads 0 for
-"Heizen" and 1 for hot water ([2026-09-20](verification/2026-09-20.md),
+"Heizen" and 1 for hot water
+([2026-09-20-display](verification/2026-09-20-display.md),
 [2026-10-01-charge](verification/2026-10-01-charge.md)).
 
 ### The heat pump's own flow and return
@@ -29,9 +31,9 @@ agree ([2026-09-20-webapi](verification/2026-09-20-webapi.md)).
 1050 and 1052, `Wärmepumpen Vorlauftemperatur (B33)` and
 `Rücklauftemperatur (B34)`, answer -1.0, though the sensor page prints both, as
 the intermediate circuit's B33/B113 and B34/B114
-([2026-09-20](verification/2026-09-20.md)). On a machine with a separating heat
-exchanger the manual sends a reader of them to the heat sink registers below.
-The table keeps both `present`, because they answer.
+([2026-09-20-display](verification/2026-09-20-display.md)). On a machine with a
+separating heat exchanger the manual sends a reader of them to the heat sink
+registers below. The table keeps both `present`, because they answer.
 
 ### The heat sink, 1066 to 1074
 
@@ -70,9 +72,9 @@ the pump runs ([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md),
 
 1449 to 1455, `Sollvorlauftemperatur HK x (Konstant-HK)`, are `HKA03` and its
 siblings, not the maximum flow temperature: moving the maximum moved none of
-them ([2026-09-20](verification/2026-09-20.md)). The minimum and maximum flow
-temperature per circuit are outside the list, `FLOAT`s on the register page,
-joined to their identifiers by moving each setting
+them ([2026-09-20-display](verification/2026-09-20-display.md)). The minimum and
+maximum flow temperature per circuit are outside the list, `FLOAT`s on the
+register page, joined to their identifiers by moving each setting
 ([2026-10-15-flow-temperature](verification/2026-10-15-flow-temperature.md)):
 
 | Address | Parameter                                    |
@@ -161,8 +163,8 @@ names the registers without saying
 ([modbus.md](modbus.md#the-access-right-rwro)); 88 `PV-Zielwert` is a `FLOAT`
 of revision 12. All answer. The floats read 0.0 while nothing feeds them,
 and 86 `Batteriefüllstand` reads `ffff`, the sentinel, on a machine without a
-battery ([2026-09-19](verification/2026-09-19.md)). 74 is in kW; what the
-controller does with 74 and 88 is in [pv-control.md](pv-control.md).
+battery ([2026-09-19-scan](verification/2026-09-19-scan.md)). 74 is in kW; what
+the controller does with 74 and 88 is in [pv-control.md](pv-control.md).
 
 ### 4108 to 4114, the power limits
 

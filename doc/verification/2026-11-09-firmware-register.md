@@ -27,7 +27,7 @@ read the software as 24, 2608, 0.
 
 The library reads with function code 4 by default, and its model probe asks
 for two registers. Function codes 3 and 4 return the same data on this
-machine wherever both were tried ([2026-09-19.md](2026-09-19.md)),
+machine wherever both were tried ([2026-09-19-scan.md](2026-09-19-scan.md)),
 but that covers only addresses that answer. So 4120 was read again by
 function code 4, unit 1, by hand, a few minutes after the capture; no tool
 here writes that read into a capture:

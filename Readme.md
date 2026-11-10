@@ -135,7 +135,6 @@ port 502 with unit id 1.
 | `data/navigator-10-gltmon-parameters.tsv`     | manufacturer's parameter IDs for registers the manual does not list, found by changing a setting and watching which register follows; hand-written |
 | `data/navigator-10-targets.tsv`               | the registers that may be written, each with an English name; hand-written                                                                         |
 | `data/navigator-10-software.tsv`              | the controller software the table describes, the only one writes are allowed on; hand-written                                                      |
-| `data/navigator-10-web-2026-09-20.tsv`        | what the controller's web pages showed, copied from the screen by hand                                                                             |
 | `captures/`                                   | raw answers from a real machine, apart from what the parameter list already says; not in git; `captures/README.md` explains the files              |
 | `tools/transcribe.py`                         | regenerates both TSVs and the targets module from the manual's PDF                                                                                 |
 | `tools/webprobe.py`                           | records the web backend's answers, using reads only                                                                                                |
@@ -151,6 +150,7 @@ port 502 with unit id 1.
 | `lib/idm-modbus/IDM/Navigator/Web.hs`, `Web/` | the web backend: its protocol, a read-only session, and the user level                                                                             |
 | `doc/`                                        | what is known about the controller, by topic, and from where; `doc/README.md` lists the documents                                                  |
 | `doc/verification/`                           | one measurement each, dated; the title states the result                                                                                           |
+| `doc/verification/2026-09-20-display.tsv`     | what the controller's web pages showed, copied from the screen by hand                                                                             |
 
 To correct the table, put a newer revision of the manual in `manual/` and
 re-run `tools/transcribe.py`. Git ignores `manual/`, since the document

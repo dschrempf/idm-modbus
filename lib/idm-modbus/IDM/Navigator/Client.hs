@@ -167,7 +167,7 @@ readMany s = probe s . filter (isReadable . registerAccess)
 --
 -- This is what a capture does. An address the parameter list marks write-only
 -- answers all the same, and recording that is the point of the capture; see
--- @doc\/verification\/2026-09-19.md@.
+-- @doc\/verification\/2026-09-19-scan.md@.
 probe :: Session -> [Register] -> IO [Sample]
 probe s = go
   where

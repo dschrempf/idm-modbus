@@ -78,7 +78,7 @@ other 31 in ramps, and -1.0 exactly where the register answered `ffff`. That
 is the controller reading its own register 1074 as signed.
 
 So 1074 is M73's control signal on the pump scale of
-[2026-09-20.md](2026-09-20.md): `ffff` is -1, the
+[2026-09-20-display.md](2026-09-20-display.md): `ffff` is -1, the
 pump not driven, and a value is percent of the pump's speed range. It read
 0 to 100. 0 is a state of its own: at the start of each hot water charge,
 from 10:01:52 and from 10:22:03, 1074 and the page stood at 0, minimum speed,

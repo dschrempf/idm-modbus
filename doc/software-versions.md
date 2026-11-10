@@ -45,8 +45,8 @@ of 1574, and on 2026-11-05 at 16:09.
 
 The first column was read in `captures/navigator-10-webapi-20.24-1574-2026-09-24-1544.json`,
 `…-20.24-1574-2026-09-29-1333.json` and `…-20.24-1574-2026-10-01-1158.json`, all alike, and the
-software version on 2026-09-19 in [2026-09-19](verification/2026-09-19.md).
-The second was read in
+software version on 2026-09-19 in
+[2026-09-19-scan](verification/2026-09-19-scan.md). The second was read in
 `captures/navigator-10-webapi-20.24-2608-2026-11-05-1624.json`, and over Modbus in
 `captures/navigator-10-widths-20.24-2608-2026-11-05-1639.json`.
 

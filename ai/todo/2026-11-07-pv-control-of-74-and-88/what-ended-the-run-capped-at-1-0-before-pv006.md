@@ -30,9 +30,9 @@ None ruled out:
 1.0 again, from a store near 30 °C, as on 2026-11-09, with 1066
 `Ladefühler (B45)` and 1070 `Vorlauftemperatur Wärmesenke (B125)` added to
 the Modbus watch (1050, named after B33, answers -1 on this machine:
-`doc/verification/2026-09-20.md`), and a webprobe walk within half an hour of the stop,
-while the graph still holds its five-minute samples. A stop near 30
-minutes with B38, B45 and the flow well below 40 is the time; a stop as
+`doc/verification/2026-09-20-display.md`), and a webprobe walk within half an
+hour of the stop, while the graph still holds its five-minute samples. A stop
+near 30 minutes with B38, B45 and the flow well below 40 is the time; a stop as
 B45 or the flow reaches 40 is the temperature.
 
     cabal run idm-dump -- HOST --watch 10 74 88 4108 1008 1066 1070 1090 1091 1100 1074 4122 1004 1098 > watch.jsonl

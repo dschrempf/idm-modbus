@@ -22,7 +22,8 @@ finding, `verification/DATE-SLUG.md`; the title states the result. Each
 records what was set, what was captured and how to reproduce it. A
 measurement a later one corrects carries a note pointing there; the topic
 documents carry the current state. The first three,
-[2026-09-19](verification/2026-09-19.md), [2026-09-20](verification/2026-09-20.md)
-and [2026-09-20-webapi](verification/2026-09-20-webapi.md), checked the table
-against the machine, its display and its web backend. The captures they cite
-are in `captures/`, which git ignores; `captures/README.md` names the files.
+[2026-09-19-scan](verification/2026-09-19-scan.md),
+[2026-09-20-display](verification/2026-09-20-display.md) and
+[2026-09-20-webapi](verification/2026-09-20-webapi.md), checked the table
+against the machine, its display and its web backend. The captures they cite are
+in `captures/`, which git ignores; `captures/README.md` names the files.

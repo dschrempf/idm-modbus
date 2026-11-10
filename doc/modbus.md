@@ -11,7 +11,7 @@ exception 02, all of them in the zone module block from 2000 on, which the
 machine lacks (`captures/navigator-10-scan-20.24-2608-2026-11-06-2120.json`,
 the `observed` column of `data/navigator-10-registers.tsv`). 1999, write-only,
 refused on 20.24-1574 and reads `0000` since 20.24-2608
-([2026-09-19](verification/2026-09-19.md),
+([2026-09-19-scan](verification/2026-09-19-scan.md),
 [2026-11-05-software-update](verification/2026-11-05-software-update.md)).
 Addresses the manual does not describe answer as well: the controller's own
 list names them ([sources.md](sources.md#the-controllers-own-list)).
@@ -31,7 +31,7 @@ channels ([2026-09-20-webapi](verification/2026-09-20-webapi.md)).
 Both return the same data for every address tried, including 4122, which
 812184 calls an input register, and 74, which it calls a holding register.
 They refuse alike too: 4120 answers exception 02 to both
-([2026-09-19](verification/2026-09-19.md),
+([2026-09-19-scan](verification/2026-09-19-scan.md),
 [2026-11-09-firmware-register](verification/2026-11-09-firmware-register.md)).
 The library reads holding registers, function code 3, since a write needs
 them.
@@ -57,14 +57,14 @@ Where a sentinel could be a reading, the documented range decides:
   range, and -1 °C is an outdoor temperature; 1002 arrives rounded to
   hundredths and stands at -1.00 whenever the average does. So -1.0 is
   `NoValue` only where a documented range excludes it, and `NoValueOr`, no
-  value or -1, elsewhere ([2026-09-19](verification/2026-09-19.md)).
+  value or -1, elsewhere ([2026-09-19-scan](verification/2026-09-19-scan.md)).
 - **`WORD`.** A `WORD` is two's complement where the parameter list
   documents a negative minimum for it, or a negative default for a read-only
   one, and there 65535 is -1, a value. The bivalence points 1120 and 1121
   read `fffb` and `ffec`, which the controller prints as -5 and -20 °C beside
   `BV002` and `BV003`; the pump signals 1104 to 1109, documented from -1 in
   revision 10 and with a default of -1 since, read `ffff` for "not driven"
-  ([2026-09-20](verification/2026-09-20.md),
+  ([2026-09-20-display](verification/2026-09-20-display.md),
   [2026-09-20-webapi](verification/2026-09-20-webapi.md)). Every `WORD`
   documented from 0 up stays at or below 100, so there 65535 cannot be a
   reading. 86 `Batteriefüllstand`, supplied by the building management
@@ -91,7 +91,7 @@ limit 15 °C, not sentinels. The sensors and the active operating modes, 1498
 to 1504, do not settle it either: circuit B, the machine's internal heating
 circuit, exists and reads -1.0 and `ffff` there exactly as the missing E to
 G do. Auto-detection finds the circuits that have sensors on them, not the
-circuits ([2026-09-20](verification/2026-09-20.md)).
+circuits ([2026-09-20-display](verification/2026-09-20-display.md)).
 
 **Whether a pump is fitted.** A fitted pump not being driven and a pump never
 installed answer the same `ffff` at 1104 to 1109.
@@ -107,8 +107,8 @@ heating circuit A, 1393, and B to G bare. `tools/transcribe.py` shares an
 encoding across registers that are alike but for the letter or digit ending
 their name — heating circuits B to G, compressors 2 to 4, the rooms of a
 zone module — or the number of the zone module inside it, so `enumLabel`
-reaches every member ([2026-09-20](verification/2026-09-20.md)). Codes the
-manual does not print but the machine answers are in
+reaches every member ([2026-09-20-display](verification/2026-09-20-display.md)).
+Codes the manual does not print but the machine answers are in
 `data/navigator-10-measured-enums.tsv`.
 
 ### Pacing

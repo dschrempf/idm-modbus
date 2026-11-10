@@ -41,10 +41,10 @@
   the web interface send them. The code is sent from Kunde only, and never
   so close to the hour that it could arrive in the next one; the result says
   whether anything was sent.
-- A second verification, `doc/verification/2026-09-20.md`, checking the table
-  against the controller's own display rather than against the machine alone,
-  with the readings in `data/navigator-10-web-2026-09-20.tsv` and the two
-  captures taken beside them.
+- A second verification, `doc/verification/2026-09-20-display.md`, checking the
+  table against the controller's own display rather than against the machine
+  alone, with the readings in `doc/verification/2026-09-20-display.tsv` and the
+  two captures taken beside them.
 - Nineteen registers the parameter list does not print, taken from the
   controller's own list of what it serves, the web page `N2_GLTMON`: the
   minimum and maximum flow temperature of circuits A, C and D, the heat sink's
