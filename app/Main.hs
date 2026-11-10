@@ -227,14 +227,6 @@ watch opening period regs = do
       NotOpened why -> hPutStrLn stderr (T.unpack why)
       Dropped why -> hPutStrLn stderr (endingText why)
 
-endingText :: Ending -> String
-endingText e = case e of
-  NoAnswer -> "no answer in time"
-  UnexpectedTransaction (TransactionId t) -> "an answer to another request, transaction " <> show t
-  Malformed frame -> "a malformed frame, " <> hex frame
-  ConnectionClosed -> "connection closed"
-  Lost why -> why
-
 failureText :: Failure -> String
 failureText f = case f of
   DeviceException IllegalDataAddress -> "(absent)"

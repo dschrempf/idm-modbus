@@ -83,6 +83,7 @@ library
   exposed-modules:
     IDM.Navigator.Capture
     IDM.Navigator.Client
+    IDM.Navigator.Drive
     IDM.Navigator.Rounds
     IDM.Navigator.Software
     IDM.Navigator.Table
@@ -136,6 +137,19 @@ executable idm-dump
     , bytestring
     , idm-modbus
     , text
+
+executable idm-drive
+  import:         exec
+  main-is:        Main.hs
+  hs-source-dirs: app-drive
+  build-depends:
+    , base                 >=4.7 && <5
+    , bytestring
+    , idm-modbus
+    , idm-modbus:schedule
+    , text
+    , time
+    , unix
 
 executable idm-web
   import:         exec

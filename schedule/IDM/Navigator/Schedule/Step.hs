@@ -22,7 +22,7 @@ module IDM.Navigator.Schedule.Step
     Progress,
     notBegun,
     step,
-    Command (..),
+    finalCommands,
     Event (..),
     Computation (..),
     Done (..),
@@ -32,6 +32,7 @@ where
 import Data.Bifunctor (first)
 import qualified Data.List.NonEmpty as NE
 import Data.Maybe (fromMaybe, isJust)
+import IDM.Navigator.Drive (Command (..))
 import IDM.Navigator.Register (Cost (..), Reading (..), Value (..))
 import IDM.Navigator.Schedule
 import IDM.Navigator.Target (Target (..))
@@ -91,10 +92,6 @@ data Current = Current
 -- | Before the first round.
 notBegun :: Progress
 notBegun = Progress Nothing Nothing
-
--- | A write to a target. @IDM.Navigator.Drive@'s will take its place.
-data Command = Command (Target 'Free) Value
-  deriving (Show, Eq)
 
 -- | What a round did, besides its commands.
 data Event
@@ -207,6 +204,19 @@ commands r o fresh c = (c', es, target <> surplus)
             Just d ->
               let w = bounded bounds (hundredths (pv - d))
                in (wrote, [Exported (Computation pv d (pv - d) w)], limit <> [Command PvSurplus (Real w)])
+
+-- | The finals, in the order they go out: 88, then 4108, then 74.
+--
+-- 88 goes first: a negative target left standing beside the final 74 could
+-- keep the pump drawing from the grid. 4108 goes before 74: a limit left
+-- standing caps every run until the controller restarts, and -1 is its
+-- default.
+finalCommands :: Finals -> [Command]
+finalCommands f =
+  [ Command PvTarget (Real (finalTarget f)),
+    Command HeatPumpPowerLimit (Real (finalLimit f)),
+    Command PvSurplus (Real (finalSurplus f))
+  ]
 
 -- | Whether a span from one round has passed by another; see 'step'.
 passed :: Period -> Seconds -> Instant -> Instant -> Bool

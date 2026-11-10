@@ -106,6 +106,15 @@ everyday use:
   4108 through `idm-write`, while `idm-dump --watch` runs alongside.
 - `tools/runtable.py` lines up what was written with what the controller did.
 
+`idm-drive HOST SCHEDULE` is to take the place of `tools/drivepv.py`. It runs
+a schedule file from `schedules/` in one process and one session: it reads
+the schedule's watch and the compressor's status and draw every round,
+writes 74, 88 and 4108 as the current phase says, and writes the schedule's
+final values to 88, 4108 and 74 on every exit, SIGINT and SIGTERM included.
+Its output is a single JSONL stream, the reads in the format of
+`idm-dump --watch` and the events beside them. `idm-drive --check SCHEDULE`
+prints the phases of a schedule without connecting.
+
 All of these programs read the controller's software version first. Writes
 and changes of the user level only go ahead if it matches the version the
 table describes, in `data/navigator-10-software.tsv`. Reads work on any

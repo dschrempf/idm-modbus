@@ -1,3 +1,5 @@
+{-# LANGUAGE DataKinds #-}
+
 -- |
 -- Module      :  Main
 -- Description :  Checks that do not need a heat pump
@@ -5,22 +7,27 @@
 -- License     :  BSD-3-Clause
 module Main (main) where
 
-import Control.Monad (foldM)
+import Control.Exception (fromException, throwIO)
+import Control.Monad (foldM, join)
 import Control.Monad.Trans.State.Strict (State, modify, runState, state)
 import qualified Data.Aeson as A
 import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy.Char8 as BL
+import Data.IORef (atomicModifyIORef', newIORef, readIORef)
 import Data.List (group, nub, sort)
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
-import Data.Time (ZonedTime, defaultTimeLocale, parseTimeOrError)
 import qualified Data.Text.IO as T
+import Data.Time (ZonedTime, defaultTimeLocale, parseTimeOrError)
+import Data.Word (Word16)
 import GHC.Float (double2Float, float2Double)
 import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
 import IDM.Navigator.Capture (watchLineOn)
 import IDM.Navigator.Client (Answer (..), Sample (..), sampleOf)
+import IDM.Navigator.Drive (Command (..), DriveEventOn (RoundEvent, Skipped, Wrote), DriveOn (..), DriveRequests (..), Finish (..), SkipReason (..), driveWith)
+import qualified IDM.Navigator.Drive as Drive
 import IDM.Navigator.Register
 import IDM.Navigator.Rounds
 import IDM.Navigator.Schedule
@@ -43,7 +50,8 @@ import System.FilePath (takeExtension, (</>))
 main :: IO ()
 main = do
   files <- scheduleFiles
-  results <- mapM check (checks <> files)
+  drives <- driveChecks
+  results <- mapM check (checks <> files <> drives)
   if and results then putStrLn "all checks passed" else exitFailure
 
 -- | The checks that read the repository's files.
@@ -723,14 +731,21 @@ data RoundRequest
   | ReadOn FakeSession Address
   | Closing FakeSession
   | PauseOn FakeSession
+  | -- | a drive's write
+    WriteOn FakeSession Address Value
+  | -- | a drive's wait, in seconds
+    SleepFor Double
   deriving (Show, Eq)
 
--- | What a round reported, as far as the checks look.
+-- | What a round or a drive reported, as far as the checks look.
 data Seen
   = SawRead Address (Maybe FakeSession) (Maybe (Either Failure B.ByteString))
   | SawOpened FakeSession
   | SawNotOpened T.Text
   | SawDropped Ending
+  | SawWrote Command (Outcome 'Free)
+  | SawSkipped Command SkipReason
+  | SawFinals
   deriving (Show, Eq)
 
 -- | A controller that answers each opening and each read with the next of
@@ -756,31 +771,146 @@ roundsAgainst openings answers held regss =
    in (reverse done, c)
   where
     next (done, session) regs = do
-      r <- readRound fake report session regs
+      r <- readRound fakeRounds (saw . seenRound) session regs
       pure (r : done, roundSession r)
-    fake :: RoundRequests (State Controller) FakeSession
-    fake =
-      RoundRequests
-        { openSession = logged Opening >> state opening,
-          readSample = \s r -> logged (ReadOn s (registerAddress r)) >> sampleOf r <$> state answer,
-          closeSession = logged . Closing,
-          pauseAfter = logged . PauseOn,
-          localClock = pure (zoned "2026-11-10T12:00:00.000+01:00"),
-          monotonicClock = state (\c -> (controllerClock c, c {controllerClock = controllerClock c + 0.25}))
-        }
-    logged q = modify (\c -> c {controllerRequests = q : controllerRequests c})
-    report e = modify (\c -> c {controllerSeen = seen e : controllerSeen c})
+
+-- | The requests of a round of the fake controller.
+fakeRounds :: RoundRequests (State Controller) FakeSession
+fakeRounds =
+  RoundRequests
+    { openSession = requested Opening >> state opening,
+      readSample = \s r -> requested (ReadOn s (registerAddress r)) >> sampleOf r <$> state answer,
+      closeSession = requested . Closing,
+      pauseAfter = requested . PauseOn,
+      localClock = pure (zoned "2026-11-10T12:00:00.000+01:00"),
+      monotonicClock = state (\c -> (controllerClock c, c {controllerClock = controllerClock c + 0.25}))
+    }
+  where
     opening c = case controllerOpenings c of
       Left why : rest -> (Left why, c {controllerOpenings = rest})
       rest -> let n = controllerSessions c + 1 in (Right (FakeSession n), c {controllerOpenings = drop 1 rest, controllerSessions = n})
     answer c = case controllerAnswers c of
       a : rest -> (a, c {controllerAnswers = rest})
       [] -> (Left (Ended NoAnswer), c)
-    seen e = case e of
-      ReadDone a -> SawRead (registerAddress (askedRegister a)) (askedSession a) (fmap answerRaw . sampleResult <$> askedSample a)
-      Opened s -> SawOpened s
-      NotOpened why -> SawNotOpened why
-      Dropped why -> SawDropped why
+
+requested :: RoundRequest -> State Controller ()
+requested q = modify (\c -> c {controllerRequests = q : controllerRequests c})
+
+saw :: Seen -> State Controller ()
+saw e = modify (\c -> c {controllerSeen = e : controllerSeen c})
+
+seenRound :: RoundEventOn FakeSession -> Seen
+seenRound e = case e of
+  ReadDone a -> SawRead (registerAddress (askedRegister a)) (askedSession a) (fmap answerRaw . sampleResult <$> askedSample a)
+  Opened s -> SawOpened s
+  NotOpened why -> SawNotOpened why
+  Dropped why -> SawDropped why
+
+-- | A drive against the fake controller, at a period of 10 s, with no need
+-- beside the step, which reads the registers given. The step makes the next
+-- of the steps given in each round, and ends the drive once they run out. A
+-- write on one of the sessions given as writable comes to the next of the
+-- outcomes given, and is confirmed once they run out.
+driveAgainst ::
+  [FakeSession] ->
+  [Either T.Text ()] ->
+  [Either Failure B.ByteString] ->
+  [Outcome 'Free] ->
+  [Register] ->
+  [IO (Either String [Command])] ->
+  [Command] ->
+  IO (Finish String, Controller)
+driveAgainst writables openings answers outcomes regs steps finals = do
+  controller <- newIORef (Controller openings answers 0 0 [] [])
+  pending <- newIORef steps
+  written <- newIORef outcomes
+  let run m = atomicModifyIORef' controller (\c -> let (a, c') = runState m c in (c', a))
+      next ref end = atomicModifyIORef' ref (\xs -> case xs of x : rest -> (rest, x); [] -> ([], end))
+      writer s (Command t v) = do
+        run (requested (WriteOn s (registerAddress (targetRegister t)) v))
+        next written (Sent Confirmed)
+      requests =
+        DriveRequests
+          { driveRoundRequests =
+              RoundRequests
+                { openSession = run (openSession fakeRounds),
+                  readSample = \s r -> run (readSample fakeRounds s r),
+                  closeSession = run . closeSession fakeRounds,
+                  pauseAfter = run . pauseAfter fakeRounds,
+                  localClock = run (localClock fakeRounds),
+                  monotonicClock = run (monotonicClock fakeRounds)
+                },
+            writerOn = \s -> if s `elem` writables then Just (writer s) else Nothing,
+            sleepFor = run . requested . SleepFor
+          }
+      report e = run . saw $ case e of
+        RoundEvent r -> seenRound r
+        Wrote c o -> SawWrote c o
+        Skipped c why -> SawSkipped c why
+        Drive.Finals -> SawFinals
+      stepNext _ = join (next pending (pure (Left "no more steps")))
+  finish <- driveWith requests report (Period 10) [] (Drive regs stepNext finals)
+  (,) finish <$> readIORef controller
+
+-- | The writes a drive made of the fake controller, in order.
+writesOf :: Controller -> [(FakeSession, Word16, Value)]
+writesOf c = [(s, a, v) | WriteOn s (Address a) v <- requestsOf c]
+
+-- | The finals of the example schedule, in the order they go out.
+exampleFinals :: [Command]
+exampleFinals = finalCommands (Finals (-0.5) 0 (-1))
+
+-- | The checks of a drive against the fake controller.
+driveChecks :: IO [(String, Bool)]
+driveChecks = do
+  (ended, c0) <- driveAgainst [s1] [] ein [] [register 1100] [pure (Left "done")] exampleFinals
+  (thrown, c1) <- driveAgainst [s1] [] ein [] [register 1100] [pure (Right [surplusOf 1]), throwIO (userError "step")] exampleFinals
+  (unopened, c2) <- driveAgainst [] (replicate 5 (Left (T.pack "refused"))) [] [] [register 1100] [pure (Right [surplusOf 1])] exampleFinals
+  (other, c3) <- driveAgainst [] [] ein [] [register 1100] [pure (Right [surplusOf 1])] exampleFinals
+  (_, c4) <- driveAgainst [s1, s2] [] ein [Failed (Ended NoAnswer)] [register 1100] [] exampleFinals
+  pure
+    [ ( "the finals go out in the order 88, 4108, 74, after the step's end, and the session is closed",
+        reason ended == Just "done"
+          && writesOf c0 == finalsOn s1
+          && dropWhile (/= SawFinals) (seenOf c0) == SawFinals : [SawWrote cmd (Sent Confirmed) | cmd <- exampleFinals]
+          && lastOf 2 (requestsOf c0) == [PauseOn s1, Closing s1]
+      ),
+      ( "the finals go out after an exception from the step",
+        thrownBy thrown == Just (userError "step")
+          && writesOf c1 == (s1, 74, Real 1) : finalsOn s1
+          && SawFinals `elem` seenOf c1
+      ),
+      ( "a write with no session, or on a session of other software, is skipped; the finals try three openings, 10 s apart",
+        reason unopened == Just "no more steps"
+          && null (writesOf c2)
+          && skipped c2 == (PvSurplus, NoSession) : [(t, NoSession) | Command t _ <- exampleFinals]
+          && length [() | SawNotOpened _ <- seenOf c2] == 5
+          && lastOf 5 (requestsOf c2) == [Opening, SleepFor 10, Opening, SleepFor 10, Opening]
+          && reason other == Just "no more steps"
+          && null (writesOf c3)
+          && skipped c3 == (PvSurplus, SoftwareDiffers) : [(t, SoftwareDiffers) | Command t _ <- exampleFinals]
+          && lastOf 1 (requestsOf c3) == [Closing s1]
+      ),
+      ( "a final whose write lost the session goes again on a session the finals open",
+        writesOf c4 == (s1, 88, Real 0) : finalsOn s2
+          && SawDropped NoAnswer `elem` seenOf c4
+          && Closing s1 `elem` requestsOf c4
+          && lastOf 1 (requestsOf c4) == [Closing s2]
+      )
+    ]
+  where
+    s1 = FakeSession 1
+    s2 = FakeSession 2
+    ein = replicate 2 (Right (B.pack [0, 1]))
+    finalsOn s = [(s, 88, Real 0), (s, 4108, Real (-1)), (s, 74, Real (-0.5))]
+    reason f = case f of
+      Finished r -> Just r
+      Interrupted _ -> Nothing
+    thrownBy f = case f of
+      Finished _ -> Nothing
+      Interrupted e -> fromException e
+    skipped c = [(t, why) | SawSkipped (Command t _) why <- seenOf c]
+    lastOf n xs = drop (length xs - n) xs
 
 requestsOf :: Controller -> [RoundRequest]
 requestsOf = reverse . controllerRequests

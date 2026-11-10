@@ -41,7 +41,8 @@ data Schedule = Schedule
 newtype Seconds = Seconds Int
   deriving (Show, Eq, Ord)
 
--- | The values written on every exit, in the order 88, 4108, 74.
+-- | The values written on every exit, in the order of
+-- @IDM.Navigator.Schedule.Step.finalCommands@.
 data Finals = Finals
   { -- | to 74, in kW
     finalSurplus :: Double,
