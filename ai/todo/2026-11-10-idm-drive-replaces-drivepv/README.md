@@ -1,0 +1,80 @@
+# `idm-drive` replaces `drivepv.py`
+
+`tools/drivepv.py` packs a phase into one argument, `2.0-4122/20/ein+720/0`,
+and the clamp the next PV run needs would make that language worse. It also
+tails the file of a separate `idm-dump --watch` and starts `idm-write`, a new
+connection, for every write. The runs need the driver a lot, and the loop
+under it is what idm-manager will need too. So the driver becomes Haskell:
+a library loop that reads, for everyone, what each part of a program
+needs; a schedule file; and an executable `idm-drive` that runs the
+schedule.
+
+## Decided on 2026-11-10
+
+- **D1.** The driver is written in Haskell. The loop is interface and goes
+  in the library. The schedule is a measurement and goes in a private
+  sublibrary and the executable. New dependencies go into the cabal file,
+  which `shellFor` brings into the dev shell. The Python tools get
+  `python3` in the shell as well.
+- **D2.** One persistent session. The driver reads 1100 and 4122 itself
+  instead of tailing a watch file, and writes through `write`, not
+  `idm-write`.
+- **D3.** A schedule file, not a language on the command line and not
+  options: `schedule-file.md`.
+- **D4.** A JSONL event log: `event-log.md`.
+- **D5.** `tools/drivepv.py` is deleted once `idm-drive` has made a run,
+  and the docs' "Reproducing" commands are translated in the same change.
+- **D6.** Every part of a program names the registers it needs. The loop
+  reads the union of those registers once per round and hands each part
+  what it asked for. `idm-drive` gets the watch and the driver in one
+  process, one session and one capture, and `idm-dump --watch` is the same
+  loop with the watch alone: `rounds-and-needs.md`.
+- **D7.** Build it right first, then run the clamp run with it. No
+  stopgap in `drivepv.py`.
+
+## Settled on 2026-11-10, after the proposal
+
+1. **TOML**, read with `toml-parser`. It allows comments and is easy to
+   write by hand; the flake's nixpkgs has 2.0.2.0, not marked broken
+   (`schedule-file.md`).
+2. **One output stream.** The reads keep the exact line format of
+   `idm-dump --watch`, and an event is a line with an `event` field, which
+   a reader of a watch skips (`event-log.md`).
+3. **Schedules tracked in `schedules/`**, each doc citing its file by path
+   (`schedule-file.md`).
+4. **One shared period for every need to begin with**, the schedule's
+   `round`. The design stays open to a period per need
+   (`rounds-and-needs.md`, "Periods").
+5. **The Fachmann level is held by the web watch, not the drive.** Only
+   the web channel has a user level, and the drive writes over Modbus.
+   `idm-web --watch --fachmann` enters the level, renews it, and leaves it
+   on every exit. It is session 3b (`fachmann-in-the-web-watch.md`).
+
+## Where it stands
+
+Designed, and not started. Sessions 1, 2, 3 and 3b can run at once
+(`sessions.md`).
+
+## Files
+
+- `rounds-and-needs.md`: the loop of D6 and what goes in the library. It
+  covers reconnecting, the drive on top of it with its final values and
+  signals, and why the schedule stays out of the library.
+- `schedule-file.md`: the TOML format, its Haskell types, the pure step
+  function the tests run, and the clamp run's schedule as the example.
+- `event-log.md`: the lines `idm-drive` writes, and what `runtable.py`
+  reads of them.
+- `fachmann-in-the-web-watch.md`: `idm-web --watch --fachmann`, which
+  enters the level, renews it before the controller's sixty minutes are up,
+  and leaves it.
+- `sessions.md`: the sessions, which of them can run in parallel, and what
+  each one hands to the next.
+
+## Outside this folder
+
+- `pv-control-of-74-and-88`: its step 1, the clamp run, waits for this.
+- idm-manager's `manager-inputs-outputs-and-algorithm-sketches`: "a pure
+  function `plan`; IO only around it". The drive loop is that IO, and the
+  manager's plan takes the schedule's place.
+- idm-manager's `record-every-input-before-controlling`: a recorder that is
+  a need beside the manager's own.

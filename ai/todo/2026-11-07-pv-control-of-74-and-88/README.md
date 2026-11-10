@@ -70,9 +70,10 @@ minutes, and what the controller does with a value no one renews.
    `PV011` at 0.1 min. A clamp adds no lag, unlike a smoothing of the
    export, and bounds how fast the integral moves the speed: whether that
    damps the swing, and whether the run passes 8 minutes. The PV the meter
-   simulates holds longer between steps than on 2026-11-10. Needs a clamp
-   form of a phase in `tools/drivepv.py`, and 4768 and 5888 in the web
-   watch (`does-88-set-the-export-the-pv-controller-holds.md`, "Next").
+   simulates holds longer between steps than on 2026-11-10. Waits for
+   `idm-drive-replaces-drivepv`, whose schedule file has the bounds; needs
+   4768 and 5888 in the web watch
+   (`does-88-set-the-export-the-pv-controller-holds.md`, "Next").
 2. Lower gains, `IV017` to `IV019`, if the clamp leaves a swing: an
    EEPROM cycle at the display each way.
 3. The overnight test of 74, `does-the-control-act-on-a-74-no-one-renews.md`.

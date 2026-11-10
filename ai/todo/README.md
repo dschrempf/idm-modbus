@@ -5,7 +5,11 @@ its own note. The PV control comes first, then the rest.
 
 ## 1. PV control
 
-`pv-control-of-74-and-88`, in its README's order: the clamp run, with
+First `idm-drive-replaces-drivepv`, its sessions in order: the clamp run
+waits for it, since a clamp form in `drivepv.py` was dropped for it
+(2026-11-10).
+
+Then `pv-control-of-74-and-88`, in its README's order: the clamp run, with
 `PV011` at 0.1 min; lower gains if it leaves a swing; the overnight test of
 74; a PV hot water charge.
 4108 as a cap is done; what ended the run at 1.0 before `PV006` is open in

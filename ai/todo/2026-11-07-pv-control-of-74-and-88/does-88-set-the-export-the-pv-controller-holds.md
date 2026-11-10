@@ -41,7 +41,8 @@ Both settings stayed: `PV006` 40 °C, `PV011` 2.0 min.
 The watches and the end as on 2026-11-07: the driver writes 0 to 88 and
 -0.5 to 74 when its schedule ends, the run stops or it is signalled. Check
 in the watch that 88 reads 0.0, stop the watches, and leave the Fachmann
-level. Never end with 88 away from 0. End a schedule on `aus` rather than a
+level; with `idm-web --watch --fachmann` (`idm-drive-replaces-drivepv`),
+stopping the web watch leaves it. Never end with 88 away from 0. End a schedule on `aus` rather than a
 time, so the driver's -0.5 does not end a run the controller would hold.
 
 ## Run: `PV011` at its minimum
@@ -60,23 +61,19 @@ fixed, slow rate. Smoothing the export instead would add lag, which is what
 the mean of 2.0 min did. A clamp is a choice a consumer would make; written
 as a fixed schedule it stays a measurement.
 
-`tools/drivepv.py` needs a phase VALUE that clamps T-4122 to a bound, a
-form to settle before the run. The schedule, with the PV held longer than on
-2026-11-10, 2.0 to 12 minutes after the start, past the stop at 8 and the
-minimum runtime at 10:
+The driver for it is `idm-drive`, not `drivepv.py`
+(`idm-drive-replaces-drivepv`). Its schedule, `schedules/pv-clamp-0-1.toml`,
+is that note's example: the PV held longer than on 2026-11-10, 2.0 to 12
+minutes after the start, past the stop at 8 and the minimum runtime at 10,
+then 1.5, 1.2 and 1.0, the last until the stop.
 
-    cabal run idm-dump -- HOST --watch 10 74 88 4108 1008 1066 1070 1090 1091 1100 1074 4122 1004 1098 > watch.jsonl
-    IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann
-    IDM_PIN=... cabal run idm-web -- HOST --watch 10 --reason 4768 5888 6245 10263 12763 10389 > webwatch.jsonl
-    tools/drivepv.py HOST watch.jsonl --final -0.5 --final-target 0 \
-      2.0/10/ein/0 CLAMPED(2.0-4122,0.1)/10/ein+720 CLAMPED(1.5-4122,0.1)/10/+360 \
-      CLAMPED(1.2-4122,0.1)/10/+360 CLAMPED(1.0-4122,0.1)/10/aus > write.log
+    IDM_PIN=... cabal run idm-web -- HOST --watch 10 --reason --fachmann 4768 5888 6245 10263 12763 10389 > webwatch.jsonl
+    cabal run idm-drive -- HOST schedules/pv-clamp-0-1.toml > drive.jsonl
     IDM_PIN=... tools/webprobe.py HOST > webapi.json
 
-`CLAMPED(...)` stands for the form still to choose. What to read: the
-swing's amplitude and period against 2026-11-10, the mean at 8 minutes and
-whether the run passes it, and the PV below which the run ends. If the swing
-stays, lower gains are next (`README.md`, step 2).
+What to read: the swing's amplitude and period against 2026-11-10, the mean
+at 8 minutes and whether the run passes it, and the PV below which the run
+ends. If the swing stays, lower gains are next (`README.md`, step 2).
 
 ## 88 left behind
 
