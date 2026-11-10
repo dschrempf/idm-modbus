@@ -16,9 +16,10 @@ controller's JavaScript names five commands: three read, `overview`,
 ([2026-09-20-webapi](verification/2026-09-20-webapi.md)). `overview` on a
 menu yields its children, `detail` on a leaf its value, unit, limits and
 `param`. `IDM.Navigator.Web` has a constructor for each read and none for a
-write; the two writes of `IDM.Navigator.Web.Level` are the exception. Two
-reads are refused too: `relaytest`/`overview`, which opens the relay test,
-and `authentication`/`overview`, which asks with `userlevel` 4.
+write; the two writes of `IDM.Navigator.Web.Level` are the exception. Nor
+does it, or `tools/webprobe.py`, send two reads: `relaytest`/`overview`,
+which opens the relay test, and `authentication`/`overview`, which asks with
+`userlevel` 4.
 
 Timestamps are seconds since 2000-01-01 in the controller's local time; the
 status page's `timestamp` is milliseconds since 1970, also local. The

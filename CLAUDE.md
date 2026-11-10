@@ -131,7 +131,8 @@ The web backend has a stack of its own beside it, joined to the first only by
 - `IDM.Navigator.Web.Level` — the two writes: entering the Fachmann level,
   with a code spelled from the controller's clock, from Kunde only, and
   leaving it. The level is the controller's, not the connection's, and the
-  controller ends it too, sixty minutes from the entry.
+  controller ends it too: sixty minutes from the entry on 20.24-1574, and on
+  20.24-2608 at times sooner (`doc/web-backend.md`).
 
 Writing some registers wears out an EEPROM (a register's `Persistence`), so
 the cost is in the type of every target and every outcome rather than in an

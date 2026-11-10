@@ -5,11 +5,16 @@ wrong, and what the library makes of it. What a single register means is in
 [registers.md](registers.md).
 
 Reaching the machine takes "Modbus TCP" "Ein" under "Gebäudeleittechnik" at
-service level; it answers on port 502, unit id 1. Every address of the table
-was read on this machine: of the 663 of 812170 rev. 10, 232 answer and 431
-refuse with exception 02, the zone module block 2000 to 2649, which the
-machine lacks, and 1999, which is write-only. Nothing answered that the
-manual does not describe ([2026-09-19](verification/2026-09-19.md)).
+service level; it answers on port 502, unit id 1. Every address of 812663
+was read on this machine: of its 582, 262 answer and 320 refuse with
+exception 02, all of them in the zone module block from 2000 on, which the
+machine lacks (`captures/navigator-10-scan-20.24-2608-2026-11-06-2120.json`,
+the `observed` column of `data/navigator-10-registers.tsv`). 1999, write-only,
+refused on 20.24-1574 and reads `0000` since 20.24-2608
+([2026-09-19](verification/2026-09-19.md),
+[2026-11-05-software-update](verification/2026-11-05-software-update.md)).
+Addresses the manual does not describe answer as well: the controller's own
+list names them ([sources.md](sources.md#the-controllers-own-list)).
 
 ## Reading
 
@@ -120,11 +125,11 @@ at once included.
 
 ### The access right `RW/RO`
 
-167 registers of 812170 rev. 12 carry `RW/RO`, which chapter 4.1, defining
-`RO`, `RW` and `W`, does not: the energy management block at 74 to 86 and
-every zone module room value. The table reads it as "supplied": the building
-management system may write it and read it back, as the worked examples of
-chapter 4.3 do. For the PV block a menu setting gates it, `PV008`, which is
+127 registers of 812663 carry `RW/RO`, which the introduction to chapter 4,
+defining `RO`, `RW` and `W`, does not: the energy management block at 74 to
+88 and every zone module room value. The table reads it as "supplied": the
+building management system may write it and read it back, as the worked
+examples of chapter 4.3 do. For the PV block a menu setting gates it, `PV008`, which is
 not addressable; with `PV008` at "Gebäudeleittechnik/Smartfox" a write to
 74 takes effect ([pv-control.md](pv-control.md)). Whether a write takes
 effect elsewhere without its menu parameter at "Ja" is untested.

@@ -25,13 +25,13 @@ defrost's `IV007` at 65 % ran at 78.0 rps, and the heating floor, `IV003` at
 ([2026-11-05-floor](verification/2026-11-05-floor.md)). The draw is 4122,
 the inverter's figure ([registers.md](registers.md#4122)).
 
-| State                                              | Speed, rps | 4122, kW  |
-| -------------------------------------------------- | ---------- | --------- |
-| Heating floor, at 8.3 °C outdoors and 27.8 °C flow | 24.0       | 0.61–0.72 |
-| Start program, every mode                          | 50.4       | 0.9–1.4   |
-| Hot water, held at the floor of the charge         | 39.9       | 1.5–1.7   |
-| Heating, unrestricted                              | 101–120    | 2.5–3.5   |
-| Top, in a PV run                                   | 120        | about 4   |
+| State                                              | Speed, rps | 4122, kW  | Measured                                                                                                                                   |
+| -------------------------------------------------- | ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Heating floor, at 8.3 °C outdoors and 27.8 °C flow | 24.0       | 0.61–0.72 | [2026-11-05-floor](verification/2026-11-05-floor.md)                                                                                       |
+| Start program, every mode                          | 50.4       | 0.9–1.4   | [2026-10-16-draw](verification/2026-10-16-draw.md), [2026-11-08-power-limit-cap](verification/2026-11-08-power-limit-cap.md)               |
+| Hot water, held at the floor of the charge         | 39.9       | 1.5–1.7   | [2026-10-01-charge](verification/2026-10-01-charge.md)                                                                                     |
+| Heating, unrestricted                              | 101–120    | 2.5–3.5   | [2026-10-16-draw](verification/2026-10-16-draw.md), [2026-11-09-heating-run-as-on-1574](verification/2026-11-09-heating-run-as-on-1574.md) |
+| Top, in a PV run                                   | 120        | about 4   | [2026-11-06-pv-surplus-own-draw](verification/2026-11-06-pv-surplus-own-draw.md)                                                           |
 
 At the heating floor the compressor gave 2.8 kW of heat, a coefficient of
 performance of about 4.1. Colder air or a warmer flow draws more at the same
@@ -48,7 +48,8 @@ then holds 50.4 rps for three to four minutes, in heating, hot water and PV
 runs alike ([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md),
 [2026-11-09-heating-run-as-on-1574](verification/2026-11-09-heating-run-as-on-1574.md)).
 At a stop the compressor and the mode stop together, and the pump's signal
-goes to -1 a round later, the flow with it.
+goes to -1 a round later, the flow with it
+([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md)).
 
 A heating run without the PV loop comes down to the floor on its own once
 the flow nears its target, and held it for seven minutes
@@ -65,21 +66,24 @@ keep the first ([pv-control.md](pv-control.md#what-stops-a-run)).
 
 The charge pump stands at its minimum, with no flow at 1072, for the first
 four to ten minutes of a charge while the compressor heats the intermediate
-circuit; 4126 reads 0 meanwhile.
+circuit; 4126 reads 0 meanwhile. Two charges on 2026-10-16 stood there four
+to five minutes, the charge of 2026-10-01 ten
+([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md),
+[2026-10-01-charge](verification/2026-10-01-charge.md)).
 
-**A charge ends at the refrigerant circuit's limit, not at a time limit.**
-Every charge from 2026-09-17 to 09-28 left the top of the tank at 59.0 to
-59.7 °C, from different starts and against targets of 60 to 64 °C, after
-different durations. Sampled every 10 s, a charge to 64 °C throttled the
-compressor from a condensation temperature of about 60 °C, held it at 39.9
-rps for its last 58 minutes, and stopped with the condensation temperature
-at 69.4 °C; nothing reported a fault. 812199 gives the R290 circuit 70 °C,
-lowered to 55 °C at -20 °C outdoors. The tank top ends ten degrees below
-because the heat passes the intermediate circuit and the safety heat
-exchanger first ([2026-10-01-charge](verification/2026-10-01-charge.md)).
-So a legionella target of 60 °C, `FW045`'s lowest, is out of reach of the
-heat pump alone on this tank. The charge that took the top from 44 to 60 °C
-gave 2.7 units of heat per unit of electricity.
+**A charge ends at the refrigerant circuit's limit, not at a time limit.** Every
+charge from 2026-09-17 to 09-28 left the top of the tank at 59.0 to 59.7 °C,
+from different starts and against targets of 60 to 64 °C, after different
+durations. Sampled every 10 s, a charge to 64 °C throttled the compressor from a
+condensation temperature of about 60 °C, held it at 39.9 rps for its last 58
+minutes, and stopped with the condensation temperature at 69.4 °C; nothing
+reported a fault. 812199 limits heating to a flow of 70 °C, falling below -10 °C
+outdoors to 60 °C at -20 °C. The tank top ends ten degrees below because the
+heat passes the intermediate circuit and the safety heat exchanger first
+([2026-10-01-charge](verification/2026-10-01-charge.md)). So a legionella target
+of 60 °C, `FW045`'s lowest, is out of reach of the heat pump alone on this tank.
+The charge that took the top from 44 to 60 °C gave 2.7 units of heat per unit of
+electricity.
 
 ## Defrost
 

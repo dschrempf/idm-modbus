@@ -23,8 +23,9 @@ matter here:
 | `PV011` 10389                      | the interval 74 is averaged over                             | 2.0 min; 0.1 min since 2026-11-10 |
 | `PV015` 10396                      | a shift of the forecast draw                                 | 0                                 |
 | `IV017` to `IV019`, 10403 to 10417 | the gains, P, I and D                                        | 5.0, 10.0, 0.0                    |
-| 5412                               | the compressor's minimum runtime                             | 10 min                            |
-| 5419                               | the compressor's minimum standstill                          | 10 min                            |
+
+The compressor's minimum runtime, 5412, and minimum standstill, 5419, are
+in [heat-pump.md](heat-pump.md#a-start-and-a-stop).
 
 The PV page, 10263 `N2_PV_POWER`, prints 74 as `Überschuss` and the forecast
 the surplus is weighed against as `mom./prog. Leistung Heizen`, 0.7 to 0.8
@@ -63,8 +64,8 @@ about 1.0 against 0.7 kW did, and one of about 1.2 against 0.7 kW did within
 [2026-11-06-pv-surplus-loop](verification/2026-11-06-pv-surplus-loop.md),
 [2026-11-07-pv-target](verification/2026-11-07-pv-target.md)).
 
-The compressor follows the request after about a minute, the start program
-after it ([heat-pump.md](heat-pump.md#a-start-and-a-stop)).
+The compressor and its start program follow the request as in any other
+run ([heat-pump.md](heat-pump.md#a-start-and-a-stop)).
 
 **A PV start waits 30 minutes after a PV stop.** A request came 29 min 59 s
 after a PV stop, with 2.0 standing at 74 for the 20 minutes past the
@@ -84,7 +85,9 @@ with D at 0 it is a PI controller. Whether `IV018` is a gain or a reset
 time, and the units of either, no source states.
 
 The runs read as such a controller on the error "mean of 74 over `PV011`",
-bounded by the heating floor, 24 rps, and `IV002`, 120 rps:
+bounded by the heating floor, 24 rps, and the top, 120 rps, which is
+`IV002` at its 100 %; whether a lower `IV002` caps a PV run is untested
+([heat-pump.md](heat-pump.md#the-compressors-speed-and-draw)):
 
 - **A constant above 0 drives the speed to the top**, from the start program
   to 120 rps: 74 plus the draw always exceeds the draw
@@ -135,9 +138,10 @@ What they show:
   positive.
 - **0 at 74 ends a run at the minimum runtime** from the start program's
   speed, the store 9 K below `PV006`; at the top it held one past it.
-- **A run ends at about 8 minutes on a mean at or below 0**, three times,
-  before the 10 minutes of 5412, whose help text excepts only a fault. A
-  negative mean of 40 s at 6 to 7 minutes did not end one.
+- **A meter-style run ends at about 8 minutes**, its mean at or below 0,
+  three times, before the 10 minutes of 5412, whose help text excepts only a
+  fault. A constant 0 at 74 held to 5412, and a negative mean of 40 s at 6
+  to 7 minutes did not end a run.
 - **4108 below 1.0 ends a run at once**, within 9 s, the minimum runtime
   notwithstanding.
 
@@ -166,9 +170,9 @@ is open (`does-88-set-the-export-the-pv-controller-holds`).
 
 ## The power limit at 4108
 
-4108 `Leistungsbegrenzung Wärmepumpe`, a `FLOAT` in kW, -1 by default, is
-volatile ([registers.md](registers.md#4108-to-4114-the-power-limits)). Beside
-74 at 2.0:
+The power limit at 4108 is in
+[registers.md](registers.md#4108-to-4114-the-power-limits). Beside 74 at
+2.0:
 
 | Run                                                                       | 4108 | Written          | What it did                                                                                    |
 | ------------------------------------------------------------------------- | ---- | ---------------- | ---------------------------------------------------------------------------------------------- |
@@ -236,8 +240,6 @@ is open (`does-the-control-act-on-a-74-no-one-renews`).
   margin and 10-minute runtime, evcc's overnight report, kodebach's on 88.
 
 ## Open
-
-In the order `ai/todo/README.md` works them:
 
 - **The loop under a clamp**, with `PV011` at 0.1 min, and lower gains if it
   still swings: whether a meter-style 74 settles at all.

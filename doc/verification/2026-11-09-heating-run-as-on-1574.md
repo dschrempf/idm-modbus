@@ -88,10 +88,10 @@ rps. The two days differ in more than the software, so this says nothing
 of a change in the control. In the defrost 4126 fell to -7.12 kW, as it
 fell to -7.79 then.
 
-10263 `N2_PV_POWER` printed `Wärmepumpe Aufnahmeleistung` within 0.05 kW of
-the nearer 4122 read in 95 % of 590 readings. Its `mom./prog. Leistung
-Heizen`, the draw the PV control expects of a heating run, read 0.8 kW to
-about 15:00 and 0.7 kW after, while the run drew 3.5.
+10263 `N2_PV_POWER` printed `Wärmepumpe Aufnahmeleistung` within 0.05 kW of the
+nearer 4122 read in 95 % of 590 readings. Its `mom./prog. Leistung Heizen`, the
+draw the PV control expects of a heating run, read 0.8 kW to about 15:00 and 0.7
+kW after, while the run drew 3.5.
 
 ## The request reason outside a PV run
 

@@ -21,27 +21,29 @@ settings join on the parameter identifier the web backend sends, and all
 agree ([2026-09-20-webapi](verification/2026-09-20-webapi.md)).
 
 1112, the valve M63, which the list leaves unenumerated, reads 0 for
-"Heizen" and 1 for hot water.
+"Heizen" and 1 for hot water ([2026-09-20](verification/2026-09-20.md),
+[2026-10-01-charge](verification/2026-10-01-charge.md)).
 
 ### The heat pump's own flow and return
 
-1050 and 1052, `Wärmepumpen Vorlauftemperatur (B33)` and `Rücklauftemperatur
-(B34)`, answer -1.0, though the sensor page prints both, as the intermediate
-circuit's B33/B113 and B34/B114 ([2026-09-20](verification/2026-09-20.md)).
-On a machine with a separating heat exchanger the manual sends a reader of
-them to the heat sink registers below. The table keeps both `present`,
-because they answer.
+1050 and 1052, `Wärmepumpen Vorlauftemperatur (B33)` and
+`Rücklauftemperatur (B34)`, answer -1.0, though the sensor page prints both, as
+the intermediate circuit's B33/B113 and B34/B114
+([2026-09-20](verification/2026-09-20.md)). On a machine with a separating heat
+exchanger the manual sends a reader of them to the heat sink registers below.
+The table keeps both `present`, because they answer.
 
 ### The heat sink, 1066 to 1074
 
-None of these is in revision 10; 1068 to 1074 are on the controller's
-register page, and revision 12 prints them. Read beside the sensor page while
-the machine heated, each tracks its designator within the display's rounding
+1066 is in revision 10 of 812170; 1068 to 1074 are on the controller's
+register page, and revision 12 and 812663 print them. Read beside the sensor
+page while the machine heated, each tracks its designator within the
+display's rounding
 ([2026-10-15-heat-sink](verification/2026-10-15-heat-sink.md)):
 
 | Address | Designator                            | Notes                                     |
 | ------- | ------------------------------------- | ----------------------------------------- |
-| 1066    | B45 Ladefühler                        | in the list                               |
+| 1066    | B45 Ladefühler                        |                                           |
 | 1068    | B124 Rücklauftemperatur Wärmesenke    |                                           |
 | 1070    | B125 Vorlauftemperatur Wärmesenke     |                                           |
 | 1072    | B2 Durchfluss Wärmesenke              | a `FLOAT`, though the manual says `UCHAR` |
@@ -52,16 +54,17 @@ the machine heated, each tracks its designator within the display's rounding
 1074 follows M73's control signal as the analog output page prints it, read
 for read, through heating, hot water, defrost and rest, on 20.24-1574 and
 20.24-2608: `ffff` is -1, "not driven", and a value is percent of the pump's
-speed range. 0 is a state of its own, minimum speed: the first four to five
-minutes of a hot water charge stand there with no flow at 1072. The
-controller's register page prints 1074 as signed too.
+speed range. 0 is a state of its own, minimum speed, with no flow at 1072:
+the start of a hot water charge stands there
+([heat-pump.md](heat-pump.md#hot-water)). The controller's register page
+prints 1074 as signed too, and so does 812663, a `WORD` from 0 to 100 with a
+default of -1; the table decodes it as `DriveSignal`, so `ffff` is
+`NotDriven` and `0000` is `Driven 0`.
 
 1104, `Status Ladepumpe (M73)`, reads `ffff` throughout, with the pump at
 100 %; the table decodes it as `DriveSignal NotDriven`, which is wrong while
 the pump runs ([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md),
 [2026-11-09-heating-run-as-on-1574](verification/2026-11-09-heating-run-as-on-1574.md)).
-The table still reads 1074 as a one-register count, 65535 at rest: its
-`gltmon` row states no datatype, range or unit.
 
 ### 1449 and the flow temperature limits, 1520 to 1540
 
@@ -173,10 +176,10 @@ the grid operator's lock contact, offers a power limit whose parameter, 4.2 kW
 by default, is not in any capture; 4108's -1.0 speaks against its being that
 parameter ([2026-10-15-web-app](verification/2026-10-15-web-app.md)).
 
-4112, the manual's `FLOAT` `Leistungsbegrenzung Kaskade`, was two registers
-wide on 20.24-1574. On 20.24-2608 4110 to 4114 each answer alone, and the
-register page names 4110 `Sperre`, 4113 `Sperre Booster 1` and 4114 `Sperre
-Booster 2`, and 4111 and 4112 not at all; the table leaves 4112 out
+4112, the manual's `FLOAT` `Leistungsbegrenzung Kaskade`, was two registers wide
+on 20.24-1574. On 20.24-2608 4110 to 4114 each answer alone, and the register
+page names 4110 `Sperre`, 4113 `Sperre Booster 1` and 4114 `Sperre Booster 2`,
+and 4111 and 4112 not at all; the table leaves 4112 out
 ([software-versions.md](software-versions.md)).
 
 ### The software version

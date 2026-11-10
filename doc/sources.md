@@ -58,9 +58,8 @@ nothing else.
 
 The table was transcribed from 812170 revision 12 from 2026-11-05 to
 2026-11-09, and before that from revision 10, 36 pages, dated 20 April 2022,
-for software 20.21-101, which the Loxone library mirrored:
-
-    https://api.library.loxone.com/downloader/file/647/Modbus%20TCP_Navigator%202.0_DE.pdf
+for software 20.21-101, which the Loxone library mirrored
+([Links](#links)).
 
 Revision 12 is attached to a LoxWiki comment of 2026-10-09 as
 `Montageanleitung_Modbus_TCP_Navigator_2_0.2025.pdf` (md5
@@ -84,12 +83,14 @@ moves `Smart Grid Status` from 1006 to 90, and reuses 1006 for the
 the -1 of the pump signals from the minimum into the default, and drops the
 cascade block's parameter identifiers.
 
-No revision says what 20.24 added; the controller's list names 36 addresses
-revision 12 lacks on 20.24-2608, and 812663 adds none of them. A revision of
+No revision says what 20.24 added; the controller's list names addresses
+that neither revision 12 nor 812663 prints
+([below](#the-controllers-own-list)). A revision of
 812663 or 812170 for 20.24 is worth asking iDM support for. Revision numbers
 run per document, so 812184 reaching revision 13 says nothing about 812170.
 
-The PV block is stable across two later reprints: 812184 rev. 13 (November 2024) and the Navigator 10 sheet (January 2026) print 74 to 86 and 4122 with
+The PV block is stable across two later reprints: 812184 rev. 13 of November
+2024 and the Navigator 10 sheet of January 2026 print 74 to 86 and 4122 with
 unchanged datatypes and defaults. Printed enumerations do drift: `PV013` went
 from "Ja/Nein" to "Nein/Automatik/Immer", and `PV008` gained four inverter
 manufacturers.
@@ -97,9 +98,7 @@ manufacturers.
 ## The supporting documents
 
 **iDM document 812184, revision 13, "myiDM+energy – Navigator 2.0", 52 pages,
-dated 27 November 2024**, published and easy to find:
-
-    https://www.idm-energie.at/wp-content/uploads/2021/04/tu_de_812184_myiDMenergy_PV_Variable-Stromtarife_Navigator-2.0-2.pdf
+dated 27 November 2024**, published and easy to find ([Links](#links)).
 
 It covers the photovoltaic and the Smart Grid side and adds no address: its
 block, 74, 76, 78, 82, 84, 86 and 4122, is 812170's, with the same datatypes
@@ -133,8 +132,9 @@ digital inputs (terminals 112/113 and 118/119) and hourly tariffs over myiDM.
 (`manual/navigator-10-pv-glt-2026-01.pdf`): the block 74 to 86 and 4122 for
 the GLT path, and the Smartfox's own settings for an iDM pump.
 
-**812199 rev. 2.0**, the AERO ALM installation manual: the refrigerant
-circuit's temperature limit ([heat-pump.md](heat-pump.md#hot-water)).
+**812199 rev. 1.1**, the AERO ALM installation manual: the limits of heating on
+p. 11, and the safety heat exchanger's loss of up to 5 K on p. 37
+([heat-pump.md](heat-pump.md#hot-water)).
 
 The PDFs live in `manual/`, which git ignores; they are the manufacturer's,
 not ours to redistribute.
