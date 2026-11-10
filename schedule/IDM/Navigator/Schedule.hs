@@ -24,6 +24,7 @@ where
 
 import Data.List.NonEmpty (NonEmpty)
 import IDM.Navigator.Register (Register)
+import IDM.Navigator.Rounds (Period (..))
 
 data Schedule = Schedule
   { -- | the period of the rounds, shared by the watch and the driver
@@ -36,16 +37,12 @@ data Schedule = Schedule
   }
   deriving (Show, Eq)
 
--- | The time from the start of one round to the start of the next, in
--- whole seconds, positive.
-newtype Period = Period Int
-  deriving (Show, Eq, Ord)
-
 -- | A span of whole seconds, positive.
 newtype Seconds = Seconds Int
   deriving (Show, Eq, Ord)
 
--- | The values written on every exit, in the order 88, 4108, 74.
+-- | The values written on every exit, in the order of
+-- @IDM.Navigator.Schedule.Step.finalCommands@.
 data Finals = Finals
   { -- | to 74, in kW
     finalSurplus :: Double,

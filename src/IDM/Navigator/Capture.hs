@@ -23,6 +23,7 @@ module IDM.Navigator.Capture
     readFields,
     statusFields,
     namesMachine,
+    endingText,
 
     -- * JSON
     field,
@@ -36,7 +37,7 @@ import qualified Data.ByteString as B
 import Data.List (intercalate)
 import qualified Data.Text as T
 import Data.Time (ZonedTime, defaultTimeLocale, formatTime)
-import IDM.Modbus.TCP (Address (..), ExceptionCode, Failure (..), exceptionByte)
+import IDM.Modbus.TCP (Address (..), Ending (..), ExceptionCode, Failure (..), TransactionId (..), exceptionByte)
 import IDM.Navigator.Client (Answer (..), Sample (..), sessionSoftware)
 import IDM.Navigator.Register
 import IDM.Navigator.Rounds (Asked, AskedOn (..))
@@ -115,6 +116,15 @@ statusFields result =
 -- | Whether a read of the register takes in the myiDM identifier.
 namesMachine :: Register -> Bool
 namesMachine reg = Table.readsMyIdm (registerAddress reg) (registerWidth (registerDatatype reg))
+
+-- | Why a connection ended, as a capture or a person reads it.
+endingText :: Ending -> String
+endingText e = case e of
+  NoAnswer -> "no answer in time"
+  UnexpectedTransaction (TransactionId t) -> "an answer to another request, transaction " <> show t
+  Malformed frame -> "a malformed frame, " <> hex frame
+  ConnectionClosed -> "connection closed"
+  Lost why -> why
 
 -- | The marker that stands for what was read, where it names the machine.
 redactedJSON :: String

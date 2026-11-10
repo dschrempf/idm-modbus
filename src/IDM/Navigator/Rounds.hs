@@ -21,6 +21,7 @@ module IDM.Navigator.Rounds
     RoundOn (..),
     Round,
     roundSample,
+    restrict,
     RoundEventOn (..),
     RoundEvent,
 
@@ -31,9 +32,11 @@ module IDM.Navigator.Rounds
 
     -- * Round after round
     Period (..),
+    NeedOn,
     Need,
     need,
     needed,
+    handOver,
     rounds,
   )
 where
@@ -83,6 +86,11 @@ type Round = RoundOn Session
 -- answer or a failure.
 roundSample :: RoundOn s -> Address -> Maybe Sample
 roundSample r a = find ((== a) . registerAddress . askedRegister) (roundReads r) >>= askedSample
+
+-- | The round with the reads of the registers given only.
+restrict :: [Register] -> RoundOn s -> RoundOn s
+restrict named r =
+  r {roundReads = filter ((`elem` map registerAddress named) . registerAddress . askedRegister) (roundReads r)}
 
 -- | What a round reports as it goes, so that a capture can print each read
 -- when it is made, and a session's opening and loss are in the stream.
@@ -161,20 +169,27 @@ readRound requests report held regs = do
 
 -- | Seconds from the start of one round to the start of the next.
 newtype Period = Period Int
+  deriving (Show, Eq, Ord)
 
 -- | A part of a program: the registers it reads each round, and what it does
 -- with them.
-data Need = Need [Register] (Round -> IO ())
+data NeedOn s = Need [Register] (RoundOn s -> IO ())
+
+type Need = NeedOn Session
 
 -- | A need of the registers given, which a round hands the reads of those
 -- registers, and of no others.
-need :: [Register] -> (Round -> IO ()) -> Need
+need :: [Register] -> (RoundOn s -> IO ()) -> NeedOn s
 need = Need
 
 -- | The registers a round of the needs reads: every one some need names,
 -- each once, in the order of first mention.
-needed :: [Need] -> [Register]
+needed :: [NeedOn s] -> [Register]
 needed needs = nubBy ((==) `on` registerAddress) (concat [regs | Need regs _ <- needs])
+
+-- | Hand a need the reads of a round that it named.
+handOver :: RoundOn s -> NeedOn s -> IO ()
+handOver r (Need named handle) = handle (restrict named r)
 
 -- | Round after round, every period, until an exception, which closes the
 -- session open at the time.
@@ -199,5 +214,3 @@ rounds opening report (Period seconds) needs = do
   (getMonotonicTime >>= go Nothing) `finally` (readIORef held >>= mapM_ close)
   where
     regs = needed needs
-    handOver r (Need named handle) =
-      handle r {roundReads = filter ((`elem` map registerAddress named) . registerAddress . askedRegister) (roundReads r)}

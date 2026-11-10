@@ -188,6 +188,29 @@
   Fachmann, or at Fachmann without the notice that closes it. Each change of
   level is a line of the webwatch with `captured`, `software`, `level`,
   `userLevel` and `error`, and with no `request`.
+- `IDM.Navigator.Drive`, the loop of a driver. `drive` reads, round after
+  round, what its needs and its step name, hands the step its reads, and
+  writes the `Command`s it answers with, each to a `Target 'Free`, on the
+  round's session and only where `writable` gives a `Writable`; a command it
+  cannot send is `Skipped`, with no session or on other software. On every
+  exit, the step's own end or an exception, a signal's included, it writes
+  the final values in their order, under the ordinary mask, and opens a
+  session for them where none is, up to three times, 10 s apart. It ends
+  with `Finish r`, the step's reason or the exception. The library prints
+  nothing and installs no signal handler: each read, opening, loss, write,
+  skip and the start of the finals is a `DriveEvent`, handed to a callback.
+  `driveWith` drives over any `DriveRequests`, so the test suite runs it
+  against a fake controller. `IDM.Navigator.Rounds` gains `NeedOn`, a need
+  on any session, `restrict` and `handOver`, and `IDM.Navigator.Capture`
+  gains `endingText`, from `idm-dump`.
+- `idm-drive HOST SCHEDULE` runs a schedule file of `schedules/` on the
+  controller: one session, the schedule's watch and 1100 and 4122 read
+  every round, and its writes of 74, 88 and 4108, with the finals to 88,
+  4108 and 74 on every exit, SIGINT and SIGTERM included. It prints one
+  JSONL stream, the reads as `idm-dump --watch` prints them and a line per
+  event, `begin` with the pid and the schedule's text first and `end` with
+  why last. `idm-drive --check SCHEDULE` reads the schedule, prints its
+  phases and connects to nothing.
 
 ### Changed
 
