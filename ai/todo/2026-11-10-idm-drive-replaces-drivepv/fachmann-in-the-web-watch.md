@@ -88,7 +88,7 @@ by hand.
   over the time since the entry, the level the last round read, the tries
   so far and whether the session is writable. It goes in a private
   sublibrary, `fachmann`, so that `test/Main.hs` reaches it: a test suite
-  cannot import a module of an executable. `app-web` depends on it.
+  cannot import a module of an executable. `app/web` depends on it.
 - It is tested in `checks`: the renewal at 55 minutes, re-entering after a
   fallback, an entry that answered but did not take as a failed try,
   giving up after three tries and trying no more, no try without a

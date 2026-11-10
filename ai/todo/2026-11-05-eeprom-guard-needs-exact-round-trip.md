@@ -2,7 +2,7 @@
 
 `write` sends nothing to an EEPROM target whose read equals `wire` of the
 encoded value, byte for byte (`writeWith` in
-`core/IDM/Navigator/Write/Core.hs`, the `SEepromCycle` branch). That only spares a cycle if the controller hands back exactly the
+`lib/core/IDM/Navigator/Write/Core.hs`, the `SEepromCycle` branch). That only spares a cycle if the controller hands back exactly the
 bytes it was sent. If it stores a setpoint at its own resolution, as a
 `FLOAT` rounded to 0.1 or a whole number behind a `FLOAT`, then
 `write t 21.3` reads back `21.299999` or `21.0`. Every repeat is then

@@ -23,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     tools/drivepv.py HOST WATCH --final -0.5 2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 > captures/navigator-10-write-SOFTWARE-YYYY-MM-DD-HHMM.log
     tools/runtable.py WATCH --web WEBWATCH --writes WRITELOG   # a run lined up by time; --last for a status line
     python3 tools/test_runtable.py     # runtable.py on tools/fixtures/, and on captures/ where it has write logs
-    ormolu -i $(git ls-files '*.hs' ':!src/IDM/Navigator/Target.hs')   # formatting; transcribe.py writes Target.hs
+    ormolu -i $(git ls-files '*.hs' ':!lib/idm-modbus/IDM/Navigator/Target.hs')   # formatting; transcribe.py writes Target.hs
     cabal-fmt -i idm-modbus.cabal
 
 The test suite is a list of `(name, Bool)` pairs in `test/Main.hs`; there is no
@@ -46,7 +46,7 @@ The register table is data, not code, and it flows one way:
 
     manual/812663-rev0.pdf → pdftotext -layout and -bbox → tools/transcribe.py
       → data/navigator-10-{registers,enums}.tsv → splice → IDM.Navigator.Table
-      → src/IDM/Navigator/Target.hs (with data/navigator-10-targets.tsv)
+      → lib/idm-modbus/IDM/Navigator/Target.hs (with data/navigator-10-targets.tsv)
 
 `tools/transcribe.py` is the only thing that may write those two TSVs and
 `IDM.Navigator.Target` — editing them by hand makes the next revision of the
@@ -112,7 +112,7 @@ The modules stack, each refusing to know the next one's business:
   a volatile one always sends. Both read back. The decision is `writeWith`
   in `IDM.Navigator.Write.Core`, over any register and any monad, so the
   test suite runs it against a fake controller in `State`. It lives with
-  the framing and `IDM.Navigator.Register` in `core/`, the private
+  the framing and `IDM.Navigator.Register` in `lib/core/`, the private
   sublibrary `core`, which the library re-exports but for that module and
   `IDM.Modbus.TCP.Internal`: a consumer reaches a register only through a
   target, and a connection only through a session.

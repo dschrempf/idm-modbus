@@ -56,7 +56,7 @@ library core
     IDM.Navigator.Register
     IDM.Navigator.Write.Core
 
-  hs-source-dirs:  core
+  hs-source-dirs:  lib/core
   build-depends:
     , base              >=4.7 && <5
     , bytestring
@@ -69,7 +69,7 @@ library core
 library fachmann
   import:          lib
   exposed-modules: IDM.Navigator.Web.Fachmann
-  hs-source-dirs:  fachmann
+  hs-source-dirs:  lib/fachmann
   build-depends:
     , base        >=4.7 && <5
     , idm-modbus
@@ -98,7 +98,7 @@ library
     IDM.Navigator.Target.Splice
     IDM.Navigator.Web.Connection
 
-  hs-source-dirs:     src
+  hs-source-dirs:     lib/idm-modbus
   build-depends:
     , aeson
     , base              >=4.7 && <5
@@ -121,7 +121,7 @@ library schedule
     IDM.Navigator.Schedule.Parse
     IDM.Navigator.Schedule.Step
 
-  hs-source-dirs:  schedule
+  hs-source-dirs:  lib/schedule
   build-depends:
     , base         >=4.7 && <5
     , idm-modbus
@@ -131,7 +131,7 @@ library schedule
 executable idm-dump
   import:         exec
   main-is:        Main.hs
-  hs-source-dirs: app
+  hs-source-dirs: app/dump
   build-depends:
     , base        >=4.7 && <5
     , bytestring
@@ -141,7 +141,7 @@ executable idm-dump
 executable idm-drive
   import:         exec
   main-is:        Main.hs
-  hs-source-dirs: app-drive
+  hs-source-dirs: app/drive
   build-depends:
     , base                 >=4.7 && <5
     , bytestring
@@ -154,7 +154,7 @@ executable idm-drive
 executable idm-web
   import:         exec
   main-is:        Main.hs
-  hs-source-dirs: app-web
+  hs-source-dirs: app/web
   build-depends:
     , aeson
     , base                 >=4.7 && <5
@@ -168,7 +168,7 @@ executable idm-web
 executable idm-write
   import:         exec
   main-is:        Main.hs
-  hs-source-dirs: app-write
+  hs-source-dirs: app/write
   build-depends:
     , base        >=4.7 && <5
     , bytestring

@@ -12,7 +12,7 @@ has one client however many parts there are.
 
 ## Library: `IDM.Navigator.Rounds`
 
-What `watch` in `app/Main.hs` does today, made general. A sketch, to be
+What `watch` in `app/dump/Main.hs` does today, made general. A sketch, to be
 settled in session 1; the names are pinned, since sessions 2 to 4 build
 against them.
 
@@ -92,7 +92,7 @@ rounds :: IO Session -> (RoundEvent -> IO ()) -> Period -> [Need] -> IO a
   and the executable prints it.
 
 The watch-line format, `watchLine` and its helpers, moves out of
-`app/Main.hs` into the library, as `IDM.Navigator.Capture`, over an
+`app/dump/Main.hs` into the library, as `IDM.Navigator.Capture`, over an
 `Asked`. The app's `Outcome` (`Returned`, `Unanswered`) goes with it into
 `Asked`, so the library has one `Outcome`, the write's. The drive writes
 the same lines, and a recorder in idm-manager will want them too.
@@ -176,7 +176,7 @@ drive :: IO Session -> (DriveEvent -> IO ()) -> Period -> [Need] -> Drive r -> I
 - **The final values go out on every exit:** the step's `Left` or any
   exception, a signal's included. They run in `finally`, under the
   ordinary, interruptible mask, not `uninterruptibleMask`: every request
-  waits under `timeout` (`core/IDM/Modbus/TCP/Internal.hs`), which works
+  waits under `timeout` (`lib/core/IDM/Modbus/TCP/Internal.hs`), which works
   only by an asynchronous exception, so an uninterruptible mask would let
   a controller that stops answering hang the finals for good. If the
   session is lost, the finals reopen it, up to three times, 10 s apart,

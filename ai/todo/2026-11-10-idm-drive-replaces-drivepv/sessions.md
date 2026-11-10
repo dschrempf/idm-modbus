@@ -17,15 +17,15 @@ Conflicts to expect when merging:
 - `idm-modbus.cabal`: 1 adds modules to the library, 2 and 3b each add a
   private sublibrary and a dependency of the test suite on it.
 - `test/Main.hs`: 1, 2 and 3b append to `checks`.
-- `src/IDM/Navigator/Table.hs`: 2 only, so none.
-- `app/Main.hs`: 1 only; 2 leaves it alone (`schedule-file.md`).
+- `lib/idm-modbus/IDM/Navigator/Table.hs`: 2 only, so none.
+- `app/dump/Main.hs`: 1 only; 2 leaves it alone (`schedule-file.md`).
 
 Merge 1 first, then 2, then 3b.
 
 ## 1. Library: rounds and capture
 
 - `IDM.Navigator.Rounds` and `IDM.Navigator.Capture`, from `watch` and
-  `watchLine` in `app/Main.hs`, with `Asked`, `Round`, `RoundEvent` and
+  `watchLine` in `app/dump/Main.hs`, with `Asked`, `Round`, `RoundEvent` and
   `readRound` as `rounds-and-needs.md` pins them.
 - `readRound` generic over its requests, and `checks` against a fake
   controller: a loss in mid-round, the reopening in the next round, a
@@ -66,7 +66,7 @@ Merge 1 first, then 2, then 3b.
 - `idm-web --watch --fachmann`, as `fachmann-in-the-web-watch.md` says:
   the private sublibrary `fachmann` with the pure renewal decision and its
   `checks`, the option, and the level lines.
-- `app-web/`, the new sublibrary, `idm-modbus.cabal` and `test/Main.hs`,
+- `app/web/`, the new sublibrary, `idm-modbus.cabal` and `test/Main.hs`,
   besides the documents that file names.
 - On the machine: a watch at `--fachmann` of more than 55 minutes, which
   shows one renewal and the leave at the end. The renewal it fixes is a
@@ -78,11 +78,11 @@ Merge 1 first, then 2, then 3b.
 - `IDM.Navigator.Drive`: `Command` over `Target 'Free`, `Drive r`,
   `Finish r`, `DriveEvent`, the finals in `finally`, and the writable
   check per round.
-- `app-drive/Main.hs`: the schedule's two needs, the watch and the driver,
+- `app/drive/Main.hs`: the schedule's two needs, the watch and the driver,
   joined into one `drive`; `--check`; the events of `event-log.md`; the
   handlers for SIGINT and SIGTERM, with `unix`, in the executable only.
 - `step`'s local `Command` replaced by the library's, and `registerArg`
-  in `app/Main.hs` pointed at the check in `IDM.Navigator.Table`.
+  in `app/dump/Main.hs` pointed at the check in `IDM.Navigator.Table`.
 - `checks`: the finals in order 88, 4108, 74; the finals after an
   exception from the step, against the fake controller of session 1; no
   command to an EEPROM target. The last follows from the type, so it may

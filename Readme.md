@@ -127,36 +127,36 @@ port 502 with unit id 1.
 
 ## Layout
 
-|                                           |                                                                                                                                                    |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data/navigator-10-registers.tsv`         | the parameter list and the controller's register page, transcribed; the single source of truth                                                     |
-| `data/navigator-10-enums.tsv`             | enumerated values, as printed in the manual, and the codes measured beside them                                                                    |
-| `data/navigator-10-measured-enums.tsv`    | codes of an enumeration measured on the machine that the manual does not print, each with its evidence; hand-written                               |
-| `data/navigator-10-gltmon-parameters.tsv` | manufacturer's parameter IDs for registers the manual does not list, found by changing a setting and watching which register follows; hand-written |
-| `data/navigator-10-targets.tsv`           | the registers that may be written, each with an English name; hand-written                                                                         |
-| `data/navigator-10-software.tsv`          | the controller software the table describes, the only one writes are allowed on; hand-written                                                      |
-| `data/navigator-10-web-2026-09-20.tsv`    | what the controller's web pages showed, copied from the screen by hand                                                                             |
-| `captures/`                               | raw answers from a real machine, apart from what the parameter list already says; not in git; `captures/README.md` explains the files              |
-| `tools/transcribe.py`                     | regenerates both TSVs and the targets module from the manual's PDF                                                                                 |
-| `tools/webprobe.py`                       | records the web backend's answers, using reads only                                                                                                |
-| `tools/drivepv.py`, `tools/runtable.py`   | write a fixed schedule to the PV targets, and line it up with what the controller did                                                              |
-| `core/IDM/Modbus/TCP/Internal.hs`         | Modbus framing; `core/IDM/Modbus/TCP.hs` is the part a consumer can use, which can neither connect nor write                                       |
-| `core/IDM/Navigator/Register.hs`          | the types that describe a register, and decoding                                                                                                   |
-| `src/IDM/Navigator/Table.hs`              | the register table, parsed at compile time                                                                                                         |
-| `src/IDM/Navigator/Software.hs`           | the controller's software version, as the table states it and as a session reads it                                                                |
-| `src/IDM/Navigator/Client.hs`             | sessions and paced reads                                                                                                                           |
-| `src/IDM/Navigator/Target.hs`             | the write targets; generated                                                                                                                       |
-| `src/IDM/Navigator/Write.hs`              | writing, with the cost in the type                                                                                                                 |
-| `core/IDM/Navigator/Write/Core.hs`        | what a write sends and what it results in, for any register; private to the package                                                                |
-| `src/IDM/Navigator/Web.hs`, `Web/`        | the web backend: its protocol, a read-only session, and the user level                                                                             |
-| `doc/`                                    | what is known about the controller, by topic, and from where; `doc/README.md` lists the documents                                                  |
-| `doc/verification/`                       | one measurement each, dated; the title states the result                                                                                           |
+|                                               |                                                                                                                                                    |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data/navigator-10-registers.tsv`             | the parameter list and the controller's register page, transcribed; the single source of truth                                                     |
+| `data/navigator-10-enums.tsv`                 | enumerated values, as printed in the manual, and the codes measured beside them                                                                    |
+| `data/navigator-10-measured-enums.tsv`        | codes of an enumeration measured on the machine that the manual does not print, each with its evidence; hand-written                               |
+| `data/navigator-10-gltmon-parameters.tsv`     | manufacturer's parameter IDs for registers the manual does not list, found by changing a setting and watching which register follows; hand-written |
+| `data/navigator-10-targets.tsv`               | the registers that may be written, each with an English name; hand-written                                                                         |
+| `data/navigator-10-software.tsv`              | the controller software the table describes, the only one writes are allowed on; hand-written                                                      |
+| `data/navigator-10-web-2026-09-20.tsv`        | what the controller's web pages showed, copied from the screen by hand                                                                             |
+| `captures/`                                   | raw answers from a real machine, apart from what the parameter list already says; not in git; `captures/README.md` explains the files              |
+| `tools/transcribe.py`                         | regenerates both TSVs and the targets module from the manual's PDF                                                                                 |
+| `tools/webprobe.py`                           | records the web backend's answers, using reads only                                                                                                |
+| `tools/drivepv.py`, `tools/runtable.py`       | write a fixed schedule to the PV targets, and line it up with what the controller did                                                              |
+| `lib/core/IDM/Modbus/TCP/Internal.hs`         | Modbus framing; `lib/core/IDM/Modbus/TCP.hs` is the part a consumer can use, which can neither connect nor write                                   |
+| `lib/core/IDM/Navigator/Register.hs`          | the types that describe a register, and decoding                                                                                                   |
+| `lib/idm-modbus/IDM/Navigator/Table.hs`       | the register table, parsed at compile time                                                                                                         |
+| `lib/idm-modbus/IDM/Navigator/Software.hs`    | the controller's software version, as the table states it and as a session reads it                                                                |
+| `lib/idm-modbus/IDM/Navigator/Client.hs`      | sessions and paced reads                                                                                                                           |
+| `lib/idm-modbus/IDM/Navigator/Target.hs`      | the write targets; generated                                                                                                                       |
+| `lib/idm-modbus/IDM/Navigator/Write.hs`       | writing, with the cost in the type                                                                                                                 |
+| `lib/core/IDM/Navigator/Write/Core.hs`        | what a write sends and what it results in, for any register; private to the package                                                                |
+| `lib/idm-modbus/IDM/Navigator/Web.hs`, `Web/` | the web backend: its protocol, a read-only session, and the user level                                                                             |
+| `doc/`                                        | what is known about the controller, by topic, and from where; `doc/README.md` lists the documents                                                  |
+| `doc/verification/`                           | one measurement each, dated; the title states the result                                                                                           |
 
 To correct the table, put a newer revision of the manual in `manual/` and
 re-run `tools/transcribe.py`. Git ignores `manual/`, since the document
 belongs to the manufacturer. The script generates the two TSVs and
-`src/IDM/Navigator/Target.hs`. Don't edit those by hand, or the next revision
-of the manual can no longer be applied cleanly.
+`lib/idm-modbus/IDM/Navigator/Target.hs`. Don't edit those by hand, or the
+next revision of the manual can no longer be applied cleanly.
 
 ## Protocol quirks
 

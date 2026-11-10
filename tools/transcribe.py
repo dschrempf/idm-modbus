@@ -58,8 +58,8 @@ unchecked, with a note.
 Of the writable registers, those listed in data/navigator-10-targets.tsv,
 which this script reads and never writes, are the ones a write may go to. The
 file gives each an English name, and the script writes them as the type
-src/IDM/Navigator/Target.hs, with what a write to each costs taken from the
-table.
+lib/idm-modbus/IDM/Navigator/Target.hs, with what a write to each costs taken
+from the table.
 
 The column layout is what carries the meaning: the list is not consistent about
 the order of its cells, so a cell is read according to where it is printed.
@@ -879,7 +879,7 @@ def main():
             )
 
     targets = read_targets(data / "navigator-10-targets.tsv", registers)
-    (HERE / "src" / "IDM" / "Navigator" / "Target.hs").write_text(
+    (HERE / "lib" / "idm-modbus" / "IDM" / "Navigator" / "Target.hs").write_text(
         target_module(targets, registers), encoding="utf-8"
     )
 

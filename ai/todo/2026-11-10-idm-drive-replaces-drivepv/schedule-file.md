@@ -110,8 +110,8 @@ warnings in a successful result, if I read its API right; session 2
 checks that, and the parser turns any warning into a failure.
 
 The check that an address is readable is `registerArg`'s in
-`app/Main.hs` today. Session 2 moves it into `IDM.Navigator.Table`, beside
-`byAddress`, without touching `app/Main.hs`; session 4 points
+`app/dump/Main.hs` today. Session 2 moves it into `IDM.Navigator.Table`, beside
+`byAddress`, without touching `app/dump/Main.hs`; session 4 points
 `registerArg` at it.
 
 ## Types, in the private sublibrary `schedule`
