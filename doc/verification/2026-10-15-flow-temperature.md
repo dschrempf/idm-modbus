@@ -3,7 +3,7 @@
 2026-10-15. The controller's register page lists the minimum and maximum flow
 temperature of circuits A, C and D at 1520 to 1540 and names no parameter
 identifier; the settings tree names `HSA04` and `HSA05` and no address
-([verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md)).
+([2026-10-14-gltmon.md](2026-10-14-gltmon.md)).
 Every circuit's maximum stood at 45 and A and C's minimum at 22, so neither a
 name nor a value could join them. Moving three settings to values no other
 circuit held, and watching both sides, joins all six.

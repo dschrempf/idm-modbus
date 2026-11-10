@@ -3,7 +3,7 @@
 
 The manufacturer's manual is a PDF and is not redistributed here. Obtain it
 (iDM document 812663 revision 0, "Modbus TCP Navigator 10"; support sends
-it on request, and doc/research.md says where else it is), put it in manual/,
+it on request, and doc/sources.md says where else it is), put it in manual/,
 which git ignores, and feed it in:
 
     tools/transcribe.py manual/812663-rev0.pdf [--scan SCAN]

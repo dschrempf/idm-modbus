@@ -18,7 +18,7 @@
   and every zone module room temperature and humidity. The table now has 663
   registers rather than 497. `Access` gained `Supplied` for the marking, read
   as "the building management system may supply this value, and may read it
-  back". This settles address 86, which `doc/research.md` had listed as
+  back". This settles address 86, which `doc/research.md`, now `doc/sources.md`, had listed as
   documented nowhere: it is `Batteriefüllstand`.
 - `idm-dump HOST --watch SECONDS ADDRESS...`, which reads a few registers
   round after round and writes a line per read, the capture format plus the
@@ -41,7 +41,7 @@
   the web interface send them. The code is sent from Kunde only, and never
   so close to the hour that it could arrive in the next one; the result says
   whether anything was sent.
-- A second verification, `doc/verification-2026-09-20.md`, checking the table
+- A second verification, `doc/verification/2026-09-20.md`, checking the table
   against the controller's own display rather than against the machine alone,
   with the readings in `data/navigator-10-web-2026-09-20.tsv` and the two
   captures taken beside them.
@@ -55,15 +55,15 @@
   682 registers. `idm-dump HOST --widths ADDRESS...` measures how many
   registers wide the value at an address is, to
   `captures/navigator-10-widths-*.json`; see
-  `doc/verification-2026-10-14-gltmon.md`.
+  `doc/verification/2026-10-14-gltmon.md`.
 - The minimum and maximum flow temperature of circuits A, C and D, 1520 to
   1540, carry their parameter identifiers, `HSA05` to `HSD04`, joined by
   moving one circuit's setting at a time and watching which register followed
-  (`doc/verification-2026-10-15-flow-temperature.md`). The join is written by
+  (`doc/verification/2026-10-15-flow-temperature.md`). The join is written by
   hand in `data/navigator-10-gltmon-parameters.tsv`, which
   `tools/transcribe.py` reads and checks against a webapi capture. The heat
   sink's 1068 to 1072 are B124, B125 and B2, read beside the display, and 4126
-  is computed from them (`doc/verification-2026-10-15-heat-sink.md`).
+  is computed from them (`doc/verification/2026-10-15-heat-sink.md`).
 - Writing. `IDM.Modbus.TCP` sends function codes 6 and 16 and checks the
   device's echo, a mismatch being `UnexpectedEcho`; a write is of `One`
   register or `Two`, as wide as a datatype goes, and a read's `Quantity` is
@@ -104,19 +104,19 @@
 - A second target, `PvTarget`, 88 `PV-Zielwert (Smartfox und Solar-Log)`,
   the candidate for the target the controller's PV loop holds 74 at. It
   stores what is written, but neither -1.0 nor +1.0 moved a PV run
-  (`doc/verification-2026-11-07-pv-target.md`,
-  `doc/verification-2026-11-07-pv-target-ignored.md`).
+  (`doc/verification/2026-11-07-pv-target.md`,
+  `doc/verification/2026-11-07-pv-target-ignored.md`).
 - A third target, `HeatPumpPowerLimit`, 4108
   `Leistungsbegrenzung Wärmepumpe`. A limit from 1.0 to 1.5 kW caps a PV
   run after its start program, also when lowered under the run, and one
   below 1.0 kW ends it; one capped at 1.0 kW ended after 30 minutes, short
   of `PV006`, for a reason not yet known
-  (`doc/verification-2026-11-08-power-limit-cap.md`,
-  `doc/verification-2026-11-09-power-limit-floor.md`,
-  `doc/verification-2026-11-09-power-limit-held-at-1-0.md`,
-  `doc/verification-2026-11-07-power-limit.md`), and a restart returns it to
+  (`doc/verification/2026-11-08-power-limit-cap.md`,
+  `doc/verification/2026-11-09-power-limit-floor.md`,
+  `doc/verification/2026-11-09-power-limit-held-at-1-0.md`,
+  `doc/verification/2026-11-07-power-limit.md`), and a restart returns it to
   its default, -1, so its cost `'Free` holds
-  (`doc/verification-2026-11-07-restart.md`).
+  (`doc/verification/2026-11-07-restart.md`).
 - `tools/drivepv.py`, which writes a schedule fixed before a run to 74, 88
   and 4108 through `idm-write`, phase by phase, beside a running
   `idm-dump --watch`, and writes final values to all three when it ends, so
@@ -135,7 +135,7 @@
   holding its evidence. `tools/transcribe.py` adds them to the enumerations,
   widens the register's range to a code outside it, and refuses a code the
   manual labels already. It holds 1005's -1 "Aus" and 3 "Urlaub"
-  (`doc/verification-2026-10-15-web-app.md`).
+  (`doc/verification/2026-10-15-web-app.md`).
 - The heat pump's request reason, from the web backend. `Query` gained
   `SystemOverview`, the `system` `overview`, and `operation` reads its
   `heatpump` to an `Operation`: the `OperationMode` and the bits of `info`,
@@ -150,10 +150,16 @@
 
 ### Changed
 
+- The documentation in `doc/` is by topic: `sources.md`, `modbus.md`,
+  `registers.md`, `web-backend.md`, `heat-pump.md`, `pv-control.md` and
+  `software-versions.md`, listed in `doc/README.md`. `doc/research.md` is
+  split among them. The measurements moved to `doc/verification/`, without
+  the `verification-` prefix.
+
 - The controller is a Navigator 10, not a Navigator 2.0: its firmware and web
   interface name it, and iDM's 2025 catalog lists the AERO ALM with it. It
   serves the register map of 812170, the Navigator 2.0's manual, which the
-  table still rests on (`doc/research.md`). The data files are
+  table still rests on (`doc/sources.md`). The data files are
   `data/navigator-10-*.tsv`, captures are named `navigator-10-*`, and
   `IDM.Navigator.Table` exports `navigator10` and `navigator10Software`
   rather than `navigator20` and `navigator20Software`.

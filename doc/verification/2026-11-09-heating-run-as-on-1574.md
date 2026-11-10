@@ -27,7 +27,7 @@ requests of the first web watch, none failed. 363 of the second: 360
 answered, the last three refused, as the level had fallen back. Software
 20.24-2608 on both channels throughout. Nothing was set but the user level;
 74 and 4108 stood at -0.5 and -1.0 throughout, as the noon run left them
-(`doc/verification-2026-11-09-power-limit-floor.md`). The watches were
+(`doc/verification/2026-11-09-power-limit-floor.md`). The watches were
 stopped at 16:29 while the compressor still ran.
 
 | Time              | 1090             | 1091 | 1100                     |
@@ -47,7 +47,7 @@ stopped at 16:29 while the compressor still ran.
 | 15:16:44–15:17:04 | 1    | 60     | `ffff` | 23.0–23.3   | 1    | 0.30–0.82 |
 | 15:17:14 on       | 1    | 64–100 | `ffff` | rising      | 1    | rising    |
 
-As on 2026-10-16 (`doc/verification-2026-10-16-charge-pump.md`): the pump's
+As on 2026-10-16 (`doc/verification/2026-10-16-charge-pump.md`): the pump's
 signal rises to 100 in the round 1090 turns to `Heizbetrieb`, the
 compressor starts 50 s later, and the signal drops to 60 with it. Here the
 flow came in the same round as the signal, not one later. The restart after
@@ -132,7 +132,7 @@ Entered at 14:51:05 and not entered again, the level answered 6245 every
 10 s until 15:51:02 and refused it from 15:51:12: sixty minutes, as on
 20.24-1574. On 20.24-2608 it fell back after 8 and 10 minutes on
 2026-11-05 and held 73 minutes on 2026-11-06, left by hand
-(`doc/software-versions.md`), so sixty minutes is not a fixed timeout there
+(`doc/verification/2026-11-05-software-update.md`), so sixty minutes is not a fixed timeout there
 either. Nothing was set at the display meanwhile; the web interface was
 only looked at.
 
@@ -149,8 +149,8 @@ only looked at.
 - **The stop.** The run went on past the watches; the stop's order, the
   compressor first and the pump's signal one round later, was measured on
   2026-10-16 only.
-- **The floor** (`doc/verification-2026-11-05-floor.md`) and a hot water
-  charge (`doc/verification-2026-10-01-charge.md`).
+- **The floor** (`doc/verification/2026-11-05-floor.md`) and a hot water
+  charge (`doc/verification/2026-10-01-charge.md`).
 
 ## Reproducing
 

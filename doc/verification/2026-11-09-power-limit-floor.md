@@ -20,7 +20,7 @@ controller named the request PV's.
 
 ## What was set
 
-As on 2026-11-08 (`doc/verification-2026-11-08-power-limit-cap.md`):
+As on 2026-11-08 (`doc/verification/2026-11-08-power-limit-cap.md`):
 `PV008` at `N2_GLTSF`, `PV001` Yes, `PV002` No, `PV013` Always, `PV006`
 40 °C, `PV011` 2.0 min, not read again. The web interface was at Fachmann
 level from 12:35 to 12:57
@@ -125,7 +125,7 @@ the JavaScript does not say. The display was not read beside it.
   draw that 1.0 had held, so the distance to the draw is not what decides;
   the value is. The line lies between 0.9 and 1.0, and holds whether the
   limit is far below the draw (0.8 under 3.1 kW,
-  `doc/verification-2026-11-07-power-limit.md`) or just below it. The
+  `doc/verification/2026-11-07-power-limit.md`) or just below it. The
   heating floor, 24 rps and 0.6 to 0.74 kW, lies below it, so it is the
   controller's line, not the compressor's.
 - **A limit at 1.2 does not hold off a start.** The request came 1 minute

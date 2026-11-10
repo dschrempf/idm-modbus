@@ -32,15 +32,15 @@ Settled on the machine, 2026-11-05 to 2026-11-09:
   returned it to -1, and 74 to 0 (evening of 2026-11-07).
 - 4108 at 0.8 under a draw of 3.1 kW ended the run within 9 s, before the
   minimum runtime, rather than capping it (late evening of 2026-11-07,
-  `doc/verification-2026-11-07-power-limit.md`).
+  `doc/verification/2026-11-07-power-limit.md`).
 - 4108 at 1.5 from before the start, beside 74 at 2.0, capped the run: the
   draw held near 1.4 kW for 42 minutes, past the minimum runtime, until
   `PV006` ended it (evening of 2026-11-08,
-  `doc/verification-2026-11-08-power-limit-cap.md`).
+  `doc/verification/2026-11-08-power-limit-cap.md`).
 - 4108 at 1.2 from before the start capped the run at 1.19 kW past the
   minimum runtime, after a start program drawing 1.24 to 1.30; lowered
   under the run to 1.0 it held 0.98 kW; at 0.9 it ended the run within 8 s
-  (noon of 2026-11-09, `doc/verification-2026-11-09-power-limit-floor.md`).
+  (noon of 2026-11-09, `doc/verification/2026-11-09-power-limit-floor.md`).
 - The controller names a PV run's request `RD_REQ_PV`, in `system`
   `overview` and `home` `detail` alike (same run).
 - 4108 at 1.0 from before the start let the start program through at up to
@@ -48,7 +48,7 @@ Settled on the machine, 2026-11-05 to 2026-11-09:
   controller withdrew the request 30 min 50 s after the start, B38 2.1 K
   below `PV006`, for no reason a capture shows: not a defrost, an error or
   a lock (evening of 2026-11-09,
-  `doc/verification-2026-11-09-power-limit-held-at-1-0.md`).
+  `doc/verification/2026-11-09-power-limit-held-at-1-0.md`).
 - With `PV011` at 0.1 min, set at the display and kept, a meter-fed run
   did not settle: the speed swung between about 35 and 95 rps, 0.9 to 2.6
   kW, some 90 s from peak to peak, rather than running to the top as at
@@ -56,7 +56,7 @@ Settled on the machine, 2026-11-05 to 2026-11-09:
   negative for at most 10 s; a negative stretch of 40 s down to -1.02 at 6
   minutes had not ended it. The third stop at about 8 minutes on a mean at
   or below zero (evening of 2026-11-10,
-  `doc/verification-2026-11-10-pv-loop-at-0-1-min-swings.md`).
+  `doc/verification/2026-11-10-pv-loop-at-0-1-min-swings.md`).
 
 So 4108 holds a run past the minimum runtime at 1.0 to 1.5 kW, and ends it
 below 1.0: about 1.0 kW is the lowest run it gives, not the floor's 0.6 to

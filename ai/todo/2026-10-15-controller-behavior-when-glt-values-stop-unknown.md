@@ -26,7 +26,7 @@ Software 20.24-2608 adds two settings to the PV menu. `SSYSPV031`
 `N2_PVStaticHousepwrActive`, No/Yes, reads No; its help text says that
 while it is No, `SSYSPV030` `N2_PVOffGridHousePower`, 0 to 10 kW, now 1.0,
 stands in for the house consumption once the smart meter has sent nothing
-for more than five hours (`doc/software-versions.md`). That is the first
+for more than five hours (`doc/verification/2026-11-05-software-update.md`). That is the first
 stated fallback, for 82 at most. Whether a value written over Modbus counts
 as the smart meter is for 74's test below to find out.
 
@@ -43,6 +43,6 @@ Per register, activated as a target together with this test:
 4. Record each in a dated `doc/`, and restore the gates.
 
 74 went first, as a consumer writes it first: steps 1 and 2 are done
-(`doc/verification-2026-11-05-pv-surplus.md`), and step 3 is in
+(`doc/verification/2026-11-05-pv-surplus.md`), and step 3 is in
 `pv-control-of-74-and-88`, `does-the-control-act-on-a-74-no-one-renews.md`.
 The others follow, each when it is listed as a target.

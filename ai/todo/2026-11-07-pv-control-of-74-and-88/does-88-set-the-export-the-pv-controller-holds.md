@@ -7,12 +7,12 @@ I 10.0, D 0.0. Both runs of 2026-11-06 fit an error of the mean of 74 over
 `PV011` less a target of 0. 88, `PV-Zielwert (Smartfox und Solar-Log)`, was
 the candidate for that target. If it were, a consumer would write the
 meter's export to 74 as it is and its intent to 88. `doc/pv-control.md`,
-"What 88 would add", has the argument.
+"The PV target at 88", has the argument.
 
 ## Answered: not for the speed
 
-Three runs on 2026-11-07, `doc/verification-2026-11-07-pv-target.md` and
-`doc/verification-2026-11-07-pv-target-ignored.md`:
+Three runs on 2026-11-07, `doc/verification/2026-11-07-pv-target.md` and
+`doc/verification/2026-11-07-pv-target-ignored.md`:
 
 - The planned meter-style run, 74 as a meter of 2.0 kW from the first write,
   stopped after 8 minutes, before its first step of 88: the loop does not
@@ -49,7 +49,7 @@ driver's -0.5 does not end a run the controller would hold.
 ## Run: `PV011` at its minimum
 
 Run on the evening of 2026-11-10 with the schedule of
-`doc/verification-2026-11-10-pv-loop-at-0-1-min-swings.md`, "Reproducing":
+`doc/verification/2026-11-10-pv-loop-at-0-1-min-swings.md`, "Reproducing":
 2.0 until the start, the export of 2.0 kW of PV for 6 minutes after it, then
 steps down every 3 minutes. The loop swung rather than settled, and the run
 ended at 8 minutes, in the first step. `PV011` stays at 0.1 min.

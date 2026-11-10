@@ -14,7 +14,7 @@ the watch's reads of 74 otherwise:
                             [--from HH:MM:SS] [--to HH:MM:SS] [--last]
 
 `--last` prints the newest row only, as a status line while a run goes on.
-It reproduces the table of `doc/verification-2026-11-06-pv-surplus-loop.md`
+It reproduces the table of `doc/verification/2026-11-06-pv-surplus-loop.md`
 to within one round of the watch.
 """
 

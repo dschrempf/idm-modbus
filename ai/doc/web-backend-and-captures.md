@@ -24,12 +24,12 @@ chooses what a read returns, and creating one is a `save`, done by hand in
 the web interface. Since 2026-11-09 seven graphs hold all 37 channels of the
 Kunde level; the 17 more of the Fachmann level, the refrigerant circuit's,
 are in 106 and 107 since 2026-11-10. B33, the flow, is no channel at either
-level (`doc/verification-2026-11-09-graphs-record-every-channel.md`). A graph
+level (`doc/verification/2026-11-09-graphs-record-every-channel.md`). A graph
 answers those of its channels that belong to the level the controller is at
 when it is read: at Kunde level 106 answers none and 107 only 53, and the
 built-in graph 2, of level 2, is left out of `graph`/`overview` but answers
 `detail` with its Kunde channels
-(`doc/verification-2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`). The
+(`doc/verification/2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`). The
 web interface's JavaScript (`main-7UP7UE6I.js`, served by the controller,
 read 2026-11-10) asks history only as `graph`/`detail {id, fromSecs,
 toSecs, stepSecs}`, of a saved graph, never of a list of channels: a channel
@@ -65,7 +65,7 @@ Both work on the machine, and the display switches with them. The level is
 the controller's, not the connection's: it holds until it is left or the
 controller ends it, sixty minutes from the entry, however often it was
 read meanwhile, on both softwares
-(`doc/verification-2026-11-09-heating-run-as-on-1574.md`). An entry sent
+(`doc/verification/2026-11-09-heating-run-as-on-1574.md`). An entry sent
 seconds after a leave answered success and left the level at Kunde; sent
 again 20 s later it took (2026-11-10,
 `captures/navigator-10-level-20.24-2608-2026-11-10-2056.log`). The frost

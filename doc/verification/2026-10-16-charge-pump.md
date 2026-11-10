@@ -3,9 +3,9 @@
 2026-10-16. The heat sink's charge pump, M73, has two candidate registers:
 1104, `Status Ladepumpe (M73)`, from the parameter list, and 1074,
 `Ladepumpe Wärmesenke Steuersignal`, from the controller's register page
-([verification-2026-10-14-gltmon.md](verification-2026-10-14-gltmon.md)).
+([2026-10-14-gltmon.md](2026-10-14-gltmon.md)).
 On 2026-10-15 they disagreed while the machine heated: 1104 read `ffff`, 1074
-93 to 97 ([verification-2026-10-15-heat-sink.md](verification-2026-10-15-heat-sink.md)).
+93 to 97 ([2026-10-15-heat-sink.md](2026-10-15-heat-sink.md)).
 Read beside the page that prints M73, at rest, through a heating run, a hot
 water charge and a defrost, 1074 follows M73 read for read: its `ffff` is the
 page's -1.0, "not driven", and its 0 the page's 0, minimum speed. 1104 reads
@@ -78,7 +78,7 @@ other 31 in ramps, and -1.0 exactly where the register answered `ffff`. That
 is the controller reading its own register 1074 as signed.
 
 So 1074 is M73's control signal on the pump scale of
-[verification-2026-09-20.md](verification-2026-09-20.md): `ffff` is -1, the
+[2026-09-20.md](2026-09-20.md): `ffff` is -1, the
 pump not driven, and a value is percent of the pump's speed range. It read
 0 to 100. 0 is a state of its own: at the start of each hot water charge,
 from 10:01:52 and from 10:22:03, 1074 and the page stood at 0, minimum speed,
@@ -95,7 +95,7 @@ and does not report the pump it names; the table decodes it as
 `DriveSignal NotDriven` while the pump is driven at 100 %. Whether software
 20.24 stopped updating it, or this configuration drives M73 through another
 channel, the run cannot say. The parameter list documents 20.21-101
-([research.md](research.md), "Revision drift").
+([sources.md](../sources.md#revision-drift)).
 
 What this does not explain is 2026-09-20, when the page printed M73 at -1.0
 while the `Digitalausgänge` page showed the same pump on: a pump running with
