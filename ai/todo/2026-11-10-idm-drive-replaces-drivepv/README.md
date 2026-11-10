@@ -22,8 +22,8 @@ schedule.
 - **D3.** A schedule file, not a language on the command line and not
   options: `schedule-file.md`.
 - **D4.** A JSONL event log: `event-log.md`.
-- **D5.** `tools/drivepv.py` is deleted once `idm-drive` has made a run,
-  and the docs' "Reproducing" commands are translated in the same change.
+- **D5.** `tools/drivepv.py` is deleted once `idm-drive` has made a run.
+  The docs' "Reproducing" commands are not translated (R7).
 - **D6.** Every part of a program names the registers it needs. The loop
   reads the union of those registers once per round and hands each part
   what it asked for. `idm-drive` gets the watch and the driver in one
@@ -50,10 +50,38 @@ schedule.
    `idm-web --watch --fachmann` enters the level, renews it, and leaves it
    on every exit. It is session 3b (`fachmann-in-the-web-watch.md`).
 
+## Settled on 2026-11-10, after the review
+
+- **R1.** A round is a list of reads, each with its own time and session.
+  Writes are not part of a round: the drive reports each as an event
+  (`rounds-and-needs.md`).
+- **R2.** One primitive reads one round and hands the session back;
+  `rounds` and `drive` are loops over it, and it is tested against a fake
+  controller.
+- **R3.** No new name clashes: the drive's end is `Finish r`, with the
+  step's own reason, so `Ending` stays the lost connection's; the read's
+  outcome is `Asked`, so `Outcome` stays the write's.
+- **R4.** The library prints nothing. Rounds and drive report events
+  through a callback, and the executables print them.
+- **R5.** Signals are handled in the executable: handlers for SIGINT and
+  SIGTERM from `unix` that set both to `Ignore`, and the finals in
+  `finally`, under the interruptible mask, so their timeouts still work.
+- **R6.** The start is the first round in which 1100 reads Ein, as in
+  `drivepv.py` (`schedule-file.md`).
+- **R7.** The old runs are not translated into schedules. The docs keep
+  their `drivepv.py` commands and name the last commit that has it.
+- **R8.** The renewal decision of the web watch goes in a private
+  sublibrary, `fachmann`, which the test suite reaches.
+- **R9.** `idm-drive` ships with the package; `CLAUDE.md` says why it is a
+  measurement tool (`sessions.md`, session 5).
+- **R10.** A web watch that fails to enter the level three times in a row
+  keeps reading at Kunde and tries no more
+  (`fachmann-in-the-web-watch.md`).
+
 ## Where it stands
 
-Designed, and not started. Sessions 1, 2, 3 and 3b can run at once
-(`sessions.md`).
+Designed and reviewed, and not started. Sessions 1, 2, 3 and 3b can run at
+once (`sessions.md`).
 
 ## Files
 

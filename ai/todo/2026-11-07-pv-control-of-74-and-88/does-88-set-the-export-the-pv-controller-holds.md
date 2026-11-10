@@ -42,8 +42,9 @@ The watches and the end as on 2026-11-07: the driver writes 0 to 88 and
 -0.5 to 74 when its schedule ends, the run stops or it is signalled. Check
 in the watch that 88 reads 0.0, stop the watches, and leave the Fachmann
 level; with `idm-web --watch --fachmann` (`idm-drive-replaces-drivepv`),
-stopping the web watch leaves it. Never end with 88 away from 0. End a schedule on `aus` rather than a
-time, so the driver's -0.5 does not end a run the controller would hold.
+stopping the web watch leaves it. Never end with 88 away from 0. End a
+schedule on the stop, `until = "stop"`, rather than a time, so the
+driver's -0.5 does not end a run the controller would hold.
 
 ## Run: `PV011` at its minimum
 
