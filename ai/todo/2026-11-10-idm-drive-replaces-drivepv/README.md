@@ -80,8 +80,21 @@ schedule.
 
 ## Where it stands
 
-Designed and reviewed, and not started. Sessions 1, 2, 3 and 3b can run at
-once (`sessions.md`).
+Sessions 1 to 4 are merged (2026-11-10). Session 5 waits for the user to
+start the runs on the machine: the dry run of `idm-drive` and the web watch
+at `--fachmann` of more than 55 minutes. Settled while building:
+
+- The loss of a round is `Dropped Ending`: `Ending` has a `Lost` (R3).
+- A span (`every`, `for`, `after-start`) passes half a period early, at the
+  round nearest it, since the 1100 read lands a moment early or late.
+- `idm-drive` steps the schedule only in a round with a writable session,
+  so a phase's 88, sent in its first round only, is not lost to a round
+  that could not write.
+- The rest each session's commit message or Haddock states: `driveWith` in
+  IO, `SkipReason` `NoSession | SoftwareDiffers`, exit codes 0, 128+n and 1,
+  and, in the web watch, an exit where the first connection fails, a
+  `userLevel` of `null` for a failure on the wire, and no level read after
+  giving up.
 
 ## Files
 
