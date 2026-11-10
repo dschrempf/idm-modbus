@@ -57,7 +57,9 @@ at 2026-11-10 09:59:59, and 25 in the eight-day span, from 2026-11-04
 every morning at 10:00, and closes with it, within 17 s until 2026-11-08
 and in the same second after. Twice, on 2026-11-04 and 2026-11-05, it
 opened about 4.5 minutes before 10003 rose again; on 2026-11-08 from
-02:00:00 to 02:05:00 it opened with 10003 at 0.
+02:00:00 to 02:05:00 it opened with 10003 at 0. On 2026-11-10 it opened
+at 09:59:59 and again at 12:59:59: the hot water window was moved that day
+to 13:00, so from 2026-11-11 it opens at 13:00.
 
 ## What it settles
 
