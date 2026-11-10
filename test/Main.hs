@@ -16,12 +16,16 @@ import Data.List (group, nub, sort)
 import qualified Data.Map.Strict as M
 import qualified Data.Text as T
 import Data.Time (ZonedTime, defaultTimeLocale, parseTimeOrError)
+import qualified Data.Text.IO as T
 import GHC.Float (double2Float, float2Double)
 import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
 import IDM.Navigator.Capture (watchLineOn)
 import IDM.Navigator.Client (Answer (..), Sample (..), sampleOf)
 import IDM.Navigator.Register
 import IDM.Navigator.Rounds
+import IDM.Navigator.Schedule
+import IDM.Navigator.Schedule.Parse (parseSchedule)
+import IDM.Navigator.Schedule.Step
 import IDM.Navigator.Software
 import qualified IDM.Navigator.Table as Table
 import IDM.Navigator.Target
@@ -29,12 +33,26 @@ import IDM.Navigator.Web
 import IDM.Navigator.Web.Level (fachmannCode)
 import IDM.Navigator.Web.Session (softwareOf)
 import IDM.Navigator.Write.Core
+import System.Directory (listDirectory)
 import System.Exit (exitFailure)
+import System.FilePath (takeExtension, (</>))
 
 main :: IO ()
 main = do
-  results <- mapM check checks
+  files <- scheduleFiles
+  results <- mapM check (checks <> files)
   if and results then putStrLn "all checks passed" else exitFailure
+
+-- | The checks that read the repository's files.
+scheduleFiles :: IO [(String, Bool)]
+scheduleFiles = do
+  names <- filter ((== ".toml") . takeExtension) <$> listDirectory "schedules"
+  texts <- mapM (T.readFile . ("schedules" </>)) names
+  pure
+    [ ( "every file in schedules/ parses",
+        not (null names) && all (either (const False) (const True) . parseSchedule) texts
+      )
+    ]
 
 check :: (String, Bool) -> IO Bool
 check (name, ok) = do
@@ -551,6 +569,99 @@ checks =
         == "{\"time\": \"2026-10-15T14:18:57.571+02:00\", \"software\": {\"status\": \"exception\", \"exception\": 2}, \"address\": 1110, \"status\": \"exception\", \"exception\": 2, \"raw\": null, \"value\": null}"
         && watchLineAt "2026-10-15T14:18:57.571+02:00" (Just (Left (Ended NoAnswer))) 500 (Just (Right (B.pack [0, 0, 0x42, 0x34])))
           == "{\"time\": \"2026-10-15T14:18:57.571+02:00\", \"software\": {\"status\": \"error\", \"exception\": null}, \"address\": 500, \"status\": \"ok\", \"exception\": null, \"raw\": \"<redacted>\", \"value\": \"<redacted>\"}"
+    ),
+    ( "the phases advance on each kind of end, and several in one round",
+      let ends =
+            stepping
+              [ ["surplus = 1.0", "until = \"start\""],
+                ["surplus = 2.0", "after-start = 30"],
+                ["surplus = 3.0", "for = 20"],
+                ["surplus = 4.0", "until = \"stop\""]
+              ]
+              [running t c | (t, c) <- [(0, Aus), (10, Ein), (20, Ein), (30, Ein), (40, Ein), (50, Ein), (60, Ein), (70, Aus)]]
+          several =
+            stepping
+              [["surplus = 1.0", "until = \"start\""], ["surplus = 2.0", "until = \"start\""], ["surplus = 3.0", "for = 20"]]
+              [running t Ein | t <- [0, 10, 20]]
+       in map (began . fst) ends == [[0], [1], [], [], [2], [], [3], []]
+            && map snd (drop 7 ends) == [Left Stopped]
+            && map (began . fst) several == [[0, 1, 2], [], []]
+            && map snd several == [Right [surplusOf 3], Right [surplusOf 3], Left ScheduleDone]
+    ),
+    ( "a span passes at a round that comes a moment early",
+      let rs =
+            stepping
+              [["surplus = 1.0", "for = 30"], ["surplus = 2.0", "until = \"stop\""]]
+              [running t Ein | t <- [0.3, 10.2, 19.9, 30.1, 39.8]]
+       in map snd rs == map (Right . pure . surplusOf) [1, 1, 1, 2, 2]
+            && map (began . fst) rs == [[0], [], [], [1], []]
+    ),
+    ( "the start in a first round that reads Ein; a round without 1100 changes nothing",
+      let first' = stepping [["surplus = 1.0", "until = \"start\""], ["surplus = 2.0", "until = \"stop\""]] [running 0 Ein]
+          without =
+            stepping
+              [["surplus = 1.0", "until = \"start\""], ["surplus = 2.0", "until = \"stop\""]]
+              [Observation (Instant t) c Nothing | (t, c) <- [(0, Nothing), (10, Just Ein), (20, Nothing), (30, Just Aus)]]
+       in map fst first' == [[CompressorStarted, BeganPhase 0 constantUntilStart, BeganPhase 1 constantUntilStop]]
+            && map (filter (`elem` [CompressorStarted, CompressorStopped]) . fst) without == [[], [CompressorStarted], [], [CompressorStopped]]
+            && map (began . fst) without == [[0], [1], [], []]
+            && map snd without == [Right [surplusOf 1], Right [surplusOf 2], Right [surplusOf 2], Left Stopped]
+    ),
+    ( "88 goes before the phase's first 74, only once, and also when that 74 is skipped",
+      let pv = ["pv = 2.0", "target = 0.5", "until = \"stop\""]
+          skipped = stepping [pv] [drawing 0 Nothing, drawing 10 (Just 1.5), drawing 20 (Just 1.5)]
+          written = stepping [pv] [drawing 0 (Just 1.5), drawing 10 (Just 1.5)]
+       in map snd skipped == [Right [targetOf 0.5], Right [surplusOf 0.5], Right [surplusOf 0.5]]
+            && map (elem (NoDraw PvSurplus) . fst) skipped == [True, False, False]
+            && map snd written == [Right [targetOf 0.5, surplusOf 0.5], Right [surplusOf 0.5]]
+    ),
+    ( "4108 goes before each 74, and not with a skipped one",
+      map snd (stepping [["pv = 2.0", "limit = 1.0", "until = \"stop\""]] [drawing 0 (Just 1.0), drawing 10 Nothing, drawing 20 (Just 1.5)])
+        == [Right [limitOf 1, surplusOf 1], Right [], Right [limitOf 1, surplusOf 0.5]]
+    ),
+    ( "the bounds clamp the export, after it is rounded to 0.01 kW",
+      let rs =
+            stepping
+              [["pv = 2.0", "min = -0.1", "max = 0.105", "until = \"stop\""]]
+              [drawing 0 (Just 1.88), drawing 10 (Just 2.5), drawing 20 (Just 1.9667)]
+       in map snd rs == map (Right . pure . surplusOf) [0.105, -0.1, 0.03]
+            && [computationWritten e | (es, _) <- rs, Exported e <- es] == [0.105, -0.1, 0.03]
+    ),
+    ( "a round without 4122, or with -1.0 there, writes no 74 in a pv phase, and the write stays due",
+      let sentinel = drawOf =<< decodeRaw 4122 (B.pack [0x00, 0x00, 0xbf, 0x80])
+          rs =
+            stepping
+              [["pv = 2.0", "every = 30", "until = \"stop\""]]
+              [drawing 0 Nothing, drawing 10 sentinel, drawing 20 (Just 1.0), drawing 30 (Just 1.0), drawing 50 (Just 1.0)]
+       in decodeRaw 4122 (B.pack [0x00, 0x00, 0xbf, 0x80]) == Just (NoValueOr (Real (-1)))
+            && map snd rs == [Right [], Right [], Right [surplusOf 1], Right [], Right [surplusOf 1]]
+            && map (elem (NoDraw PvSurplus) . fst) rs == [True, True, False, False, False]
+    ),
+    ( "an Aus after an Ein ends the drive, and one before an Ein does not",
+      map snd (stepping [["surplus = 1.0", "until = \"stop\""]] [running t c | (t, c) <- [(0, Aus), (10, Aus), (20, Ein), (30, Aus)]])
+        == [Right [surplusOf 1], Right [surplusOf 1], Right [surplusOf 1], Left Stopped]
+    ),
+    ( "the parser refuses an unknown key, two ends, a bound beside surplus, min above max, every below round, and a phase after until = \"stop\"",
+      let stop = ["surplus = 1.0", "until = \"stop\""]
+          refused = either (const True) (const False) . parseSchedule . T.pack
+       in not (refused (withPhases [stop]))
+            && all
+              refused
+              [ "colour = 1\n" <> withPhases [stop],
+                withPhases [stop <> ["colour = 1"]],
+                withPhases [["surplus = 1.0", "for = 60", "until = \"stop\""]],
+                withPhases [["surplus = 1.0", "min = 0", "until = \"stop\""]],
+                withPhases [["pv = 2.0", "min = 0.2", "max = 0.1", "until = \"stop\""]],
+                withPhases [["surplus = 1.0", "every = 5", "until = \"stop\""]],
+                withPhases [stop, ["surplus = 2.0", "for = 60"]]
+              ]
+    ),
+    ( "a schedule watches only readable addresses of the parameter list",
+      let watching w = parseSchedule (T.pack ("watch = " <> w <> "\n" <> withPhases [["surplus = 1.0", "until = \"stop\""]]))
+       in fmap (map registerAddress . scheduleWatch) (watching "[74, 1100]") == Right [Address 74, Address 1100]
+            && all (either (const True) (const False) . watching) ["[1]", "[70000]", "[-74]"]
+            && Table.readableAt 1 == Left Table.Unlisted
+            && Table.readableAt 65536 == Left Table.Unlisted
     )
   ]
 
@@ -647,6 +758,43 @@ watchLineAt t version a result =
 
 zoned :: String -> ZonedTime
 zoned = parseTimeOrError False defaultTimeLocale "%Y-%m-%dT%H:%M:%S%Q%Ez"
+
+-- | A schedule of these phases, each given by its lines, at a round of 10 s.
+withPhases :: [[String]] -> String
+withPhases ps =
+  unlines $
+    ["round = 10", "[final]", "surplus = -0.5", "target = 0.0", "limit = -1.0"]
+      <> concatMap ("[[phase]]" :) ps
+
+-- | What each round of a schedule of these phases did, up to its end.
+stepping :: [[String]] -> [Observation] -> [([Event], Either Done [Command])]
+stepping ps = go notBegun
+  where
+    s = either (error . unlines) id (parseSchedule (T.pack (withPhases ps)))
+    go _ [] = []
+    go p (o : os) =
+      let (p', es, r) = step s p o
+       in (es, r) : either (const []) (const (go p' os)) r
+
+-- | A round in which 1100 read this, and 4122 nothing.
+running :: Double -> Compressor -> Observation
+running t c = Observation (Instant t) (Just c) Nothing
+
+-- | A round in which the compressor ran and drew this.
+drawing :: Double -> Maybe Double -> Observation
+drawing t = Observation (Instant t) (Just Ein)
+
+began :: [Event] -> [Int]
+began es = [i | BeganPhase i _ <- es]
+
+surplusOf, targetOf, limitOf :: Double -> Command
+surplusOf = Command PvSurplus . Real
+targetOf = Command PvTarget . Real
+limitOf = Command HeatPumpPowerLimit . Real
+
+constantUntilStart, constantUntilStop :: Phase
+constantUntilStart = Phase (Constant 1) Nothing Nothing Nothing AtStart
+constantUntilStop = Phase (Constant 2) Nothing Nothing Nothing AtStop
 
 -- | A request a write made of the fake controller.
 data Request
