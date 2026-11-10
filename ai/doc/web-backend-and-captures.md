@@ -23,8 +23,13 @@ lists whether or not a graph holds it, about eight days back; a graph only
 chooses what a read returns, and creating one is a `save`, done by hand in
 the web interface. Since 2026-11-09 seven graphs hold all 37 channels of the
 Kunde level; the 17 more of the Fachmann level, the refrigerant circuit's,
-are in none. B33, the flow, is no channel at either level
-(`doc/verification-2026-11-09-graphs-record-every-channel.md`). The
+are in 106 and 107 since 2026-11-10. B33, the flow, is no channel at either
+level (`doc/verification-2026-11-09-graphs-record-every-channel.md`). A graph
+answers those of its channels that belong to the level the controller is at
+when it is read: at Kunde level 106 answers none and 107 only 53, and the
+built-in graph 2, of level 2, is left out of `graph`/`overview` but answers
+`detail` with its Kunde channels
+(`doc/verification-2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`). The
 web interface's JavaScript (`main-7UP7UE6I.js`, served by the controller,
 read 2026-11-10) asks history only as `graph`/`detail {id, fromSecs,
 toSecs, stepSecs}`, of a saved graph, never of a list of channels: a channel

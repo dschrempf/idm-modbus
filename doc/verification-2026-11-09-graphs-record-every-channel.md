@@ -102,8 +102,9 @@ sends `graph`/`overview`, `traverse`, `detail` with a graph's `id`, and
   lists 54 channels (`captures/navigator-10-webapi-20.24-2608-2026-11-09-1243.json`),
   17 more than at Kunde: 23 B71, 26 B37, 28 B79, 29 B78, 55 M51, 60 M63,
   76, 91, 93, 145, 146 `T25x_AIN_TCOND`, 148 `T23xPRS`, 149, 153 B86, 180,
-  182 B87 and 188. No graph holds them, and whether a graph holding them
-  answers at Kunde level is untried.
+  182 B87 and 188. No graph holds them. Since 2026-11-10 two graphs do,
+  and answer them only at Fachmann level
+  (`doc/verification-2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`).
 - **How far back the history reaches** past the eight days the web
   interface asks for.
 

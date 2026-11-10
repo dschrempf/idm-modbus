@@ -17,10 +17,6 @@ done).
 
 ## 2. The rest
 
-`create-the-fachmann-level-graphs`, all but done on 2026-11-10: the graphs
-are for a person at the web interface; a run reads the refrigerant circuit
-from its web watch.
-
 1. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
 2. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM

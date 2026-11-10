@@ -127,6 +127,6 @@ reads them live, not from a graph, since a graph is edited by hand and can chang
   update; no run here needs it.
 - `power-limit-4108-outside-pv-and-locks-4110-to-4114`, an idea: 4108 for a
   grid operator's dimming, and the locks.
-- `create-the-fachmann-level-graphs`: the refrigerant circuit's channels in
-  a graph, for a person reading the web interface; a run reads them from
+- `create-the-fachmann-level-graphs`, done: the refrigerant circuit's
+  channels in a graph, at Fachmann level only, for a person reading the web interface; a run reads them from
   the web watch.

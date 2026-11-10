@@ -1,5 +1,11 @@
 # Create the graphs of the Fachmann level's channels
 
+**Done on 2026-11-10.** 106 and 107 hold all 17 channels the Fachmann
+level adds and answer them, with their history, at Fachmann level only;
+at Kunde level a graph answers the Kunde channels it holds
+(`doc/verification-2026-11-10-a-graph-answers-the-channels-of-the-current-level.md`,
+`web-backend-and-captures`). A run reads the circuit from its web watch.
+
 The controller records every graph channel whether or not a graph holds
 it, but a read reaches a channel only through a graph
 (`doc/verification-2026-11-09-graphs-record-every-channel.md`). Seven
@@ -25,7 +31,7 @@ is edited by hand and can change under it (decided 2026-11-10).
 3. Record it in `doc/verification-2026-11-09-graphs-record-every-channel.md`
    or a new dated `doc/`, and in `ai/doc/web-backend-and-captures.md`.
 
-## Done on 2026-11-10, but for one channel
+## What was done
 
 Created by hand at about 20:50: 106 "Temperatures (Fachmann)" holds 23,
 26, 28, 91, 145, 146, 149, 182 and 188; 107 "Pressures and actuators
@@ -39,5 +45,8 @@ answered no channel, 107 only 53 and 2 only 10000 to 10004: a graph answers
 the channels of the level the controller is at
 (`captures/navigator-10-webgraph-20.24-2608-2026-11-10-2137.json`). The
 walk at Fachmann level of 21:24 holds the run's five-minute means
-(`captures/navigator-10-webapi-20.24-2608-2026-11-10-2124.json`). Left: 60
-into 107.
+(`captures/navigator-10-webapi-20.24-2608-2026-11-10-2124.json`). 60 went
+into 107 by hand at 21:42, at Fachmann level; read at once, 107 answered it
+with history from before, 5 points over 30 h and 25 over 8 days, each 0 or
+1, beside the other eight
+(`captures/navigator-10-webgraph-20.24-2608-2026-11-10-2142.json`).
