@@ -96,6 +96,31 @@ at `--fachmann` of more than 55 minutes. Settled while building:
   `userLevel` of `null` for a failure on the wire, and no level read after
   giving up.
 
+Reviewed on 2026-11-10, and the review's fixes merged the same day:
+
+- An exception that interrupts a request ends the connection, as
+  `Abandoned` (be28714). Its test, a loopback listener, is
+  `test-that-an-interrupted-request-ends-the-connection`.
+- Once the finals begin, nothing thrown stops them: a write or an opening
+  that throws counts as the session lost, within the three openings; a
+  report that throws is passed over and thrown again after them; and an
+  exception in the finals of a drive that had finished makes it
+  `Interrupted`, so a signal at the schedule's end still exits 128+n
+  (0c015c7). A signal that lands while a report blocks is thrown again as
+  the report's failure, and `idm-drive` then exits 1 (the Haddock of
+  `driveWith`).
+- The signal handler interrupts the drive also where its line cannot be
+  written (916752c).
+- The event lines are in `IDM.Navigator.Schedule.Log`, in the private
+  sublibrary `schedule`, checked against `tools/fixtures/drive.jsonl`;
+  the fixture was corrected where it departed from `event-log.md`
+  (dc81cf1).
+- A round that cannot write is not stepped, so outside the finals it
+  leaves no `skip`, and a drive on other software runs until a signal
+  (`event-log.md`; b7b33cc).
+- Kept: a final whose read-back lost the connection goes again, though the
+  controller acknowledged it.
+
 ## Files
 
 - `rounds-and-needs.md`: the loop of D6 and what goes in the library. It
