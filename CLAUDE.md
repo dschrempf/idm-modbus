@@ -28,7 +28,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The test suite is a list of `(name, Bool)` pairs in `test/Main.hs`; there is no
 per-test selection, and a new invariant is a new entry in `checks`. It needs no
-heat pump: everything is decoded from literal byte strings.
+heat pump: everything is decoded from literal byte strings, but for the checks
+of a connection, which run against a listener on the loopback interface that
+never answers.
 
 Reaching a real machine needs Modbus TCP switched on in the controller (service
 level, "Gebäudeleittechnik", "Modbus TCP" to "Ein"; the service code is the day

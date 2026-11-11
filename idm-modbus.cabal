@@ -193,6 +193,7 @@ test-suite idm-modbus-test
     , idm-modbus:core
     , idm-modbus:fachmann
     , idm-modbus:schedule
+    , network
     , text
     , time
     , transformers
