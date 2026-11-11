@@ -7,8 +7,9 @@
 -- License     :  BSD-3-Clause
 module Main (main) where
 
-import Control.Exception (Exception, SomeException, fromException, throwIO, toException, try)
-import Control.Monad (foldM, join, when)
+import Control.Concurrent (forkIO, killThread, newEmptyMVar, putMVar, takeMVar, throwTo)
+import Control.Exception (Exception, SomeException, bracket, fromException, throwIO, toException, try)
+import Control.Monad (foldM, join, void, when)
 import Control.Monad.Trans.State.Strict (State, modify, runState, state)
 import qualified Data.Aeson as A
 import qualified Data.Aeson.Key as K
@@ -23,7 +24,7 @@ import qualified Data.Text.IO as T
 import Data.Time (ZonedTime, defaultTimeLocale, parseTimeOrError)
 import Data.Word (Word16)
 import GHC.Float (double2Float, float2Double)
-import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Quantity, Registers (..), TransactionId (..), Write (..), parseResponse, parseWriteResponse, quantity, quantityCount, registerPair, singleRegister)
+import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Host (..), Patience (..), Port (..), Quantity, Registers (..), TransactionId (..), UnitId (..), Write (..), connect, disconnect, parseResponse, parseWriteResponse, quantity, quantityCount, readRegisters, registerPair, singleRegister)
 import IDM.Navigator.Capture (watchLineOn)
 import IDM.Navigator.Client (Answer (..), Sample (..), sampleOf)
 import IDM.Navigator.Drive (Command (..), DriveEventOn (RoundEvent, Skipped, Wrote), DriveOn (..), DriveRequests (..), Finish (..), SkipReason (..), driveWith)
@@ -44,16 +45,20 @@ import qualified IDM.Navigator.Web.Level as Level
 import IDM.Navigator.Web.Session (softwareOf)
 import qualified IDM.Navigator.Web.Session as Web
 import IDM.Navigator.Write.Core
+import qualified Network.Socket as N
+import qualified Network.Socket.ByteString as NB
 import System.Directory (listDirectory)
 import System.Exit (exitFailure)
 import System.FilePath (takeExtension, (</>))
+import System.Timeout (timeout)
 
 main :: IO ()
 main = do
   files <- scheduleFiles
   drives <- driveChecks
   logs <- logChecks
-  results <- mapM check (checks <> files <> drives <> logs)
+  connections <- connectionChecks
+  results <- mapM check (checks <> files <> drives <> logs <> connections)
   if and results then putStrLn "all checks passed" else exitFailure
 
 -- | The checks that read the repository's files.
@@ -1250,3 +1255,62 @@ logChecks = do
     parsed :: String -> Maybe A.Value
     parsed = A.decode . BL.pack
     isPrefixOf' p l = take (length p) l == p
+
+-- | The checks of a connection against a listener on the loopback interface
+-- that accepts and never answers. The whole runs under a time limit, so a
+-- defect fails the checks rather than hanging the suite.
+connectionChecks :: IO [(String, Bool)]
+connectionChecks = do
+  results <- timeout 20000000 $ bracket listener N.close $ \lsock -> do
+    port <- N.socketPort lsock
+    let open p = connect (Patience p) (Host "127.0.0.1") (Port (fromIntegral port)) (UnitId 1)
+        ask conn = readRegisters conn ReadHoldingRegisters (Address 1100) singleRegister
+    interrupted <- serving lsock $ \(request, rest) -> bracket (open 10000000) disconnect $ \conn -> do
+      done <- newEmptyMVar
+      reader <- forkIO (try (ask conn) >>= putMVar done)
+      sent <- takeMVar request
+      throwTo reader Signalled
+      first <- takeMVar done
+      second <- ask conn
+      after <- takeMVar rest
+      pure
+        ( B.length sent == 12
+            && either fromException (const Nothing) first == Just Signalled
+            && second == Left (Unsent Abandoned)
+            && B.null after
+        )
+    unanswered <- serving lsock $ \(_, rest) -> bracket (open 200000) disconnect $ \conn -> do
+      first <- ask conn
+      second <- ask conn
+      _ <- takeMVar rest
+      pure (first == Left (Ended NoAnswer) && second == Left (Unsent NoAnswer))
+    pure (interrupted, unanswered)
+  pure
+    [ ( "an exception that interrupts a request goes on, and ends the connection Abandoned; a later request fails unsent",
+        maybe False fst results
+      ),
+      ( "a request that gets no answer in time ends the connection NoAnswer, not Abandoned",
+        maybe False snd results
+      )
+    ]
+  where
+    listener = do
+      sock <- N.socket N.AF_INET N.Stream N.defaultProtocol
+      N.bind sock (N.SockAddrInet 0 (N.tupleToHostAddress (127, 0, 0, 1)))
+      N.listen sock 1
+      pure sock
+    -- Accept one connection and answer nothing: hand over the first 12
+    -- bytes, a read request, and then what else arrives until the client
+    -- closes.
+    serving lsock k = do
+      request <- newEmptyMVar
+      rest <- newEmptyMVar
+      let serve = bracket (fst <$> N.accept lsock) N.close $ \sock -> do
+            recvUpTo sock 12 B.empty >>= putMVar request
+            recvUpTo sock maxBound B.empty >>= putMVar rest
+      bracket (forkIO (void (try serve :: IO (Either SomeException ())))) killThread (const (k (request, rest)))
+    recvUpTo sock n acc
+      | B.length acc >= n = pure acc
+      | otherwise = do
+          chunk <- NB.recv sock (min 4096 (n - B.length acc))
+          if B.null chunk then pure acc else recvUpTo sock n (acc <> chunk)
