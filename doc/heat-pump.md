@@ -47,6 +47,10 @@ signal drops to 60; 4122 leaves 0 a round after that. The start program
 then holds 50.4 rps for three to four minutes, in heating, hot water and PV
 runs alike ([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md),
 [2026-11-09-heating-run-as-on-1574](verification/2026-11-09-heating-run-as-on-1574.md)).
+A PV run with 74 below the PV control's target held it 8 min 20 s from the
+compressor's start, and then fell to the floor within 40 s; why it held so
+long is open
+([2026-11-11-the-pv-control-holds-74-at-0-25](verification/2026-11-11-the-pv-control-holds-74-at-0-25.md)).
 At a stop the compressor and the mode stop together, and the pump's signal
 goes to -1 a round later, the flow with it
 ([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md)).

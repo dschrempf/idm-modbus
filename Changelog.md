@@ -76,6 +76,10 @@
   is in the type; `write` in `IDM.Navigator.Write` returns an `Outcome c`. An
   EEPROM write reads first and sends nothing when the value is held already,
   and every write is read back. The first target is the PV surplus at 74.
+  Past the start program the controller holds it at +0.25 kW, so a value
+  from 0 to +0.25 keeps a PV run at the compressor's floor, about 0.7 kW,
+  until the store is full
+  (`doc/verification/2026-11-11-the-pv-control-holds-74-at-0-25.md`).
   `idm-write HOST ADDRESS VALUE` writes it, and writes an EEPROM target only
   with `--eeprom`.
 - A guard against an unannounced update of the controller's software. The
@@ -103,9 +107,11 @@
   the controller's log.
 - A second target, `PvTarget`, 88 `PV-Zielwert (Smartfox und Solar-Log)`,
   the candidate for the target the controller's PV loop holds 74 at. It
-  stores what is written, but neither -1.0 nor +1.0 moved a PV run
+  stores what is written, but neither -1.0 nor +1.0 moved a PV run, also
+  not past the start program
   (`doc/verification/2026-11-07-pv-target.md`,
-  `doc/verification/2026-11-07-pv-target-ignored.md`).
+  `doc/verification/2026-11-07-pv-target-ignored.md`,
+  `doc/verification/2026-11-11-the-pv-control-holds-74-at-0-25.md`).
 - A third target, `HeatPumpPowerLimit`, 4108
   `Leistungsbegrenzung Wärmepumpe`. A limit from 1.0 to 1.5 kW caps a PV
   run after its start program, also when lowered under the run, and one

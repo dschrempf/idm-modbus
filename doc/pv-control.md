@@ -84,19 +84,32 @@ The PV menu at Fachmann level holds one set of gains, `IV017` to `IV019`;
 with D at 0 it is a PI controller. Whether `IV018` is a gain or a reset
 time, and the units of either, no source states.
 
-The runs read as such a controller on the error "mean of 74 over `PV011`",
-bounded by the heating floor, 24 rps, and the top, 120 rps, which is
-`IV002` at its 100 %; whether a lower `IV002` caps a PV run is untested
-([heat-pump.md](heat-pump.md#the-compressors-speed-and-draw)):
+The runs read as such a controller on the error "mean of 74 over `PV011`
+less 0.25 kW", bounded by the heating floor, 24 rps, and the top, 120 rps,
+which is `IV002` at its 100 %; whether a lower `IV002` caps a PV run is
+untested ([heat-pump.md](heat-pump.md#the-compressors-speed-and-draw)):
 
-- **A constant above 0 drives the speed to the top**, from the start program
-  to 120 rps: 74 plus the draw always exceeds the draw
+- **The target is +0.25 kW at 74, not 0.** With `PV011` at 0.1 min, past
+  the start program, 74 at +0.25 held the speed where it stood, at 26.6,
+  45.8 and 27.7 rps; above it the speed rose and below it fell, 5.8 to 7.5
+  rps a minute for each 0.01 kW off 0.25, from +0.23 to +0.3 and at any
+  speed: the integral term
+  ([2026-11-11-the-pv-control-holds-74-at-0-25](verification/2026-11-11-the-pv-control-holds-74-at-0-25.md)).
+  Whether 0.25 is a setting, `N2_PV_POWERTARGET` or a constant, no source
+  states. A consumer that writes the export as measured leaves 0.25 kW to
+  the grid while a run holds.
+- **A constant between 0 and +0.25 holds a run at the floor**, 24 rps at
+  0.63 to 0.75 kW: +0.1 held one there for 45 minutes, and the run, at the
+  floor or above, went on to `PV006` 77 minutes after its start
+  ([2026-11-11-the-pv-control-holds-74-at-0-25](verification/2026-11-11-the-pv-control-holds-74-at-0-25.md)).
+- **A constant well above +0.25 drives the speed to the top**, from the
+  start program to 120 rps
   ([2026-11-06-pv-surplus-own-draw](verification/2026-11-06-pv-surplus-own-draw.md)).
-- **A mean of 0 holds the speed where it is**: the start program's 50.4 rps
-  for nine minutes, or 120 rps for three
+- **The start program's speed holds for 4 to 8 minutes.** At +0.1 the
+  speed held 50.4 rps for 8 min 20 s after the start and then fell to the
+  floor; on 2026-11-10 a 74 of about +0.8 raised it after about 4 minutes.
+  A mean of 0 held 50.4 for nine minutes, to the minimum runtime
   ([2026-11-07-pv-target-ignored](verification/2026-11-07-pv-target-ignored.md)).
-  The integral dominates; a proportional term alone has nothing to hold with
-  at an error of 0.
 - **A meter-style 74 overshoots.** Written as a meter reads it, with `PV011`
   at 2 minutes, the speed climbed from the start program to the top while
   the mean was still positive, and fell back once it turned; the run ended
@@ -107,11 +120,13 @@ bounded by the heating floor, 24 rps, and the top, 120 rps, which is
   and 95 rps, some 90 s from peak to peak: the lag left is the feed's, 74
   written every 10 s from a 4122 read every 10 s, and the gains are too high
   for it ([2026-11-10-pv-loop-at-0-1-min-swings](verification/2026-11-10-pv-loop-at-0-1-min-swings.md)).
-- **How long the top holds once the mean turns is not explained**: 20 s, 10
-  s and 100 s in three runs.
+- **How long the top holds once the mean falls below the target is not
+  explained**: 20 s, 10 s and 100 s in three runs, and a mean of 0 held 120
+  rps for three minutes
+  ([2026-11-07-pv-target-ignored](verification/2026-11-07-pv-target-ignored.md)).
 
-No value written to 74 alone holds a run at low power past the minimum
-runtime. 4108 does.
+So 74 alone holds a run at low power, the floor's 0.7 kW, as long as the
+store takes; 4108 holds one at 1.0 kW and above.
 
 ## What stops a run
 
@@ -131,17 +146,23 @@ The stops measured:
 | [2026-11-09, noon](verification/2026-11-09-power-limit-floor.md)          | 17 min 30 s | 38          | 2.0                                    | 4108 at 0.9                               |
 | [2026-11-09, evening](verification/2026-11-09-power-limit-held-at-1-0.md) | 30 min 50 s | 37          | 2.0                                    | ?, 4108 at 1.0, store 2.1 K below `PV006` |
 | [2026-11-10](verification/2026-11-10-pv-loop-at-0-1-min-swings.md)        | 8 min 0 s   | 82, rising  | meter-style, mean -0.18                | ?                                         |
+| [2026-11-11](verification/2026-11-11-the-pv-control-holds-74-at-0-25.md)  | 77 min 3 s  | 34, rising  | +0.255, at +0.1 to +0.3 before         | the store at `PV006`                      |
 
 What they show:
 
 - **The store's maximum ends a run** that nothing else ends, with 74 still
-  positive.
+  positive. It is B38 that reaches it: B45 and B125 stood above `PV006` for
+  11 minutes before a stop that came with B38 at 40.01 °C
+  ([2026-11-11-the-pv-control-holds-74-at-0-25](verification/2026-11-11-the-pv-control-holds-74-at-0-25.md)).
 - **0 at 74 ends a run at the minimum runtime** from the start program's
   speed, the store 9 K below `PV006`; at the top it held one past it.
 - **A meter-style run ends at about 8 minutes**, its mean at or below 0,
   three times, before the 10 minutes of 5412, whose help text excepts only a
   fault. A constant 0 at 74 held to 5412, and a negative mean of 40 s at 6
   to 7 minutes did not end a run.
+- **A mean above 0 ends no run**, below the target as well as above it:
+  +0.1 to +0.3 held one for 77 minutes, to `PV006`, with no stop at 8
+  minutes, the minimum runtime or 30 minutes.
 - **4108 below 1.0 ends a run at once**, within 9 s, the minimum runtime
   notwithstanding.
 
@@ -163,10 +184,13 @@ for 3 minutes moved nothing, and +1.0 for 3 minutes moved nothing either; a
 fall that once followed +1.0 came at the end of the minimum runtime
 ([2026-11-07-pv-target](verification/2026-11-07-pv-target.md),
 [2026-11-07-pv-target-ignored](verification/2026-11-07-pv-target-ignored.md)).
+Those steps came while the speed held the start program's; past it, with
+the speed at the floor and 74 at +0.1, 0.15 below the target, -1.0 for 4
+minutes moved nothing either
+([2026-11-11-the-pv-control-holds-74-at-0-25](verification/2026-11-11-the-pv-control-holds-74-at-0-25.md)).
 12763 lists 88 as written, and the PV page prints nothing that follows it.
 On a Navigator 2.0 a user reports no visible effect either. Whether 88
-weighs in the start or the stop, or settles the loop under a meter-style 74,
-is open (`pv-control-of-74-and-88`).
+weighs in the start or the stop is open (`pv-control-of-74-and-88`).
 
 ## The power limit at 4108
 
@@ -200,6 +224,10 @@ and a restart drops it to 0 ([modbus.md](modbus.md#a-restart)). 812184 and
 the help text of `N2D_PVStaticHousepwrActive`, `SSYSPV031`, have a fallback
 house consumption, `SSYSPV030`, take over "when the smart meter hasn't
 delivered any new values for more than 5 hours"; here `SSYSPV031` reads No.
+`SSYSPV030` read 1.0 kW from the update of 2026-11-05 on, against a
+default of 0, and 0 since 2026-11-11: set to 0 under a run with 74 renewed
+every 10 s, it moved nothing
+([2026-11-11-the-pv-control-holds-74-at-0-25](verification/2026-11-11-the-pv-control-holds-74-at-0-25.md)).
 On a Navigator 2.0 the controller kept acting overnight on the last value
 written, by an evcc user's report. What the control does with a stale 74
 is open (`does-the-control-act-on-a-74-no-one-renews`).
@@ -241,16 +269,17 @@ is open (`does-the-control-act-on-a-74-no-one-renews`).
 
 ## Open
 
-- **The loop under a clamp**, with `PV011` at 0.1 min, and lower gains if it
-  still swings: whether a meter-style 74 settles at all.
+- **A meter-style loop at its target**: whether a 74 written as the export
+  settles at +0.25 with `PV011` at 0.1 min, or needs lower gains; and
+  whether the target is the same with `PV011` at 2.0 min.
+- **Why the start program's speed held 8 minutes** at +0.1 and about 4 at
+  +0.8.
 - **A stale 74 overnight**: what the control does once nobody renews it.
 - **A PV hot water charge on 74**, which 812184 says runs to its end however
   far the surplus falls (`pv-hot-water-charge-on-74-untested`).
 - **What ended the run capped at 1.0** before `PV006`.
 - **What holds a PV start off for 30 minutes**, and whether the request
   reason shows a start that waits.
-- **88 under a settling loop**: a step of 88 while a meter-style 74 holds
-  the run.
-- **The form of `IV017` and `IV018`**, and whether the target is 88,
-  `N2_PV_POWERTARGET` or both; a Fachmann walk during a run, searched for
-  `CA20PV` and `POWERTARGET`, would show whether a page lists them.
+- **The form of `IV017` and `IV018`**, and whether the target of +0.25 is
+  `N2_PV_POWERTARGET`; a Fachmann walk during a run, searched for `CA20PV`
+  and `POWERTARGET`, would show whether a page lists them.

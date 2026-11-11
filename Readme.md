@@ -35,9 +35,13 @@ Writing is supported for three targets, each tried on the machine:
 
 - `PvSurplus` (74): the controller reads the value in kW and adds the heat
   pump's own draw back on top. Writing 0 therefore keeps a running charge
-  going, and a negative value ends it.
+  going, and a negative value ends it. Once the start program is over, the
+  controller adjusts the compressor's speed to hold the value at +0.25 kW.
+  So a value between 0 and +0.25 keeps a charge at the lowest speed, about
+  0.7 kW, until the store is full.
 - `PvTarget` (88): writes are accepted and read back, but none of the values
-  tried so far had any effect on a PV run.
+  tried so far had any effect on a PV run, also not while the controller was
+  adjusting the speed.
 - `HeatPumpPowerLimit` (4108): a limit from 1.0 to 1.5 kW caps a PV run
   after its start program, also when it is lowered while the run goes on; a
   limit below 1.0 kW ends the run. A run capped at 1.0 kW held 30 minutes
