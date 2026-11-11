@@ -21,11 +21,9 @@ done).
 
 ## 2. The rest
 
-1. `test-that-an-interrupted-request-ends-the-connection`: needs no
-   machine, so it can go in beside any session that waits for one.
-2. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
+1. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
-3. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
+2. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
    target.
-4. `controller-behavior-when-glt-values-stop-unknown`: a register each time
+3. `controller-behavior-when-glt-values-stop-unknown`: a register each time
    one is listed as a target.

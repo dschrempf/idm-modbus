@@ -53,3 +53,11 @@ that a defect cannot hang `cabal test`.
   is IO, as `driveChecks` and `scheduleFiles` in `test/Main.hs` are; it
   joins them in `main`.
 - No Changelog entry: be28714 has one.
+
+## Outcome
+
+Done on 2026-11-11 (8043d61), as decided: `connectionChecks` in
+`test/Main.hs`, two checks against a loopback listener under a 20 s limit,
+cases 1 to 4 in one and the control case 5 in the other. With the
+`onException` of be28714 removed, the first fails and the second passes.
+`CLAUDE.md` says the test suite's connection checks use the loopback.
