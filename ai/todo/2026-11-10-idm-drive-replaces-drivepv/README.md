@@ -1,150 +1,59 @@
 # `idm-drive` replaces `drivepv.py`
 
-`tools/drivepv.py` packs a phase into one argument, `2.0-4122/20/ein+720/0`,
-and the clamp the next PV run needs would make that language worse. It also
-tails the file of a separate `idm-dump --watch` and starts `idm-write`, a new
-connection, for every write. The runs need the driver a lot, and the loop
-under it is what idm-manager will need too. So the driver becomes Haskell:
-a library loop that reads, for everyone, what each part of a program
-needs; a schedule file; and an executable `idm-drive` that runs the
-schedule.
+`idm-drive` and `idm-web --watch --fachmann` are built, merged and reviewed,
+and the web watch's renewal of the level has been measured on the machine
+(`doc/verification/2026-11-11-the-web-watch-renews-the-fachmann-level.md`).
+What is left: running `idm-drive` on the machine, then switching from
+`tools/drivepv.py`. The clamp run, step 1 of `pv-control-of-74-and-88`
+with `schedules/pv-clamp-0-1.toml`, waits for both.
 
-## Decided on 2026-11-10
+## 1. A dry run on the machine
 
-- **D1.** The driver is written in Haskell. The loop is interface and goes
-  in the library. The schedule is a measurement and goes in a private
-  sublibrary and the executable. New dependencies go into the cabal file,
-  which `shellFor` brings into the dev shell. The Python tools get
-  `python3` in the shell as well.
-- **D2.** One persistent session. The driver reads 1100 and 4122 itself
-  instead of tailing a watch file, and writes through `write`, not
-  `idm-write`.
-- **D3.** A schedule file, not a language on the command line and not
-  options: `schedule-file.md`.
-- **D4.** A JSONL event log: `event-log.md`.
-- **D5.** `tools/drivepv.py` is deleted once `idm-drive` has made a run.
-  The docs' "Reproducing" commands are not translated (R7).
-- **D6.** Every part of a program names the registers it needs. The loop
-  reads the union of those registers once per round and hands each part
-  what it asked for. `idm-drive` gets the watch and the driver in one
-  process, one session and one capture, and `idm-dump --watch` is the same
-  loop with the watch alone: `rounds-and-needs.md`.
-- **D7.** Build it right first, then run the clamp run with it. No
-  stopgap in `drivepv.py`.
+Waits for the user to start it.
 
-## Settled on 2026-11-10, after the proposal
+- A schedule that cannot start the pump: B38 above `PV006`, or a constant
+  `surplus = -0.5`. No schedule has been written for it yet. Running the web
+  watch at `--fachmann` beside it is optional.
+- Run it for a few rounds, end it with SIGTERM, and check in the drive file
+  that the finals went out in the order 88, 4108, 74 and read back.
+- Send a second SIGTERM during the finals, and check that they still
+  complete.
+- The run does not need to force a reconnect: `checks` cover it.
 
-1. **TOML**, read with `toml-parser`. It allows comments and is easy to
-   write by hand; the flake's nixpkgs has 2.0.2.0, not marked broken
-   (`schedule-file.md`).
-2. **One output stream.** The reads keep the exact line format of
-   `idm-dump --watch`, and an event is a line with an `event` field, which
-   a reader of a watch skips (`event-log.md`).
-3. **Schedules tracked in `schedules/`**, each doc citing its file by path
-   (`schedule-file.md`).
-4. **One shared period for every need to begin with**, the schedule's
-   `round`. The design stays open to a period per need
-   (`rounds-and-needs.md`, "Periods").
-5. **The Fachmann level is held by the web watch, not the drive.** Only
-   the web channel has a user level, and the drive writes over Modbus.
-   `idm-web --watch --fachmann` enters the level, renews it, and leaves it
-   on every exit. It is session 3b (`fachmann-in-the-web-watch.md`).
+## 2. Delete `tools/drivepv.py`
 
-## Settled on 2026-11-10, after the review
+- The eight verifications whose "Reproducing" calls it keep their commands:
+  the old runs are not translated into schedules. Each one says that
+  `drivepv.py` was deleted after commit X, the last commit that has it, and
+  that `git show X:tools/drivepv.py` recovers it. They are
+  `doc/verification/` 2026-11-06-pv-surplus-loop,
+  2026-11-07-pv-target, 2026-11-07-pv-target-ignored,
+  2026-11-07-power-limit, 2026-11-08-power-limit-cap,
+  2026-11-09-power-limit-floor, 2026-11-09-power-limit-held-at-1-0 and
+  2026-11-10-pv-loop-at-0-1-min-swings.
+- `what-ended-the-run-capped-at-1-0-before-pv006` plans its run with
+  `drivepv.py`. It needs a schedule in `schedules/` and an `idm-drive`
+  command, with `--watch --fachmann` in place of `--enter-fachmann`.
+- `CLAUDE.md` needs three changes:
+  - The command list: `idm-drive` and `idm-drive --check` in place of
+    `drivepv.py`.
+  - The architecture list: it names neither `IDM.Navigator.Rounds`,
+    `IDM.Navigator.Capture` nor `IDM.Navigator.Drive`, and neither of the
+    private sublibraries `schedule` and `fachmann`.
+  - The measurement paragraph: it should say why `idm-drive` is a
+    measurement tool even though it ships with the package and computes
+    74 from 4122. It runs a schedule fixed before the run, as `drivepv.py`
+    did, and its step stays in the private sublibrary `schedule`.
+- `Readme.md`: in "measurement tools", put `idm-drive` in `drivepv.py`'s
+  place and state as done what "is to take the place of" promises. Update
+  the table row too.
+- `Changelog.md`: the deletion.
+- `captures/README.md`: add the drive capture,
+  `navigator-10-drive-SOFTWARE-YYYY-MM-DD-HHMM.jsonl`, and note that the
+  write log of `tools/drivepv.py` is the old runs' log.
+  `runtable.py --writes` stays for those logs.
 
-- **R1.** A round is a list of reads, each with its own time and session.
-  Writes are not part of a round: the drive reports each as an event
-  (`rounds-and-needs.md`).
-- **R2.** One primitive reads one round and hands the session back;
-  `rounds` and `drive` are loops over it, and it is tested against a fake
-  controller.
-- **R3.** No new name clashes: the drive's end is `Finish r`, with the
-  step's own reason, so `Ending` stays the lost connection's; the read's
-  outcome is `Asked`, so `Outcome` stays the write's.
-- **R4.** The library prints nothing. Rounds and drive report events
-  through a callback, and the executables print them.
-- **R5.** Signals are handled in the executable: handlers for SIGINT and
-  SIGTERM from `unix` that set both to `Ignore`, and the finals in
-  `finally`, under the interruptible mask, so their timeouts still work.
-- **R6.** The start is the first round in which 1100 reads Ein, as in
-  `drivepv.py` (`schedule-file.md`).
-- **R7.** The old runs are not translated into schedules. The docs keep
-  their `drivepv.py` commands and name the last commit that has it.
-- **R8.** The renewal decision of the web watch goes in a private
-  sublibrary, `fachmann`, which the test suite reaches.
-- **R9.** `idm-drive` ships with the package; `CLAUDE.md` says why it is a
-  measurement tool (`sessions.md`, session 5).
-- **R10.** A web watch that fails to enter the level three times in a row
-  keeps reading at Kunde and tries no more
-  (`fachmann-in-the-web-watch.md`).
+## 3. Close
 
-## Where it stands
-
-Sessions 1 to 4 are merged (2026-11-10). On the machine on 2026-11-11, from
-07:40 to 08:50: the web watch at `--fachmann` of session 3b renewed the level
-(`doc/verification/2026-11-11-the-web-watch-renews-the-fachmann-level.md`),
-and beside it session 1's optional `idm-dump --watch 10 1100 4122` wrote 420
-rounds, every read ok, in the line shape of the watch of 2026-11-10 20:57,
-before the change. Session 5 waits for the user to start the dry run of
-`idm-drive`. Settled while building:
-
-- The loss of a round is `Dropped Ending`: `Ending` has a `Lost` (R3).
-- A span (`every`, `for`, `after-start`) passes half a period early, at the
-  round nearest it, since the 1100 read lands a moment early or late.
-- `idm-drive` steps the schedule only in a round with a writable session,
-  so a phase's 88, sent in its first round only, is not lost to a round
-  that could not write.
-- The rest each session's commit message or Haddock states: `driveWith` in
-  IO, `SkipReason` `NoSession | SoftwareDiffers`, exit codes 0, 128+n and 1,
-  and, in the web watch, an exit where the first connection fails, a
-  `userLevel` of `null` for a failure on the wire, and no level read after
-  giving up.
-
-Reviewed on 2026-11-10, and the review's fixes merged the same day:
-
-- An exception that interrupts a request ends the connection, as
-  `Abandoned` (be28714). Its test, a loopback listener, is
-  `test-that-an-interrupted-request-ends-the-connection`.
-- Once the finals begin, nothing thrown stops them: a write or an opening
-  that throws counts as the session lost, within the three openings; a
-  report that throws is passed over and thrown again after them; and an
-  exception in the finals of a drive that had finished makes it
-  `Interrupted`, so a signal at the schedule's end still exits 128+n
-  (0c015c7). A signal that lands while a report blocks is thrown again as
-  the report's failure, and `idm-drive` then exits 1 (the Haddock of
-  `driveWith`).
-- The signal handler interrupts the drive also where its line cannot be
-  written (916752c).
-- The event lines are in `IDM.Navigator.Schedule.Log`, in the private
-  sublibrary `schedule`, checked against `tools/fixtures/drive.jsonl`;
-  the fixture was corrected where it departed from `event-log.md`
-  (dc81cf1).
-- A round that cannot write is not stepped, so outside the finals it
-  leaves no `skip`, and a drive on other software runs until a signal
-  (`event-log.md`; b7b33cc).
-- Kept: a final whose read-back lost the connection goes again, though the
-  controller acknowledged it.
-
-## Files
-
-- `rounds-and-needs.md`: the loop of D6 and what goes in the library. It
-  covers reconnecting, the drive on top of it with its final values and
-  signals, and why the schedule stays out of the library.
-- `schedule-file.md`: the TOML format, its Haskell types, the pure step
-  function the tests run, and the clamp run's schedule as the example.
-- `event-log.md`: the lines `idm-drive` writes, and what `runtable.py`
-  reads of them.
-- `fachmann-in-the-web-watch.md`: `idm-web --watch --fachmann`, which
-  enters the level, renews it before the controller's sixty minutes are up,
-  and leaves it.
-- `sessions.md`: the sessions, which of them can run in parallel, and what
-  each one hands to the next.
-
-## Outside this folder
-
-- `pv-control-of-74-and-88`: its step 1, the clamp run, waits for this.
-- idm-manager's `manager-inputs-outputs-and-algorithm-sketches`: "a pure
-  function `plan`; IO only around it". The drive loop is that IO, and the
-  manager's plan takes the schedule's place.
-- idm-manager's `record-every-input-before-controlling`: a recorder that is
-  a need beside the manager's own.
+Close this note into `closed/done`. Rank the clamp run first in
+`todo/README.md`.

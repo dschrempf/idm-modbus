@@ -5,9 +5,9 @@ its own note. The PV control comes first, then the rest.
 
 ## 1. PV control
 
-First `idm-drive-replaces-drivepv`, its sessions in order: the clamp run
-waits for it, since a clamp form in `drivepv.py` was dropped for it
-(2026-11-10).
+First `idm-drive-replaces-drivepv`: a dry run of `idm-drive` on the
+machine, then the switch from `drivepv.py`. The clamp run waits for it,
+since a clamp form in `drivepv.py` was dropped for it (2026-11-10).
 
 Then `pv-control-of-74-and-88`, in its README's order: the clamp run, with
 `PV011` at 0.1 min; lower gains if it leaves a swing; the overnight test of
@@ -17,7 +17,9 @@ Then `pv-control-of-74-and-88`, in its README's order: the clamp run, with
 
 Each run on 74 or 88 watches the request reason too, with
 `idm-web --watch SECONDS --reason` (`watch-the-request-reason-pv-in-idm-web`,
-done).
+done). `idm-drive-reads-the-web-watch-too` would put that watch into the
+drive's process. No run waits for it, so it comes after the clamp run, or
+alongside it.
 
 ## 2. The rest
 
