@@ -5,11 +5,15 @@ its own note. The PV control comes first, then the rest.
 
 ## 1. PV control
 
-1. `pv-control-of-74-and-88`, in its README's order, the clamp run first:
-   `idm-drive` is in `drivepv.py`'s place (`idm-drive-replaces-drivepv`,
-   done), so nothing waits.
-2. `idm-drive-reads-the-web-watch-too`: no run waits for it, so it comes
-   after the clamp run, or alongside it.
+1. `idm-drive-takes-a-new-value-without-ending-the-run`: the run of
+   2026-11-11 was steered by hand through a drive per step, ended with
+   SIGKILL; the next runs on 74 want the same, so it comes first.
+2. `pv-control-of-74-and-88`, in its README's order, the clamp around the
+   target first; it can run before the first is done, through a drive per
+   step as on 2026-11-11.
+3. `idm-drive-reads-the-web-watch-too`: no run waits for it; settle it
+   together with the first, which aims at one process and one capture per
+   run too.
 
 ## 2. The rest
 

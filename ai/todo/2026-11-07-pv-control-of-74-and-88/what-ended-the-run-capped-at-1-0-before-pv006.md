@@ -11,19 +11,13 @@ run needs to know what ends it.
 
 ## Candidates
 
-None ruled out:
-
-- **B45 `Ladefühler` against `PV006`.** B45 is the water going into the
-  store, about 2 K above B38 while it charges. The graph's five-minute
-  means put it near 39.6 °C at the stop, below 40
-  (`doc/verification/2026-11-09-graphs-record-every-channel.md`). Against
-  it, as against the flow: on 2026-11-08 it must have passed 40 well before
-  that run ended at B38 40.00 °C.
-- **The flow, B33, against `PV006`.** It read 39.8 °C at the stop. Against
-  it: on 2026-11-08 B38 reached 40.00 °C, so the flow, above B38 while the
-  store charges, stood above 40 for a while without ending that run.
 - **A time of about 30 minutes**, for a capped run or one at low speed; the
-  run on 1.5 held 46 min 30 s.
+  run on 1.5 held 46 min 30 s. An uncapped run at the floor and above held
+  77 minutes on 2026-11-11, so a time would be the cap's.
+- **Ruled out: B45 `Ladefühler` or the flow against `PV006`.** On
+  2026-11-11 B45 and B125 stood above 40 °C for 11 minutes before a stop
+  that came with B38 at 40.01 °C
+  (`doc/verification/2026-11-11-the-pv-control-holds-74-at-0-25.md`).
 
 ## How we might solve it
 
@@ -32,8 +26,7 @@ None ruled out:
 the Modbus watch (1050, named after B33, answers -1 on this machine:
 `doc/verification/2026-09-20-display.md`), and a webprobe walk within half an
 hour of the stop, while the graph still holds its five-minute samples. A stop
-near 30 minutes with B38, B45 and the flow well below 40 is the time; a stop as
-B45 or the flow reaches 40 is the temperature.
+near 30 minutes with B38 well below 40 is the time.
 
 The 2026-11-09 run as a schedule for `idm-drive`,
 `schedules/pv-limit-1-0.toml`, with the watch of
