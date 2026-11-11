@@ -3,7 +3,7 @@
 ## The question
 
 Three volatile `BOOL` registers let a building management system ask the
-controller to run. 812170 says this much:
+controller to run. 812663 says this much:
 
 - 1710 `Anforderung Heizen`: in a system that only manages its store and
   runs no heating control, the heat request comes through 1710, with the
@@ -42,10 +42,10 @@ spent:
    withdraw.
 3. With the circuits idle above the heating limit, write 1710 = 1 and watch
    1090, 1091, B38 and the store's target.
-4. Record each in a dated `doc/`, and the answers in the Haddock of the
-   targets.
+4. Record each in a dated `doc/verification/`, and the answers in the
+   Haddock of the targets.
 
-## 2026-11-09: two reports from other machines
+## Two reports from other machines
 
 Both unmeasured here, and both from the Navigator 2.0; `doc/sources.md`,
 "Community work", cites them.
