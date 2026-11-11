@@ -1221,7 +1221,7 @@ logChecks = do
           && maybe False (exactly (t' "01:01.700")) (writeOf (limitOf (-1)) (Sent Confirmed))
           && maybe False (exactly (t' "01:01.800")) (writeOf (surplusOf (-0.5)) (Sent (ReadBackFailed (DeviceException ServerDeviceFailure))))
       ),
-      ( "idm-drive's write lines of the outcomes the fixture lacks say what event-log.md says",
+      ( "idm-drive's write lines of the outcomes the fixture lacks have its fields, and the outcomes tools/runtable.py reads",
         fmap (Log.eventLine (zoned (t' "00:00.000"))) (writeOf (surplusOf 1) (Sent Unconfirmed))
           == Just (line' (t' "00:00.000") "write" [("address", "74"), ("value", "1.0"), ("outcome", "\"unconfirmed\""), ("detail", "null")])
           && fmap (Log.eventLine (zoned (t' "00:00.000"))) (writeOf (surplusOf (1 / 0)) (Refused (NotFinite (1 / 0))))
@@ -1245,7 +1245,7 @@ logChecks = do
         all (< '\x80') (Log.string escaped)
           && A.decode (BL.pack (Log.string escaped)) == Just (A.String (T.pack escaped))
       ),
-      ( "the drive fixture has no line of a kind event-log.md does not name",
+      ( "the drive fixture has no line of a kind IDM.Navigator.Schedule.Log does not write",
         all
           (`elem` ["begin", "session", "unopened", "lost", "phase", "start", "stop", "export", "skip", "write", "signal", "final", "end"])
           [T.unpack k | Just (A.Object o) <- map parsed fixture, Just (A.String k) <- [KM.lookup (K.fromString "event") o]]
