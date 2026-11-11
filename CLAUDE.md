@@ -192,3 +192,8 @@ controller's software, so it says which software a measurement was made on.
 - Haddock header on every module: name, description, copyright, license.
 - German register names and the manufacturer's identifiers (`FLOAT`, `FW030`,
   `B32`) are quoted verbatim; prose is US English.
+- Commits follow Conventional Commits, whatever the older history shows:
+  `type(scope): summary`, the summary in the imperative and lower case, the
+  scope optional and free. Types: `feat`, `fix`, `docs`, `test`, `refactor`,
+  `build`, `chore`; a change only to the AI directory is `chore(ai)`. A merge
+  keeps git's default message.
