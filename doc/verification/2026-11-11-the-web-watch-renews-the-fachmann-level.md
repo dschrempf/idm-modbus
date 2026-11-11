@@ -54,11 +54,6 @@ their tables to the last round, at 08:50:25.
 
 ## What it does not settle
 
-- **Whether the renewal was needed.** On 20.24-2608 a level once held 73
-  minutes unrenewed
-  ([2026-11-05-software-update](2026-11-05-software-update.md)), so
-  that the renewed level held past 08:40:37 does not show that the first
-  entry would have ended then.
 - **The watch's other paths on the machine**: a level that falls back on
   its own, an entry that does not take, giving up after three. The checks
   of `decide` cover them against no machine.

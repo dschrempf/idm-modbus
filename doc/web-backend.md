@@ -65,21 +65,18 @@ leaves it by acknowledging the notice `N2_USERLEVELACTIVE`. The display
 switches with it: the level is the controller's, not the connection's. A
 restart returns it to Kunde.
 
-The controller ends the level itself. On 20.24-1574 it fell back sixty
-minutes after the entry, however often it was read meanwhile
-([2026-10-01-charge](verification/2026-10-01-charge.md)). On 20.24-2608 it
-fell back after about ten and eight minutes on 2026-11-05, held 73 minutes
-until left by hand on 2026-11-06, and held sixty minutes under a 10 s watch
-on 2026-11-09
-([2026-11-05-software-update](verification/2026-11-05-software-update.md),
+The controller ends the level sixty minutes after the entry, however often
+it was read meanwhile
+([2026-10-01-charge](verification/2026-10-01-charge.md),
 [2026-11-09-heating-run-as-on-1574](verification/2026-11-09-heating-run-as-on-1574.md)).
-What ends it on 20.24-2608 is open. An entry sent seconds after a leave
-answers success and leaves the level at Kunde; sent again 20 s to 1.5 min
-later it takes.
+Anyone else can change the level in the meantime: a person at the display,
+the installer remotely. An entry sent seconds after a leave answers success
+and leaves the level at Kunde; sent again 20 s to 1.5 min later it takes.
 
-`idm-web --watch --fachmann` holds the level for a watch: it enters it,
-renews it 55 minutes from the entry by leaving it and entering again 30 s
-later, and leaves it on exit. A 70-minute watch on 2026-11-11 held it so,
+`idm-web --watch --fachmann` holds the level for a watch: it reads the
+level in every round, enters it, renews it 55 minutes from the entry by
+leaving it and entering again 30 s later, enters it again where it fell
+back, and leaves it on exit. A 70-minute watch on 2026-11-11 held it so,
 the renewal took, and in the pause 5888 and 6245 answered "not accessible"
 at once ([2026-11-11-the-web-watch-renews-the-fachmann-level](verification/2026-11-11-the-web-watch-renews-the-fachmann-level.md)).
 

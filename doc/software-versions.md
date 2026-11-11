@@ -56,8 +56,7 @@ The update kept the register map: a scan of the 682 addresses then in the
 table read every one as before, answered or refused, with the same widths,
 but for 1999, which refused and now reads `0000`. It split 4112 into single
 registers, added 18 rows to the register page, two settings to the PV menu,
-`SSYSPV030` and `SSYSPV031`, and renamed graph channels 112 and 365. The
-Fachmann level stopped lasting a fixed sixty minutes
+`SSYSPV030` and `SSYSPV031`, and renamed graph channels 112 and 365
 ([2026-11-05-software-update](verification/2026-11-05-software-update.md)).
 The table was rebuilt on 20.24-2608 the same day.
 

@@ -65,7 +65,9 @@ Both work on the machine, and the display switches with them. The level is
 the controller's, not the connection's: it holds until it is left or the
 controller ends it, sixty minutes from the entry, however often it was
 read meanwhile, on both softwares
-(`doc/verification/2026-11-09-heating-run-as-on-1574.md`). An entry sent
+(`doc/verification/2026-11-09-heating-run-as-on-1574.md`). Anyone else may
+change it sooner, a person at the display or the installer remotely, so a
+watch that needs it checks it every round and enters it again. An entry sent
 seconds after a leave answered success and left the level at Kunde; sent
 again 20 s later it took (2026-11-10,
 `captures/navigator-10-level-20.24-2608-2026-11-10-2056.log`). The frost
