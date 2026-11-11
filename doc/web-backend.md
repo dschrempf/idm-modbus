@@ -77,6 +77,12 @@ What ends it on 20.24-2608 is open. An entry sent seconds after a leave
 answers success and leaves the level at Kunde; sent again 20 s to 1.5 min
 later it takes.
 
+`idm-web --watch --fachmann` holds the level for a watch: it enters it,
+renews it 55 minutes from the entry by leaving it and entering again 30 s
+later, and leaves it on exit. A 70-minute watch on 2026-11-11 held it so,
+the renewal took, and in the pause 5888 and 6245 answered "not accessible"
+at once ([2026-11-11-the-web-watch-renews-the-fachmann-level](verification/2026-11-11-the-web-watch-renews-the-fachmann-level.md)).
+
 ## The request reason
 
 The `system` overview's `heatpump` carries `operationMode` and, while a

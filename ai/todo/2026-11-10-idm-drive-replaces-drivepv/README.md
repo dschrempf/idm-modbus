@@ -80,9 +80,13 @@ schedule.
 
 ## Where it stands
 
-Sessions 1 to 4 are merged (2026-11-10). Session 5 waits for the user to
-start the runs on the machine: the dry run of `idm-drive` and the web watch
-at `--fachmann` of more than 55 minutes. Settled while building:
+Sessions 1 to 4 are merged (2026-11-10). On the machine on 2026-11-11, from
+07:40 to 08:50: the web watch at `--fachmann` of session 3b renewed the level
+(`doc/verification/2026-11-11-the-web-watch-renews-the-fachmann-level.md`),
+and beside it session 1's optional `idm-dump --watch 10 1100 4122` wrote 420
+rounds, every read ok, in the line shape of the watch of 2026-11-10 20:57,
+before the change. Session 5 waits for the user to start the dry run of
+`idm-drive`. Settled while building:
 
 - The loss of a round is `Dropped Ending`: `Ending` has a `Lost` (R3).
 - A span (`every`, `for`, `after-start`) passes half a period early, at the

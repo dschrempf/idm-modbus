@@ -90,6 +90,9 @@ first of them on, and at Kunde that leave sends nothing. It exits at once,
 having sent nothing, on other software, at a level neither Kunde nor
 Fachmann, or at Fachmann without the notice. Each change of level is a line
 of the webwatch with `level` and `userLevel`, and no `request`.
+On the machine, a 70-minute watch renewed the level at 55 minutes, and the
+entry after the 30 s gap took
+(`doc/verification/2026-11-11-the-web-watch-renews-the-fachmann-level.md`).
 
 Xerolux/idm-heatpump-hass, `docs/wiki/Navigator-Protocol-Analysis.md` in
 `community/`, says the opposite: that a code spelled from the clock opens
