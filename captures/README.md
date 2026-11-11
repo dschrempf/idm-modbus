@@ -17,6 +17,7 @@ The kind of capture is in the name:
     navigator-10-level-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-web HOST --leave-fachmann, --enter-fachmann
     navigator-10-show-SOFTWARE-YYYY-MM-DD-HHMM.txt        idm-web HOST --show SETTING...
     navigator-10-write-SOFTWARE-YYYY-MM-DD-HHMM.log       idm-write HOST ADDRESS VALUE, or tools/drivepv.py
+    navigator-10-drive-SOFTWARE-YYYY-MM-DD-HHMM.jsonl     idm-drive HOST SCHEDULE
 
 The time is the local minute the capture started. `SOFTWARE` is the
 controller's software as `doc/software-versions.md` spells it, `20.24-2608`.
@@ -70,7 +71,13 @@ time: the settings as they stood before, during and after an experiment that
 changed them.
 
 A `write` log is what `idm-write` printed, a line per write, each after the
-laptop's time.
+laptop's time. The write logs of the PV runs before `idm-drive` are what
+`tools/drivepv.py` printed, which commit 7bc8367d7f42 is the last to have.
+
+A `drive` capture is what `idm-drive` printed: a line per read, as a
+`watch` has it, and a line per event, with an `event` field, `begin` first,
+with the pid and the schedule's text, and `end` last, with why the run
+ended. `IDM.Navigator.Schedule.Log` says which lines a round leaves.
 
 A `webui` capture is a directory of the web interface's own files, as the
 controller serves them over HTTP on port 80, each at its path on the server

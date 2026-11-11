@@ -97,23 +97,27 @@ read it. With the flag, it reads the current value first and writes nothing
 if it already matches. A confirmed write only means that the register holds
 the new value, not that the controller acts on it.
 
-Three of the scripts in `tools/` are for taking measurements, not for
-everyday use:
+`idm-drive` and two of the scripts in `tools/` are for taking
+measurements, not for everyday use:
 
+- `idm-drive HOST SCHEDULE` runs a schedule file from `schedules/`, fixed
+  before the run, in one process and one session: it reads the schedule's
+  watch and the compressor's status and draw every round, writes 74, 88 and
+  4108 as the current phase says, and writes the schedule's final values to
+  88, 4108 and 74 on every exit, SIGINT and SIGTERM included. On the
+  machine, a SIGTERM ends a run with the finals written and read back, and
+  a second one does not cut them short
+  (`doc/verification/2026-11-11-idm-drive-writes-its-finals-through-a-second-sigterm.md`).
+  Its output is a single JSONL stream, the reads in the format of
+  `idm-dump --watch` and the events beside them. `idm-drive --check SCHEDULE`
+  prints the phases of a schedule without connecting. It took the place of
+  `tools/drivepv.py`, which wrote such a schedule through `idm-write` beside
+  `idm-dump --watch`.
 - `tools/webprobe.py` records what the web backend answers. It only sends
   read requests.
-- `tools/drivepv.py` writes a schedule, fixed before the run, to 74, 88 and
-  4108 through `idm-write`, while `idm-dump --watch` runs alongside.
-- `tools/runtable.py` lines up what was written with what the controller did.
-
-`idm-drive HOST SCHEDULE` is to take the place of `tools/drivepv.py`. It runs
-a schedule file from `schedules/` in one process and one session: it reads
-the schedule's watch and the compressor's status and draw every round,
-writes 74, 88 and 4108 as the current phase says, and writes the schedule's
-final values to 88, 4108 and 74 on every exit, SIGINT and SIGTERM included.
-Its output is a single JSONL stream, the reads in the format of
-`idm-dump --watch` and the events beside them. `idm-drive --check SCHEDULE`
-prints the phases of a schedule without connecting.
+- `tools/runtable.py` lines up what was written with what the controller
+  did, from the output of `idm-drive`, or from a watch and the write log of
+  `tools/drivepv.py` for the runs before it.
 
 All of these programs read the controller's software version first. Writes
 and changes of the user level only go ahead if it matches the version the
@@ -138,7 +142,7 @@ port 502 with unit id 1.
 | `captures/`                                   | raw answers from a real machine, apart from what the parameter list already says; not in git; `captures/README.md` explains the files              |
 | `tools/transcribe.py`                         | regenerates both TSVs and the targets module from the manual's PDF                                                                                 |
 | `tools/webprobe.py`                           | records the web backend's answers, using reads only                                                                                                |
-| `tools/drivepv.py`, `tools/runtable.py`       | write a fixed schedule to the PV targets, and line it up with what the controller did                                                              |
+| `schedules/`, `tools/runtable.py`             | the schedules `idm-drive` runs, fixed before a run, and lining a run up with what the controller did                                               |
 | `lib/core/IDM/Modbus/TCP/Internal.hs`         | Modbus framing; `lib/core/IDM/Modbus/TCP.hs` is the part a consumer can use, which can neither connect nor write                                   |
 | `lib/core/IDM/Navigator/Register.hs`          | the types that describe a register, and decoding                                                                                                   |
 | `lib/idm-modbus/IDM/Navigator/Table.hs`       | the register table, parsed at compile time                                                                                                         |

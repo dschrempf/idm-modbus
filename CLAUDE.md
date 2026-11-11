@@ -20,8 +20,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     IDM_PIN=... cabal run idm-web -- HOST --watch 10 --reason --fachmann 4768 5888 > captures/navigator-10-webwatch-SOFTWARE-YYYY-MM-DD-HHMM.jsonl   # holds the Fachmann level
     IDM_PIN=... cabal run idm-web -- HOST --enter-fachmann   # and --leave-fachmann
     cabal run idm-write -- HOST 74 3.0               # a target; --eeprom where it costs a cycle
-    tools/drivepv.py HOST WATCH --final -0.5 2.0-4122/20/ein+720/0 2.0-4122/20/ein+1140/1.0 > captures/navigator-10-write-SOFTWARE-YYYY-MM-DD-HHMM.log
-    tools/runtable.py WATCH --web WEBWATCH --writes WRITELOG   # a run lined up by time; --last for a status line
+    cabal run idm-drive -- HOST schedules/dry-run.toml > captures/navigator-10-drive-SOFTWARE-YYYY-MM-DD-HHMM.jsonl   # SIGTERM the pid of its begin line
+    cabal run idm-drive -- --check schedules/dry-run.toml   # a schedule's phases, connecting to nothing
+    tools/runtable.py DRIVE --web WEBWATCH   # a run lined up by time; --last for a status line; a watch and --writes for a run before idm-drive
     python3 tools/test_runtable.py     # runtable.py on tools/fixtures/, and on captures/ where it has write logs
     ormolu -i $(git ls-files '*.hs' ':!lib/idm-modbus/IDM/Navigator/Target.hs')   # formatting; transcribe.py writes Target.hs
     cabal-fmt -i idm-modbus.cabal
@@ -118,6 +119,20 @@ The modules stack, each refusing to know the next one's business:
   sublibrary `core`, which the library re-exports but for that module and
   `IDM.Modbus.TCP.Internal`: a consumer reaches a register only through a
   target, and a connection only through a session.
+- `IDM.Navigator.Rounds` — reading what each part of a program needs, round
+  after round: the union of the `Need`s once per `Period`, in one session,
+  and each part handed the reads it named. A lost connection ends the
+  session and the round, and the next round opens a new one. Nothing
+  prints: a read, an opening and a loss are each a `RoundEvent`, handed to
+  a callback.
+- `IDM.Navigator.Capture` — the line of a watch capture, `watchLine`, and the
+  fields the other captures share with it.
+- `IDM.Navigator.Drive` — the loop every driver shares: after each round it
+  writes the `Command`s its step answers with, to a `Target 'Free` only and
+  only where `writable` gives a `Writable`, and on every exit the final
+  values, which nothing thrown once they began stops. The step is where a
+  strategy goes, so the module holds none, and it installs no signal
+  handler.
 
 The web backend has a stack of its own beside it, joined to the first only by
 `Host` and by the parameter identifier:
@@ -135,6 +150,11 @@ The web backend has a stack of its own beside it, joined to the first only by
   leaving it. The level is the controller's, not the connection's, and the
   controller ends it too, sixty minutes from the entry; anyone else, at the
   display or remotely, may change it sooner (`doc/web-backend.md`).
+- `IDM.Navigator.Web.Fachmann` — what `idm-web --watch --fachmann` decides
+  about the level each round: entering it, renewing it 55 minutes from each
+  entry, entering again where it fell back, and reading on at Kunde after
+  three entries that did not take. It is the private sublibrary `fachmann`,
+  so that the test suite reaches it and a consumer does not.
 
 Writing some registers wears out an EEPROM (a register's `Persistence`), so
 the cost is in the type of every target and every outcome rather than in an
@@ -149,8 +169,14 @@ to its consumers, and no such strategy goes in here, not even as an example. A
 write of the surplus register 74, of its target 88, or of the power limit 4108
 is interface; computing any of them is not.
 A schedule fixed before a run, written to see how the controller responds,
-is a measurement and not a strategy: `tools/drivepv.py` writes one, and
-`tools/runtable.py` lines up what it wrote with what the controller did.
+is a measurement and not a strategy: `idm-drive` runs one from `schedules/`,
+and `tools/runtable.py` lines up what it wrote with what the controller did.
+`idm-drive` ships with the package and computes 74 from 4122, the PV a
+phase states less the heat pump's draw, and stays a measurement all the
+same: the schedule, fixed before the run, states what it computes and when. The
+schedule, its parser and its step are the private sublibrary `schedule`,
+which a consumer does not reach, and the loop they run on,
+`IDM.Navigator.Drive`, holds no strategy.
 
 ## Things the wire does that surprise people
 

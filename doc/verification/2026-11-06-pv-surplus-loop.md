@@ -128,3 +128,7 @@ The run used two scratch scripts that `tools/drivepv.py` replaced; the
 schedule above is theirs. The table's mean of 74 was taken at the times of
 6245's samples; `tools/runtable.py` takes it at the rounds of the Modbus
 watch, so its figures differ from the table's by up to one round.
+
+`tools/drivepv.py` was deleted after commit 7bc8367d7f42, the last that has it,
+and `git show 7bc8367d7f42:tools/drivepv.py` recovers it. `idm-drive`, with
+a schedule of `schedules/`, took its place.

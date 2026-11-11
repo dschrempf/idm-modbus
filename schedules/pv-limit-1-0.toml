@@ -1,0 +1,21 @@
+# 74 at a constant 2.0 and 4108 at 1.0 from before the start, to the stop.
+round = 10
+watch = [74, 88, 4108, 1008, 1066, 1070, 1090, 1091, 1100, 1074, 4122, 1004, 1098]
+
+[final]
+surplus = -0.5
+target = 0.0
+limit = -1.0
+
+[[phase]]
+surplus = 2.0
+every = 20
+target = 0.0
+limit = 1.0
+until = "start"
+
+[[phase]]
+surplus = 2.0
+every = 20
+limit = 1.0
+until = "stop"

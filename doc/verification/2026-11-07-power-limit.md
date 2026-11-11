@@ -121,3 +121,7 @@ With the PV menu as above, at Kunde level for Modbus:
 
 The last phase runs until the compressor stops, so the driver's final
 values cannot be what ends the run.
+
+`tools/drivepv.py` was deleted after commit 7bc8367d7f42, the last that has it,
+and `git show 7bc8367d7f42:tools/drivepv.py` recovers it. `idm-drive`, with
+a schedule of `schedules/`, took its place.

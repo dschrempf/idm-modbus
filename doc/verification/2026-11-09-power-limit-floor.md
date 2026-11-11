@@ -164,3 +164,7 @@ at its first poll. The webprobe capture, about 5 minutes after the
 compressor start:
 
     IDM_PIN=... tools/webprobe.py HOST > webapi.json
+
+`tools/drivepv.py` was deleted after commit 7bc8367d7f42, the last that has it,
+and `git show 7bc8367d7f42:tools/drivepv.py` recovers it. `idm-drive`, with
+a schedule of `schedules/`, took its place.

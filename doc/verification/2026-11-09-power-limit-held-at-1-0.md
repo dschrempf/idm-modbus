@@ -163,3 +163,7 @@ With the PV menu as above, at Kunde level for Modbus:
 and after the run
 
     IDM_PIN=... tools/webprobe.py HOST > webapi.json
+
+`tools/drivepv.py` was deleted after commit 7bc8367d7f42, the last that has it,
+and `git show 7bc8367d7f42:tools/drivepv.py` recovers it. `idm-drive`, with
+a schedule of `schedules/`, took its place.

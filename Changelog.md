@@ -324,6 +324,12 @@
   error, which `readRegisters` no longer throws. `ConnectionClosed` is an
   `Ending` now. `parseResponse` reads a frame as the answer to its request.
 
+### Removed
+
+- `tools/drivepv.py`, whose place `idm-drive` took. The verifications that
+  ran it name the last commit that has it. `tools/runtable.py --writes`
+  stays, for the write logs of the runs before.
+
 ### Fixed
 
 - `readRegisters` took whatever answer came next for the answer to its request.

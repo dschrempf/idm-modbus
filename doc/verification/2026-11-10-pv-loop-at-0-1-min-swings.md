@@ -129,3 +129,7 @@ With the PV menu as above and `PV011` at 0.1 min:
       2.0/10/ein/0 2.0-4122/10/ein+360 1.5-4122/10/+180 1.2-4122/10/+180 \
       1.0-4122/10/+180 0.8-4122/10/aus > write.log
     tools/runtable.py watch.jsonl --web webwatch.jsonl --writes write.log --mean 6
+
+`tools/drivepv.py` was deleted after commit 7bc8367d7f42, the last that has it,
+and `git show 7bc8367d7f42:tools/drivepv.py` recovers it. `idm-drive`, with
+a schedule of `schedules/`, took its place.
