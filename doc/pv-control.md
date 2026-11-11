@@ -166,7 +166,7 @@ fall that once followed +1.0 came at the end of the minimum runtime
 12763 lists 88 as written, and the PV page prints nothing that follows it.
 On a Navigator 2.0 a user reports no visible effect either. Whether 88
 weighs in the start or the stop, or settles the loop under a meter-style 74,
-is open (`does-88-set-the-export-the-pv-controller-holds`).
+is open (`pv-control-of-74-and-88`).
 
 ## The power limit at 4108
 

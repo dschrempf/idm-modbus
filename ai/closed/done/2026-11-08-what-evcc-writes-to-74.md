@@ -28,21 +28,11 @@ The YAML of evcc-io/evcc#35894 writes `max(0, setpoint − draw)`, that is the
 grid meter's export less evcc's `residualPower`, renewed every 60 s by a
 watchdog with a 2-minute timeout. Its author holds that an iDM behaves the
 same and the YAML carries over with the registers changed; untested on an
-iDM.
+iDM. Here a value below 0 ends a run; clamped at 0, a run ends at `PV006`
+or at the minimum runtime.
 
-On this machine that is the meter-style run of the README, with
-two differences:
+## Outcome
 
-- **Renewed every 60 s.** The Lambda wants a value within 5 minutes and
-  smooths over 10 to 15 itself; here 74 is held for at least five hours
-  (`SSYSPV030`) and smoothed over `PV011`.
-- **Never negative.** Here a value below 0 ends a run. Clamped, a run ends
-  at `PV006`, or at the minimum runtime where 0 ends it, as on the evening
-  of 2026-11-07 but not on 2026-11-06. That run should feed the export
-  unclamped, and note what the same run would do clamped.
-
-## Reported
-
-Answered in evcc-io/evcc#19002 on 2026-11-08: the double count, not to
-clamp at 0, and 4108 as a cap set before the start. Once the meter-style run is done,
-its outcome goes there too.
+Reported in evcc-io/evcc#19002: the double count, not to clamp at 0, 4108
+as a cap set before the start, then the swing with `PV011` at 0.1 min. Closed on
+2026-11-11; the clamp run is `pv-control-of-74-and-88`'s.
