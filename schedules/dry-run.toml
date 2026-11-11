@@ -1,0 +1,14 @@
+# A dry run that cannot start the pump: 74 held at an import of 0.5 kW.
+round = 10
+watch = [74, 88, 4108, 1008, 1066, 1070, 1090, 1091, 1100, 1074, 4122, 1004, 1098]
+
+[final]
+surplus = -0.5
+target = 0.0
+limit = -1.0
+
+[[phase]]
+surplus = -0.5
+target = 0.0
+limit = -1.0
+for = 600
