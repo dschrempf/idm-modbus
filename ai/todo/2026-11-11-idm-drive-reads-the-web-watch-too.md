@@ -33,6 +33,6 @@ read the web watch's settings, and the drive holds the Fachmann level.
 
 ## Outside this note
 
-- `idm-drive-replaces-drivepv` comes first.
+- `idm-drive-replaces-drivepv`, done.
 - The clamp run of `pv-control-of-74-and-88` does not wait for this: it
   runs the two processes.

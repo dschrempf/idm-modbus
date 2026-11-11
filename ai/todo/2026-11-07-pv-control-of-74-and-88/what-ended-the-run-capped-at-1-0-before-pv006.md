@@ -35,33 +35,10 @@ hour of the stop, while the graph still holds its five-minute samples. A stop
 near 30 minutes with B38, B45 and the flow well below 40 is the time; a stop as
 B45 or the flow reaches 40 is the temperature.
 
-The 2026-11-09 run as a schedule for `idm-drive`, the watch of
+The 2026-11-09 run as a schedule for `idm-drive`,
+`schedules/pv-limit-1-0.toml`, with the watch of
 `schedules/pv-clamp-0-1.toml`, which has 1066 and 1070:
 
-```toml
-# 74 at a constant 2.0 and 4108 at 1.0 from before the start, to the stop.
-round = 10
-watch = [74, 88, 4108, 1008, 1066, 1070, 1090, 1091, 1100, 1074, 4122, 1004, 1098]
-
-[final]
-surplus = -0.5
-target = 0.0
-limit = -1.0
-
-[[phase]]
-surplus = 2.0
-every = 20
-target = 0.0
-limit = 1.0
-until = "start"
-
-[[phase]]
-surplus = 2.0
-every = 20
-limit = 1.0
-until = "stop"
-```
-
     IDM_PIN=... cabal run idm-web -- HOST --watch 10 --reason --fachmann 4768 5888 6245 10263 12763 > webwatch.jsonl
-    cabal run idm-drive -- HOST schedules/SCHEDULE.toml > drive.jsonl
+    cabal run idm-drive -- HOST schedules/pv-limit-1-0.toml > drive.jsonl
     IDM_PIN=... tools/webprobe.py HOST > webapi.json

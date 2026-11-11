@@ -1,5 +1,14 @@
 # `idm-drive` replaces `drivepv.py`
 
+**Done, 2026-11-11.** The dry run held on the machine: a SIGTERM ended a
+run with the finals written in order and read back, and a second one did
+not cut them short
+(`doc/verification/2026-11-11-idm-drive-writes-its-finals-through-a-second-sigterm.md`,
+with `schedules/dry-run.toml`). `tools/drivepv.py` is deleted; the eight
+verifications name 7bc8367d7f42, the last commit that has it, and the run
+of `what-ended-the-run-capped-at-1-0-before-pv006` is
+`schedules/pv-limit-1-0.toml`. What follows is the plan as it stood.
+
 `idm-drive` and `idm-web --watch --fachmann` are built, merged and reviewed,
 and the web watch's renewal of the level has been measured on the machine
 (`doc/verification/2026-11-11-the-web-watch-renews-the-fachmann-level.md`).

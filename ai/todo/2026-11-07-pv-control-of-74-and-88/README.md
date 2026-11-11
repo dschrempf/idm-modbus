@@ -13,8 +13,7 @@ run.
 
 1. The clamp run: 74 as the export, clamped to ±0.1 kW, every 10 s, with
    `PV011` at 0.1 min, to see whether the clamp damps the swing of
-   2026-11-10 and the run passes 8 minutes. Waits for
-   `idm-drive-replaces-drivepv`
+   2026-11-10 and the run passes 8 minutes
    (`the-clamp-run-with-pv011-at-0-1-min.md`).
 2. Lower gains, `IV017` to `IV019`, if the clamp leaves a swing: an
    EEPROM cycle at the display each way.
@@ -46,7 +45,7 @@ can change.
 - `what-evcc-writes-to-74`, done: stock evcc counts the draw twice here,
   reported in evcc-io/evcc#19002.
 - `todo/README.md`: where this folder stands among the other todos.
-- `idm-drive-replaces-drivepv`: the driver step 1 waits for.
+- `idm-drive-replaces-drivepv`, done: `idm-drive` drives every run.
 - `controller-behavior-when-glt-values-stop-unknown`: the question of step
   3 for every register a building management system writes.
 - `what-a-power-cycle-does-to-74-and-the-controller`, an idea: open for a
