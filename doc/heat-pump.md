@@ -2,8 +2,8 @@
 
 How the machine behaves, as far as a consumer of the registers needs to
 know: its configuration, the compressor's speeds and draws, a start, a hot
-water charge, frost protection. What the PV control adds is in
-[pv-control.md](pv-control.md).
+water charge, frost protection, a circuit's pump. What the PV control adds
+is in [pv-control.md](pv-control.md).
 
 ## The installation
 
@@ -107,3 +107,16 @@ above 10 °C. A circuit not in frost protection reads 0.0 at its target
 ([2026-11-06-frost-protection](verification/2026-11-06-frost-protection.md)).
 Only the system's mode "Aus", -1 at 1005, is documented to stop it. Where it
 lets go, and what `AE026` governs, is open.
+
+## A circuit's pump
+
+A circuit's pump stops while the circuit's flow is above its maximum flow,
+`HSx04`, though the circuit is in "Heizen" with a request, and starts within
+30 s once the maximum is raised above the flow. The set flow does not stop
+it: the pump runs with the flow above the set flow. `HSx04` also caps the
+set flow. Circuit D's mixer is faulty, so with its pump running D's flow
+rises to the buffer's temperature, and a maximum below that stops the pump
+minutes after it starts
+([2026-11-24-a-circuits-pump-stops-while-its-flow-is-above-its-maximum](verification/2026-11-24-a-circuits-pump-stops-while-its-flow-is-above-its-maximum.md)).
+At what flow a stopped pump starts again, and whether the maximum stops a
+circuit's frost protection too, is open.

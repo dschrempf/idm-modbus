@@ -11,7 +11,7 @@ still open closes it.
 | [modbus.md](modbus.md)                       | the wire: word order, sentinels, signedness, enumerations, writes, a restart |
 | [registers.md](registers.md)                 | what single registers hold, where it differs from the manual                 |
 | [web-backend.md](web-backend.md)             | the websocket: protocol, user level, request reason, graphs                  |
-| [heat-pump.md](heat-pump.md)                 | the machine: speeds and draws, starts, hot water, defrost, frost protection  |
+| [heat-pump.md](heat-pump.md)                 | the machine: speeds, starts, hot water, defrost, frost protection, pumps     |
 | [pv-control.md](pv-control.md)               | the PV control: 74, 88 and 4108, what starts, steers and stops a run         |
 | [software-versions.md](software-versions.md) | the controller's software by date, and what each update changed              |
 
