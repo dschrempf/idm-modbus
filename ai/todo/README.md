@@ -1,16 +1,9 @@
 # Order of the open todos
 
 The order the open todos are worked in, and why; what each needs stays in
-its own note. A lost round comes first, then the PV control, then the
-rest.
-
-## 0. First
-
-1. `a-watch-slower-than-10-s-loses-every-other-round`: any watch or drive
-   slower than 10 s reads every other round only, the overnight watch of
-   `what-ae026-governs-and-whether-it-runs-the-charge-pump` among them.
-   `record-the-defrosts-and-circuit-d-of-2026-11-24-before-the-graphs-age-out`
-   still has to be done before about 2026-12-02, whatever comes first.
+its own note. The PV control comes first, then the rest;
+`record-the-defrosts-and-circuit-d-of-2026-11-24-before-the-graphs-age-out`
+has to be done before about 2026-12-02, whatever comes first.
 
 ## 1. PV control
 

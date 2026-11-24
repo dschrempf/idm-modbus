@@ -49,3 +49,23 @@ some other cause, to check.
 4. A measurement in `doc/verification/`, the timeout in `doc/modbus.md`
    beside `pollIntervalMicroseconds`, and a check in `test/Main.hs` against
    the loopback listener that closes an idle connection.
+
+## Outcome
+
+Done on 2026-11-24, as the design choice of step 3 settled: retire an idle
+session before the round.
+
+1. The timeout is 12.25 to 12.30 s from the last answer, closed by the
+   controller with a FIN; idleness, not a lifetime.
+   `doc/verification/2026-11-24-modbus-closes-a-connection-idle-for-12-s.md`.
+   The errors of 10-15 1418 and 11-07 2120 have other causes, named there:
+   a read unanswered after 4.4 s idle, and the restart.
+2. The websocket read every round at 20 s and at 60 s.
+3. `Poll` gained `pollIdleLimitMicroseconds`, 10 s by default; `readRound`
+   and the finals of `IDM.Navigator.Drive` close a session idle past it and
+   open another (`Retired`). Retry within the round and a keep-alive read
+   were turned down.
+4. The measurement, `doc/modbus.md` "An idle connection", the Changelog,
+   and checks on the fake controller, the drive log and a loopback listener
+   that closes a connection idle for 0.3 s. After the fix the watches at
+   13, 20 and 60 s read every round.
