@@ -338,6 +338,14 @@
 
 ### Fixed
 
+- `idm-dump --watch` and `idm-drive` lost every other round at a period
+  above 12 s: the controller closes a connection idle for 12.25 s, and the
+  next round found it closed at its first read. A round, and a drive's
+  finals, now close a session idle past `pollIdleLimitMicroseconds`, a new
+  field of `Poll`, and open another. `RoundEventOn` gained `Retired`,
+  `RoundRequests` `idleFor` and `idleLimit`, `IDM.Navigator.Client`
+  `sessionIdleSeconds`, and a drive capture a `retired` event, with the
+  seconds the session had been idle.
 - `readRegisters` took whatever answer came next for the answer to its request.
   A caller that timed a read out and kept the connection read the late answer
   as the answer to its next request. It now checks the transaction id.

@@ -76,8 +76,8 @@ type Drive r = DriveOn Session r
 
 -- | What a drive reports as it goes.
 data DriveEventOn s
-  = -- | a read, or a session's opening, failed opening or loss; also those
-    -- of the finals, which open a session where none is
+  = -- | a read, or a session's opening, failed opening, loss or retirement;
+    -- also those of the finals, which open a session where none is
     RoundEvent (RoundEventOn s)
   | Wrote Command (Outcome 'Free)
   | -- | nothing was sent
@@ -141,7 +141,8 @@ drive = driveWith . sessionDriveRequests
 -- The finals go out on every exit, as in 'Control.Exception.finally': under
 -- the ordinary mask, which an operation that blocks still interrupts, so
 -- that the timeout of every request still works. Where no session is open,
--- the finals open one, up to three times, 10 s apart. A final whose write
+-- or the one open has been idle past its limit, which is retired as a round
+-- retires it, the finals open one, up to three times, 10 s apart. A final whose write
 -- ended the connection goes again on the next session, within those three.
 -- The session open at the end is closed.
 --
@@ -163,6 +164,7 @@ driveWith rq report (Period seconds) needs d = do
   let track e = case e of
         Opened s -> writeIORef held (Just s)
         Dropped _ -> writeIORef held Nothing
+        Retired _ _ -> writeIORef held Nothing
         _ -> pure ()
       roundReport e = track e >> report (RoundEvent e)
       skip why c = report (Skipped c why)
@@ -206,7 +208,17 @@ driveWith rq report (Period seconds) needs d = do
       final _ [] = pure ()
       final left cs@(c : rest) =
         readIORef held >>= \held' -> case held' of
-          Just s -> case writerOn rq s of
+          Just s ->
+            guarded (idleFor rr s) >>= \idle -> case idle of
+              Left _ -> abandon s Abandoned >> final left cs
+              Right i
+                | i > idleLimit rr s -> toldRound (Retired s i) >> void (guarded (closeSession rr s)) >> final left cs
+                | otherwise -> writing s
+          Nothing
+            | left <= 0 -> mapM_ (told . (`Skipped` NoSession)) cs
+            | otherwise -> reopen left True >>= \left' -> final left' cs
+        where
+          writing s = case writerOn rq s of
             Nothing -> mapM_ (told . (`Skipped` SoftwareDiffers)) cs
             Just w ->
               guarded (w c) >>= \written -> case written of
@@ -219,9 +231,6 @@ driveWith rq report (Period seconds) needs d = do
                       guarded (pauseAfter rr s) >>= \paused -> case paused of
                         Left _ -> abandon s Abandoned >> final left rest
                         Right () -> final left rest
-          Nothing
-            | left <= 0 -> mapM_ (told . (`Skipped` NoSession)) cs
-            | otherwise -> reopen left True >>= \left' -> final left' cs
       -- the tries left after opening one, or after the last failed
       reopen left firstTry
         | left <= 0 = pure 0

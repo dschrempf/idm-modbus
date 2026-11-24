@@ -226,6 +226,7 @@ watch opening period regs = do
       Opened s -> warn s
       NotOpened why -> hPutStrLn stderr (T.unpack why)
       Dropped why -> hPutStrLn stderr (endingText why)
+      Retired _ _ -> pure ()
 
 failureText :: Failure -> String
 failureText f = case f of

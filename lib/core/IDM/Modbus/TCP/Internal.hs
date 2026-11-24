@@ -20,6 +20,7 @@ module IDM.Modbus.TCP.Internal
     withConnection,
     connect,
     disconnect,
+    idleSeconds,
     FunctionCode (..),
     Address (..),
     Quantity,
@@ -46,6 +47,7 @@ import Data.Bits (testBit, (.&.))
 import qualified Data.ByteString as B
 import Data.IORef (IORef, atomicModifyIORef', newIORef, readIORef, writeIORef)
 import Data.Word (Word16, Word8)
+import GHC.Clock (getMonotonicTime)
 import Language.Haskell.TH.Syntax (Lift)
 import qualified Network.Socket as N
 import qualified Network.Socket.ByteString as NB
@@ -173,7 +175,10 @@ data Connection = Connection
     connectionPatience :: Patience,
     connectionNextTransaction :: IORef Word16,
     -- | why the connection ended, if it has
-    connectionEnded :: IORef (Maybe Ending)
+    connectionEnded :: IORef (Maybe Ending),
+    -- | when the last answer arrived, or the connection opened, on the
+    -- monotonic clock, in seconds
+    connectionLastAnswer :: IORef Double
   }
 
 -- | Open a connection, run an action, close it again.
@@ -198,12 +203,18 @@ connect patience (Host host) (Port port) unit = do
           (\sock -> sock <$ N.connect sock (N.addrAddress addr))
   case opened of
     Nothing -> ioError (userError ("connecting to " <> host <> " timed out"))
-    Just sock -> Connection sock unit patience <$> newIORef 1 <*> newIORef Nothing
+    Just sock -> Connection sock unit patience <$> newIORef 1 <*> newIORef Nothing <*> (getMonotonicTime >>= newIORef)
   where
     hints = N.defaultHints {N.addrSocketType = N.Stream}
 
 disconnect :: Connection -> IO ()
 disconnect = N.close . connectionSocket
+
+-- | Seconds since the last answer arrived, or, where none has, since the
+-- connection opened. A Navigator closes a connection idle for some seconds
+-- (@doc\/modbus.md@), and a request after that fails.
+idleSeconds :: Connection -> IO Double
+idleSeconds conn = (-) <$> getMonotonicTime <*> readIORef (connectionLastAnswer conn)
 
 -- | Read @quantity@ consecutive registers, returning their raw bytes in wire
 -- order. Interpreting them is not this module's business.
@@ -283,6 +294,7 @@ transact conn pdu parse =
       received <-
         exchange conn adu
           `onException` (writeIORef (connectionEnded conn) (Just Abandoned) >> disconnect conn)
+      either (const (pure ())) (const (getMonotonicTime >>= writeIORef (connectionLastAnswer conn))) received
       let result = either (Left . Ended) (parse (TransactionId tid)) received
       case result of
         Left (Ended e) -> do

@@ -18,6 +18,7 @@ module IDM.Navigator.Client
     sessionConnection,
     sessionPoll,
     sessionSoftware,
+    sessionIdleSeconds,
     open,
     close,
     withSession,
@@ -50,7 +51,11 @@ import IDM.Navigator.Table (enumLabel, navigator10Software)
 data Poll = Poll
   { pollFunctionCode :: FunctionCode,
     -- | pause between requests
-    pollIntervalMicroseconds :: Int
+    pollIntervalMicroseconds :: Int,
+    -- | how long a session may stay idle and still be asked, under the time
+    -- after which the controller closes it (@doc\/modbus.md@); a round
+    -- opens a new one instead
+    pollIdleLimitMicroseconds :: Int
   }
   deriving (Show, Eq)
 
@@ -58,7 +63,8 @@ defaultPoll :: Poll
 defaultPoll =
   Poll
     { pollFunctionCode = ReadHoldingRegisters,
-      pollIntervalMicroseconds = 150000
+      pollIntervalMicroseconds = 150000,
+      pollIdleLimitMicroseconds = 10000000
     }
 
 -- | A connection, and the software the controller ran when it was made.
@@ -66,6 +72,11 @@ defaultPoll =
 -- An update restarts the controller, which ends the connection, and every
 -- later request on it fails unsent; so the version holds for as long as the
 -- session can ask anything. A new connection is a new session, read anew.
+--
+-- The controller closes a connection that has been idle for some seconds, so
+-- a session held between requests further apart is lost at the next one;
+-- 'sessionIdleSeconds' says how long it has been idle, and
+-- "IDM.Navigator.Rounds" opens a new one in its place.
 data Session = Session
   { sessionConnection :: Connection,
     sessionPoll :: Poll,
@@ -83,6 +94,10 @@ open patience poll host port unit = do
 
 close :: Session -> IO ()
 close = disconnect . sessionConnection
+
+-- | Seconds since the session's last answer, or its opening.
+sessionIdleSeconds :: Session -> IO Double
+sessionIdleSeconds = idleSeconds . sessionConnection
 
 withSession :: Patience -> Poll -> Host -> Port -> UnitId -> (Session -> IO a) -> IO a
 withSession patience poll host port unit = bracket (open patience poll host port unit) close

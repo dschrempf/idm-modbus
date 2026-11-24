@@ -11,6 +11,9 @@
 -- A round holds reads only, each with its own time and session. A lost
 -- connection ends the session: the rest of the round's reads are not asked,
 -- and the next round opens a new session, which reads the software anew.
+-- The controller closes a connection idle for some seconds, so a round
+-- retires a session held idle past its limit, and opens a new one, rather
+-- than lose a read to it.
 --
 -- Nothing here prints. What a round does as it goes, a read, an opening, a
 -- loss, is a 'RoundEvent', handed to a callback as it happens.
@@ -52,7 +55,7 @@ import qualified Data.Text as T
 import Data.Time (ZonedTime, getZonedTime)
 import GHC.Clock (getMonotonicTime)
 import IDM.Modbus.TCP (Address, Ending, Failure (..))
-import IDM.Navigator.Client (Poll (..), Sample (..), Session, close, readOne, sessionPoll)
+import IDM.Navigator.Client (Poll (..), Sample (..), Session, close, readOne, sessionIdleSeconds, sessionPoll)
 import IDM.Navigator.Register (Register (..))
 
 -- | One read of a round: what was asked, when, on which session, and what
@@ -102,6 +105,9 @@ data RoundEventOn s
     NotOpened Text
   | -- | why the session ended; it is closed, and the round asks nothing more
     Dropped Ending
+  | -- | the session had been idle the seconds given, past its limit, and is
+    -- closed before it is asked anything; a new one is opened in its place
+    Retired s Double
 
 type RoundEvent = RoundEventOn Session
 
@@ -111,6 +117,10 @@ data RoundRequests m s = RoundRequests
     openSession :: m (Either Text s),
     readSample :: s -> Register -> m Sample,
     closeSession :: s -> m (),
+    -- | seconds since the session's last answer, or its opening
+    idleFor :: s -> m Double,
+    -- | the seconds a session may stay idle and still be asked
+    idleLimit :: s -> Double,
     -- | after a request, so as not to stall the controller
     pauseAfter :: s -> m (),
     localClock :: m ZonedTime,
@@ -126,22 +136,30 @@ sessionRequests opening =
     { openSession = first (T.pack . show) <$> (try opening :: IO (Either IOException Session)),
       readSample = readOne,
       closeSession = close,
+      idleFor = sessionIdleSeconds,
+      idleLimit = (/ 1e6) . fromIntegral . pollIdleLimitMicroseconds . sessionPoll,
       pauseAfter = threadDelay . pollIntervalMicroseconds . sessionPoll,
       localClock = getZonedTime,
       monotonicClock = getMonotonicTime
     }
 
--- | One round: open a session where none is given, read every register
--- given in order, and report each read as it is made.
+-- | One round: open a session where none is given, or where the one given
+-- has been idle past its limit, which is closed; read every register given
+-- in order, and report each read as it is made.
 --
 -- A read whose failure ended the connection closes the session, and the
 -- reads after it are not asked. The session the round ends with is the
 -- caller's, to give to the next round or to close.
 readRound :: (Monad m) => RoundRequests m s -> (RoundEventOn s -> m ()) -> Maybe s -> [Register] -> m (RoundOn s)
 readRound requests report held regs = do
-  session <- maybe opening (pure . Just) held
+  session <- maybe opening fresh held
   go session regs []
   where
+    fresh s = do
+      idle <- idleFor requests s
+      if idle > idleLimit requests s
+        then report (Retired s idle) >> closeSession requests s >> opening
+        else pure (Just s)
     opening =
       openSession requests >>= \opened -> case opened of
         Right s -> Just s <$ report (Opened s)
@@ -203,6 +221,7 @@ rounds opening report (Period seconds) needs = do
         case e of
           Opened s -> writeIORef held (Just s)
           Dropped _ -> writeIORef held Nothing
+          Retired _ _ -> writeIORef held Nothing
           _ -> pure ()
         report e
       go session due = do

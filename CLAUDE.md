@@ -122,9 +122,11 @@ The modules stack, each refusing to know the next one's business:
 - `IDM.Navigator.Rounds` — reading what each part of a program needs, round
   after round: the union of the `Need`s once per `Period`, in one session,
   and each part handed the reads it named. A lost connection ends the
-  session and the round, and the next round opens a new one. Nothing
-  prints: a read, an opening and a loss are each a `RoundEvent`, handed to
-  a callback.
+  session and the round, and the next round opens a new one. A session
+  idle past its limit, which the controller would have closed, is retired
+  before the round asks it anything, and a new one opened. Nothing prints:
+  a read, an opening, a loss and a retirement are each a `RoundEvent`,
+  handed to a callback.
 - `IDM.Navigator.Capture` — the line of a watch capture, `watchLine`, and the
   fields the other captures share with it.
 - `IDM.Navigator.Drive` — the loop every driver shares: after each round it
@@ -195,6 +197,8 @@ which a consumer does not reach, and the loop they run on,
   as -2. At 1005 `ffff` is no sentinel but the operating mode "Aus", a code
   the manual does not print; its range, widened to -1, says so.
 - The Navigator stalls when polled hard, hence `pollIntervalMicroseconds`.
+- It closes a connection left idle for 12.25 s, hence
+  `pollIdleLimitMicroseconds`.
 
 `doc/` holds topic documents, each the current knowledge on its topic and
 its open questions; `doc/README.md` lists them. `doc/verification/DATE-SLUG.md`

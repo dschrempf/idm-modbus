@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE LambdaCase #-}
 
 -- |
 -- Module      :  Main
@@ -7,10 +8,10 @@
 -- License     :  BSD-3-Clause
 module Main (main) where
 
-import Control.Concurrent (forkIO, killThread, newEmptyMVar, putMVar, takeMVar, throwTo)
-import Control.Exception (Exception, SomeException, bracket, fromException, throwIO, toException, try)
-import Control.Monad (foldM, join, void, when)
-import Control.Monad.Trans.State.Strict (State, modify, runState, state)
+import Control.Concurrent (forkIO, killThread, newEmptyMVar, putMVar, takeMVar, threadDelay, throwTo)
+import Control.Exception (Exception, SomeException, bracket, finally, fromException, throwIO, toException, try)
+import Control.Monad (foldM, forever, join, void, when)
+import Control.Monad.Trans.State.Strict (State, gets, modify, runState, state)
 import qualified Data.Aeson as A
 import qualified Data.Aeson.Key as K
 import qualified Data.Aeson.KeyMap as KM
@@ -24,9 +25,10 @@ import qualified Data.Text.IO as T
 import Data.Time (ZonedTime, defaultTimeLocale, parseTimeOrError)
 import Data.Word (Word16)
 import GHC.Float (double2Float, float2Double)
-import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Host (..), Patience (..), Port (..), Quantity, Registers (..), TransactionId (..), UnitId (..), Write (..), connect, disconnect, parseResponse, parseWriteResponse, quantity, quantityCount, readRegisters, registerPair, singleRegister)
+import IDM.Modbus.TCP.Internal (Address (..), Ending (..), ExceptionCode (..), Failure (..), FunctionCode (..), Host (..), Patience (..), Port (..), Quantity, Registers (..), TransactionId (..), UnitId (..), Write (..), connect, defaultPatience, disconnect, parseResponse, parseWriteResponse, quantity, quantityCount, readRegisters, registerPair, singleRegister)
 import IDM.Navigator.Capture (watchLineOn)
-import IDM.Navigator.Client (Answer (..), Sample (..), sampleOf)
+import IDM.Navigator.Client (Answer (..), Poll (..), Sample (..), defaultPoll, sampleOf)
+import qualified IDM.Navigator.Client as Client
 import IDM.Navigator.Drive (Command (..), DriveEventOn (RoundEvent, Skipped, Wrote), DriveOn (..), DriveRequests (..), Finish (..), SkipReason (..), driveWith)
 import qualified IDM.Navigator.Drive as Drive
 import IDM.Navigator.Register
@@ -58,7 +60,8 @@ main = do
   drives <- driveChecks
   logs <- logChecks
   connections <- connectionChecks
-  results <- mapM check (checks <> files <> drives <> logs <> connections)
+  idles <- idleChecks
+  results <- mapM check (checks <> files <> drives <> logs <> connections <> idles)
   if and results then putStrLn "all checks passed" else exitFailure
 
 -- | The checks that read the repository's files.
@@ -548,6 +551,20 @@ checks =
             && requestsOf c == [ReadOn (FakeSession 0) (Address 1100), Closing (FakeSession 0), Opening, ReadOn (FakeSession 1) (Address 1100), PauseOn (FakeSession 1)]
             && map roundSession rs == [Nothing, Just (FakeSession 1)]
     ),
+    ( "a held session idle past its limit is closed before it is asked anything, and the round reads on a new one",
+      let (rs, c) = roundsIdle [FakeSession 0] [] [Right (B.pack [0, 1])] (Just (FakeSession 0)) [[register 1100]]
+       in seenOf c
+            == [ SawRetired (FakeSession 0) 11,
+                 SawOpened (FakeSession 1),
+                 SawRead (Address 1100) (Just (FakeSession 1)) (Just (Right (B.pack [0, 1])))
+               ]
+            && requestsOf c == [Closing (FakeSession 0), Opening, ReadOn (FakeSession 1) (Address 1100), PauseOn (FakeSession 1)]
+            && map roundSession rs == [Just (FakeSession 1)]
+    ),
+    ( "a drive capture records a retired session with the seconds it had been idle",
+      Log.driveEntry (const (Left (Ended NoAnswer))) (const False) (RoundEvent (Retired (FakeSession 1) 11))
+        == Right (Log.Entry "retired" [("idle", "11.0")])
+    ),
     ( "a session that does not open asks nothing, and the next round tries again",
       let (rs, c) = roundsAgainst [Left (T.pack "refused")] [Right (B.pack [0, 0, 0xbf, 0])] Nothing [[register 74, register 88], [register 74]]
        in seenOf c
@@ -756,6 +773,7 @@ data Seen
   | SawOpened FakeSession
   | SawNotOpened T.Text
   | SawDropped Ending
+  | SawRetired FakeSession Double
   | SawWrote Command (Outcome 'Free)
   | SawSkipped Command SkipReason
   | SawFinals
@@ -768,6 +786,8 @@ data Controller = Controller
   { controllerOpenings :: [Either T.Text ()],
     controllerAnswers :: [Either Failure B.ByteString],
     controllerSessions :: Int,
+    -- | the sessions idle past their limit
+    controllerIdle :: [FakeSession],
     -- | seconds; a quarter more at every look
     controllerClock :: Double,
     -- | latest first
@@ -779,8 +799,12 @@ data Controller = Controller
 -- | Rounds read one after another off the fake controller, each from the
 -- session the one before it ended with.
 roundsAgainst :: [Either T.Text ()] -> [Either Failure B.ByteString] -> Maybe FakeSession -> [[Register]] -> ([RoundOn FakeSession], Controller)
-roundsAgainst openings answers held regss =
-  let ((done, _), c) = runState (foldM next ([], held) regss) (Controller openings answers 0 0 [] [])
+roundsAgainst = roundsIdle []
+
+-- | 'roundsAgainst', with the sessions given idle past their limit.
+roundsIdle :: [FakeSession] -> [Either T.Text ()] -> [Either Failure B.ByteString] -> Maybe FakeSession -> [[Register]] -> ([RoundOn FakeSession], Controller)
+roundsIdle idle openings answers held regss =
+  let ((done, _), c) = runState (foldM next ([], held) regss) (Controller openings answers 0 idle 0 [] [])
    in (reverse done, c)
   where
     next (done, session) regs = do
@@ -794,6 +818,8 @@ fakeRounds =
     { openSession = requested Opening >> state opening,
       readSample = \s r -> requested (ReadOn s (registerAddress r)) >> sampleOf r <$> state answer,
       closeSession = requested . Closing,
+      idleFor = \s -> gets (\c -> if s `elem` controllerIdle c then 11 else 0),
+      idleLimit = const 10,
       pauseAfter = requested . PauseOn,
       localClock = pure (zoned "2026-11-10T12:00:00.000+01:00"),
       monotonicClock = state (\c -> (controllerClock c, c {controllerClock = controllerClock c + 0.25}))
@@ -818,6 +844,7 @@ seenRound e = case e of
   Opened s -> SawOpened s
   NotOpened why -> SawNotOpened why
   Dropped why -> SawDropped why
+  Retired s idle -> SawRetired s idle
 
 -- | A drive against the fake controller, at a period of 10 s, with no need
 -- beside the step, which reads the registers given. The step makes the next
@@ -834,7 +861,7 @@ driveAgainst ::
   [Command] ->
   IO (Finish String, Controller)
 driveAgainst writables openings answers outcomes regs steps finals = do
-  (r, c) <- driveRigged (Rigged (const False) (map Right outcomes) []) writables openings answers regs steps finals
+  (r, c) <- driveRigged (Rigged (const False) (map Right outcomes) [] []) writables openings answers regs steps finals
   either throwIO (\f -> pure (f, c)) r
 
 -- | What throws in a rigged drive.
@@ -846,7 +873,9 @@ data Rigged = Rigged
     riggedWrites :: [Either SomeException (Outcome 'Free)],
     -- | the openings, in order: what one throws once asked, or 'Nothing'
     -- where it goes to the controller; all go there once they run out
-    riggedOpenings :: [Maybe SomeException]
+    riggedOpenings :: [Maybe SomeException],
+    -- | the sessions idle past their limit
+    riggedIdle :: [FakeSession]
   }
 
 -- | 'driveAgainst' with what throws rigged, and what 'driveWith' threw.
@@ -860,7 +889,7 @@ driveRigged ::
   [Command] ->
   IO (Either SomeException (Finish String), Controller)
 driveRigged rigged writables openings answers regs steps finals = do
-  controller <- newIORef (Controller openings answers 0 0 [] [])
+  controller <- newIORef (Controller openings answers 0 (riggedIdle rigged) 0 [] [])
   pending <- newIORef steps
   written <- newIORef (riggedWrites rigged)
   opened <- newIORef (riggedOpenings rigged)
@@ -880,6 +909,8 @@ driveRigged rigged writables openings answers regs steps finals = do
                 { openSession = opening,
                   readSample = \s r -> run (readSample fakeRounds s r),
                   closeSession = run . closeSession fakeRounds,
+                  idleFor = run . idleFor fakeRounds,
+                  idleLimit = idleLimit fakeRounds,
                   pauseAfter = run . pauseAfter fakeRounds,
                   localClock = run (localClock fakeRounds),
                   monotonicClock = run (monotonicClock fakeRounds)
@@ -917,12 +948,13 @@ driveChecks = do
   (_, c4) <- driveAgainst [s1, s2] [] ein [Failed (Ended NoAnswer)] [register 1100] [] exampleFinals
   let firstFinal = SawWrote (Command PvTarget (Real 0)) (Sent Confirmed)
       signalled = toException Signalled
-      throwing = Rigged (const False) [Left signalled] [Nothing, Just signalled, Just signalled]
+      throwing = Rigged (const False) [Left signalled] [Nothing, Just signalled, Just signalled] []
       done = [pure (Left "done")]
-  (reported, c5) <- driveRigged (Rigged (\e -> e == SawFinals || e == firstFinal) [] []) [s1] [] ein [register 1100] done exampleFinals
-  (interrupted, c6) <- driveRigged (Rigged (const False) [Left signalled] []) [s1, s2] [] ein [register 1100] done exampleFinals
+  (reported, c5) <- driveRigged (Rigged (\e -> e == SawFinals || e == firstFinal) [] [] []) [s1] [] ein [register 1100] done exampleFinals
+  (interrupted, c6) <- driveRigged (Rigged (const False) [Left signalled] [] []) [s1, s2] [] ein [register 1100] done exampleFinals
   (reopened, c7) <- driveRigged throwing [s1, s2] [] ein [register 1100] done exampleFinals
   (_, c8) <- driveRigged throwing {riggedOpenings = Nothing : replicate 3 (Just signalled)} [s1] [] ein [register 1100] done exampleFinals
+  (idled, c9) <- driveRigged (Rigged (const False) [] [] [s1]) [s1, s2] [] ein [register 1100] done exampleFinals
   pure
     [ ( "the finals go out in the order 88, 4108, 74, after the step's end, and the session is closed",
         reason ended == Just "done"
@@ -971,6 +1003,13 @@ driveChecks = do
           && length [() | Opening <- requestsOf c8] == 4
           && writesOf c8 == [(s1, 88, Real 0)]
           && skipped c8 == [(t, NoSession) | Command t _ <- exampleFinals]
+      ),
+      ( "the finals retire a session idle past its limit, and write on a new one",
+        either (const False) ((== Just "done") . reason) idled
+          && writesOf c9 == finalsOn s2
+          && SawRetired s1 11 `elem` seenOf c9
+          && Closing s1 `elem` requestsOf c9
+          && lastOf 1 (requestsOf c9) == [Closing s2]
       )
     ]
   where
@@ -1314,3 +1353,70 @@ connectionChecks = do
       | otherwise = do
           chunk <- NB.recv sock (min 4096 (n - B.length acc))
           if B.null chunk then pure acc else recvUpTo sock n (acc <> chunk)
+
+-- | The checks of rounds against a listener on the loopback interface that
+-- answers every read with zeros and, as the controller does, closes a
+-- connection idle for 0.3 s. The whole runs under a time limit.
+idleChecks :: IO [(String, Bool)]
+idleChecks = do
+  results <- timeout 20000000 $ bracket listener N.close $ \lsock -> do
+    port <- N.socketPort lsock
+    let opening limit =
+          Client.open defaultPatience defaultPoll {pollIntervalMicroseconds = 0, pollIdleLimitMicroseconds = limit} (Host "127.0.0.1") (Port (fromIntegral port)) (UnitId 1)
+        reading limit held = do
+          seen <- newIORef []
+          r <- readRound (sessionRequests (opening limit)) (\e -> atomicModifyIORef' seen (\es -> (e : es, ()))) held [register 1100]
+          mapM_ Client.close (roundSession r)
+          (,) r . reverse <$> readIORef seen
+        events = map (\e -> case e of ReadDone _ -> "read"; Opened _ -> "opened"; NotOpened _ -> "unopened"; Dropped _ -> "dropped"; Retired _ _ -> "retired")
+        answered r = [either (const False) (const True) . sampleResult <$> askedSample a | a <- roundReads r] == [Just True]
+    bracket (forkIO (answering lsock)) killThread $ \_ -> do
+      kept <- opening 200000
+      (rKept, eKept) <- reading 200000 (Just kept)
+      lost <- opening 10000000
+      threadDelay 500000
+      (rLost, eLost) <- reading 10000000 (Just lost)
+      retired <- opening 200000
+      threadDelay 500000
+      (rRetired, eRetired) <- reading 200000 (Just retired)
+      pure
+        ( answered rKept && events eKept == ["read"],
+          map (fmap (fmap answerRaw . sampleResult) . askedSample) (roundReads rLost) == [Just (Left (Ended ConnectionClosed))]
+            && events eLost == ["read", "dropped"],
+          answered rRetired && events eRetired == ["retired", "opened", "read"]
+        )
+  pure
+    [ ( "a session asked within its idle limit is kept",
+        maybe False (\(k, _, _) -> k) results
+      ),
+      ( "a held session past the time the listener closes it loses the round's read, where its limit is longer",
+        maybe False (\(_, l, _) -> l) results
+      ),
+      ( "a held session idle past its limit is retired, and the round reads on a new one",
+        maybe False (\(_, _, r) -> r) results
+      )
+    ]
+  where
+    listener = do
+      sock <- N.socket N.AF_INET N.Stream N.defaultProtocol
+      N.bind sock (N.SockAddrInet 0 (N.tupleToHostAddress (127, 0, 0, 1)))
+      N.listen sock 4
+      pure sock
+    answering lsock = forever $ do
+      (sock, _) <- N.accept lsock
+      forkIO (serve sock `finally` N.close sock)
+    serve sock =
+      timeout 300000 (recvExactly sock 12) >>= \case
+        Just req | B.length req == 12 -> do
+          let q = fromIntegral (B.index req 10) * 256 + fromIntegral (B.index req 11) :: Int
+              body = B.pack [B.index req 6, 3, fromIntegral (2 * q)] <> B.replicate (2 * q) 0
+          NB.sendAll sock (B.take 4 req <> B.pack [0, fromIntegral (B.length body)] <> body)
+          serve sock
+        _ -> pure ()
+    recvExactly sock n = go B.empty
+      where
+        go acc
+          | B.length acc >= n = pure acc
+          | otherwise = do
+              chunk <- NB.recv sock (n - B.length acc)
+              if B.null chunk then pure acc else go (acc <> chunk)
