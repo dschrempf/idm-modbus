@@ -38,7 +38,12 @@ capture before then keeps eight days of all of them.
   2026-11-24, but D was shut off by a valve outside the controller until
   that evening, so the pump ran against it and B54 read water that did
   not flow: the figures say nothing about the mixer. The graph's points
-  are about 50 minutes apart besides.
+  are about 50 minutes apart besides, each an average over its interval.
+  That evening, measurement
+  `2026-11-24-a-circuits-pump-stops-while-its-flow-is-above-its-maximum`
+  had M34 stop while B54 stood above `HSD04`; the morning's run above
+  it contradicts that unless `HSD04` was higher then. Ask when it was set
+  to 20 °C before recording this finding.
 
 ## What to write
 
