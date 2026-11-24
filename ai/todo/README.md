@@ -1,7 +1,16 @@
 # Order of the open todos
 
 The order the open todos are worked in, and why; what each needs stays in
-its own note. The PV control comes first, then the rest.
+its own note. A lost round comes first, then the PV control, then the
+rest.
+
+## 0. First
+
+1. `a-watch-slower-than-10-s-loses-every-other-round`: any watch or drive
+   slower than 10 s reads every other round only, the overnight watch of
+   `what-ae026-governs-and-whether-it-runs-the-charge-pump` among them.
+   `record-the-defrosts-and-circuit-d-of-2026-11-24-before-the-graphs-age-out`
+   still has to be done before about 2026-12-02, whatever comes first.
 
 ## 1. PV control
 
@@ -17,9 +26,13 @@ its own note. The PV control comes first, then the rest.
 
 ## 2. The rest
 
-1. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
+1. `record-the-defrosts-and-circuit-d-of-2026-11-24-before-the-graphs-age-out`:
+   its evidence lives on the controller until about 2026-12-02.
+2. `what-ae026-governs-and-whether-it-runs-the-charge-pump`: an overnight
+   watch, reading only, which needs a night below 3 °C.
+3. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
-2. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
+4. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
    target.
-3. `controller-behavior-when-glt-values-stop-unknown`: a register each time
+5. `controller-behavior-when-glt-values-stop-unknown`: a register each time
    one is listed as a target.
