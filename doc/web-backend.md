@@ -21,6 +21,10 @@ does it, or `tools/webprobe.py`, send two reads: `relaytest`/`overview`,
 which opens the relay test, and `authentication`/`overview`, which asks with
 `userlevel` 4.
 
+Unlike Modbus TCP, the websocket stays open while idle: a watch every 60 s,
+with nothing sent between rounds, read every round on one connection
+([2026-11-24-modbus-closes-a-connection-idle-for-12-s](verification/2026-11-24-modbus-closes-a-connection-idle-for-12-s.md)).
+
 Timestamps are seconds since 2000-01-01 in the controller's local time; the
 status page's `timestamp` is milliseconds since 1970, also local. The
 controller's clock runs its own course: 82 s ahead of NTP on 2026-10-01, 28 s

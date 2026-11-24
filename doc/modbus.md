@@ -121,6 +121,18 @@ reads at `pollIntervalMicroseconds`. Watches here read a dozen registers
 every 10 s, one request each, for hours without a failure, two connections
 at once included.
 
+### An idle connection
+
+The controller closes a connection 12.25 s after its last answer, with a
+FIN, and a request after that fails; a connection in use stays open for
+hours ([2026-11-24-modbus-closes-a-connection-idle-for-12-s](verification/2026-11-24-modbus-closes-a-connection-idle-for-12-s.md)).
+`pollIdleLimitMicroseconds` is how long a session may stay idle and still
+be asked, and `defaultPoll` sets it below that. A round of
+`IDM.Navigator.Rounds`, and the finals of `IDM.Navigator.Drive`, close a
+session idle longer and open another, which reads the software anew: a
+watch or a drive slower than the limit connects anew every round, rather
+than lose every other round to a closed connection.
+
 ## Writing
 
 ### The access right `RW/RO`
