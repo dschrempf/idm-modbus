@@ -91,10 +91,22 @@ electricity.
 
 ## Defrost
 
-1090 reads 8 `Abtauung`; the compressor runs up to 78 rps, and 4126 goes
-negative, to about -7 to -8 kW, heat taken from the heat sink's water
-([2026-10-16-draw](verification/2026-10-16-draw.md)). The request reason is
+1090 reads 8 `Abtauung`; the compressor stops, for a minute on
+20.24-2608 and 2 min 20 s on 20.24-1574, then runs up to 78 rps, and 4126
+goes negative, to about -7 to -8 kW, heat taken from the heat sink's water
+([2026-10-16-draw](verification/2026-10-16-draw.md),
+[2026-11-26-a-graphs-state-channel-keeps-one-point-per-five-minutes](verification/2026-11-26-a-graphs-state-channel-keeps-one-point-per-five-minutes.md)).
+The 4-way valve M51 switches 15 to 22 s in and back as the defrost ends.
+On 20.24-2608 a defrost lasts six minutes, and the machine goes back to
+the mode it interrupted, a hot water charge included. The request reason is
 absent during it ([web-backend.md](web-backend.md#the-request-reason)).
+
+How often one comes is not the outdoor temperature's. On a day of snow at
+0.5 to 1.8 °C the heat pump defrosted ten times in 11.8 hours of
+operation, every 53 to 60 minutes of running; on the seven days before, at
+-3.9 to 11.7 °C, once in 2.9 to 10.8 hours
+([2026-11-26-on-a-day-of-snow-the-heat-pump-defrosted-every-hour](verification/2026-11-26-on-a-day-of-snow-the-heat-pump-defrosted-every-hour.md)).
+What starts and what ends a defrost is open.
 
 ## Frost protection
 

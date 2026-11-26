@@ -133,8 +133,14 @@ graph.
 at the interval's end. The controller thins what it keeps: points every 5
 minutes for about the last half hour, then about every 50 minutes, and every
 1.6 hours in the eight-day span, whatever the span asked. A state channel
-has a point per change. A graph says what the machine did while nobody
-watched; it does not replace a watch, and flattens a peak
+has a point per change, but at most one per five minutes: a change within
+five minutes of the channel's last point is stamped five minutes after it,
+with the state then. So the compressor's M1 reads 0 for the first five
+minutes of every defrost, though the compressor runs from about a minute
+in
+([2026-11-26-a-graphs-state-channel-keeps-one-point-per-five-minutes](verification/2026-11-26-a-graphs-state-channel-keeps-one-point-per-five-minutes.md)).
+A graph says what the machine did while nobody watched; it does not
+replace a watch, and flattens a peak
 ([2026-10-01-charge](verification/2026-10-01-charge.md),
 [2026-11-09-graphs-record-every-channel](verification/2026-11-09-graphs-record-every-channel.md)).
 On 20.24-1574 before the restart of 2026-09-23 the state channels were

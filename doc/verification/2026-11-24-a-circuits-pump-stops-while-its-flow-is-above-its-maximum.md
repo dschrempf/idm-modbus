@@ -47,7 +47,8 @@ a register.
   before 22:41 and 5 minutes after; a step channel's point is a change.
   M34's changes there lag the watch's by up to 20 s, and the one at about
   23:01 shows as 23:05:01, so the times below are the watch's where it
-  has them.
+  has them. Why the one shows four minutes late is
+  [2026-11-26-a-graphs-state-channel-keeps-one-point-per-five-minutes](2026-11-26-a-graphs-state-channel-keeps-one-point-per-five-minutes.md).
 
 ## The readings
 
