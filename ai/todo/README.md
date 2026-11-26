@@ -1,9 +1,7 @@
 # Order of the open todos
 
 The order the open todos are worked in, and why; what each needs stays in
-its own note. The PV control comes first, then the rest;
-`record-the-defrosts-and-circuit-d-of-2026-11-24-before-the-graphs-age-out`
-has to be done before about 2026-12-02, whatever comes first.
+its own note. The PV control comes first, then the rest.
 
 ## 1. PV control
 
@@ -19,10 +17,11 @@ has to be done before about 2026-12-02, whatever comes first.
 
 ## 2. The rest
 
-1. `record-the-defrosts-and-circuit-d-of-2026-11-24-before-the-graphs-age-out`:
-   its evidence lives on the controller until about 2026-12-02.
-2. `what-ae026-governs-and-whether-it-runs-the-charge-pump`: an overnight
-   watch, reading only, which needs a night below 3 °C.
+1. `what-ae026-governs-and-whether-it-runs-the-charge-pump`: an overnight
+   watch, reading only, which needs a night below 3 °C; the note has the
+   run ready to start.
+2. `record-the-hot-water-stop-and-circuit-d-of-2026-11-24`: writing only,
+   its graphs captured on 2026-11-26.
 3. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
 4. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM

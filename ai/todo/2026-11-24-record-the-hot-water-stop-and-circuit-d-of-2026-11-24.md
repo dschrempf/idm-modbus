@@ -1,25 +1,28 @@
-# Record the defrosts and circuit D of 2026-11-24 before the graphs age out
+# Record the hot water stop and circuit D of 2026-11-24
 
-The controller's graphs reach back about eight days, so what follows
-lives on it only until about 2026-12-02. It was read on 2026-11-24 near
-21:10 with `graph`/`detail` of graphs 1, 102, 104, 105 and 107, 30 hours
-back, at Fachmann level, and printed, not captured. A `tools/webprobe.py`
-capture before then keeps eight days of all of them.
+The walk of 2026-11-26 at 20:36, at Fachmann level
+(`captures/navigator-10-webapi-20.24-2608-2026-11-26-2036.json`), holds
+eight days of every graph, back to 2026-11-19, 2026-11-24 among them. What
+follows was read on 2026-11-24 near 21:10 with `graph`/`detail` of graphs
+1, 102, 104, 105 and 107, 30 hours back, and printed; it is to be read
+again from that capture before it is written.
+
+The defrost finding is written:
+`doc/verification/2026-11-26-on-a-day-of-snow-the-heat-pump-defrosted-every-hour.md`,
+and M1's five minutes of 0 in a defrost are the graph's, not the
+compressor's:
+`doc/verification/2026-11-26-a-graphs-state-channel-keeps-one-point-per-five-minutes.md`.
+What is left is below.
 
 ## The findings
 
-- **A defrost shows in the graphs** as `T15x_BETRIEBSART_SYSTEM` 8 and
-  `N2_DEFROSTING` 1, with the 4-way valve M51 switching about 19 s in and
-  back as the defrost ends: 07:37:30 to 07:43:31 and 11:03:29 to
-  11:09:29, each about six minutes, at 1 to 4 °C outdoors. The compressor
-  channel M1 reads 0 for five of those minutes, though
-  `doc/verification/2026-10-16-draw.md` had the compressor run at up to
-  78 rps in a defrost. What M1 records there is open.
 - **The end of a hot water charge stops the compressor, a change into
   one does not**: heating went into hot water at 12:59:58 with the
   compressor running; the charge ended at 13:44:44 with a stop, and
   heating, requested from 13:44:44, started the compressor at 13:55:04,
-  after 10 min 20 s, the minimum standstill (5419).
+  after 10 min 20 s, the minimum standstill (5419). M1's start there came
+  more than five minutes after its last point, 13:44:44, so the graph
+  stamps it at its time.
 - **Circuit D's "demand" is a configuration**: the web's
   `system.heatingcircuit` `detail` carries `info.demand` 1 for A, C and
   D, with A and C at `activeMode` 0 "Aus"; it most likely mirrors `HSx06`
@@ -41,14 +44,16 @@ capture before then keeps eight days of all of them.
   are about 50 minutes apart besides, each an average over its interval.
   That evening, measurement
   `2026-11-24-a-circuits-pump-stops-while-its-flow-is-above-its-maximum`
-  had M34 stop while B54 stood above `HSD04`; the morning's run above
-  it contradicts that unless `HSD04` was higher then. Ask when it was set
-  to 20 °C before recording this finding.
+  had M34 stop while B54 stood above `HSD04`. The morning's run does not
+  contradict it: `HSD04` read 40 °C on 2026-11-11 at 22:41, and by the
+  household's account it went to 20 °C only later on 2026-11-24, before
+  21:10, and to 35 °C that evening, so that D runs for sure, a manual
+  frost protection while the mixer is faulty. It stood at 35 °C on
+  2026-11-26. The morning's figures are no evidence about `HSD04`.
 
 ## What to write
 
-A measurement in `doc/verification/` for the defrost and the stop after
-hot water, and what it changes in `doc/heat-pump.md` ("Defrost", "A start
-and a stop"); the circuit D findings into `doc/web-backend.md` for
-`demand`, and into `doc/heat-pump.md` for Eco, each cited from a
-measurement.
+A measurement in `doc/verification/` for the stop after hot water, and
+what it changes in `doc/heat-pump.md` ("A start and a stop"); the circuit
+D findings into `doc/web-backend.md` for `demand`, and into
+`doc/heat-pump.md` for Eco, each cited from a measurement.
