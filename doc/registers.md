@@ -67,6 +67,10 @@ default of -1; the table decodes it as `DriveSignal`, so `ffff` is
 100 %; the table decodes it as `DriveSignal NotDriven`, which is wrong while
 the pump runs ([2026-10-16-charge-pump](verification/2026-10-16-charge-pump.md),
 [2026-11-09-heating-run-as-on-1574](verification/2026-11-09-heating-run-as-on-1574.md)).
+Nor is the digital output page, 4789, a witness: its M73
+`Ladepumpe Wärmesenke EIN/AUS` read 100 all night, with the pump stopped
+and running
+([2026-11-26-below-ae025-the-charge-pump-ran-only-for-a-circuits-request](verification/2026-11-26-below-ae025-the-charge-pump-ran-only-for-a-circuits-request.md)).
 
 ### 1449 and the flow temperature limits, 1520 to 1540
 

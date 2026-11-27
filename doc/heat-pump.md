@@ -118,7 +118,21 @@ average at 1002, and asks nothing of the heat pump while the flows stay
 above 10 °C. A circuit not in frost protection reads 0.0 at its target
 ([2026-11-06-frost-protection](verification/2026-11-06-frost-protection.md)).
 Only the system's mode "Aus", -1 at 1005, is documented to stop it. Where it
-lets go, and what `AE026` governs, is open.
+lets go is open. Since 2026-11-26 all three circuits' `HSx40` read `N2_NO`.
+
+812199 §5.7 describes a second frost protection, of the outdoor unit: below
+the frost protection outdoor temperature, `AE025`, while the heat pump's
+flow is below an adjustable minimum, it starts the charge pump M73. It does
+not key on the intermediate circuit's B33 or B34 against `AE026`'s 20 °C:
+for five hours at 0.1 to 0.6 °C, with B33 down to 13.9 °C and B34 to
+8.6 °C, M73 stood, and it ran only for a circuit's heating request, whose
+reason never read `RD_REQ_FROST_PROT`
+([2026-11-26-below-ae025-the-charge-pump-ran-only-for-a-circuits-request](verification/2026-11-26-below-ae025-the-charge-pump-ran-only-for-a-circuits-request.md)).
+812199 §1.8 requires a heating-side minimum of 20 °C for the defrost, which
+is what the web interface says `AE026` secures; the heat sink's B124 and
+B125 stayed above 21.4 °C that night, so whether the frost protection keys
+on them is open. Whether M73 runs is 1074 and the flow at 1072; 4789's M73
+`Ladepumpe Wärmesenke EIN/AUS` reads 100 at rest too.
 
 ## A circuit's pump
 
