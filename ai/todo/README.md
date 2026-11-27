@@ -17,15 +17,11 @@ its own note. The PV control comes first, then the rest.
 
 ## 2. The rest
 
-1. `what-ae026-governs-and-whether-it-runs-the-charge-pump`: the watch of
-   2026-11-26 ruled out B33/B34; left is the heat sink, which needs a
-   night below 3 °C without a heating request, and so a change to C's
-   settings agreed first.
-2. `record-the-hot-water-stop-and-circuit-d-of-2026-11-24`: writing only,
+1. `record-the-hot-water-stop-and-circuit-d-of-2026-11-24`: writing only,
    its graphs captured on 2026-11-26.
-3. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
+2. `what-glt-requests-1710-1712-1713-do-unsettled`: write runs, all
    volatile.
-4. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
+3. `eeprom-guard-needs-exact-round-trip`: waits for the first EEPROM
    target.
-5. `controller-behavior-when-glt-values-stop-unknown`: a register each time
+4. `controller-behavior-when-glt-values-stop-unknown`: a register each time
    one is listed as a target.

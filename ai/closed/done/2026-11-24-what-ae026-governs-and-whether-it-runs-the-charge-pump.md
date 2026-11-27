@@ -24,3 +24,12 @@ mode), at an EEPROM cycle each way, to be agreed before.
 
 Also open, cheaply: what fills the intermediate circuit of the
 `CF085` separation kit, brine or water (812199 §5.8; the kit's papers).
+
+## Outcome
+
+Closed 2026-11-27. The intermediate circuit is filled with antifreeze and
+cannot freeze (the household's account), so B33 and B34 at 8 °C are no
+risk, and `AE026`'s 20 °C is the heating side's minimum for the defrost
+of 812199 §1.8, B124/B125. Not tested on the machine: the night that
+would show it needs C's settings changed at an EEPROM cycle each way,
+for an answer nothing depends on.
