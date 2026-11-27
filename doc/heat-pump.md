@@ -129,9 +129,10 @@ for five hours at 0.1 to 0.6 °C, with B33 down to 13.9 °C and B34 to
 reason never read `RD_REQ_FROST_PROT`
 ([2026-11-26-below-ae025-the-charge-pump-ran-only-for-a-circuits-request](verification/2026-11-26-below-ae025-the-charge-pump-ran-only-for-a-circuits-request.md)).
 812199 §1.8 requires a heating-side minimum of 20 °C for the defrost, which
-is what the web interface says `AE026` secures; the heat sink's B124 and
-B125 stayed above 21.4 °C that night, so whether the frost protection keys
-on them is open. Whether M73 runs is 1074 and the flow at 1072; 4789's M73
+is what the web interface says `AE026` secures, so `AE026` is read as the
+heat sink's minimum, B124 and B125; they stayed above 21.4 °C that night,
+so this is not tested. The intermediate circuit holds antifreeze and cannot
+freeze (the household's account), so B33 and B34 below 20 °C are no risk. Whether M73 runs is 1074 and the flow at 1072; 4789's M73
 `Ladepumpe Wärmesenke EIN/AUS` reads 100 at rest too.
 
 ## A circuit's pump
